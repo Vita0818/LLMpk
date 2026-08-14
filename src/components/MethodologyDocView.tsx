@@ -122,9 +122,9 @@ export const MethodologyDocView: React.FC = () => {
               <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-emerald-300">
                 P_i = max(0, A_i + &Delta;v + &Delta;c)
                 <br />
-                -12 &lt; &Delta;v &lt; +7.5  |  -18 &lt; &Delta;c &lt; +7.5
+                -8 &lt; &Delta;v &lt; +7.5  |  -12 &lt; &Delta;c &lt; +7.5
                 <br />
-                -30 &lt; &Delta;v + &Delta;c &lt; +15
+                -20 &lt; &Delta;v + &Delta;c &lt; +15
               </div>
               <p>
                 速度与成本采用同模型产品线的 OpenRouter 目录价格和 Standard 聚合性能，

@@ -131,9 +131,57 @@ assert.deepEqual(
 );
 assert.equal(
   VERIFIED_RECOVERED_SOURCE_OBSERVATIONS.length,
-  14,
-  'LongCat 2.0 recovery must expose ten capability and four AA practical-fallback observations.',
+  13,
+  'LongCat 2.0 recovery must expose nine current capability and four AA practical-fallback observations.',
 );
+assert.ok(
+  !VERIFIED_RECOVERED_SOURCE_OBSERVATIONS.some((observation) => (
+    observation.metricId === 'aa_tau3_banking'
+  )),
+  'LongCat 2.0 must preserve the refreshed source\'s missing τ³-Banking value.',
+);
+
+for (const expectation of [
+  {
+    cardId: 'card-aa-coding-agent-codex-deepseek-v4-flash-0731-max',
+    sourceRecordId: 'ba75b0f1ce2019c511374b7a7f850ce5',
+    sourceHarnessLabel: 'Codex',
+    harnessName: 'Codex CLI',
+  },
+  {
+    cardId: 'card-aa-coding-agent-opencode-gemini-3-6-flash-high',
+    sourceRecordId: '4fb40d5633b706eecb1da0a68cb4f1ed',
+    sourceHarnessLabel: 'Opencode',
+    harnessName: 'OpenCode',
+  },
+  {
+    cardId: 'card-aa-coding-agent-claude-code-qwen3-8-max',
+    sourceRecordId: 'f06493dca66d238f2252adb8092dd10f',
+    sourceHarnessLabel: 'Claude Code',
+    harnessName: 'Claude Code',
+  },
+] as const) {
+  const card = VERIFIED_HARNESS_SOURCE_MODEL_CARDS.find(
+    (candidate) => candidate.id === expectation.cardId,
+  );
+  assert.ok(card, `Corrected AA Agent Harness card ${expectation.cardId} must be projected.`);
+  assert.equal(card.metadataJson?.sourceIdentity?.sourceRecordId, expectation.sourceRecordId);
+  assert.equal(card.metadataJson?.sourceIdentity?.sourceHarnessLabel, expectation.sourceHarnessLabel);
+  assert.equal(card.metadataJson?.sourceIdentity?.harnessName, expectation.harnessName);
+  const metricIds = new Set(
+    VERIFIED_HARNESS_SOURCE_OBSERVATIONS
+      .filter((observation) => observation.sourceModelCardId === expectation.cardId)
+      .map((observation) => observation.metricId),
+  );
+  for (const metricId of [
+    'aa_coding_agent_index',
+    'aa_coding_agent_deepswe',
+    'aa_coding_agent_swe_atlas_qna',
+    'aa_coding_agent_terminalbench_v2',
+  ]) {
+    assert.ok(metricIds.has(metricId), `${expectation.cardId} must expose ${metricId}.`);
+  }
+}
 
 const scopeKey = (card: SourceModelCard): string => {
   const scope = card.metadataJson?.scope as Record<string, unknown> | undefined;
@@ -589,8 +637,8 @@ assert.deepEqual(
     card.metadataJson?.scope?.scopeVersion
   )),
   [
-    'oagxm-current-product-lines/v4-muse-spark-1-2',
-    'oagxm-current-product-lines/v4-muse-spark-1-2',
+    'oagxm-current-product-lines/v5-2026-08-13-releases',
+    'oagxm-current-product-lines/v5-2026-08-13-releases',
   ],
 );
 
@@ -629,7 +677,9 @@ const expectedPresetLinks = new Map<string, Array<{
   provenance: ConfigurationSourceLinkProvenance;
 }>>();
 let expectedUnresolvedPresetCardCount = 0;
+const expectedUnresolvedPresetCards: string[] = [];
 let expectedMismatchedPresetCardCount = 0;
+const expectedMismatchedPresetCards: string[] = [];
 let expectedLowerProfileFallbackCount = 0;
 let expectedLowerHarnessFallbackCount = 0;
 let expectedLowerProfileHarnessFallbackCount = 0;
@@ -652,11 +702,15 @@ for (const preset of BUILT_IN_CONFIGURATION_PRESETS) {
     const card = reconciledV3Store.cards.find((candidate) => candidate.id === declaration.cardId);
     if (!card) {
       expectedUnresolvedPresetCardCount += 1;
+      expectedUnresolvedPresetCards.push(`${preset.id}:${declaration.cardId}`);
       continue;
     }
     const scope = card.metadataJson?.scope as Record<string, unknown> | undefined;
     if (scope?.productLineId !== preset.productLineId) {
       expectedMismatchedPresetCardCount += 1;
+      expectedMismatchedPresetCards.push(
+        `${preset.id}:${declaration.cardId}(${String(scope?.productLineId)}!=${preset.productLineId})`,
+      );
       continue;
     }
     if (declaration.provenance.kind === 'lower_profile_fallback') {
@@ -724,8 +778,16 @@ for (const preset of BUILT_IN_CONFIGURATION_PRESETS) {
   }
   expectedPresetLinks.set(preset.id, matchingLinks);
 }
-assert.equal(expectedUnresolvedPresetCardCount, 0, 'Every listed built-in card ID must exist in the verified catalog.');
-assert.equal(expectedMismatchedPresetCardCount, 0, 'A built-in card ID must never cross product lines.');
+assert.equal(
+  expectedUnresolvedPresetCardCount,
+  0,
+  `Every listed built-in card ID must exist in the verified catalog: ${expectedUnresolvedPresetCards.join(', ')}`,
+);
+assert.equal(
+  expectedMismatchedPresetCardCount,
+  0,
+  `A built-in card ID must never cross product lines: ${expectedMismatchedPresetCards.join(', ')}`,
+);
 assert.ok(
   BUILT_IN_CONFIGURATION_PRESETS.length >= 20
   && BUILT_IN_CONFIGURATION_PRESETS.length <= 80,
@@ -840,7 +902,9 @@ for (const [vendorKey, modelGroups] of nonKeyVendorModelGroups) {
   );
 }
 for (const presetId of [
-  'builtin.data-md.deepseek-v4-flash-0731.max',
+  'builtin.harness.deepseek-v4-flash-0731.max.codex-cli',
+  'builtin.harness.gemini-3-6-flash.high.opencode',
+  'builtin.harness.qwen3-8.max.claude-code',
   'builtin.harness.gpt-5-6-sol.max.codex-cli',
   'builtin.harness.gpt-5-6-luna.max.codex-cli',
   'builtin.harness.gpt-5-6-terra.max.codex-cli',
@@ -866,7 +930,6 @@ for (const presetId of [
   'builtin.agent.arena.grok-build-0-1.max',
   'builtin.source-catalog.source-profile-inkling-xhigh.inkling-xhigh',
   'builtin.data-md.longcat-2-0.max',
-  'builtin.source-catalog.source-profile-gemini-3-1-flash-lite-preview.gemini-3-1-flash-lite-preview',
   'builtin.source-catalog.source-profile-north-mini-code.north-mini-code',
   'builtin.muse-spark-1-2.xhigh',
 ]) {
@@ -875,6 +938,64 @@ for (const presetId of [
     `Strong or evidence-rich API profile ${presetId} must remain shipped.`,
   );
 }
+
+const previouslyVerifiedHarnessRoutes = [
+  ['builtin.harness.claude-fable-5.max.claude-code', 'Claude Code'],
+  ['builtin.harness.claude-opus-4-6.max.claude-code', 'Claude Code'],
+  ['builtin.harness.claude-opus-4-7.max.claude-code', 'Claude Code'],
+  ['builtin.harness.claude-opus-4-8.max.claude-code', 'Claude Code'],
+  ['builtin.harness.claude-opus-5.max.claude-code', 'Claude Code'],
+  ['builtin.harness.claude-sonnet-4-6.max.claude-code', 'Claude Code'],
+  ['builtin.harness.deepseek-v4-pro.high.claude-code', 'Claude Code'],
+  ['builtin.harness.glm-5-2.max.claude-code', 'Claude Code'],
+  ['builtin.harness.kimi-k2-6.max.claude-code', 'Claude Code'],
+  ['builtin.harness.qwen-3-7-plus.max.claude-code', 'Claude Code'],
+  ['builtin.harness.gpt-5-4.xhigh.codex-cli', 'Codex CLI'],
+  ['builtin.harness.gpt-5-5.xhigh.codex-cli', 'Codex CLI'],
+  ['builtin.harness.gpt-5-6-luna.max.codex-cli', 'Codex CLI'],
+  ['builtin.harness.gpt-5-6-sol.max.codex-cli', 'Codex CLI'],
+  ['builtin.harness.gpt-5-6-terra.max.codex-cli', 'Codex CLI'],
+  ['builtin.harness.gemini-3-1-pro.high.gemini-cli', 'Gemini CLI'],
+  ['builtin.harness.grok-4-5.high.grok-build', 'Grok Build'],
+  ['builtin.harness.kimi-k3.max.kimi-code-cli', 'Kimi Code CLI'],
+  ['builtin.harness.muse-spark-1-1.xhigh.opencode', 'OpenCode'],
+] as const;
+assert.equal(previouslyVerifiedHarnessRoutes.length, 19);
+for (const [presetId, expectedHarness] of previouslyVerifiedHarnessRoutes) {
+  const preset = BUILT_IN_CONFIGURATION_PRESETS.find((candidate) => candidate.id === presetId);
+  assert.ok(preset, `Previously verified Harness route ${presetId} must remain shipped.`);
+  assert.equal(
+    preset.identity.harness.name,
+    expectedHarness,
+    `Previously verified Harness route ${presetId} must not be relabelled.`,
+  );
+}
+
+const uniqueRouteCountForHarness = (harnessName: string): number => new Set(
+  BUILT_IN_CONFIGURATION_PRESETS
+    .filter((preset) => preset.identity.harness.name === harnessName)
+    .map((preset) => [
+      preset.identity.model.name,
+      preset.identity.model.profile,
+      preset.identity.model.preset || '',
+    ].join('\u0000')),
+).size;
+assert.equal(
+  uniqueRouteCountForHarness('AA Agent Harness'),
+  8,
+  'The eight former Arena Agent Mode routes must display AA Agent Harness.',
+);
+assert.equal(
+  uniqueRouteCountForHarness('---'),
+  13,
+  'Routes without an AA Coding Agent record must display ---.',
+);
+assert.ok(
+  BUILT_IN_CONFIGURATION_PRESETS.every(
+    (preset) => preset.identity.harness.name !== 'Arena Agent Mode',
+  ),
+  'Arena Agent Mode must remain source provenance, not a reader-facing Harness label.',
+);
 for (const omittedPresetId of [
   'builtin.data-md.kimi-k3.max',
   'builtin.data-md.claude-sonnet-5.max.vertex',
@@ -907,6 +1028,7 @@ for (const omittedPresetId of [
   'builtin.source-catalog.source-profile-granite-4-1-8b.granite-4-1-8b',
   'builtin.source-catalog.source-profile-grok-4-3.grok-4-3',
   'builtin.source-catalog.source-profile-kimi-k2-7-code.kimi-k2-7-code',
+  'builtin.source-catalog.source-profile-gemini-3-1-flash-lite-preview.gemini-3-1-flash-lite-preview',
   'builtin.source-catalog.source-profile-gpt-4-1-2025-04-14.gpt-4-1-2025-04-14',
   'builtin.source-catalog.source-profile-deepseek-r1-2025-01.deepseek-r1-2025-01',
   'builtin.source-catalog.source-profile-agnes-2-5-pro-alpha.agnes-2-5-pro-alpha',
@@ -971,6 +1093,11 @@ const chatGptPlusTargets: readonly ExpectedSubscriptionTarget[] = [
     basePresetId: 'builtin.harness.gpt-5-6-luna.max.codex-cli',
     usableQuotaFraction: 1,
   },
+  {
+    key: 'gpt-5-5.xhigh.codex-cli',
+    basePresetId: 'builtin.harness.gpt-5-5.xhigh.codex-cli',
+    usableQuotaFraction: 1,
+  },
 ];
 
 const claudeProTargets: readonly ExpectedSubscriptionTarget[] = [
@@ -1001,20 +1128,15 @@ const claudeProTargets: readonly ExpectedSubscriptionTarget[] = [
   },
 ];
 
-const googleSubscriptionTargets: readonly ExpectedSubscriptionTarget[] = [
+const googleAiProTargets: readonly ExpectedSubscriptionTarget[] = [
   {
     key: 'gemini-3-1-pro.high.gemini-cli',
     basePresetId: 'builtin.harness.gemini-3-1-pro.high.gemini-cli',
     usableQuotaFraction: 1,
   },
   {
-    key: 'gemini-3-6-flash.high.chat',
-    basePresetId: 'builtin.data-md.gemini-3-6-flash.high.ai-studio',
-    usableQuotaFraction: 1,
-  },
-  {
-    key: 'gemini-3-5-flash.high.arena-agent-mode',
-    basePresetId: 'builtin.agent.arena.gemini-3-5-flash.high',
+    key: 'gemini-3-7-flash.high.chat',
+    basePresetId: 'builtin.gemini-3-7-flash.high',
     usableQuotaFraction: 1,
   },
   {
@@ -1022,29 +1144,15 @@ const googleSubscriptionTargets: readonly ExpectedSubscriptionTarget[] = [
     basePresetId: 'builtin.data-md.gemini-3-5-flash-lite.high.ai-studio',
     usableQuotaFraction: 1,
   },
-  {
-    key: 'gemini-3-1-flash-lite-preview.max.chat',
-    basePresetId:
-      'builtin.source-catalog.source-profile-gemini-3-1-flash-lite-preview.gemini-3-1-flash-lite-preview',
-    usableQuotaFraction: 1,
-  },
 ];
+
+const googleAiUltraTargets: readonly ExpectedSubscriptionTarget[] =
+  googleAiProTargets.filter(({ key }) => key !== 'gemini-3-5-flash-lite.high.chat');
 
 const superGrokTargets: readonly ExpectedSubscriptionTarget[] = [
   {
-    key: 'grok-4-5.high.grok-build',
-    basePresetId: 'builtin.harness.grok-4-5.high.grok-build',
-    usableQuotaFraction: 1,
-  },
-  {
-    key: 'grok-build-0-1.max.arena-agent-mode',
-    basePresetId: 'builtin.agent.arena.grok-build-0-1.max',
-    usableQuotaFraction: 1,
-  },
-  {
-    key: 'grok-4-3.high.chat',
-    basePresetId:
-      'builtin.source-catalog.source-profile-grok-4-3-high.grok-4-3-high',
+    key: 'grok-4-6.xhigh.chat',
+    basePresetId: 'builtin.grok-4-6.xhigh',
     usableQuotaFraction: 1,
   },
 ];
@@ -1054,14 +1162,14 @@ const expectedSubscriptionPlans = [
     key: 'chatgpt-plus',
     providerLabel: 'ChatGPT Plus',
     monthlyPriceUSD: 20,
-    apiEquivalentCostUSD: 250,
+    apiEquivalentCostUSD: 100,
     targets: chatGptPlusTargets,
   },
   {
     key: 'chatgpt-pro-20x',
     providerLabel: 'ChatGPT Pro 20×',
     monthlyPriceUSD: 200,
-    apiEquivalentCostUSD: 5000,
+    apiEquivalentCostUSD: 2000,
     targets: chatGptPlusTargets.slice(0, 1),
   },
   {
@@ -1083,14 +1191,14 @@ const expectedSubscriptionPlans = [
     providerLabel: 'Google AI Pro',
     monthlyPriceUSD: 20,
     apiEquivalentCostUSD: 260,
-    targets: googleSubscriptionTargets,
+    targets: googleAiProTargets,
   },
   {
     key: 'google-ai-ultra-20x',
     providerLabel: 'Google AI Ultra 20×',
     monthlyPriceUSD: 200,
     apiEquivalentCostUSD: 5200,
-    targets: googleSubscriptionTargets,
+    targets: googleAiUltraTargets,
   },
   {
     key: 'supergrok',
@@ -1225,7 +1333,7 @@ for (const box of installedPresetBoxes) {
     assert.equal(config.provider, preset.subscriptionData.planName);
     assert.deepEqual(config.subscriptionData, preset.subscriptionData);
   }
-  if (preset.identity.harness.name === 'Chat') {
+  if (isPlainChatHarness(preset.identity.harness.name)) {
     assert.ok(
       Object.keys(config.observations).every(
         (metricId) => !isHarnessOnlyCapabilityMetric(metricId),
@@ -1256,18 +1364,19 @@ for (const box of installedPresetBoxes) {
   );
 }
 const deepSeek0731Box = installedPresetBoxes.find((box) => (
-  box.builtInPresetId === 'builtin.data-md.deepseek-v4-flash-0731.max'
+  box.builtInPresetId === 'builtin.harness.deepseek-v4-flash-0731.max.codex-cli'
 ));
-assert.ok(deepSeek0731Box, 'DeepSeek V4 Flash 0731 Max must be installed as its own configuration.');
+assert.ok(deepSeek0731Box, 'DeepSeek V4 Flash 0731 Max must use its exact Codex configuration.');
 assert.deepEqual(
   reconciledV3Store.getLinkedCardStack(deepSeek0731Box.id).map(({ card }) => card.id),
   [
+    'card-aa-coding-agent-codex-deepseek-v4-flash-0731-max',
+    'card-arena-deepseek-v4-flash-high',
     'card-aa-deepseek-v4-flash',
     'card-openrouter-deepseek-deepseek-v4-flash-0731',
     'card-openrouter-standard-performance-deepseek-deepseek-v4-flash-0731',
-    'card-arena-deepseek-v4-flash-high',
   ],
-  'The 0731 configuration must use only independently versioned 0731 cards.',
+  'The 0731 Codex configuration must use only independently versioned 0731 cards.',
 );
 const deepSeek0731Config = reconciledV3Store.buildLLMConfiguration(deepSeek0731Box);
 assert.deepEqual(
@@ -1277,7 +1386,7 @@ assert.deepEqual(
 );
 assert.equal(
   deepSeek0731Config.observations.arena_code_webdev?.rawValue,
-  1576.5384851960803,
+  1582.108887462124,
 );
 function expectedOpenRouterDataFromVerifiedCards(
   ...cardIds: string[]
@@ -1338,16 +1447,22 @@ assert.deepEqual(
   reconciledV3Store.getLinkedCardStack(museSpark12Box.id).map(({ card }) => card.id),
   [
     'card-aa-muse-spark-1-2',
+    'card-arena-muse-spark-1-2-xhigh',
     'card-openrouter-meta-muse-spark-1-2',
     'card-openrouter-standard-performance-meta-muse-spark-1-2',
   ],
-  'Muse Spark 1.2 XHigh must combine only its exact AA and OpenRouter source cards.',
+  'Muse Spark 1.2 XHigh must combine only its exact AA, Arena, and OpenRouter source cards.',
 );
 const museSpark12Config = reconciledV3Store.buildLLMConfiguration(museSpark12Box);
 assert.equal(
   Object.keys(museSpark12Config.observations).some((metricId) => metricId.startsWith('arena_')),
+  true,
+  'Muse Spark 1.2 XHigh must include its newly published exact Arena evidence.',
+);
+assert.equal(
+  Object.keys(museSpark12Config.observations).some((metricId) => metricId.startsWith('arena_agent_')),
   false,
-  'Muse Spark 1.2 must preserve missing Arena evidence instead of inferring it.',
+  'Muse Spark 1.2 must not infer Arena Agent Mode evidence that the source does not publish.',
 );
 assert.deepEqual(
   museSpark12Config.openRouterData,
@@ -1357,10 +1472,187 @@ assert.deepEqual(
   ),
 );
 const museSpark12Score = scoreByConfigurationId.get(museSpark12Box.id);
-assert.equal(museSpark12Score?.availableDomainCount, 5);
+assert.equal(museSpark12Score?.availableDomainCount, 6);
 assert.notEqual(museSpark12Score?.rawCapabilityScore, null);
 assert.notEqual(museSpark12Score?.practicalBreakdown.practicalScore, null);
 assert.equal(museSpark12Score?.eligibleForGlobalLeaderboard, true);
+
+const august2026ReleaseExpectations = [
+  {
+    presetId: 'builtin.grok-4-6.xhigh',
+    modelName: 'Grok 4.6',
+    productLineId: 'grok_46',
+    cardIds: [
+      'card-openrouter-x-ai-grok-4-6',
+      'card-openrouter-standard-performance-x-ai-grok-4-6',
+      'card-aa-grok-4-6',
+      'card-arena-grok-4-6-high',
+    ],
+    openRouterCardIds: [
+      'card-openrouter-x-ai-grok-4-6',
+      'card-openrouter-standard-performance-x-ai-grok-4-6',
+    ],
+  },
+  {
+    presetId: 'builtin.muse-glimmer.xhigh',
+    modelName: 'Muse Glimmer',
+    productLineId: 'muse_glimmer',
+    cardIds: [
+      'card-openrouter-meta-muse-glimmer-30b',
+      'card-openrouter-standard-performance-meta-muse-glimmer-30b',
+      'card-aa-muse-glimmer',
+      'card-arena-muse-glimmer',
+    ],
+    openRouterCardIds: [
+      'card-openrouter-meta-muse-glimmer-30b',
+      'card-openrouter-standard-performance-meta-muse-glimmer-30b',
+    ],
+  },
+  {
+    presetId: 'builtin.gemini-3-7-flash.high',
+    modelName: 'Gemini 3.7 Flash',
+    productLineId: 'gemini_37_flash',
+    cardIds: [
+      'card-aa-gemini-3-7-flash',
+      'card-arena-gemini-3-7-flash-high',
+      'card-openrouter-google-gemini-3-7-flash',
+      'card-openrouter-standard-performance-google-gemini-3-7-flash',
+      'card-aa-gemini-3-7-flash-medium',
+      'card-aa-gemini-3-7-flash-low',
+    ],
+    openRouterCardIds: [
+      'card-openrouter-google-gemini-3-7-flash',
+      'card-openrouter-standard-performance-google-gemini-3-7-flash',
+    ],
+  },
+  {
+    presetId: 'builtin.deepseek-v4-pro-0813.max',
+    modelName: 'DeepSeek V4 Pro 0813',
+    productLineId: 'deepseek_v4_pro_0813',
+    cardIds: [
+      'card-aa-deepseek-v4-pro',
+      'card-arena-deepseek-v4-pro-max-20260813',
+      'card-openrouter-deepseek-deepseek-v4-pro-0813',
+      'card-openrouter-standard-performance-deepseek-deepseek-v4-pro-0813',
+    ],
+    openRouterCardIds: [
+      'card-openrouter-deepseek-deepseek-v4-pro-0813',
+      'card-openrouter-standard-performance-deepseek-deepseek-v4-pro-0813',
+    ],
+  },
+] as const;
+
+const august2026ReleaseBoxes = new Map<string, ConfigurationBox>();
+for (const expectation of august2026ReleaseExpectations) {
+  const box = installedPresetBoxes.find((candidate) => (
+    candidate.builtInPresetId === expectation.presetId
+  ));
+  assert.ok(box, `${expectation.modelName} must ship as a score-ready configuration.`);
+  august2026ReleaseBoxes.set(expectation.productLineId, box);
+
+  const stack = reconciledV3Store.getLinkedCardStack(box.id);
+  assert.deepEqual(
+    stack.map(({ card }) => card.id),
+    expectation.cardIds,
+    `${expectation.modelName} must use only its explicitly scoped August 2026 cards.`,
+  );
+  assert.ok(
+    stack.every(({ card }) => (
+      (card.metadataJson?.scope as Record<string, unknown> | undefined)?.productLineId
+      === expectation.productLineId
+    )),
+    `${expectation.modelName} must not consume a similarly named product line.`,
+  );
+
+  const config = reconciledV3Store.buildLLMConfiguration(box);
+  assert.deepEqual(
+    config.openRouterData,
+    expectedOpenRouterDataFromVerifiedCards(...expectation.openRouterCardIds),
+    `${expectation.modelName} practical data must be copied from its linked OpenRouter cards.`,
+  );
+  const score = scoreByConfigurationId.get(box.id);
+  assert.ok(
+    (score?.availableDomainCount || 0) >= 5,
+    `${expectation.modelName} must have enough independent domains for the global ranking.`,
+  );
+  assert.notEqual(score?.rawCapabilityScore, null);
+  assert.notEqual(score?.practicalBreakdown.practicalScore, null);
+  assert.equal(score?.eligibleForGlobalLeaderboard, true);
+}
+
+const deepSeek0813Box = august2026ReleaseBoxes.get('deepseek_v4_pro_0813');
+assert.ok(deepSeek0813Box);
+const deepSeekPreviewBox = installedPresetBoxes.find((candidate) => (
+  candidate.builtInPresetId === 'builtin.harness.deepseek-v4-pro.high.claude-code'
+));
+assert.ok(deepSeekPreviewBox, 'The independent DeepSeek-v4-Pro Preview configuration must remain installed.');
+const deepSeek0813Stack = reconciledV3Store.getLinkedCardStack(deepSeek0813Box.id);
+const deepSeekPreviewStack = reconciledV3Store.getLinkedCardStack(deepSeekPreviewBox.id);
+assert.ok(
+  deepSeekPreviewStack.every(({ card }) => (
+    (card.metadataJson?.scope as Record<string, unknown> | undefined)?.productLineId
+    === 'deepseek_v4_pro'
+  )),
+  'The Preview configuration must use only the original DeepSeek V4 Pro product line.',
+);
+const deepSeek0813CardIds = new Set(deepSeek0813Stack.map(({ card }) => card.id));
+assert.ok(
+  deepSeekPreviewStack.every(({ card }) => !deepSeek0813CardIds.has(card.id)),
+  'DeepSeek V4 Pro 0813 and Preview must share no source card.',
+);
+
+function assertSubscriptionRoutesPreserveCapability(
+  apiPresetId: string,
+  subscriptionPresetIds: readonly string[],
+) {
+  const apiBox = installedPresetBoxes.find((box) => box.builtInPresetId === apiPresetId);
+  assert.ok(apiBox, `Missing API base route ${apiPresetId}.`);
+  const apiConfig = reconciledV3Store.buildLLMConfiguration(apiBox);
+  const apiScore = scoreByConfigurationId.get(apiBox.id);
+  assert.ok(apiScore);
+
+  for (const subscriptionPresetId of subscriptionPresetIds) {
+    const subscriptionBox = installedPresetBoxes.find((box) => (
+      box.builtInPresetId === subscriptionPresetId
+    ));
+    assert.ok(subscriptionBox, `Missing independent subscription route ${subscriptionPresetId}.`);
+    const subscriptionConfig = reconciledV3Store.buildLLMConfiguration(subscriptionBox);
+    const subscriptionScore = scoreByConfigurationId.get(subscriptionBox.id);
+    assert.ok(subscriptionScore);
+    assert.deepEqual(
+      subscriptionConfig.observations,
+      apiConfig.observations,
+      `${subscriptionPresetId} must reuse the exact API route capability evidence.`,
+    );
+    assert.deepEqual(
+      subscriptionScore.domainScores,
+      apiScore.domainScores,
+      `${subscriptionPresetId} must preserve every API radar score.`,
+    );
+    assert.equal(subscriptionScore.rawCapabilityScore, apiScore.rawCapabilityScore);
+    assert.notEqual(
+      subscriptionScore.practicalBreakdown.practicalScore,
+      apiScore.practicalBreakdown.practicalScore,
+      `${subscriptionPresetId} must independently price its subscription access route.`,
+    );
+  }
+}
+
+assertSubscriptionRoutesPreserveCapability(
+  'builtin.gemini-3-7-flash.high',
+  [
+    'builtin.subscription.google-ai-pro.gemini-3-7-flash.high.chat',
+    'builtin.subscription.google-ai-ultra-20x.gemini-3-7-flash.high.chat',
+  ],
+);
+assertSubscriptionRoutesPreserveCapability(
+  'builtin.grok-4-6.xhigh',
+  ['builtin.subscription.supergrok.grok-4-6.xhigh.chat'],
+);
+assertSubscriptionRoutesPreserveCapability(
+  'builtin.harness.gpt-5-5.xhigh.codex-cli',
+  ['builtin.subscription.chatgpt-plus.gpt-5-5.xhigh.codex-cli'],
+);
 for (const presetId of [
   'builtin.harness.claude-fable-5.max.claude-code',
   'builtin.harness.claude-opus-4-6.max.claude-code',
@@ -1389,7 +1681,7 @@ for (const [presetId, expectedHarness] of [
   ['builtin.harness.claude-opus-4-6.max.claude-code', 'Claude Code'],
   ['builtin.harness.claude-sonnet-4-6.max.claude-code', 'Claude Code'],
   ['builtin.harness.kimi-k2-6.max.claude-code', 'Claude Code'],
-  ['builtin.data-md.claude-haiku-4-5.max.vertex', 'Chat'],
+  ['builtin.data-md.claude-haiku-4-5.max.vertex', '---'],
 ] as const) {
   const preset = BUILT_IN_CONFIGURATION_PRESETS.find((candidate) => candidate.id === presetId);
   assert.ok(preset, `Requested historical comparator ${presetId} must be curated.`);

@@ -2,10 +2,10 @@
 
 - Audit status: **VALIDATED**
 - Audit status validates provenance, score integrity, and Arena reconciliation; it is not by itself a claim that every upstream source was fetched live in this run.
-- Audit time: 2026-08-06T05:50:59.113Z
+- Audit time: 2026-08-14T05:39:23.970Z
 - Raw extraction: `src/data/arenaRawExtraction.json` (arena-raw-extraction/v1)
 - Catalog: `src/data/seedCards.ts`
-- Scope: `oagxm-current-product-lines` (oagxm-current-product-lines/v4-muse-spark-1-2)
+- Scope: `oagxm-current-product-lines` (oagxm-current-product-lines/v5-2026-08-13-releases)
 - Catalog refresh status: **MIXED_SNAPSHOT_REBUILD**
 - Catalog freshness disclosure: The catalog mixes direct raw extraction with official-source and/or verified-catalog snapshots. This audit validates provenance and reconciliation, not a fully live three-source refresh.
 
@@ -13,8 +13,8 @@
 
 - Scope provenance findings: 0
 - Product lines with no source record in this snapshot: 2
-- General source-catalog records outside this curated scope: 1336 cards / 7910 observations; card and observation scopes still reconcile exactly.
-- All 49 configured product lines are formal text/agent models; no image/audio/safety-only line is admitted to this capability scope.
+- General source-catalog records outside this curated scope: 1423 cards / 8129 observations; card and observation scopes still reconcile exactly.
+- All 53 configured product lines are formal text/agent models; no image/audio/safety-only line is admitted to this capability scope.
 
 ## Arena per-metric reconciliation
 
@@ -22,34 +22,34 @@ The `source*` columns retain complete public-leaderboard extraction facts. The u
 
 | Metric | sourceExtractedRowCount | sourceDuplicateRowCount | sourceUniqueModelCount | extractedRowCount | duplicateRowCount | uniqueModelCount | databaseAvailableCount | Status |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| arena_text_instruction | 385 | 1 | 384 | 51 | 1 | 50 | 50 | VALID |
-| arena_text_multiturn | 383 | 1 | 382 | 51 | 1 | 50 | 50 | VALID |
-| arena_text_creative | 383 | 1 | 382 | 51 | 1 | 50 | 50 | VALID |
-| arena_text_hard | 385 | 1 | 384 | 51 | 1 | 50 | 50 | VALID |
-| arena_text_math | 371 | 1 | 370 | 49 | 1 | 48 | 48 | VALID |
-| arena_text_coding | 380 | 1 | 379 | 51 | 1 | 50 | 50 | VALID |
-| arena_code_webdev | 110 | 1 | 109 | 42 | 0 | 42 | 42 | VALID |
+| arena_text_instruction | 390 | 0 | 390 | 54 | 0 | 54 | 54 | VALID |
+| arena_text_multiturn | 388 | 0 | 388 | 54 | 0 | 54 | 54 | VALID |
+| arena_text_creative | 388 | 0 | 388 | 54 | 0 | 54 | 54 | VALID |
+| arena_text_hard | 390 | 0 | 390 | 54 | 0 | 54 | 54 | VALID |
+| arena_text_math | 376 | 0 | 376 | 53 | 0 | 53 | 53 | VALID |
+| arena_text_coding | 385 | 0 | 385 | 54 | 0 | 54 | 54 | VALID |
+| arena_code_webdev | 116 | 1 | 115 | 47 | 0 | 47 | 47 | VALID |
 | arena_search | 32 | 0 | 32 | 8 | 0 | 8 | 8 | VALID |
-| arena_agent_success | 45 | 0 | 45 | 35 | 0 | 35 | 35 | VALID |
-| arena_agent_praise | 45 | 0 | 45 | 35 | 0 | 35 | 35 | VALID |
-| arena_agent_steerability | 45 | 0 | 45 | 35 | 0 | 35 | 35 | VALID |
-| arena_agent_bash_recovery | 45 | 0 | 45 | 35 | 0 | 35 | 35 | VALID |
-| arena_agent_tool_hallucination | 45 | 0 | 45 | 35 | 0 | 35 | 35 | VALID |
+| arena_agent_success | 48 | 0 | 48 | 37 | 0 | 37 | 37 | VALID |
+| arena_agent_praise | 48 | 0 | 48 | 37 | 0 | 37 | 37 | VALID |
+| arena_agent_steerability | 48 | 0 | 48 | 37 | 0 | 37 | 37 | VALID |
+| arena_agent_bash_recovery | 48 | 0 | 48 | 37 | 0 | 37 | 37 | VALID |
+| arena_agent_tool_hallucination | 48 | 0 | 48 | 37 | 0 | 37 | 37 | VALID |
 
-Total effective Arena observations: 523; sum of 13 unique available counts: 523; conservation: PASS.
+Total effective Arena observations: 563; sum of 13 unique available counts: 563; conservation: PASS.
 
 ## Catalog provenance
 
-- Cards: 1630 (AA 593, Arena 432, OpenRouter 605)
-- Available observations: 10285 (AA 6428, Arena 2647, OpenRouter 1210)
+- Cards: 1788 (AA 607, Arena 440, OpenRouter 741)
+- Available observations: 10755 (AA 6569, Arena 2704, OpenRouter 1482)
 - Provenance / source ownership findings: 0
 - Unproven default 0 / 50 values: 0
 - Full live three-source refresh: no
 - Source input modes:
-  - arena: official-arena-raw-extraction — 432 cards, 2647 available observations (direct_source_extraction)
-  - artificial_analysis: official-aa-structured-snapshot — 593 cards, 6428 available observations (official_source_snapshot)
-  - openrouter: official-openrouter-local-snapshot — 309 cards, 618 available observations (official_source_snapshot)
-  - openrouter: provider-neutral arithmetic mean across every accepted OpenRouter Standard endpoint; raw rows, traffic-weighted mean, median, quartiles, and range retained in the verified snapshot — 296 cards, 592 available observations (official_source_snapshot)
+  - arena: official-arena-raw-extraction — 440 cards, 2704 available observations (direct_source_extraction)
+  - artificial_analysis: official-aa-structured-snapshot — 607 cards, 6569 available observations (official_source_snapshot)
+  - openrouter: 3d/1w stabilized endpoint medians, followed by an equal-weight mean across current OpenRouter Standard endpoints; raw current rows, auxiliary traffic-weighted mean, median, quartiles, and range retained in the verified snapshot — 361 cards, 722 available observations (official_source_snapshot)
+  - openrouter: official-openrouter-local-snapshot — 380 cards, 760 available observations (official_source_snapshot)
 
 ## Integrity checks
 

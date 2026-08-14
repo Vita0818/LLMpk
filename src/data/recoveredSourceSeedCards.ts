@@ -15,7 +15,7 @@ const LONGCAT_20_CARD_ID = 'card-recovered-aa-longcat-2-0';
 const SNAPSHOT_DATE = artificialAnalysisFetchedAt.slice(0, 10);
 const LONGCAT_20_SCOPE = {
   scopeId: 'oagxm-current-product-lines',
-  scopeVersion: 'oagxm-current-product-lines/v4-muse-spark-1-2',
+  scopeVersion: 'oagxm-current-product-lines/v5-2026-08-13-releases',
   vendorId: 'meituan',
   vendorName: 'Meituan LongCat',
   productLineId: 'longcat_20',

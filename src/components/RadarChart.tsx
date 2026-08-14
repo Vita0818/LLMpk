@@ -33,6 +33,19 @@ const DOMAIN_ORDER: DomainId[] = [
   'search_knowledge',
 ];
 
+export const getRadarDomainLines = (nameEn: string): string[] => {
+  if (nameEn === 'Chatting & Dialogue') return ['Chatting & Dialogue'];
+  if (nameEn === 'Math & Science Reasoning') return ['Math & Science', 'Reasoning'];
+  if (nameEn === 'Coding') return ['Coding'];
+  if (nameEn === 'Engineering') return ['Engineering'];
+  if (nameEn === 'Agentic Work') return ['Agentic Work'];
+  if (nameEn === 'Search & Knowledge') return ['Search &', 'Knowledge'];
+  const parts = nameEn.split(' ');
+  if (parts.length <= 2) return [nameEn];
+  const mid = Math.ceil(parts.length / 2);
+  return [parts.slice(0, mid).join(' '), parts.slice(mid).join(' ')];
+};
+
 export const RadarChart: React.FC<RadarChartProps> = ({
   seriesList,
   size = 360,
@@ -299,20 +312,7 @@ export const RadarChart: React.FC<RadarChartProps> = ({
             const labelFontSize = Math.max(9, Math.round(scoreFontSize * 0.62));
             const lineGap = labelFontSize * 1.35;
 
-            const getDomainLines = (nameEn: string): string[] => {
-              if (nameEn === 'Chatting & Dialogue') return ['Chatting & Dialogue'];
-              if (nameEn === 'Math & Science Reasoning') return ['Math & Science', 'Reasoning'];
-              if (nameEn === 'Coding') return ['Coding'];
-              if (nameEn === 'Engineering') return ['Engineering'];
-              if (nameEn === 'Agentic Work') return ['Agentic Work'];
-              if (nameEn === 'Search & Knowledge') return ['Search &', 'Knowledge'];
-              const parts = nameEn.split(' ');
-              if (parts.length <= 2) return [nameEn];
-              const mid = Math.ceil(parts.length / 2);
-              return [parts.slice(0, mid).join(' '), parts.slice(mid).join(' ')];
-            };
-
-            const domainLines = getDomainLines(def.nameEn);
+            const domainLines = getRadarDomainLines(def.nameEn);
 
             // Custom vertical line placement per vertex position
             let scoreY = ly - lineGap * 0.75;

@@ -273,7 +273,7 @@ const incompatibleHarnessMetricLeaks = profileRows.filter(
   (row) => row.incompatibleHarnessMetricIds.length > 0,
 );
 const executionModeCounts = profileRows.reduce<Record<string, number>>((counts, row) => {
-  const key = isPlainChatHarness(row.harness) ? 'Chat' : (row.harness || 'Unknown');
+  const key = row.harness || 'Unknown';
   counts[key] = (counts[key] || 0) + 1;
   return counts;
 }, {});

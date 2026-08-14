@@ -157,14 +157,14 @@ assert.equal(getCoverageStatus(SCORING_CONFIG.coverage.officialMinimum), 'offici
 assert.equal(getCoverageStatus(SCORING_CONFIG.coverage.officialMinimum - 0.001), 'provisional');
 assert.equal(getCoverageStatus(0), 'no_observed_data');
 assert.deepEqual(SCORING_CONFIG.practicalAdjustment, {
-  version: '1.3',
+  version: '1.4',
   speed: {
     rewardScale: 7.5,
-    penaltyScale: 12,
+    penaltyScale: 8,
   },
   cost: {
     rewardScale: 7.5,
-    penaltyScale: 18,
+    penaltyScale: 12,
   },
 });
 assert.equal(
@@ -175,7 +175,7 @@ assert.equal(
 assert.equal(
   SCORING_CONFIG.practicalAdjustment.speed.penaltyScale
     + SCORING_CONFIG.practicalAdjustment.cost.penaltyScale,
-  30,
+  20,
 );
 
 // Sparse metric participation narrows the effective score range. Five observed
@@ -379,7 +379,7 @@ chatGptSubscriptionConfiguration.openRouterData = {
 chatGptSubscriptionConfiguration.subscriptionData = {
   planName: 'ChatGPT Pro 20×',
   monthlyPriceUSD: 200,
-  apiEquivalentCostUSD: 5000,
+  apiEquivalentCostUSD: 2000,
   usableQuotaFraction: 1,
 };
 const chatGptPlusConfiguration = makeConfiguration('chatgpt-plus', {});
@@ -389,7 +389,7 @@ chatGptPlusConfiguration.openRouterData = {
 chatGptPlusConfiguration.subscriptionData = {
   planName: 'ChatGPT Plus',
   monthlyPriceUSD: 20,
-  apiEquivalentCostUSD: 250,
+  apiEquivalentCostUSD: 100,
   usableQuotaFraction: 1,
 };
 const claudeSubscriptionConfiguration = makeConfiguration(
@@ -440,11 +440,11 @@ const subscriptionCostsById = new Map(subscriptionCostResults.map((result) => [
 nearlyEqual(subscriptionCostsById.get('api-cost-route')!, 15);
 nearlyEqual(
   subscriptionCostsById.get('chatgpt-pro-subscription')!,
-  15 * 200 / 5000,
+  15 * 200 / 2000,
 );
 nearlyEqual(
   subscriptionCostsById.get('chatgpt-plus')!,
-  15 * 20 / 250,
+  15 * 20 / 100,
 );
 nearlyEqual(
   subscriptionCostsById.get('claude-max-subscription')!,
@@ -496,4 +496,4 @@ assert.equal(
   null,
 );
 
-console.log('scoringEngine Scoring v1.2 + Practical Adjustment v1.3 policies: PASS');
+console.log('scoringEngine Scoring v1.2 + Practical Adjustment v1.4 policies: PASS');

@@ -102,12 +102,23 @@ export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
     ],
   },
   {
+    productLineId: 'deepseek_v4_pro_0813',
+    tiers: [
+      tier('low', 'Low', 1),
+      tier('high', 'High', 3),
+      tier('max', 'Max', 5, [
+        'card-aa-deepseek-v4-pro',
+        'card-arena-deepseek-v4-pro-max-20260813',
+      ]),
+    ],
+  },
+  {
     productLineId: 'deepseek_v4_pro',
     tiers: [
-      tier('none', 'None', 0, ['card-aa-deepseek-v4-pro-non-reasoning', 'card-arena-deepseek-v4-pro']),
-      tier('high', 'High', 3, ['card-aa-deepseek-v4-pro-high', 'card-arena-deepseek-v4-pro-high-preview']),
+      tier('none', 'None', 0, ['card-aa-deepseek-v4-pro-0424-non-reasoning', 'card-arena-deepseek-v4-pro']),
+      tier('high', 'High', 3, ['card-aa-deepseek-v4-pro-0424-high', 'card-arena-deepseek-v4-pro-high-preview']),
       tier('xhigh', 'XHigh', 4),
-      tier('max', 'Max', 5, ['card-aa-deepseek-v4-pro']),
+      tier('max', 'Max', 5, ['card-aa-deepseek-v4-pro-0424']),
     ],
   },
   {
@@ -153,7 +164,7 @@ export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
       tier('none', 'None', 0, ['card-aa-claude-opus-4-7-non-reasoning']),
       tier('low', 'Low', 1),
       tier('medium', 'Medium', 2),
-      tier('high', 'High', 3),
+      tier('high', 'High', 3, ['card-arena-claude-opus-4-7-high']),
       tier('xhigh', 'XHigh', 4),
       tier('max', 'Max', 5, ['card-aa-claude-opus-4-7']),
     ],
@@ -166,7 +177,7 @@ export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
       tier('none', 'None', 0),
       tier('low', 'Low', 1),
       tier('medium', 'Medium', 2),
-      tier('high', 'High', 3),
+      tier('high', 'High', 3, ['card-arena-claude-opus-4-8-high']),
       tier('xhigh', 'XHigh', 4),
       tier('max', 'Max', 5, ['card-aa-claude-opus-4-8']),
     ],
@@ -201,6 +212,17 @@ export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
     ],
   },
   {
+    productLineId: 'gemini_37_flash',
+    tiers: [
+      tier('low', 'Low', 1, ['card-aa-gemini-3-7-flash-low']),
+      tier('medium', 'Medium', 2, ['card-aa-gemini-3-7-flash-medium']),
+      tier('high', 'High', 3, [
+        'card-aa-gemini-3-7-flash',
+        'card-arena-gemini-3-7-flash-high',
+      ]),
+    ],
+  },
+  {
     productLineId: 'gemini_35_flash',
     tiers: [
       tier('minimal', 'Minimal', 0, ['card-aa-gemini-3-5-flash-minimal']),
@@ -225,8 +247,8 @@ export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
     tiers: [
       tier('minimal', 'Minimal', 0),
       tier('low', 'Low', 1),
-      tier('medium', 'Medium', 2, ['card-aa-gemini-3-6-flash', 'card-arena-gemini-3-6-flash']),
-      tier('high', 'High', 3),
+      tier('medium', 'Medium', 2, ['card-aa-gemini-3-6-flash']),
+      tier('high', 'High', 3, ['card-arena-gemini-3-6-flash-high']),
     ],
   },
   {
@@ -267,13 +289,27 @@ export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
     ],
   },
   {
+    productLineId: 'muse_glimmer',
+    tiers: [
+      tier('low', 'Low', 1),
+      // Arena publishes the unsuffixed/default profile; OpenRouter documents
+      // Medium as the model's default effort, so it belongs here.
+      tier('medium', 'Medium', 2, ['card-arena-muse-glimmer']),
+      tier('high', 'High', 3, ['card-aa-muse-glimmer']),
+      tier('xhigh', 'XHigh', 4),
+    ],
+  },
+  {
     productLineId: 'muse_spark_12',
     tiers: [
       tier('minimal', 'Minimal', 0),
       tier('low', 'Low', 1),
       tier('medium', 'Medium', 2),
       tier('high', 'High', 3),
-      tier('xhigh', 'XHigh', 4, ['card-aa-muse-spark-1-2']),
+      tier('xhigh', 'XHigh', 4, [
+        'card-aa-muse-spark-1-2',
+        'card-arena-muse-spark-1-2-xhigh',
+      ]),
     ],
   },
   {
@@ -301,6 +337,15 @@ export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
       tier('medium', 'Medium', 2, ['card-aa-step-3-7-flash']),
       tier('high', 'High', 3),
       tier('max', 'Max', 5),
+    ],
+  },
+  {
+    productLineId: 'grok_46',
+    tiers: [
+      tier('low', 'Low', 1),
+      tier('medium', 'Medium', 2),
+      tier('high', 'High', 3, ['card-aa-grok-4-6', 'card-arena-grok-4-6-high']),
+      tier('xhigh', 'XHigh', 4),
     ],
   },
   {

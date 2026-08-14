@@ -79,7 +79,9 @@ export function isCapabilityMetricCompatibleWithHarness(
     return CODING_AGENT_HARNESS_NAMES.has(normalizedHarness);
   }
   if (ARENA_AGENT_MODE_METRIC_IDS.has(metricId)) {
-    return normalizedHarness === 'arena agent mode';
+    return normalizedHarness === 'arena agent mode'
+      || normalizedHarness === 'aa agent harness'
+      || normalizedHarness === 'aa harness';
   }
   return false;
 }
@@ -103,6 +105,8 @@ export function isCapabilityMetricApplicableToConfiguration(
   }
   if (ARENA_AGENT_MODE_METRIC_IDS.has(metricId)) {
     return normalizedHarness === 'arena agent mode'
+      || normalizedHarness === 'aa agent harness'
+      || normalizedHarness === 'aa harness'
       || CODING_AGENT_HARNESS_NAMES.has(normalizedHarness);
   }
   return false;
@@ -150,5 +154,5 @@ export function isCapabilityMetricCompatibleWithSourceLink(
 export function isPlainChatHarness(value: string | undefined): boolean {
   const harnessName = (value || '').split('·', 1)[0].trim();
   return !harnessName
-    || /^(?:chat|正常对话|来源已发布配置)$/iu.test(harnessName);
+    || /^(?:---|chat|no aa harness|无 aa harness|正常对话|来源已发布配置)$/iu.test(harnessName);
 }

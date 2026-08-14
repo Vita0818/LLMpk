@@ -135,7 +135,7 @@ function modelAuthorProviderName(modelName: string): string | null {
   if (/\bglm\b/u.test(normalized)) return 'Z.ai';
   if (/\bkimi\b/u.test(normalized)) return 'Moonshot AI';
   if (/\bminimax\b/u.test(normalized)) return 'MiniMax';
-  if (/\b(?:llama|muse spark)\b/u.test(normalized)) return 'Meta';
+  if (/\b(?:llama|muse(?: spark| glimmer))\b/u.test(normalized)) return 'Meta';
   if (/\bmistral\b/u.test(normalized)) return 'Mistral';
   if (/\bnemotron\b/u.test(normalized)) return 'NVIDIA';
   if (/\b(?:hunyuan|hy3)\b/u.test(normalized)) return 'Tencent';
@@ -265,7 +265,7 @@ function definePreset({ key, ...preset }: PresetInput): BuiltInConfigurationPres
 function normalChat(
   environment: string = 'OpenRouter Chatroom (ORC)',
 ): BuiltInConfigurationIdentity['harness'] {
-  return { name: 'Chat', environment };
+  return { name: '---', environment };
 }
 
 function viaOpenRouter(providerName: string, upstreamApi: string): BuiltInConfigurationIdentity['provider'] {
@@ -369,14 +369,14 @@ function arenaAgentModePreset(input: {
     productLineId: input.productLineId,
     modelName: input.modelName,
     profile: input.profile,
-    harness: 'Arena Agent Mode',
+    harness: 'AA Agent Harness',
     providerName: input.providerName,
     upstreamApi: input.upstreamApi,
     exactHarnessCardIds: [productionAgentModeCardId(input.arenaBaseCardId)],
     chatFallbackCardIds: input.chatFallbackCardIds,
     sameHarnessFallbackLinks: input.additionalFallbackLinks,
     environment: 'Arena Agent Mode',
-    fallbackPolicyNote: 'Arena Agent Mode 专属数据只进入该 Agent 配置；同档 Chat 数据仅可单向向上补缺，禁止回填 Chat 或串入其他 Agent。',
+    fallbackPolicyNote: 'AA Agent Harness 展示项使用 Arena Agent Mode 的已发布 Agent 数据；同档无 Harness 数据仅可单向向上补缺，禁止反向回填或串入其他 Harness。',
     note: input.note,
   });
 }
@@ -660,7 +660,7 @@ const DATA_MD_CONFIGURATION_PRESETS_RAW: readonly BuiltInConfigurationPreset[] =
     )],
   }),
   orcPreset({ key: 'data-md.deepseek-v4-flash.max', productLineId: 'deepseek_v4_flash', modelName: 'DeepSeek-v4-Flash Preview', profile: DATA_MD_DEFAULT_REASONING, providerName: 'DeepSeek', upstreamApi: 'DeepSeek API', sourceCardIds: ['card-aa-deepseek-v4-flash-0420', 'card-openrouter-deepseek-deepseek-v4-flash'] }),
-  orcPreset({ key: 'data-md.deepseek-v4-pro.max', productLineId: 'deepseek_v4_pro', modelName: 'DeepSeek-v4-Pro Preview', profile: DATA_MD_DEFAULT_REASONING, providerName: 'DeepSeek', upstreamApi: 'DeepSeek API', sourceCardIds: ['card-aa-deepseek-v4-pro', 'card-openrouter-deepseek-deepseek-v4-pro'] }),
+  orcPreset({ key: 'data-md.deepseek-v4-pro.max', productLineId: 'deepseek_v4_pro', modelName: 'DeepSeek-v4-Pro Preview', profile: DATA_MD_DEFAULT_REASONING, providerName: 'DeepSeek', upstreamApi: 'DeepSeek API', sourceCardIds: ['card-aa-deepseek-v4-pro-0424', 'card-openrouter-deepseek-deepseek-v4-pro'] }),
   orcPreset({ key: 'data-md.glm-5-2.max', productLineId: 'glm_52', modelName: 'GLM-5.2', profile: DATA_MD_DEFAULT_REASONING, providerName: 'Z.ai', upstreamApi: 'Z.ai API', sourceCardIds: ['card-aa-glm-5-2', 'card-arena-glm-5-2-max', 'card-openrouter-z-ai-glm-5-2'] }),
   orcPreset({ key: 'data-md.hy3.max', productLineId: 'hunyuan_hy3', modelName: 'Hy3', profile: DATA_MD_DEFAULT_REASONING, providerName: 'GMICloud', upstreamApi: 'GMICloud API' }),
   definePreset({
@@ -960,9 +960,6 @@ const DATA_MD_EXACT_CARD_ADDITIONS: Readonly<Record<string, readonly string[]>> 
   'builtin.data-md.claude-fable-5.max.vertex': [
     'card-arena-claude-fable-5',
     'card-openrouter-anthropic-claude-fable-5',
-  ],
-  'builtin.data-md.claude-opus-4-8.max.vertex': [
-    'card-arena-claude-opus-4-8-thinking',
   ],
   'builtin.data-md.kimi-k2-6.max': ['card-arena-kimi-k2-6'],
   'builtin.data-md.minimax-m3.max': ['card-aa-minimax-m3', 'card-arena-minimax-m3'],
@@ -1275,6 +1272,58 @@ const MUSE_SPARK_1_2_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[
   });
 
 /**
+ * Source-backed August 2026 releases. Each model keeps its published effort
+ * profiles and exact source cards; price/speed cards are shared only inside
+ * the same independently scoped product line.
+ */
+const AUGUST_2026_RELEASE_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
+  ...apiProfilePresets({
+    keyPrefix: 'grok-4-6',
+    productLineId: 'grok_46',
+    modelName: 'Grok 4.6',
+    profileKeys: ['low', 'medium', 'high', 'xhigh'],
+    providerName: 'xAI',
+    upstreamApi: 'xAI API',
+    sharedExactCardIds: ['card-openrouter-x-ai-grok-4-6'],
+    origin: 'source-backed',
+    note: 'OpenRouter 发布 Low、Medium、High、XHigh；AA 与 Arena 当前只提供 High 能力观测，XHigh 仅按 High→XHigh 单向补缺。',
+  }),
+  ...apiProfilePresets({
+    keyPrefix: 'muse-glimmer',
+    productLineId: 'muse_glimmer',
+    modelName: 'Muse Glimmer',
+    profileKeys: ['low', 'medium', 'high', 'xhigh'],
+    providerName: 'Meta',
+    upstreamApi: 'Meta API',
+    sharedExactCardIds: ['card-openrouter-meta-muse-glimmer-30b'],
+    origin: 'source-backed',
+    note: 'OpenRouter 发布 Low、Medium、High、XHigh 且默认 Medium；Arena 无后缀记录归默认 Medium，AA 的 High 保持独立，禁止向低档反向回填。',
+  }),
+  ...apiProfilePresets({
+    keyPrefix: 'gemini-3-7-flash',
+    productLineId: 'gemini_37_flash',
+    modelName: 'Gemini 3.7 Flash',
+    profileKeys: ['low', 'medium', 'high'],
+    providerName: 'Google AI Studio',
+    upstreamApi: 'Gemini API / Google AI Studio',
+    sharedExactCardIds: ['card-openrouter-google-gemini-3-7-flash'],
+    origin: 'source-backed',
+    note: 'Low、Medium、High 均使用各自 AA 能力卡；Arena 的明确 High 行只连接 High，不跨档复制。',
+  }),
+  ...apiProfilePresets({
+    keyPrefix: 'deepseek-v4-pro-0813',
+    productLineId: 'deepseek_v4_pro_0813',
+    modelName: 'DeepSeek V4 Pro 0813',
+    profileKeys: ['low', 'high', 'max'],
+    providerName: 'DeepSeek',
+    upstreamApi: 'DeepSeek API',
+    sharedExactCardIds: ['card-openrouter-deepseek-deepseek-v4-pro-0813'],
+    origin: 'source-backed',
+    note: '0813 是独立产品线；只使用带 0813/20260813 身份的 AA、Arena 与 OpenRouter 记录，绝不连接 0424 Preview 卡。',
+  }),
+];
+
+/**
  * Claude Opus 5 is one API model with source-published effort profiles.
  * These are separate model-side configurations; High is the normal/standard
  * API profile, and Fast is a distinct low-latency route rather than a copied
@@ -1343,7 +1392,7 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
     productLineId: 'deepseek_v4_flash',
     modelName: 'DeepSeek-v4-Flash Preview',
     profile: 'Max',
-    harness: 'Arena Agent Mode',
+    harness: 'AA Agent Harness',
     providerName: 'DeepSeek',
     upstreamApi: 'DeepSeek API',
     exactHarnessCardIds: [],
@@ -1427,7 +1476,7 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
     productLineId: 'claude_sonnet_5',
     modelName: 'Claude Sonnet 5',
     profile: 'Max',
-    harness: 'Arena Agent Mode',
+    harness: 'AA Agent Harness',
     providerName: 'Anthropic',
     upstreamApi: 'Anthropic API',
     exactHarnessCardIds: [],
@@ -1449,7 +1498,7 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
         4,
         'Max',
         5,
-        'Arena Agent Mode',
+        'AA Agent Harness',
       ),
       lowerProfileFallback(
         'card-arena-claude-sonnet-5',
@@ -1497,7 +1546,7 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
         4,
         'Max',
         5,
-        'Arena Agent Mode',
+        'AA Agent Harness',
       ),
     ],
     note: 'Arena 的文本榜仍保留同家族 Preview 名称；该较早版本只向正式 Max Agent 单向补齐 Chat 数据。',
@@ -1523,7 +1572,7 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
     productLineId: 'source-profile-grok-build-0-1-0616',
     modelName: 'Grok Build 0.1',
     profile: 'Max',
-    harness: 'Arena Agent Mode',
+    harness: 'AA Agent Harness',
     providerName: 'xAI',
     upstreamApi: 'xAI API',
     exactHarnessCardIds: [
@@ -1534,7 +1583,79 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
       'card-openrouter-x-ai-grok-build-0-1',
     ],
     environment: 'Arena Agent Mode',
-    fallbackPolicyNote: 'Arena 只发布了该模型的 Agent 行，因此用 Arena Agent Mode 作为榜单配置；AA 与 OpenRouter 的模型级数据只向该执行环境单向补缺。',
+    fallbackPolicyNote: 'Arena 只发布了该模型的 Agent 行，因此榜单第二项统一显示 AA Agent Harness；Arena 来源身份仍保留，AA 与 OpenRouter 的模型级数据只向该执行环境单向补缺。',
+  }),
+  harnessPreset({
+    key: 'harness.deepseek-v4-flash-0731.max.codex-cli',
+    productLineId: 'deepseek_v4_flash_0731',
+    modelName: 'DeepSeek V4 Flash 0731',
+    profile: 'Max',
+    harness: 'Codex CLI',
+    providerName: 'DeepSeek',
+    upstreamApi: 'DeepSeek API',
+    exactHarnessCardIds: [
+      'card-aa-coding-agent-codex-deepseek-v4-flash-0731-max',
+    ],
+    chatFallbackCardIds: [
+      'card-aa-deepseek-v4-flash',
+      'card-openrouter-deepseek-deepseek-v4-flash-0731',
+    ],
+    sameHarnessFallbackLinks: [
+      lowerProfileHarnessFallback(
+        'card-arena-deepseek-v4-flash-high',
+        'High',
+        3,
+        'Max',
+        5,
+        'Codex CLI',
+      ),
+    ],
+    note: 'AA Coding Agent 原始行明确使用 Codex；0731 的普通模型数据仅作为 Codex CLI 配置的单向补充。',
+  }),
+  harnessPreset({
+    key: 'harness.gemini-3-6-flash.high.opencode',
+    productLineId: 'gemini_36_flash',
+    modelName: 'Gemini 3.6 Flash',
+    profile: 'High',
+    harness: 'OpenCode',
+    providerName: 'Google',
+    upstreamApi: 'Gemini API / Google AI Studio',
+    exactHarnessCardIds: [
+      'card-aa-coding-agent-opencode-gemini-3-6-flash-high',
+    ],
+    chatFallbackCardIds: [
+      'card-arena-gemini-3-6-flash-high',
+      'card-openrouter-google-gemini-3-6-flash',
+    ],
+    sameHarnessFallbackLinks: [
+      lowerProfileHarnessFallback(
+        'card-aa-gemini-3-6-flash',
+        'Medium',
+        2,
+        'High',
+        3,
+        'OpenCode',
+      ),
+    ],
+    note: 'AA Coding Agent 原始行明确使用 Opencode；站内执行名称沿用 OpenCode，其余同产品线数据只向 High Harness 单向补充。',
+  }),
+  harnessPreset({
+    key: 'harness.qwen3-8.max.claude-code',
+    productLineId: 'source-profile-qwen3-8-max',
+    modelName: 'Qwen3.8',
+    profile: 'Max',
+    harness: 'Claude Code',
+    providerName: 'Alibaba',
+    upstreamApi: 'Alibaba Qwen API',
+    exactHarnessCardIds: [
+      'card-aa-coding-agent-claude-code-qwen3-8-max',
+    ],
+    chatFallbackCardIds: [
+      'card-aa-qwen3-8-max',
+      'card-arena-qwen3-8-max',
+      'card-openrouter-qwen-qwen3-8-max',
+    ],
+    note: 'AA Coding Agent 原始行明确使用 Claude Code；普通 Qwen3.8 Max 数据仅向该 Harness 配置单向补充。',
   }),
   harnessPreset({
     key: 'harness.gpt-5-5.xhigh.codex-cli',
@@ -1674,13 +1795,23 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
     ],
     chatFallbackCardIds: [
       'card-aa-claude-opus-4-7',
-      'card-arena-claude-opus-4-7-thinking',
       'card-openrouter-anthropic-claude-opus-4-7',
     ],
     sameHarnessFallbackLinks: [
-      lowerAgentHarnessFallback(
-        productionAgentModeCardId('card-arena-claude-opus-4-7-thinking'),
+      lowerProfileAgentHarnessFallback(
+        productionAgentModeCardId('card-arena-claude-opus-4-7-high'),
+        'High',
+        3,
         'Max',
+        5,
+        'Claude Code',
+      ),
+      lowerProfileHarnessFallback(
+        'card-arena-claude-opus-4-7-high',
+        'High',
+        3,
+        'Max',
+        5,
         'Claude Code',
       ),
       lowerProfileFallback(
@@ -1929,7 +2060,7 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
     upstreamApi: 'DeepSeek API',
     exactHarnessCardIds: ['card-aa-coding-agent-claude-code-deepseek-v4-pro-high'],
     chatFallbackCardIds: [
-      'card-aa-deepseek-v4-pro-high',
+      'card-aa-deepseek-v4-pro-0424-high',
       'card-arena-deepseek-v4-pro-high-preview',
       'card-openrouter-deepseek-deepseek-v4-pro',
     ],
@@ -1952,12 +2083,22 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
     exactHarnessCardIds: ['card-aa-coding-agent-claude-code-claude-opus-4-8-max'],
     chatFallbackCardIds: [
       'card-aa-claude-opus-4-8',
-      'card-arena-claude-opus-4-8-thinking',
     ],
     sameHarnessFallbackLinks: [
-      lowerAgentHarnessFallback(
-        productionAgentModeCardId('card-arena-claude-opus-4-8-thinking'),
+      lowerProfileAgentHarnessFallback(
+        productionAgentModeCardId('card-arena-claude-opus-4-8-high'),
+        'High',
+        3,
         'Max',
+        5,
+        'Claude Code',
+      ),
+      lowerProfileHarnessFallback(
+        'card-arena-claude-opus-4-8-high',
+        'High',
+        3,
+        'Max',
+        5,
         'Claude Code',
       ),
       lowerProfileFallback(
@@ -2251,7 +2392,6 @@ const PRACTICAL_METRIC_IDS = new Set([
  * silently promoting every otherwise sparse source-catalog record.
  */
 export const READER_APPROVED_SOURCE_CATALOG_PRODUCT_LINE_IDS = [
-  'source-profile-gemini-3-1-flash-lite-preview',
   'source-profile-grok-4-3-high',
   'source-profile-grok-build-0-1-0616',
   'source-profile-inkling-xhigh',
@@ -2295,7 +2435,7 @@ function sourceCatalogModelName(
 function sourceCatalogHarness(cards: readonly SourceModelCard[]): BuiltInConfigurationIdentity['harness'] {
   if (cards.some(isOpenRouterStandardPerformanceCard)) {
     return {
-      name: 'Chat',
+      name: '---',
       environment: 'OpenRouter Standard',
     };
   }
@@ -2306,7 +2446,10 @@ function sourceCatalogHarness(cards: readonly SourceModelCard[]): BuiltInConfigu
   if (/\bsearch\b|grounding/u.test(profileText)) {
     return { name: 'Search', environment: 'Search' };
   }
-  return { name: 'Chat', environment: /\bfast\b/u.test(profileText) ? 'Fast' : 'Chat' };
+  return {
+    name: '---',
+    environment: /\bfast\b/u.test(profileText) ? 'Fast' : 'Chat',
+  };
 }
 
 function sourceCatalogProfileLabel(
@@ -2752,6 +2895,7 @@ function attachProviderNeutralOpenRouterPracticalCards(
 const BASE_HAND_AUTHORED_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
   ...DATA_MD_CONFIGURATION_PRESETS,
   ...MUSE_SPARK_1_2_CONFIGURATION_PRESETS,
+  ...AUGUST_2026_RELEASE_CONFIGURATION_PRESETS,
   ...CLAUDE_OPUS_5_CONFIGURATION_PRESETS,
   ...HARNESS_CONFIGURATION_PRESETS,
 ];
@@ -2849,7 +2993,7 @@ interface SubscriptionConfigurationTarget {
 }
 
 const BASE_PLAN_TO_20X_QUOTA_DIVISOR = 20;
-const CHATGPT_PRO_20X_API_EQUIVALENT_USD = 5000;
+const CHATGPT_PRO_20X_API_EQUIVALENT_USD = 2000;
 const CLAUDE_MAX_20X_API_EQUIVALENT_USD = 1600;
 const GOOGLE_AI_ULTRA_20X_API_EQUIVALENT_USD = 5200;
 
@@ -2859,7 +3003,7 @@ const CHATGPT_PLUS_PLAN: SubscriptionPlanDefinition = {
   monthlyPriceUSD: 20,
   apiEquivalentCostUSD:
     CHATGPT_PRO_20X_API_EQUIVALENT_USD / BASE_PLAN_TO_20X_QUOTA_DIVISOR,
-  note: '20 美元档按同一订阅族的 20× 比例折合 250 美元 API 用量；100 美元 5× 档成本效率相同，因此不重复建盒。',
+  note: '20 美元档按同一订阅族的 20× 比例折合 100 美元 API 用量；100 美元 5× 档成本效率相同，因此不重复建盒。',
 };
 
 const CHATGPT_PRO_20X_PLAN: SubscriptionPlanDefinition = {
@@ -2867,7 +3011,7 @@ const CHATGPT_PRO_20X_PLAN: SubscriptionPlanDefinition = {
   planName: 'ChatGPT Pro 20×',
   monthlyPriceUSD: 200,
   apiEquivalentCostUSD: CHATGPT_PRO_20X_API_EQUIVALENT_USD,
-  note: '200 美元档按已确认口径取 5000 美元 API 等价值。',
+  note: '200 美元档按已确认口径取 2000 美元 API 等价值。',
 };
 
 const CLAUDE_PRO_PLAN: SubscriptionPlanDefinition = {
@@ -2930,6 +3074,11 @@ const SUBSCRIPTION_CONFIGURATION_TARGETS:
     plans: [CHATGPT_PLUS_PLAN],
   },
   {
+    key: 'gpt-5-5.xhigh.codex-cli',
+    basePresetId: 'builtin.harness.gpt-5-5.xhigh.codex-cli',
+    plans: [CHATGPT_PLUS_PLAN],
+  },
+  {
     key: 'claude-fable-5.max.claude-code',
     basePresetId: 'builtin.harness.claude-fable-5.max.claude-code',
     plans: [CLAUDE_PRO_PLAN, CLAUDE_MAX_20X_PLAN],
@@ -2962,40 +3111,18 @@ const SUBSCRIPTION_CONFIGURATION_TARGETS:
     plans: [GOOGLE_AI_PRO_PLAN, GOOGLE_AI_ULTRA_20X_PLAN],
   },
   {
-    key: 'gemini-3-6-flash.high.chat',
-    basePresetId: 'builtin.data-md.gemini-3-6-flash.high.ai-studio',
-    plans: [GOOGLE_AI_PRO_PLAN, GOOGLE_AI_ULTRA_20X_PLAN],
-  },
-  {
-    key: 'gemini-3-5-flash.high.arena-agent-mode',
-    basePresetId: 'builtin.agent.arena.gemini-3-5-flash.high',
+    key: 'gemini-3-7-flash.high.chat',
+    basePresetId: 'builtin.gemini-3-7-flash.high',
     plans: [GOOGLE_AI_PRO_PLAN, GOOGLE_AI_ULTRA_20X_PLAN],
   },
   {
     key: 'gemini-3-5-flash-lite.high.chat',
     basePresetId: 'builtin.data-md.gemini-3-5-flash-lite.high.ai-studio',
-    plans: [GOOGLE_AI_PRO_PLAN, GOOGLE_AI_ULTRA_20X_PLAN],
+    plans: [GOOGLE_AI_PRO_PLAN],
   },
   {
-    key: 'gemini-3-1-flash-lite-preview.max.chat',
-    basePresetId:
-      'builtin.source-catalog.source-profile-gemini-3-1-flash-lite-preview.gemini-3-1-flash-lite-preview',
-    plans: [GOOGLE_AI_PRO_PLAN, GOOGLE_AI_ULTRA_20X_PLAN],
-  },
-  {
-    key: 'grok-4-5.high.grok-build',
-    basePresetId: 'builtin.harness.grok-4-5.high.grok-build',
-    plans: [SUPERGROK_PLAN],
-  },
-  {
-    key: 'grok-build-0-1.max.arena-agent-mode',
-    basePresetId: 'builtin.agent.arena.grok-build-0-1.max',
-    plans: [SUPERGROK_PLAN],
-  },
-  {
-    key: 'grok-4-3.high.chat',
-    basePresetId:
-      'builtin.source-catalog.source-profile-grok-4-3-high.grok-4-3-high',
+    key: 'grok-4-6.xhigh.chat',
+    basePresetId: 'builtin.grok-4-6.xhigh',
     plans: [SUPERGROK_PLAN],
   },
 ];
@@ -3260,7 +3387,6 @@ export const BUILT_IN_CONFIGURATION_RELEASE_CUTOFF = '2026-04-24';
  */
 export const BUILT_IN_CONFIGURATION_PINNED_MODEL_GROUP_KEYS = [
   'gemini_31_pro',
-  'source-model:gemini 3.1 flash lite preview',
   'gpt_55',
   'source-model:gpt-5.4',
   'claude_opus_47',
@@ -3375,7 +3501,7 @@ function vendorKeyFromModelName(value: string): string | null {
   if (/\bglm\b/u.test(normalized)) return 'zai';
   if (/\bkimi\b/u.test(normalized)) return 'moonshot';
   if (/\bminimax\b/u.test(normalized)) return 'minimax';
-  if (/\b(?:llama|muse spark)\b/u.test(normalized)) return 'meta';
+  if (/\b(?:llama|muse(?: spark| glimmer))\b/u.test(normalized)) return 'meta';
   if (/\bmistral\b/u.test(normalized)) return 'mistral';
   if (/\bnemotron\b/u.test(normalized)) return 'nvidia';
   if (/\b(?:hunyuan|hy3)\b/u.test(normalized)) return 'tencent';
@@ -3496,6 +3622,7 @@ const READER_FACING_PRESET_EXCLUSIONS = new Set<string>([
   'builtin.source-catalog.source-profile-grok-4-3.grok-4-3',
   'builtin.source-catalog.source-profile-kimi-k2-7-code.kimi-k2-7-code',
   'builtin.source-catalog.source-profile-gemma-4-12b-reasoning.gemma-4-12b-reasoning',
+  'builtin.source-catalog.source-profile-gemini-3-1-flash-lite-preview.gemini-3-1-flash-lite-preview',
 ]);
 
 /**
@@ -3600,7 +3727,7 @@ function curateReaderFacingPresets(
       .filter((preset) => {
         const coverage = score(preset);
         if (coverage.compatibleHarnessMetricCount <= 0) return false;
-        return preset.identity.harness.name === 'Arena Agent Mode'
+        return preset.identity.harness.name === 'AA Agent Harness'
           ? coverage.availableDomainIds.includes('agentic_work')
           : (
             coverage.availableDomainIds.includes('engineering')
@@ -3738,4 +3865,4 @@ export const BUILT_IN_CONFIGURATION_PRESET_COUNT = BUILT_IN_CONFIGURATION_PRESET
  * additions visible during Vite hot updates as well as after a full reload.
  */
 export const BUILT_IN_CONFIGURATION_PRESET_INVENTORY_VERSION =
-  '2026-08-06-muse-spark-1-2-source-backed-v34';
+  '2026-08-14-aa-agent-harness-labels-v40';

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "oagxm-current-product-lines/v4-muse-spark-1-2",
+  "schemaVersion": "oagxm-current-product-lines/v5-2026-08-13-releases",
   "scopeId": "oagxm-current-product-lines",
   "snapshotPolicy": "Keep every source-published execution profile for the listed product lines, including the Data.md model inventory. Never merge reasoning effort, harness, fast, pro, custom-tools, or serving-environment variants by name. Arena Search and Grounding suffixes are benchmark row labels, so their observations belong to the underlying model rather than a separate execution configuration; the original row identity remains in provenance. Exclude variable latest aliases and :free routes. A model mentioned only through a client or IDE environment is not automatically represented as that environment; it needs a source-published record for the exact profile.",
   "benchmarkBoundary": "General-purpose text or multimodal foundation models supported by the LLM capability registry. Historical Data.md entries are retained only when an exact record is published by Artificial Analysis, Arena, or OpenRouter. Dedicated image, video, speech, embedding, moderation, and safety-only APIs are outside the formal capability leaderboard unless a corresponding source benchmark is added.",
@@ -38,6 +38,7 @@
       "officialModelsUrl": "https://ai.google.dev/gemini-api/docs/models",
       "productLines": [
         { "id": "gemini_31_pro", "name": "Gemini 3.1 Pro", "tier": "preview", "rankingClass": "formal_text_agent", "patterns": ["\\bgemini[- ]3\\.1[- ]pro\\b"] },
+        { "id": "gemini_37_flash", "name": "Gemini 3.7 Flash", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bgemini[- ]3[._-]7[- ]flash\\b"] },
         { "id": "gemini_36_flash", "name": "Gemini 3.6 Flash", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bgemini[- ]3\\.6[- ]flash\\b"] },
         { "id": "gemini_35_flash", "name": "Gemini 3.5 Flash", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bgemini[- ]3\\.5[- ]flash(?![- ]lite)\\b"], "allowPreviewSourceRecords": false },
         { "id": "gemini_35_flash_lite", "name": "Gemini 3.5 Flash-Lite", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bgemini[- ]3\\.5[- ]flash[- ]lite\\b"] },
@@ -52,6 +53,7 @@
       "name": "xAI",
       "officialModelsUrl": "https://docs.x.ai/developers/models",
       "productLines": [
+        { "id": "grok_46", "name": "Grok 4.6", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bgrok[- ]4[._-]6\\b"] },
         { "id": "grok_45", "name": "Grok 4.5", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bgrok[- ]4\\.5\\b"] }
       ]
     },
@@ -60,6 +62,7 @@
       "name": "Meta",
       "officialModelsUrl": "https://ai.meta.com/llama",
       "productLines": [
+        { "id": "muse_glimmer", "name": "Muse Glimmer", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bmuse[- ]glimmer(?:[- ]30b)?\\b"] },
         { "id": "muse_spark_12", "name": "Muse Spark 1.2", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bmuse[- ]spark[- ]1\\.2\\b"] },
         { "id": "muse_spark_11", "name": "Muse Spark 1.1", "tier": "preview", "rankingClass": "formal_text_agent", "patterns": ["\\bmuse[- ]spark[- ]1\\.1\\b"] },
         { "id": "llama_4_maverick", "name": "Llama 4 Maverick", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bllama[- ]4[- ]maverick\\b"] },
@@ -71,9 +74,10 @@
       "name": "DeepSeek",
       "officialModelsUrl": "https://api-docs.deepseek.com/quick_start/pricing",
       "productLines": [
-        { "id": "deepseek_v4_flash_0731", "name": "DeepSeek V4 Flash 0731", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[- ]flash[- ]0731\\b", "2083084415157022911"] },
+        { "id": "deepseek_v4_flash_0731", "name": "DeepSeek V4 Flash 0731", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[- ]flash[- ]0731\\b", "2083084415157022911", "date[- ]2026[- ]07[- ]31"] },
         { "id": "deepseek_v4_flash", "name": "DeepSeek V4 Flash Preview", "tier": "preview", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[- ]flash\\b"] },
-        { "id": "deepseek_v4_pro", "name": "DeepSeek V4 Pro", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[- ]pro\\b"] }
+        { "id": "deepseek_v4_pro_0813", "name": "DeepSeek V4 Pro 0813", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[- ]pro(?:[- ](?:max|high|low|xhigh|reasoning))*[- ](?:0813|20260813)\\b"] },
+        { "id": "deepseek_v4_pro", "name": "DeepSeek V4 Pro", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[- ]pro\\b(?![- ]?(?:0813|20260813)\\b)"] }
       ]
     },
     {

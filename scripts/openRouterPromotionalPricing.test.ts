@@ -47,6 +47,22 @@ const requireScore = (name: string) => {
   return score;
 };
 
+const solPlusSubscription = requireScore(
+  'GPT-5.6 Sol Max | Codex CLI | ChatGPT Plus',
+);
+const solProSubscription = requireScore(
+  'GPT-5.6 Sol Max | Codex CLI | ChatGPT Pro 20×',
+);
+assert.equal(solPlusSubscription.config.subscriptionData?.apiEquivalentCostUSD, 100);
+assert.equal(solProSubscription.config.subscriptionData?.apiEquivalentCostUSD, 2000);
+assert.ok(
+  Math.abs(
+    solPlusSubscription.practicalBreakdown.effectiveScenarioCostUSD!
+      - solProSubscription.practicalBreakdown.effectiveScenarioCostUSD! * 2,
+  ) < 1e-12,
+  'At the published monthly prices, Plus must have twice the effective scenario cost of Pro 20×.',
+);
+
 const terraApi = requireScore('GPT-5.6 Terra Max | Codex CLI | OpenAI API');
 const terraSubscription = requireScore(
   'GPT-5.6 Terra Max | Codex CLI | ChatGPT Plus',
@@ -56,13 +72,13 @@ assert.equal(terraApi.config.openRouterData?.outputPricePerMToken, 6);
 assert.equal(terraApi.practicalBreakdown.effectiveScenarioCostUSD, 2.5);
 assert.equal(
   terraSubscription.config.subscriptionData?.apiEquivalentCostUSD,
-  250,
+  100,
 );
 assert.equal(terraSubscription.config.openRouterData?.inputPricePerMToken, 1);
 assert.equal(terraSubscription.config.openRouterData?.outputPricePerMToken, 6);
 assert.equal(
   terraSubscription.practicalBreakdown.effectiveScenarioCostUSD,
-  1 / 5,
+  1 / 2,
 );
 
 const lunaApi = requireScore('GPT-5.6 Luna Max | Codex CLI | OpenAI API');
@@ -74,13 +90,13 @@ assert.equal(lunaApi.config.openRouterData?.outputPricePerMToken, 0.6);
 assert.equal(lunaApi.practicalBreakdown.effectiveScenarioCostUSD, 0.25);
 assert.equal(
   lunaSubscription.config.subscriptionData?.apiEquivalentCostUSD,
-  250,
+  100,
 );
 assert.equal(lunaSubscription.config.openRouterData?.inputPricePerMToken, 0.1);
 assert.equal(lunaSubscription.config.openRouterData?.outputPricePerMToken, 0.6);
 assert.equal(
   lunaSubscription.practicalBreakdown.effectiveScenarioCostUSD,
-  1 / 50,
+  1 / 20,
 );
 
 console.log(

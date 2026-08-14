@@ -11,6 +11,9 @@ import { OAGXM_SCOPE, classifyOagxmModel } from '../src/data/oagxmScope';
 const expectedProductLines: Array<[string, string]> = [
   ['DeepSeek-v4-Flash', 'deepseek_v4_flash'],
   ['DeepSeek-v4-Flash-0731', 'deepseek_v4_flash_0731'],
+  ['DeepSeek V4 Pro 0813', 'deepseek_v4_pro_0813'],
+  ['deepseek/deepseek-v4-pro-20260813', 'deepseek_v4_pro_0813'],
+  ['deepseek-v4-pro-max-20260813', 'deepseek_v4_pro_0813'],
   ['DeepSeek-v4-Pro', 'deepseek_v4_pro'],
   ['GLM-5.2', 'glm_52'],
   ['Hy3', 'hunyuan_hy3'],
@@ -41,12 +44,15 @@ const expectedProductLines: Array<[string, string]> = [
   ['Claude Opus 5', 'claude_opus_5'],
   ['Gemini 3.1 Pro', 'gemini_31_pro'],
   ['Gemini 3.1 Pro Preview', 'gemini_31_pro'],
+  ['Gemini 3.7 Flash', 'gemini_37_flash'],
   ['Gemini 3.6 Flash', 'gemini_36_flash'],
   ['Gemini 3.5 Flash', 'gemini_35_flash'],
   ['Gemini 3.5 Flash-Lite', 'gemini_35_flash_lite'],
   ['Gemini 3.1 Flash Lite', 'gemini_31_flash_lite'],
   ['Gemini 2.5 Flash Lite', 'gemini_25_flash_lite'],
+  ['Grok 4.6', 'grok_46'],
   ['Grok 4.5', 'grok_45'],
+  ['Muse Glimmer 30B', 'muse_glimmer'],
   ['Muse Spark 1.2', 'muse_spark_12'],
   ['Muse Spark 1.1', 'muse_spark_11'],
   ['Mistral Medium 3.5', 'mistral_medium_35'],
@@ -70,7 +76,7 @@ for (const [sourceName, productLineId] of expectedProductLines) {
 }
 
 const configuredProductLines = OAGXM_SCOPE.vendors.flatMap((vendor) => vendor.productLines);
-assert.equal(configuredProductLines.length, 49, 'Curated inventory should include Muse Spark 1.2 as its own product line');
+assert.equal(configuredProductLines.length, 53, 'Curated inventory should include all four 2026-08 release product lines');
 assert.ok(
   configuredProductLines.every((line) => line.rankingClass === 'formal_text_agent'),
   'Image/audio/safety-only product lines must not enter the Data.md capability scope',
@@ -88,11 +94,29 @@ assert.equal(
 );
 assert.equal(
   classifyOagxmModel(
+    'deepseek-v4-flash-high',
+    'https://api-docs.deepseek.com/updates/#date-2026-07-31',
+  )?.productLineId,
+  'deepseek_v4_flash_0731',
+  'The refreshed official DeepSeek July 31 anchor must resolve to 0731.',
+);
+assert.equal(
+  classifyOagxmModel(
     'deepseek-v4-flash-high-preview',
     'https://api-docs.deepseek.com/news/news260424',
   )?.productLineId,
   'deepseek_v4_flash',
   'The Arena row linked to the April 24 announcement must remain Preview.',
+);
+assert.equal(
+  classifyOagxmModel('DeepSeek V4 Pro 0813 (Reasoning, Max Effort)')?.productLineId,
+  'deepseek_v4_pro_0813',
+  'The August 13 release must never collapse into the older DeepSeek V4 Pro Preview line.',
+);
+assert.equal(
+  classifyOagxmModel('DeepSeek V4 Pro Preview')?.productLineId,
+  'deepseek_v4_pro',
+  'The older DeepSeek V4 Pro Preview line must remain independently addressable.',
 );
 
 console.log(`OAGXM scope inventory passed: ${configuredProductLines.length} product lines.`);

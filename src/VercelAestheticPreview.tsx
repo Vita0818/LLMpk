@@ -20,6 +20,7 @@ import type {
 } from './types/publicLeaderboard';
 import { RadarChart } from './components/RadarChart';
 import { SideBySideCompareView } from './components/SideBySideCompareView';
+import { CustomRankingView } from './components/CustomRankingView';
 import {
   ConfigurationMetricList,
   ConfigurationRadar,
@@ -69,8 +70,8 @@ const getScoreDepthStyle = (score: number | null | undefined) => {
  * - Header Pill Navbar: bg-neutral-100 rounded-[1.5rem] with bg-black active pill
  */
 export const VercelAestheticPreview: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'leaderboard' | 'side_by_side' | 'overview' | 'detail'>('leaderboard');
-  const [lastMainTab, setLastMainTab] = useState<'leaderboard' | 'side_by_side' | 'overview'>('leaderboard');
+  const [activeTab, setActiveTab] = useState<'leaderboard' | 'custom' | 'side_by_side' | 'overview' | 'detail'>('leaderboard');
+  const [lastMainTab, setLastMainTab] = useState<'leaderboard' | 'custom' | 'side_by_side' | 'overview'>('leaderboard');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedConfigId, setSelectedConfigId] = useState<string>('');
   const [filterCategory, setFilterCategory] = useState<'all' | 'reasoning' | 'top'>('all');
@@ -555,10 +556,10 @@ export const VercelAestheticPreview: React.FC = () => {
       {/* 1. Header Navigation */}
       {(!PLAY_MODE_ENABLED || !isPlayModeCleanView) && (
         <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-neutral-200/80 shadow-2xs">
-          <div className="max-w-[1500px] mx-auto px-4 h-16 flex items-center justify-between gap-4">
+          <div className="max-w-[1500px] mx-auto px-3 sm:px-4 h-16 flex items-center justify-between gap-2 sm:gap-4">
           {/* Logo & Circular Back Button Next to LLMpk */}
           <div className="flex items-center gap-3">
-            <a href={import.meta.env.BASE_URL} className="font-brand-mono text-3xl font-black text-neutral-950 tracking-tight select-none hover:opacity-90 transition-opacity">
+            <a href={import.meta.env.BASE_URL} className="font-brand-mono text-2xl sm:text-3xl font-black text-neutral-950 tracking-tight select-none hover:opacity-90 transition-opacity">
               LLMpk
             </a>
 
@@ -578,45 +579,62 @@ export const VercelAestheticPreview: React.FC = () => {
           {/* Top Right Main Tab Switcher & Play Mode Button */}
           <div className="flex items-center gap-2">
             {activeTab !== 'detail' && (
-              <div className="flex items-center p-1 bg-neutral-100/90 rounded-full border border-neutral-200/80 text-xs font-bold font-brand-mono">
+              <div className="flex items-center p-1 bg-neutral-100/90 rounded-full border border-neutral-200/80 text-[10px] sm:text-xs font-bold font-brand-mono">
                 <button
                   onClick={() => {
                     setActiveTab('leaderboard');
                     setLastMainTab('leaderboard');
                   }}
-                  className={`px-3.5 py-1.5 rounded-full transition-all ${
+                  className={`px-2.5 sm:px-3.5 py-1.5 rounded-full transition-all ${
                     activeTab === 'leaderboard'
                       ? 'bg-black text-white shadow-2xs'
                       : 'text-neutral-600 hover:text-neutral-950'
                   }`}
                 >
-                  全量榜单
+                  <span className="sm:hidden">榜单</span>
+                  <span className="hidden sm:inline">全量榜单</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveTab('custom');
+                    setLastMainTab('custom');
+                  }}
+                  className={`px-2.5 sm:px-3.5 py-1.5 rounded-full transition-all ${
+                    activeTab === 'custom'
+                      ? 'bg-black text-white shadow-2xs'
+                      : 'text-neutral-600 hover:text-neutral-950'
+                  }`}
+                >
+                  <span className="sm:hidden">自定义</span>
+                  <span className="hidden sm:inline">自定义排行</span>
                 </button>
                 <button
                   onClick={() => {
                     setActiveTab('side_by_side');
                     setLastMainTab('side_by_side');
                   }}
-                  className={`px-3.5 py-1.5 rounded-full transition-all ${
+                  className={`px-2.5 sm:px-3.5 py-1.5 rounded-full transition-all ${
                     activeTab === 'side_by_side'
                       ? 'bg-black text-white shadow-2xs'
                       : 'text-neutral-600 hover:text-neutral-950'
                   }`}
                 >
-                  并排对比
+                  <span className="sm:hidden">对比</span>
+                  <span className="hidden sm:inline">并排对比</span>
                 </button>
                 <button
                   onClick={() => {
                     setActiveTab('overview');
                     setLastMainTab('overview');
                   }}
-                  className={`px-3.5 py-1.5 rounded-full transition-all ${
+                  className={`px-2.5 sm:px-3.5 py-1.5 rounded-full transition-all ${
                     activeTab === 'overview'
                       ? 'bg-black text-white shadow-2xs'
                       : 'text-neutral-600 hover:text-neutral-950'
                   }`}
                 >
-                  雷达图总览
+                  <span className="sm:hidden">雷达</span>
+                  <span className="hidden sm:inline">雷达图总览</span>
                 </button>
               </div>
             )}
@@ -625,7 +643,7 @@ export const VercelAestheticPreview: React.FC = () => {
             {PLAY_MODE_ENABLED && (
               <button
                 onClick={handleStartPlayMode}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-neutral-950 hover:bg-neutral-800 text-white font-bold text-xs shadow-2xs transition-all border border-neutral-800 shrink-0 cursor-pointer"
+                className="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-neutral-950 hover:bg-neutral-800 text-white font-bold text-xs shadow-2xs transition-all border border-neutral-800 shrink-0 cursor-pointer"
                 title={`开启播放模式（${playModeQueue.length} 个代表配置，从末位播放至第 1 名）`}
               >
                 <Play className="w-3.5 h-3.5 fill-current text-emerald-400" />
@@ -787,7 +805,18 @@ export const VercelAestheticPreview: React.FC = () => {
           </div>
         )}
 
-        {/* VIEW 2: RADAR OVERVIEW GALLERY (4 PER ROW) */}
+        {/* VIEW 2: USER-WEIGHTED CUSTOM RANKING */}
+        {activeTab === 'custom' && (
+          <CustomRankingView
+            scoreItems={scores}
+            onSelectConfigForDetail={(item) => {
+              setSelectedConfigId(item.config.id);
+              setActiveTab('detail');
+            }}
+          />
+        )}
+
+        {/* VIEW 3: RADAR OVERVIEW GALLERY (4 PER ROW) */}
         {activeTab === 'overview' && (
           <div className="space-y-6 font-brand-mono">
             {/* 4-Per-Row Grid Layout */}
@@ -877,7 +906,7 @@ export const VercelAestheticPreview: React.FC = () => {
           </div>
         )}
 
-        {/* VIEW 2: SIDE-BY-SIDE COMPARE */}
+        {/* VIEW 4: SIDE-BY-SIDE COMPARE */}
         {activeTab === 'side_by_side' && (
           <SideBySideCompareView
             scoreItems={scores}

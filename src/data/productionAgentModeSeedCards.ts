@@ -29,7 +29,7 @@ const REVIEWED_ARENA_AGENT_BASE_CARD_IDS = [
   'card-arena-gpt-5-5-xhigh',
   // Explicitly retained historical families with genuine Arena Agent rows.
   'card-arena-gemini-3-1-pro-preview',
-  'card-arena-claude-opus-4-7-thinking',
+  'card-arena-claude-opus-4-7-high',
   'card-arena-claude-opus-4-6',
   'card-arena-claude-sonnet-4-6',
   'card-arena-kimi-k2-6',
@@ -42,7 +42,7 @@ const REVIEWED_ARENA_AGENT_BASE_CARD_IDS = [
   'card-arena-gpt-5-6-terra-xhigh',
   'card-arena-gpt-5-6-luna-xhigh',
   'card-arena-claude-fable-5-high',
-  'card-arena-claude-opus-4-8-thinking',
+  'card-arena-claude-opus-4-8-high',
   'card-arena-grok-4-5',
   // Arena currently publishes this row as `kimi-k3-max`. Keep the exact
   // current card id here so its genuine Agent Mode observations are projected

@@ -8,7 +8,7 @@ const SOURCE_URL = 'https://artificialanalysis.ai/agents/coding-agents';
 const SOURCE_LEADERBOARD = 'Artificial Analysis Coding Agent Index v1.3';
 const SNAPSHOT_DATE = artificialAnalysisFetchedAt.slice(0, 10) || '2026-07-27';
 const SCOPE_ID = 'oagxm-current-product-lines';
-const SCOPE_VERSION = 'oagxm-current-product-lines/v4-muse-spark-1-2';
+const SCOPE_VERSION = 'oagxm-current-product-lines/v5-2026-08-13-releases';
 
 interface HarnessCodingAgentRow {
   key: string;
@@ -43,7 +43,7 @@ interface HarnessCodingAgentRow {
 const BASE_HARNESS_CODING_AGENT_ROWS: readonly HarnessCodingAgentRow[] = [
   {
     key: 'codex-gpt-5-6-sol-max',
-    sourceRecordId: '0ed87f4672c6820504f9402f198df0a6',
+    sourceRecordId: '345f8adb212fc6a898b2efc99650420f',
     displayLabel: 'Codex - GPT-5.6 Sol (max)',
     harness: 'Codex CLI',
     sourceHarnessLabel: 'Codex',
@@ -66,7 +66,7 @@ const BASE_HARNESS_CODING_AGENT_ROWS: readonly HarnessCodingAgentRow[] = [
   },
   {
     key: 'codex-gpt-5-6-terra-max',
-    sourceRecordId: 'bf63573db2966abb8e5df6aeb89d4a7a',
+    sourceRecordId: '99fc7a41674acd861df20610d8a84d04',
     displayLabel: 'Codex - GPT-5.6 Terra (max)',
     harness: 'Codex CLI',
     sourceHarnessLabel: 'Codex',
@@ -89,7 +89,7 @@ const BASE_HARNESS_CODING_AGENT_ROWS: readonly HarnessCodingAgentRow[] = [
   },
   {
     key: 'codex-gpt-5-6-luna-max',
-    sourceRecordId: '5062f510436fd9929027de5e98e49f60',
+    sourceRecordId: '3a30362dcf759090896f412187029f11',
     displayLabel: 'Codex - GPT-5.6 Luna (max)',
     harness: 'Codex CLI',
     sourceHarnessLabel: 'Codex',
@@ -112,7 +112,7 @@ const BASE_HARNESS_CODING_AGENT_ROWS: readonly HarnessCodingAgentRow[] = [
   },
   {
     key: 'claude-code-glm-5-2-max',
-    sourceRecordId: '23a4b1945147ca7027b1207f6664e9f8',
+    sourceRecordId: '8b6eea9ec9aca082aed5713b4ffc5abb',
     displayLabel: 'Claude Code - GLM-5.2',
     harness: 'Claude Code',
     sourceHarnessLabel: 'Claude Code',
@@ -135,7 +135,7 @@ const BASE_HARNESS_CODING_AGENT_ROWS: readonly HarnessCodingAgentRow[] = [
   },
   {
     key: 'claude-code-deepseek-v4-pro-high',
-    sourceRecordId: '191c8ab738f67c70506375676fd133a1',
+    sourceRecordId: 'e1d299b2461811a5e3922910872e21ac',
     displayLabel: 'Claude Code - DeepSeek V4 Pro (high)',
     harness: 'Claude Code',
     sourceHarnessLabel: 'Claude Code',
@@ -158,7 +158,7 @@ const BASE_HARNESS_CODING_AGENT_ROWS: readonly HarnessCodingAgentRow[] = [
   },
   {
     key: 'claude-code-claude-opus-4-8-max',
-    sourceRecordId: 'd68a924ec12a4f20f77e1c039573fae4',
+    sourceRecordId: 'd5768a9c2a80806a3eac3765b9550f4b',
     displayLabel: 'Claude Code - Opus 4.8 (max)',
     harness: 'Claude Code',
     sourceHarnessLabel: 'Claude Code',
@@ -181,7 +181,7 @@ const BASE_HARNESS_CODING_AGENT_ROWS: readonly HarnessCodingAgentRow[] = [
   },
   {
     key: 'claude-code-claude-opus-5-max',
-    sourceRecordId: '42d261a806e9a96a4769ed568662ad9c',
+    sourceRecordId: 'b4e3bfe152628dcb2a79bba1258dc84e',
     displayLabel: 'Claude Code - Opus 5 (max)',
     harness: 'Claude Code',
     sourceHarnessLabel: 'Claude Code',
@@ -204,7 +204,7 @@ const BASE_HARNESS_CODING_AGENT_ROWS: readonly HarnessCodingAgentRow[] = [
   },
   {
     key: 'claude-code-claude-fable-5-max',
-    sourceRecordId: '3dc51da6d8a643b1053c74af93b012b8',
+    sourceRecordId: '1d6603e65afa69261ec25dd3db0ae990',
     displayLabel: 'Claude Code - Fable 5 (max) (with fallback)',
     harness: 'Claude Code',
     sourceHarnessLabel: 'Claude Code',
@@ -227,7 +227,7 @@ const BASE_HARNESS_CODING_AGENT_ROWS: readonly HarnessCodingAgentRow[] = [
   },
   {
     key: 'claude-code-qwen3-7-plus-max',
-    sourceRecordId: '40743f41c6416cb5bd1ca0b58b901a62',
+    sourceRecordId: '5a84753fc015b73cd84a26c73977b4da',
     displayLabel: 'Claude Code - Qwen3.7 Plus (thinking)',
     harness: 'Claude Code',
     sourceHarnessLabel: 'Claude Code',
@@ -250,7 +250,7 @@ const BASE_HARNESS_CODING_AGENT_ROWS: readonly HarnessCodingAgentRow[] = [
   },
   {
     key: 'grok-build-grok-4-5-high',
-    sourceRecordId: '27ee60d5f3819ed24fe64a9c6d5529c5',
+    sourceRecordId: '826cff5ab69aa8b11bf5ce37dd0c619c',
     displayLabel: 'Grok Build - Grok 4.5 (high)',
     harness: 'Grok Build',
     sourceHarnessLabel: 'Grok Build',
@@ -273,7 +273,7 @@ const BASE_HARNESS_CODING_AGENT_ROWS: readonly HarnessCodingAgentRow[] = [
   },
   {
     key: 'kimi-code-cli-kimi-k3-max',
-    sourceRecordId: '0280f5ae3ebf36c3d322dedc04f12c7d',
+    sourceRecordId: '6a3f4427a0ee251db8ba6e3e21bb7afe',
     displayLabel: 'Kimi Code CLI - Kimi K3',
     harness: 'Kimi Code CLI',
     sourceHarnessLabel: 'Kimi Code CLI',
@@ -296,7 +296,7 @@ const BASE_HARNESS_CODING_AGENT_ROWS: readonly HarnessCodingAgentRow[] = [
   },
   {
     key: 'opencode-muse-spark-1-1-xhigh',
-    sourceRecordId: 'ef32f4245e6f9d0b7d390fbf075bc909',
+    sourceRecordId: 'c8eeed9aed54ca291e444ff7b972d2de',
     displayLabel: 'Opencode - Muse Spark 1.1 (xhigh)',
     harness: 'OpenCode',
     sourceHarnessLabel: 'Opencode',
@@ -340,8 +340,44 @@ interface StructuredHarnessBinding {
  */
 const STRUCTURED_HARNESS_BINDINGS: readonly StructuredHarnessBinding[] = [
   {
+    key: 'codex-deepseek-v4-flash-0731-max',
+    sourceRecordId: 'ba75b0f1ce2019c511374b7a7f850ce5',
+    expectedDisplayLabel: 'Codex - DeepSeek V4 Flash (max)',
+    harness: 'Codex CLI',
+    productLineId: 'deepseek_v4_flash_0731',
+    productLineName: 'DeepSeek V4 Flash 0731',
+    canonicalProfileKey: 'deepseek-v4-flash-0731-max-codex',
+    vendorId: 'deepseek',
+    vendorName: 'DeepSeek',
+    tier: 'official',
+  },
+  {
+    key: 'opencode-gemini-3-6-flash-high',
+    sourceRecordId: '4fb40d5633b706eecb1da0a68cb4f1ed',
+    expectedDisplayLabel: 'Opencode - Gemini 3.6 Flash (high)',
+    harness: 'OpenCode',
+    productLineId: 'gemini_36_flash',
+    productLineName: 'Gemini 3.6 Flash',
+    canonicalProfileKey: 'gemini-3-6-flash-high-opencode',
+    vendorId: 'google',
+    vendorName: 'Google',
+    tier: 'official',
+  },
+  {
+    key: 'claude-code-qwen3-8-max',
+    sourceRecordId: 'f06493dca66d238f2252adb8092dd10f',
+    expectedDisplayLabel: 'Claude Code - Qwen3.8 Max',
+    harness: 'Claude Code',
+    productLineId: 'source-profile-qwen3-8-max',
+    productLineName: 'Qwen3.8',
+    canonicalProfileKey: 'qwen3-8-max-claude-code',
+    vendorId: 'alibaba',
+    vendorName: 'Alibaba / Qwen',
+    tier: 'official',
+  },
+  {
     key: 'claude-code-claude-opus-4-6-medium',
-    sourceRecordId: 'a2fd26aa83bc9f3cb60d3031483143e4',
+    sourceRecordId: 'b08354cddd8d6202450b8275e2a37982',
     expectedDisplayLabel: 'Claude Code - Opus 4.6 (medium)',
     harness: 'Claude Code',
     productLineId: 'claude_opus_46',
@@ -353,7 +389,7 @@ const STRUCTURED_HARNESS_BINDINGS: readonly StructuredHarnessBinding[] = [
   },
   {
     key: 'claude-code-claude-sonnet-4-6-medium',
-    sourceRecordId: '4b7c9a05dd7b156199e1b13db78c4b9a',
+    sourceRecordId: '05941975b2dc8ed93cfcdb3feaf85847',
     expectedDisplayLabel: 'Claude Code - Sonnet 4.6 (medium)',
     harness: 'Claude Code',
     productLineId: 'source-profile-claude-sonnet-4-6',
@@ -365,7 +401,7 @@ const STRUCTURED_HARNESS_BINDINGS: readonly StructuredHarnessBinding[] = [
   },
   {
     key: 'claude-code-claude-opus-4-7-max',
-    sourceRecordId: '7370adbe8d1abc2dc2c0b4d7e158c95a',
+    sourceRecordId: 'cd52b3abde9774798e4cbacbffd5e789',
     expectedDisplayLabel: 'Claude Code - Opus 4.7 (max)',
     harness: 'Claude Code',
     productLineId: 'claude_opus_47',
@@ -377,7 +413,7 @@ const STRUCTURED_HARNESS_BINDINGS: readonly StructuredHarnessBinding[] = [
   },
   {
     key: 'codex-gpt-5-4-medium',
-    sourceRecordId: 'abf2a954484a4209b9767b0ba9e58f90',
+    sourceRecordId: '49eb59f1612c45154a4fda6b8daaf5c7',
     expectedDisplayLabel: 'Codex - GPT-5.4 (medium)',
     harness: 'Codex CLI',
     productLineId: 'source-profile-gpt-5-4',
@@ -389,7 +425,7 @@ const STRUCTURED_HARNESS_BINDINGS: readonly StructuredHarnessBinding[] = [
   },
   {
     key: 'codex-gpt-5-5-xhigh',
-    sourceRecordId: '7cf3f9a8ffd09d3ac7c6986bd9530811',
+    sourceRecordId: 'e4cbff3e0fa0bfa4ca4f885f7510ab44',
     expectedDisplayLabel: 'Codex - GPT-5.5 (xhigh)',
     harness: 'Codex CLI',
     productLineId: 'gpt_55',
@@ -401,7 +437,7 @@ const STRUCTURED_HARNESS_BINDINGS: readonly StructuredHarnessBinding[] = [
   },
   {
     key: 'gemini-cli-gemini-3-1-pro-high',
-    sourceRecordId: 'a96f1513a8b251ea2cdcfaba32e9f98b',
+    sourceRecordId: '7fa67a9e1f722082acda6674e2d6000e',
     expectedDisplayLabel: 'Gemini CLI - Gemini 3.1 Pro (high)',
     harness: 'Gemini CLI',
     productLineId: 'gemini_31_pro',
@@ -413,7 +449,7 @@ const STRUCTURED_HARNESS_BINDINGS: readonly StructuredHarnessBinding[] = [
   },
   {
     key: 'claude-code-kimi-k2-6-default',
-    sourceRecordId: '6fbb3572412c46b0746c08d31f3a3a76',
+    sourceRecordId: '846aef1bbf3857553dd98019096491d8',
     expectedDisplayLabel: 'Claude Code - Kimi K2.6',
     harness: 'Claude Code',
     productLineId: 'kimi_k26',
@@ -515,8 +551,60 @@ function projectStructuredHarnessRow(
   };
 }
 
+/**
+ * The Coding Agent API may republish the same named execution under a new
+ * internal row ID. Resolve the exact current display identity and copy every
+ * numeric value from the checked-in snapshot so the hand-authored product
+ * scope never leaves stale benchmark values behind after a source refresh.
+ */
+function projectCurrentBaseHarnessRow(row: HarnessCodingAgentRow): HarnessCodingAgentRow {
+  const matches = STRUCTURED_CODING_AGENT_RECORDS.filter(
+    (candidate) => candidate.displayLabel === row.displayLabel,
+  );
+  if (matches.length !== 1) {
+    throw new Error(
+      `Expected one current AA coding-agent row for ${row.displayLabel}; found ${matches.length}.`,
+    );
+  }
+  const record = matches[0];
+  const sourceRecordId = record.id;
+  const indexScore = finiteNumber(record.indexScore);
+  const meanCostUsd = finiteNumber(record.mean?.costUsd);
+  const meanAgentWallTimeSec = finiteNumber(record.mean?.agentWallTimeSec);
+  const meanSteps = finiteNumber(record.mean?.steps);
+  if (
+    !sourceRecordId
+    || indexScore === undefined
+    || meanCostUsd === undefined
+    || meanAgentWallTimeSec === undefined
+    || meanSteps === undefined
+  ) {
+    throw new Error(`Current AA coding-agent row ${row.displayLabel} is missing required fields.`);
+  }
+  const rewardFor = (datasetIndexName: string): number | undefined => finiteNumber(
+    record.evals?.find((evaluation) => (
+      evaluation.datasetIndexName === datasetIndexName
+    ))?.mean?.reward,
+  );
+  return {
+    ...row,
+    sourceRecordId,
+    sourceHarnessLabel: record.agentName || row.sourceHarnessLabel,
+    provider: record.provider || row.provider,
+    hostModelSlug: record.hostModelSlug || row.hostModelSlug,
+    indexScore,
+    deepSwe: rewardFor('deep-swe'),
+    sweAtlasQna: rewardFor('swe-atlas-qna'),
+    terminalBenchV2: rewardFor('terminal-bench-v2'),
+    meanCostUsd,
+    meanAgentWallTimeSec,
+    meanSteps,
+    harnessVersion: harnessVersionRange(record),
+  };
+}
+
 const HARNESS_CODING_AGENT_ROWS: readonly HarnessCodingAgentRow[] = [
-  ...BASE_HARNESS_CODING_AGENT_ROWS,
+  ...BASE_HARNESS_CODING_AGENT_ROWS.map(projectCurrentBaseHarnessRow),
   ...STRUCTURED_HARNESS_BINDINGS.map(projectStructuredHarnessRow),
 ];
 

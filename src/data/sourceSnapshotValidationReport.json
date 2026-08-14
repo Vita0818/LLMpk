@@ -1,6 +1,6 @@
 {
   "schemaVersion": "source-snapshot-validation-report/v1",
-  "validatedAt": "2026-08-07T14:23:02.657Z",
+  "validatedAt": "2026-08-14T05:38:26.694Z",
   "status": "PASS",
   "inputs": {
     "artificialAnalysis": "src/data/artificialAnalysisSourceSnapshot.json",
@@ -15,8 +15,8 @@
   },
   "coverage": {
     "artificialAnalysis": {
-      "modelRecords": 594,
-      "codingAgentRecords": 51,
+      "modelRecords": 608,
+      "codingAgentRecords": 54,
       "codingAgentHarnesses": [
         "Claude Code",
         "Codex",
@@ -27,56 +27,56 @@
         "Opencode"
       ],
       "metricCoverage": {
-        "hle": 555,
-        "gpqa": 559,
-        "critpt": 468,
-        "scicode": 553,
-        "lcr": 487,
-        "omniscienceAccuracy": 464,
-        "omniscienceNonHallucination": 464,
-        "gdpvalNormalized": 188,
-        "tauBanking": 187,
-        "terminalbenchV21": 186,
-        "ifbench": 449,
+        "hle": 567,
+        "gpqa": 575,
+        "critpt": 482,
+        "scicode": 567,
+        "lcr": 500,
+        "omniscienceAccuracy": 479,
+        "omniscienceNonHallucination": 479,
+        "gdpvalNormalized": 202,
+        "tauBanking": 160,
+        "terminalbenchV21": 200,
+        "ifbench": 450,
         "apexAgents": 29,
         "itbenchSre": 33,
-        "mmmuPro": 236
+        "mmmuPro": 240
       },
       "evaluationRows": {
-        "aa-briefcase": 57,
-        "automationbench-aa": 39,
-        "harvey-lab-aa": 35,
-        "enterprise-ops-gym-aa": 33
+        "aa-briefcase": 62,
+        "automationbench-aa": 40,
+        "harvey-lab-aa": 37,
+        "enterprise-ops-gym-aa": 34
       }
     },
     "arena": {
       "metricRowCounts": {
-        "arena_text_instruction": 385,
-        "arena_text_multiturn": 383,
-        "arena_text_creative": 383,
-        "arena_text_hard": 385,
-        "arena_text_math": 371,
-        "arena_text_coding": 380,
-        "arena_code_webdev": 110,
+        "arena_text_instruction": 390,
+        "arena_text_multiturn": 388,
+        "arena_text_creative": 388,
+        "arena_text_hard": 390,
+        "arena_text_math": 376,
+        "arena_text_coding": 385,
+        "arena_code_webdev": 116,
         "arena_search": 32,
-        "arena_agent_success": 45,
-        "arena_agent_praise": 45,
-        "arena_agent_steerability": 45,
-        "arena_agent_bash_recovery": 45,
-        "arena_agent_tool_hallucination": 45
+        "arena_agent_success": 48,
+        "arena_agent_praise": 48,
+        "arena_agent_steerability": 48,
+        "arena_agent_bash_recovery": 48,
+        "arena_agent_tool_hallucination": 48
       }
     },
     "openRouterCatalog": {
-      "modelRecords": 340,
-      "canonicalTextModelRecords": 309,
+      "modelRecords": 412,
+      "canonicalTextModelRecords": 381,
       "pricingCoverage": {
-        "prompt": 340,
-        "completion": 340,
-        "cacheRead": 184,
-        "cacheWrite": 59,
-        "reasoning": 19,
+        "prompt": 412,
+        "completion": 412,
+        "cacheRead": 247,
+        "cacheWrite": 73,
+        "reasoning": 30,
         "request": 0,
-        "webSearch": 99
+        "webSearch": 157
       },
       "pricingFields": [
         "audio",
@@ -95,40 +95,40 @@
       ]
     },
     "openRouterPerformance": {
-      "queriedModels": 309,
-      "modelsWithPerformance": 294,
-      "endpointRecords": 928,
-      "modelAggregates": 294,
-      "modelsWithSingleEndpoint": 145,
-      "modelsWithMultipleEndpoints": 149,
-      "unavailableModels": 7,
-      "noStatisticsModels": 8,
+      "queriedModels": 381,
+      "modelsWithPerformance": 362,
+      "endpointRecords": 1227,
+      "modelAggregates": 362,
+      "modelsWithSingleEndpoint": 158,
+      "modelsWithMultipleEndpoints": 204,
+      "unavailableModels": 10,
+      "noStatisticsModels": 9,
       "failedModels": 0,
-      "historyRequestsAttempted": 1176,
-      "historyRequestsSucceeded": 1176,
+      "historyRequestsAttempted": 1448,
+      "historyRequestsSucceeded": 1448,
       "historyRequestsFailed": 0,
-      "returnedEndpointRows": 977,
-      "acceptedEndpointRows": 928,
-      "rejectedEndpointRows": 49,
-      "rejectedMissingLatency": 49,
-      "rejectedMissingThroughput": 49,
-      "rejectedMissingOrZeroRequestCount": 49,
-      "stabilizedMeasureValues": 1856,
-      "historyBackedMeasureValues": 1846,
-      "currentWindowFallbackMeasureValues": 10,
-      "historyBackedMeasureCoverage": 0.9946120689655172,
-      "endpointRecordsWithBothMeasuresHistoryBacked": 923,
+      "returnedEndpointRows": 1262,
+      "acceptedEndpointRows": 1227,
+      "rejectedEndpointRows": 35,
+      "rejectedMissingLatency": 35,
+      "rejectedMissingThroughput": 35,
+      "rejectedMissingOrZeroRequestCount": 35,
+      "stabilizedMeasureValues": 2454,
+      "historyBackedMeasureValues": 2330,
+      "currentWindowFallbackMeasureValues": 124,
+      "historyBackedMeasureCoverage": 0.9494702526487367,
+      "endpointRecordsWithBothMeasuresHistoryBacked": 1165,
       "stabilizationSources": {
-        "threeDayPlusOneWeek": 1712,
-        "threeDayOnly": 22,
-        "oneWeekOnly": 112,
-        "currentWindowFallback": 10
+        "threeDayPlusOneWeek": 2114,
+        "threeDayOnly": 32,
+        "oneWeekOnly": 184,
+        "currentWindowFallback": 124
       },
       "aggregateCoverage": {
-        "modelAggregates": 294,
-        "singleEndpointModels": 145,
-        "multipleEndpointModels": 149,
-        "fourMeasureCompleteModels": 294
+        "modelAggregates": 362,
+        "singleEndpointModels": 158,
+        "multipleEndpointModels": 204,
+        "fourMeasureCompleteModels": 362
       }
     }
   },
@@ -146,7 +146,7 @@
       "description": "Artificial Analysis snapshot was fetched recently.",
       "passed": true,
       "details": {
-        "fetchedAt": "2026-08-06T05:35:06.555Z"
+        "fetchedAt": "2026-08-14T05:17:16.645Z"
       }
     },
     {
@@ -154,7 +154,7 @@
       "description": "Artificial Analysis contains a non-truncated model catalog.",
       "passed": true,
       "details": {
-        "modelRecords": 594,
+        "modelRecords": 608,
         "minimum": 400
       }
     },
@@ -163,8 +163,8 @@
       "description": "Artificial Analysis model IDs and slugs are unique and complete.",
       "passed": true,
       "details": {
-        "uniqueIds": 594,
-        "uniqueSlugs": 594
+        "uniqueIds": 608,
+        "uniqueSlugs": 608
       }
     },
     {
@@ -195,9 +195,9 @@
       "description": "High-coverage AA atomics were not truncated.",
       "passed": true,
       "details": {
-        "hle": 555,
-        "gpqa": 559,
-        "scicode": 553,
+        "hle": 567,
+        "gpqa": 575,
+        "scicode": 567,
         "minimumEach": 400
       }
     },
@@ -206,10 +206,10 @@
       "description": "AA main records retain newer IFBench, APEX-Agents, ITBench and MMMU-Pro fields.",
       "passed": true,
       "details": {
-        "ifbench": 449,
+        "ifbench": 450,
         "apexAgents": 29,
         "itbenchSre": 33,
-        "mmmuPro": 236
+        "mmmuPro": 240
       }
     },
     {
@@ -218,10 +218,10 @@
       "passed": true,
       "details": {
         "rows": {
-          "aa-briefcase": 57,
-          "automationbench-aa": 39,
-          "harvey-lab-aa": 35,
-          "enterprise-ops-gym-aa": 33
+          "aa-briefcase": 62,
+          "automationbench-aa": 40,
+          "harvey-lab-aa": 37,
+          "enterprise-ops-gym-aa": 34
         }
       }
     },
@@ -288,7 +288,7 @@
       "description": "AA Coding Agent rows have unique IDs, model+harness identity, and finite component scores.",
       "passed": true,
       "details": {
-        "rows": 51,
+        "rows": 54,
         "harnesses": [
           "Claude Code",
           "Codex",
@@ -313,7 +313,7 @@
       "description": "Arena extraction was produced recently.",
       "passed": true,
       "details": {
-        "extractedAt": "2026-08-06T05:35:14.803Z"
+        "extractedAt": "2026-08-14T05:17:40.171Z"
       }
     },
     {
@@ -359,19 +359,19 @@
       "passed": true,
       "details": {
         "rowCounts": {
-          "arena_text_instruction": 385,
-          "arena_text_multiturn": 383,
-          "arena_text_creative": 383,
-          "arena_text_hard": 385,
-          "arena_text_math": 371,
-          "arena_text_coding": 380,
-          "arena_code_webdev": 110,
+          "arena_text_instruction": 390,
+          "arena_text_multiturn": 388,
+          "arena_text_creative": 388,
+          "arena_text_hard": 390,
+          "arena_text_math": 376,
+          "arena_text_coding": 385,
+          "arena_code_webdev": 116,
           "arena_search": 32,
-          "arena_agent_success": 45,
-          "arena_agent_praise": 45,
-          "arena_agent_steerability": 45,
-          "arena_agent_bash_recovery": 45,
-          "arena_agent_tool_hallucination": 45
+          "arena_agent_success": 48,
+          "arena_agent_praise": 48,
+          "arena_agent_steerability": 48,
+          "arena_agent_bash_recovery": 48,
+          "arena_agent_tool_hallucination": 48
         },
         "minimumEach": 5
       }
@@ -389,7 +389,7 @@
       "description": "OpenRouter catalog was fetched recently.",
       "passed": true,
       "details": {
-        "fetchedAt": "2026-08-06T05:35:15.923Z"
+        "fetchedAt": "2026-08-14T05:17:41.958Z"
       }
     },
     {
@@ -397,8 +397,8 @@
       "description": "OpenRouter catalog is non-trivial and has unique model IDs.",
       "passed": true,
       "details": {
-        "modelRecords": 340,
-        "uniqueIds": 340
+        "modelRecords": 412,
+        "uniqueIds": 412
       }
     },
     {
@@ -417,13 +417,13 @@
       "description": "OpenRouter retained base and optional published pricing fields.",
       "passed": true,
       "details": {
-        "prompt": 340,
-        "completion": 340,
-        "cacheRead": 184,
-        "cacheWrite": 59,
-        "reasoning": 19,
+        "prompt": 412,
+        "completion": 412,
+        "cacheRead": 247,
+        "cacheWrite": 73,
+        "reasoning": 30,
         "request": 0,
-        "webSearch": 99
+        "webSearch": 157
       }
     },
     {
@@ -439,7 +439,7 @@
       "description": "OpenRouter performance snapshot was fetched recently.",
       "passed": true,
       "details": {
-        "fetchedAt": "2026-08-07T14:19:51.633Z"
+        "fetchedAt": "2026-08-14T05:20:21.444Z"
       }
     },
     {
@@ -447,10 +447,10 @@
       "description": "OpenRouter performance refresh had no transient request failures.",
       "passed": true,
       "details": {
-        "endpointRecords": 928,
+        "endpointRecords": 1227,
         "failedModels": 0,
         "failedHistoryRequests": 0,
-        "modelsWithPerformance": 294
+        "modelsWithPerformance": 362
       }
     },
     {
@@ -458,7 +458,7 @@
       "description": "Every retained Standard endpoint has finite p50 latency, throughput and request count.",
       "passed": true,
       "details": {
-        "endpointRecords": 928
+        "endpointRecords": 1227
       }
     },
     {
@@ -467,10 +467,10 @@
       "passed": true,
       "details": {
         "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
-        "historyBackedMeasureCoverage": 0.9946120689655172,
-        "historyBackedMeasureValues": 1846,
-        "currentWindowFallbackMeasureValues": 10,
-        "historyRequestsAttempted": 1176,
+        "historyBackedMeasureCoverage": 0.9494702526487367,
+        "historyBackedMeasureValues": 2330,
+        "currentWindowFallbackMeasureValues": 124,
+        "historyRequestsAttempted": 1448,
         "historyRequestsFailed": 0
       }
     },
@@ -479,8 +479,8 @@
       "description": "Every model with performance has provider-neutral price, TTFT, and output-speed summaries.",
       "passed": true,
       "details": {
-        "modelAggregates": 294,
-        "modelsWithPerformance": 294,
+        "modelAggregates": 362,
+        "modelsWithPerformance": 362,
         "requiredMeasures": [
           "inputPricePerToken",
           "outputPricePerToken",
@@ -489,8 +489,8 @@
           "instantaneousTimeToFirstTokenMilliseconds",
           "instantaneousOutputSpeedTokensPerSecond"
         ],
-        "singleEndpointModels": 145,
-        "multipleEndpointModels": 149
+        "singleEndpointModels": 158,
+        "multipleEndpointModels": 204
       }
     },
     {
@@ -498,12 +498,12 @@
       "description": "OpenRouter reports how many returned endpoint rows were accepted or rejected.",
       "passed": true,
       "details": {
-        "returned": 977,
-        "accepted": 928,
-        "rejected": 49,
-        "rejectedMissingLatency": 49,
-        "rejectedMissingThroughput": 49,
-        "rejectedMissingOrZeroRequestCount": 49
+        "returned": 1262,
+        "accepted": 1227,
+        "rejected": 35,
+        "rejectedMissingLatency": 35,
+        "rejectedMissingThroughput": 35,
+        "rejectedMissingOrZeroRequestCount": 35
       }
     }
   ]
