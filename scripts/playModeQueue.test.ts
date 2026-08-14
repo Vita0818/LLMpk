@@ -6,10 +6,20 @@ import type {
 import {
   buildPlayModeQueue,
   getPlayModeRouteGroupKey,
+  sortRadarOverviewScores,
 } from '../src/utils/playModeQueue';
+import {
+  getPlayModeRadarOverviewDurationMs,
+  getPlayModeRadarOverviewScrollTop,
+  PLAY_MODE_RADAR_OVERVIEW_BOTTOM_HOLD_MS,
+  PLAY_MODE_RADAR_OVERVIEW_MIN_DURATION_MS,
+  PLAY_MODE_RADAR_OVERVIEW_SCROLL_PX_PER_SECOND,
+  PLAY_MODE_RADAR_OVERVIEW_TOP_HOLD_MS,
+} from '../src/utils/playModeRadarOverview';
 
 const snapshot = publicLeaderboardSnapshot as unknown as PublicLeaderboardSnapshot;
 const queue = buildPlayModeQueue(snapshot.scores);
+const radarOverviewScores = sortRadarOverviewScores(queue);
 
 const assert = (condition: unknown, message: string) => {
   if (!condition) throw new Error(message);
@@ -24,6 +34,18 @@ assert(
 assert(
   snapshot.scores.length - queue.length === 18,
   'Playback queue should collapse exactly 18 duplicate route rows.',
+);
+assert(
+  radarOverviewScores.length === queue.length,
+  'Radar overview must contain every playback representative exactly once.',
+);
+assert(
+  new Set(radarOverviewScores.map((item) => item.config.id)).size === queue.length,
+  'Radar overview must not duplicate playback representatives.',
+);
+assert(
+  radarOverviewScores.every((item) => queue.includes(item)),
+  'Radar overview must not introduce configurations omitted by playback.',
 );
 
 snapshot.scores.forEach((candidate) => {
@@ -86,4 +108,58 @@ for (let index = 1; index < queue.length; index += 1) {
   );
 }
 
-console.log('Play mode queue keeps 43 best-route radar profiles in rank order: PASS');
+for (let index = 1; index < radarOverviewScores.length; index += 1) {
+  const previous = radarOverviewScores[index - 1] as PublicLeaderboardScore;
+  const current = radarOverviewScores[index] as PublicLeaderboardScore;
+  const previousScore = previous.rawCapabilityScore ?? Number.NEGATIVE_INFINITY;
+  const currentScore = current.rawCapabilityScore ?? Number.NEGATIVE_INFINITY;
+
+  assert(
+    previousScore >= currentScore,
+    `Radar overview is not sorted by raw capability score at index ${index}.`,
+  );
+}
+
+const testScrollDistance = PLAY_MODE_RADAR_OVERVIEW_SCROLL_PX_PER_SECOND * 10;
+const testScrollDuration = getPlayModeRadarOverviewDurationMs(testScrollDistance);
+const expectedScrollDuration = PLAY_MODE_RADAR_OVERVIEW_TOP_HOLD_MS
+  + 10_000
+  + PLAY_MODE_RADAR_OVERVIEW_BOTTOM_HOLD_MS;
+assert(
+  testScrollDuration === expectedScrollDuration,
+  'Radar overview duration must preserve the configured pixels-per-second speed.',
+);
+assert(
+  getPlayModeRadarOverviewDurationMs(0) === PLAY_MODE_RADAR_OVERVIEW_MIN_DURATION_MS,
+  'A short overview must still remain visible for the minimum duration.',
+);
+assert(
+  getPlayModeRadarOverviewScrollTop(
+    PLAY_MODE_RADAR_OVERVIEW_TOP_HOLD_MS - 1,
+    testScrollDistance,
+  ) === 0,
+  'Radar overview must remain at the top during its opening hold.',
+);
+assert(
+  Math.abs(
+    getPlayModeRadarOverviewScrollTop(
+      PLAY_MODE_RADAR_OVERVIEW_TOP_HOLD_MS + 5000,
+      testScrollDistance,
+    ) - testScrollDistance / 2,
+  ) < Number.EPSILON,
+  'Radar overview must scroll linearly through the gallery.',
+);
+assert(
+  getPlayModeRadarOverviewScrollTop(
+    testScrollDuration - PLAY_MODE_RADAR_OVERVIEW_BOTTOM_HOLD_MS,
+    testScrollDistance,
+  ) === testScrollDistance,
+  'Radar overview must reach the bottom before its closing hold.',
+);
+assert(
+  getPlayModeRadarOverviewScrollTop(testScrollDuration, testScrollDistance)
+    === testScrollDistance,
+  'Radar overview must remain at the bottom until the phase ends.',
+);
+
+console.log('Playback queue, radar overview ordering, and auto-scroll timing: PASS');

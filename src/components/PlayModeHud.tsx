@@ -28,6 +28,7 @@ export interface PlayModeHudProps {
   isPlaying: boolean;
   isFinished: boolean;
   stayDurationSeconds: number; // default 5
+  durationLabel?: string;
   stayDurationOptions?: readonly number[];
   elapsedMs: number;
   onTogglePlay: () => void;
@@ -53,6 +54,7 @@ export const PlayModeHud: React.FC<PlayModeHudProps> = ({
   isPlaying,
   isFinished,
   stayDurationSeconds,
+  durationLabel = '停留',
   stayDurationOptions = [2, 3, 4, 5, 7, 10],
   elapsedMs,
   onTogglePlay,
@@ -141,7 +143,7 @@ export const PlayModeHud: React.FC<PlayModeHudProps> = ({
             <Clock className="w-3.5 h-3.5 text-neutral-500" />
             {onStayDurationChange ? (
               <label className="flex items-center gap-1.5">
-                <span>停留</span>
+                <span>{durationLabel}</span>
                 <select
                   value={stayDurationSeconds}
                   onChange={(event) => onStayDurationChange(Number(event.target.value))}
@@ -156,7 +158,7 @@ export const PlayModeHud: React.FC<PlayModeHudProps> = ({
                 </select>
               </label>
             ) : (
-              <span>停留 {stayDurationSeconds}s</span>
+              <span>{durationLabel} {Math.ceil(stayDurationSeconds)}s</span>
             )}
             <span className="text-white font-bold bg-neutral-900 px-2 py-0.5 rounded-md border border-neutral-800 text-xs">
               {isFinished ? '0s' : `${secondsLeft}s`}

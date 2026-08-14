@@ -3,15 +3,18 @@ import { DOMAIN_DEFINITIONS } from '../src/engine/scoringEngine';
 import { DOMAIN_IDS, SCORING_CONFIG } from '../src/engine/scoringConfig';
 import publicLeaderboardSnapshot from '../src/data/publicLeaderboardSnapshot.json';
 import type { PublicLeaderboardScore } from '../src/types/publicLeaderboard';
+import { buildPlayModeQueue } from '../src/utils/playModeQueue';
 import {
   CAPABILITY_PREFERENCE_DIMENSIONS,
   calculatePersonalizedScore,
+  CUSTOM_RANKING_RESULT_LIMIT,
   DEFAULT_PREFERENCE_WEIGHTS,
   getNormalizedPreferenceShares,
   OVERALL_PREFERENCE_DIMENSIONS,
   OVERALL_PREFERENCE_BASELINE_WEIGHTS,
   PREFERENCE_DIMENSIONS,
   rankScoresByPreferences,
+  rankTopScoresByPreferences,
   type OverallPreferenceDimensionId,
   type PreferenceWeights,
 } from '../src/utils/customRanking';
@@ -199,6 +202,29 @@ defaultRanked.forEach((result) => {
 });
 
 const publicScores = publicLeaderboardSnapshot.scores as unknown as PublicLeaderboardScore[];
+const representativePublicScores = buildPlayModeQueue(publicScores);
+const representativeIds = new Set(
+  representativePublicScores.map((item) => item.config.id),
+);
+const representativePublicRanking = rankScoresByPreferences(
+  representativePublicScores,
+  DEFAULT_PREFERENCE_WEIGHTS,
+);
+const customTopFive = rankTopScoresByPreferences(
+  representativePublicScores,
+  DEFAULT_PREFERENCE_WEIGHTS,
+);
+assert.equal(representativePublicScores.length, 43);
+assert.equal(publicScores.length - representativePublicScores.length, 18);
+assert.equal(representativePublicRanking.length, 43);
+assert.equal(customTopFive.length, CUSTOM_RANKING_RESULT_LIMIT);
+assert.ok(customTopFive.every((result) => representativeIds.has(result.item.config.id)));
+assert.ok(publicScores
+  .filter((item) => !representativeIds.has(item.config.id))
+  .every((item) => !representativePublicRanking.some(
+    (result) => result.item.config.id === item.config.id,
+  )));
+
 const defaultPublicRanking = rankScoresByPreferences(
   publicScores,
   DEFAULT_PREFERENCE_WEIGHTS,

@@ -2,6 +2,7 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import {
@@ -18,15 +19,14 @@ import type {
   PublicLeaderboardScore,
   PublicLeaderboardSnapshot,
 } from './types/publicLeaderboard';
-import { RadarChart } from './components/RadarChart';
 import { SideBySideCompareView } from './components/SideBySideCompareView';
 import { CustomRankingView } from './components/CustomRankingView';
+import { RadarOverviewGallery } from './components/RadarOverviewGallery';
 import {
   ConfigurationMetricList,
   ConfigurationRadar,
   parseConfigurationName,
 } from './components/ConfigurationDetailContent';
-import { getProviderBrandTheme } from './utils/providerColors';
 import {
   formatPracticalAdjustment,
   getPracticalAdjustment,
@@ -34,7 +34,15 @@ import {
 } from './utils/practicalAdjustment';
 import { PlayModeHud } from './components/PlayModeHud';
 import { AnimatedScore } from './components/AnimatedScore';
-import { buildPlayModeQueue } from './utils/playModeQueue';
+import {
+  buildPlayModeQueue,
+  sortRadarOverviewScores,
+} from './utils/playModeQueue';
+import {
+  getPlayModeRadarOverviewDurationMs,
+  getPlayModeRadarOverviewScrollTop,
+  PLAY_MODE_RADAR_OVERVIEW_MIN_DURATION_MS,
+} from './utils/playModeRadarOverview';
 import {
   PlayModeCreditsCard,
   PlayModeIntroCard,
@@ -44,8 +52,15 @@ import { PLAY_MODE_ENABLED } from './config/featureFlags';
 
 type SortKey = 'rawCapabilityScore' | 'practicalScore' | DomainId;
 
-/** intro -> model loop -> outro weights -> outro credits -> finished. */
-type PlayModePhase = 'intro' | 'model' | 'outro_weights' | 'outro_credits';
+/** intro -> model loop -> radar overview -> outro weights -> outro credits. */
+type PlayModePhase =
+  | 'intro'
+  | 'model'
+  | 'radar_overview'
+  | 'outro_weights'
+  | 'outro_credits';
+
+const PLAY_MODE_HUD_UPDATE_INTERVAL_MS = 100;
 
 const PUBLIC_SCORES = (
   publicLeaderboardSnapshot as unknown as PublicLeaderboardSnapshot
@@ -85,15 +100,21 @@ export const VercelAestheticPreview: React.FC = () => {
   );
   const scores: PublicLeaderboardScore[] = PUBLIC_SCORES;
 
-  // Play Mode: rank the 37 representative radar profiles from low to high.
+  // Play Mode: rank one representative configuration per distinct radar route.
   const [isPlayModeActive, setIsPlayModeActive] = useState(false);
   const [isPlayModePlaying, setIsPlayModePlaying] = useState(false);
   const [playModePhase, setPlayModePhase] = useState<PlayModePhase>('intro');
   const [playModeIndex, setPlayModeIndex] = useState(0); // 0 = last place, total - 1 = #1 rank
   const [playModeElapsedMs, setPlayModeElapsedMs] = useState(0);
+  const playModeElapsedMsRef = useRef(0);
   const [isPlayModeFinished, setIsPlayModeFinished] = useState(false);
   const [playModeStaySeconds, setPlayModeStaySeconds] = useState(5);
   const [isPlayModeCleanView, setIsPlayModeCleanView] = useState(false);
+  const playModeRadarOverviewRef = useRef<HTMLDivElement>(null);
+  const [playModeRadarScrollDistance, setPlayModeRadarScrollDistance] = useState(0);
+  const [playModeRadarDurationMs, setPlayModeRadarDurationMs] = useState(
+    PLAY_MODE_RADAR_OVERVIEW_MIN_DURATION_MS,
+  );
 
   // Filtered scores
   const filteredScores = useMemo(() => {
@@ -162,13 +183,26 @@ export const VercelAestheticPreview: React.FC = () => {
       });
   }, [scores, searchTerm, filterCategory, sortKey, sortOrder]);
 
-  // Playback deliberately ignores search/filter UI state. Equivalent API and
-  // subscription routes share one radar slot, represented by the route with
-  // the highest practical score.
-  const playModeQueue = useMemo(
-    () => PLAY_MODE_ENABLED ? buildPlayModeQueue(scores) : [],
+  // Playback and radar overview deliberately ignore search/filter UI state.
+  // Equivalent API and subscription routes share one radar slot, represented
+  // by the route with the highest practical score.
+  const representativeRouteScores = useMemo(
+    () => buildPlayModeQueue(scores),
     [scores],
   );
+  const playModeQueue = PLAY_MODE_ENABLED ? representativeRouteScores : [];
+  const radarOverviewScores = useMemo(
+    () => sortRadarOverviewScores(representativeRouteScores),
+    [representativeRouteScores],
+  );
+  const currentPlayModePhaseDurationMs = playModePhase === 'radar_overview'
+    ? playModeRadarDurationMs
+    : playModeStaySeconds * 1000;
+
+  const resetPlayModeElapsed = useCallback(() => {
+    playModeElapsedMsRef.current = 0;
+    setPlayModeElapsedMs(0);
+  }, []);
 
   const showPlayModeIndex = useCallback((index: number) => {
     const queueLength = playModeQueue.length;
@@ -186,36 +220,116 @@ export const VercelAestheticPreview: React.FC = () => {
 
     setPlayModePhase('intro');
     setPlayModeIndex(0);
-    setPlayModeElapsedMs(0);
+    resetPlayModeElapsed();
     setIsPlayModeFinished(false);
     setIsPlayModeActive(true);
     setIsPlayModePlaying(shouldPlay);
     showPlayModeIndex(0);
-  }, [playModeQueue.length, showPlayModeIndex]);
+  }, [playModeQueue.length, resetPlayModeElapsed, showPlayModeIndex]);
 
-  // Use real elapsed time so a busy recording frame does not make the timer
-  // drift. React only updates the progress UI at 20fps.
+  // The overview is a real copy of the gallery page, so its playback length is
+  // measured from the rendered document instead of using the per-model delay.
+  useEffect(() => {
+    if (
+      !PLAY_MODE_ENABLED
+      || !isPlayModeActive
+      || playModePhase !== 'radar_overview'
+    ) {
+      return;
+    }
+
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+
+    const measureScrollDistance = () => {
+      const documentHeight = Math.max(
+        document.documentElement.scrollHeight,
+        document.body.scrollHeight,
+      );
+      const scrollDistance = Math.max(0, documentHeight - window.innerHeight);
+      const durationMs = getPlayModeRadarOverviewDurationMs(scrollDistance);
+
+      setPlayModeRadarScrollDistance((current) => (
+        Math.abs(current - scrollDistance) < 0.5 ? current : scrollDistance
+      ));
+      setPlayModeRadarDurationMs((current) => (
+        Math.abs(current - durationMs) < 0.5 ? current : durationMs
+      ));
+    };
+
+    const animationFrame = window.requestAnimationFrame(measureScrollDistance);
+    const resizeObserver = typeof ResizeObserver === 'undefined'
+      ? null
+      : new ResizeObserver(measureScrollDistance);
+    if (playModeRadarOverviewRef.current) {
+      resizeObserver?.observe(playModeRadarOverviewRef.current);
+    }
+    window.addEventListener('resize', measureScrollDistance);
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      resizeObserver?.disconnect();
+      window.removeEventListener('resize', measureScrollDistance);
+    };
+  }, [isPlayModeActive, isPlayModeCleanView, playModePhase]);
+
+  // Drive the visible scroll on every display frame, while updating React only
+  // often enough for the HUD. This keeps the 43 SVG charts out of the hot path.
   useEffect(() => {
     if (!PLAY_MODE_ENABLED || !isPlayModeActive || !isPlayModePlaying || isPlayModeFinished) return;
 
-    let previousTick = performance.now();
-    const timer = window.setInterval(() => {
-      const now = performance.now();
-      const elapsedSinceTick = Math.max(0, now - previousTick);
-      previousTick = now;
-      setPlayModeElapsedMs((prev) => {
-        const stayMs = playModeStaySeconds * 1000;
-        return Math.min(stayMs, prev + elapsedSinceTick);
-      });
-    }, 50);
+    let previousFrame = performance.now();
+    let lastHudUpdate = previousFrame;
+    let animationFrame = 0;
 
-    return () => window.clearInterval(timer);
+    const tick = (now: number) => {
+      const elapsedSinceFrame = Math.max(0, now - previousFrame);
+      previousFrame = now;
+
+      const nextElapsedMs = Math.min(
+        currentPlayModePhaseDurationMs,
+        playModeElapsedMsRef.current + elapsedSinceFrame,
+      );
+      playModeElapsedMsRef.current = nextElapsedMs;
+
+      if (playModePhase === 'radar_overview') {
+        window.scrollTo({
+          top: getPlayModeRadarOverviewScrollTop(
+            nextElapsedMs,
+            playModeRadarScrollDistance,
+          ),
+          left: 0,
+          behavior: 'auto',
+        });
+      }
+
+      const phaseFinished = nextElapsedMs >= currentPlayModePhaseDurationMs;
+      if (
+        phaseFinished
+        || (
+          !isPlayModeCleanView
+          && now - lastHudUpdate >= PLAY_MODE_HUD_UPDATE_INTERVAL_MS
+        )
+      ) {
+        lastHudUpdate = now;
+        setPlayModeElapsedMs(nextElapsedMs);
+      }
+
+      if (!phaseFinished) {
+        animationFrame = window.requestAnimationFrame(tick);
+      }
+    };
+
+    animationFrame = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(animationFrame);
   }, [
     isPlayModeActive,
     isPlayModePlaying,
     isPlayModeFinished,
-    playModeStaySeconds,
+    currentPlayModePhaseDurationMs,
+    isPlayModeCleanView,
+    playModePhase,
     playModeIndex,
+    playModeRadarScrollDistance,
   ]);
 
   useEffect(() => {
@@ -224,14 +338,14 @@ export const VercelAestheticPreview: React.FC = () => {
       || !isPlayModeActive
       || !isPlayModePlaying
       || isPlayModeFinished
-      || playModeElapsedMs < playModeStaySeconds * 1000
+      || playModeElapsedMs < currentPlayModePhaseDurationMs
     ) {
       return;
     }
 
     if (playModePhase === 'intro') {
       setPlayModePhase('model');
-      setPlayModeElapsedMs(0);
+      resetPlayModeElapsed();
       showPlayModeIndex(0);
       return;
     }
@@ -239,20 +353,27 @@ export const VercelAestheticPreview: React.FC = () => {
     if (playModePhase === 'model') {
       const nextIndex = playModeIndex + 1;
       if (nextIndex >= playModeQueue.length) {
-        setPlayModePhase('outro_weights');
-        setPlayModeElapsedMs(0);
+        setPlayModePhase('radar_overview');
+        resetPlayModeElapsed();
         return;
       }
 
       setPlayModeIndex(nextIndex);
-      setPlayModeElapsedMs(0);
+      resetPlayModeElapsed();
       showPlayModeIndex(nextIndex);
+      return;
+    }
+
+    if (playModePhase === 'radar_overview') {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+      setPlayModePhase('outro_weights');
+      resetPlayModeElapsed();
       return;
     }
 
     if (playModePhase === 'outro_weights') {
       setPlayModePhase('outro_credits');
-      setPlayModeElapsedMs(0);
+      resetPlayModeElapsed();
       return;
     }
 
@@ -263,10 +384,11 @@ export const VercelAestheticPreview: React.FC = () => {
     isPlayModePlaying,
     isPlayModeFinished,
     playModeElapsedMs,
-    playModeStaySeconds,
+    currentPlayModePhaseDurationMs,
     playModePhase,
     playModeIndex,
     playModeQueue.length,
+    resetPlayModeElapsed,
     showPlayModeIndex,
   ]);
 
@@ -286,7 +408,7 @@ export const VercelAestheticPreview: React.FC = () => {
 
   const handlePlayModeNext = useCallback(() => {
     const queueLength = playModeQueue.length;
-    setPlayModeElapsedMs(0);
+    resetPlayModeElapsed();
     setIsPlayModeFinished(false);
 
     if (playModePhase === 'intro') {
@@ -301,17 +423,28 @@ export const VercelAestheticPreview: React.FC = () => {
         setPlayModeIndex(nextIdx);
         showPlayModeIndex(nextIdx);
       } else {
-        setPlayModePhase('outro_weights');
+        setPlayModePhase('radar_overview');
       }
+      return;
+    }
+    if (playModePhase === 'radar_overview') {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+      setPlayModePhase('outro_weights');
       return;
     }
     if (playModePhase === 'outro_weights') {
       setPlayModePhase('outro_credits');
     }
-  }, [playModePhase, playModeIndex, playModeQueue.length, showPlayModeIndex]);
+  }, [
+    playModePhase,
+    playModeIndex,
+    playModeQueue.length,
+    resetPlayModeElapsed,
+    showPlayModeIndex,
+  ]);
 
   const handlePlayModePrev = useCallback(() => {
-    setPlayModeElapsedMs(0);
+    resetPlayModeElapsed();
     setIsPlayModeFinished(false);
 
     if (playModePhase === 'outro_credits') {
@@ -319,6 +452,10 @@ export const VercelAestheticPreview: React.FC = () => {
       return;
     }
     if (playModePhase === 'outro_weights') {
+      setPlayModePhase('radar_overview');
+      return;
+    }
+    if (playModePhase === 'radar_overview') {
       const lastIdx = playModeQueue.length - 1;
       setPlayModePhase('model');
       setPlayModeIndex(lastIdx);
@@ -334,7 +471,13 @@ export const VercelAestheticPreview: React.FC = () => {
         setPlayModePhase('intro');
       }
     }
-  }, [playModePhase, playModeIndex, playModeQueue.length, showPlayModeIndex]);
+  }, [
+    playModePhase,
+    playModeIndex,
+    playModeQueue.length,
+    resetPlayModeElapsed,
+    showPlayModeIndex,
+  ]);
 
   const handlePlayModeReplay = useCallback(() => {
     resetPlayMode(true);
@@ -350,11 +493,12 @@ export const VercelAestheticPreview: React.FC = () => {
     setIsPlayModeActive(false);
     setIsPlayModePlaying(false);
     setIsPlayModeFinished(false);
-    setPlayModeElapsedMs(0);
+    resetPlayModeElapsed();
     setIsPlayModeCleanView(false);
     leaveFullscreen();
     setActiveTab(lastMainTab);
-  }, [lastMainTab, leaveFullscreen]);
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [lastMainTab, leaveFullscreen, resetPlayModeElapsed]);
 
   const handlePrepareRecording = useCallback(() => {
     resetPlayMode(false);
@@ -372,8 +516,8 @@ export const VercelAestheticPreview: React.FC = () => {
 
   const handleStayDurationChange = useCallback((seconds: number) => {
     setPlayModeStaySeconds(seconds);
-    setPlayModeElapsedMs(0);
-  }, []);
+    resetPlayModeElapsed();
+  }, [resetPlayModeElapsed]);
 
   useEffect(() => {
     if (!PLAY_MODE_ENABLED || !isPlayModeActive) return;
@@ -496,38 +640,49 @@ export const VercelAestheticPreview: React.FC = () => {
   return (
     <div
       className={`min-h-screen bg-white text-neutral-900 font-brand-mono antialiased selection:bg-black selection:text-white ${
-        PLAY_MODE_ENABLED && isPlayModeCleanView ? 'play-mode-clean-view' : ''
+        PLAY_MODE_ENABLED && isPlayModeCleanView
+          ? `play-mode-clean-view ${
+              playModePhase === 'radar_overview'
+                ? 'play-mode-clean-view--scrolling'
+                : ''
+            }`
+          : ''
       }`}
     >
       {/* Floating Play Mode Controller HUD */}
       {PLAY_MODE_ENABLED && isPlayModeActive && !isPlayModeCleanView && (() => {
         const queueLength = playModeQueue.length;
         const isModelPhase = playModePhase === 'model';
+        const isRadarOverviewPhase = playModePhase === 'radar_overview';
         const currentItem = isModelPhase ? currentPlayModeItem : null;
         const parsed = currentItem ? parseConfigName(currentItem.config.name) : null;
-        // Virtual timeline: intro + models + weights card + credits card.
+        // Virtual timeline: intro + models + radar overview + weights + credits.
         const virtualIndex =
           playModePhase === 'intro'
             ? 0
             : playModePhase === 'model'
               ? playModeIndex + 1
-              : playModePhase === 'outro_weights'
+              : playModePhase === 'radar_overview'
                 ? queueLength + 1
-                : queueLength + 2;
+                : playModePhase === 'outro_weights'
+                  ? queueLength + 2
+                  : queueLength + 3;
         const stageLabel =
           playModePhase === 'intro' ? '片头'
             : playModePhase === 'model' ? undefined
-              : '片尾';
+              : playModePhase === 'radar_overview' ? '总览'
+                : '片尾';
         const stageTitle =
           playModePhase === 'intro' ? 'LLMpk'
-            : playModePhase === 'outro_weights' ? '评分权重'
-              : playModePhase === 'outro_credits' ? 'Thanks for Watching'
-                : '';
+            : playModePhase === 'radar_overview' ? '雷达图总览'
+              : playModePhase === 'outro_weights' ? '评分权重'
+                : playModePhase === 'outro_credits' ? 'Thanks for Watching'
+                  : '';
 
         return (
           <PlayModeHud
             totalItems={queueLength}
-            totalSteps={queueLength + 3}
+            totalSteps={queueLength + 4}
             currentIndex={virtualIndex}
             currentRank={isModelPhase ? currentPlayModeRank : null}
             stageLabel={stageLabel}
@@ -540,14 +695,19 @@ export const VercelAestheticPreview: React.FC = () => {
             scoreLabel="实用分"
             isPlaying={isPlayModePlaying}
             isFinished={isPlayModeFinished}
-            stayDurationSeconds={playModeStaySeconds}
+            stayDurationSeconds={isRadarOverviewPhase
+              ? currentPlayModePhaseDurationMs / 1000
+              : playModeStaySeconds}
+            durationLabel={isRadarOverviewPhase ? '滚动' : '停留'}
             elapsedMs={playModeElapsedMs}
             onTogglePlay={handlePlayModeTogglePlay}
             onNext={handlePlayModeNext}
             onPrev={handlePlayModePrev}
             onReplay={handlePlayModeReplay}
             onExit={handlePlayModeExit}
-            onStayDurationChange={handleStayDurationChange}
+            onStayDurationChange={isRadarOverviewPhase
+              ? undefined
+              : handleStayDurationChange}
             onPrepareRecording={handlePrepareRecording}
           />
         );
@@ -659,7 +819,9 @@ export const VercelAestheticPreview: React.FC = () => {
       <main
         className={
           PLAY_MODE_ENABLED && isPlayModeCleanView
-            ? 'play-mode-clean-stage mx-auto h-screen w-full max-w-[1500px] px-6 py-4'
+            ? playModePhase === 'radar_overview'
+              ? 'play-mode-clean-stage mx-auto min-h-screen w-full max-w-[1500px] px-6 py-4'
+              : 'play-mode-clean-stage mx-auto h-screen w-full max-w-[1500px] px-6 py-4'
             : PLAY_MODE_ENABLED && isPlayModeActive
               ? 'mx-auto w-full max-w-[1500px] px-4 pb-6 pt-36'
               : 'mx-auto w-full max-w-[1500px] px-4 py-6'
@@ -808,7 +970,7 @@ export const VercelAestheticPreview: React.FC = () => {
         {/* VIEW 2: USER-WEIGHTED CUSTOM RANKING */}
         {activeTab === 'custom' && (
           <CustomRankingView
-            scoreItems={scores}
+            representativeScoreItems={representativeRouteScores}
             onSelectConfigForDetail={(item) => {
               setSelectedConfigId(item.config.id);
               setActiveTab('detail');
@@ -818,92 +980,14 @@ export const VercelAestheticPreview: React.FC = () => {
 
         {/* VIEW 3: RADAR OVERVIEW GALLERY (4 PER ROW) */}
         {activeTab === 'overview' && (
-          <div className="space-y-6 font-brand-mono">
-            {/* 4-Per-Row Grid Layout */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-              {filteredScores.map((item, index) => {
-                const rank = item.eligibleForGlobalLeaderboard
-                  ? filteredScores
-                      .slice(0, index + 1)
-                      .filter((score) => score.eligibleForGlobalLeaderboard).length
-                  : null;
-                const parsed = parseConfigName(item.config.name);
-                const capabilityScore = item.rawCapabilityScore;
-                const practicalAdjustment = getPracticalAdjustment(item.practicalBreakdown);
-
-                return (
-                  <div
-                    key={item.config.id}
-                    onClick={() => {
-                      setSelectedConfigId(item.config.id);
-                      setActiveTab('detail');
-                    }}
-                    className="group relative flex flex-col justify-between py-2 transition-opacity duration-150 cursor-pointer hover:opacity-85"
-                  >
-                    {/* Header: Rank + Model Configuration */}
-                    <div className="space-y-1">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="font-black text-neutral-400 text-xs">
-                          {rank !== null ? `#${rank}` : '—'}
-                        </span>
-                        <div className="flex items-center gap-1 text-xs">
-                          <span className="font-black text-neutral-950 text-sm">{formatScore(capabilityScore)}</span>
-                          <span className="text-[10px] text-neutral-500 font-medium">
-                            (
-                            <span className={practicalAdjustmentTextClass(practicalAdjustment)}>
-                              {formatPracticalAdjustment(practicalAdjustment)}
-                            </span>
-                            )
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="min-w-0">
-                        <div className="font-extrabold text-neutral-950 text-sm group-hover:text-purple-900 transition-colors truncate">
-                          {parsed.model}
-                        </div>
-                        <div className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 truncate">
-                          <span className="truncate">{parsed.harness}</span>
-                          <span className="text-neutral-300 font-normal shrink-0">|</span>
-                          <span className="truncate">{parsed.provider}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Compact Radar Chart (Centered inside card) */}
-                    <div className="py-2 flex items-center justify-center">
-                      {(() => {
-                        const brandTheme = getProviderBrandTheme(parsed.provider);
-                        return (
-                          <RadarChart
-                            seriesList={[
-                              {
-                                id: item.config.id,
-                                name: item.config.name,
-                                color: brandTheme.color,
-                                fillColor: brandTheme.fillColor,
-                                scores: {
-                                  chatting: item.domainScores?.chatting?.score ?? null,
-                                  math_science: item.domainScores?.math_science?.score ?? null,
-                                  coding: item.domainScores?.coding?.score ?? null,
-                                  engineering: item.domainScores?.engineering?.score ?? null,
-                                  agentic_work: item.domainScores?.agentic_work?.score ?? null,
-                                  search_knowledge: item.domainScores?.search_knowledge?.score ?? null,
-                                },
-                              },
-                            ]}
-                            size={270}
-                            showLegend={false}
-                            showDomainNames={false}
-                          />
-                        );
-                      })()}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          <RadarOverviewGallery
+            scoreItems={radarOverviewScores}
+            onSelectConfigForDetail={(item) => {
+              setSelectedConfigId(item.config.id);
+              setActiveTab('detail');
+            }}
+            testId="radar-overview-gallery"
+          />
         )}
 
         {/* VIEW 4: SIDE-BY-SIDE COMPARE */}
@@ -916,6 +1000,15 @@ export const VercelAestheticPreview: React.FC = () => {
               setSelectedConfigId(item.config.id);
               setActiveTab('detail');
             }}
+          />
+        )}
+
+        {/* PLAY MODE OVERVIEW: the existing gallery, scrolling from top to bottom. */}
+        {PLAY_MODE_ENABLED && isPlayModeActive && playModePhase === 'radar_overview' && (
+          <RadarOverviewGallery
+            ref={playModeRadarOverviewRef}
+            scoreItems={radarOverviewScores}
+            testId="play-mode-radar-overview"
           />
         )}
 

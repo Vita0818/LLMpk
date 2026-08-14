@@ -92,6 +92,8 @@ export interface CustomRankedScore<T extends PublicLeaderboardScore = PublicLead
   preferenceCoverage: number;
 }
 
+export const CUSTOM_RANKING_RESULT_LIMIT = 5;
+
 export const clampPreferenceWeight = (value: number) => (
   Math.max(0, Math.min(100, Math.round(value)))
 );
@@ -242,7 +244,7 @@ export const calculatePersonalizedScore = (
 };
 
 export const rankScoresByPreferences = <T extends PublicLeaderboardScore>(
-  items: T[],
+  items: readonly T[],
   weights: PreferenceWeights,
 ): CustomRankedScore<T>[] => (
   items
@@ -269,3 +271,11 @@ export const rankScoresByPreferences = <T extends PublicLeaderboardScore>(
         || left.item.config.name.localeCompare(right.item.config.name);
     })
 );
+
+export const rankTopScoresByPreferences = <T extends PublicLeaderboardScore>(
+  representativeItems: readonly T[],
+  weights: PreferenceWeights,
+): CustomRankedScore<T>[] => rankScoresByPreferences(
+  representativeItems,
+  weights,
+).slice(0, CUSTOM_RANKING_RESULT_LIMIT);

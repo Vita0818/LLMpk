@@ -139,6 +139,12 @@
   user-select: none;
 }
 
+.play-mode-clean-view.play-mode-clean-view--scrolling {
+  height: auto;
+  min-height: 100vh;
+  overflow: visible;
+}
+
 .play-mode-clean-view main {
   pointer-events: none;
 }

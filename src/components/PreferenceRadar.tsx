@@ -14,6 +14,8 @@ interface PreferenceRadarProps {
   ariaLabel: string;
   testId: string;
   size?: number;
+  radiusRatio?: number;
+  labelGapRatio?: number;
   valueFormatter?: (value: number) => string;
 }
 
@@ -24,6 +26,8 @@ export const PreferenceRadar: React.FC<PreferenceRadarProps> = ({
   ariaLabel,
   testId,
   size = 420,
+  radiusRatio = 0.33,
+  labelGapRatio = 0.105,
   valueFormatter,
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
@@ -32,8 +36,8 @@ export const PreferenceRadar: React.FC<PreferenceRadarProps> = ({
   const activePointerIdRef = useRef<number | null>(null);
   const [activeDimension, setActiveDimension] = useState<PreferenceDimensionId | null>(null);
   const center = size / 2;
-  const radius = size * 0.33;
-  const labelRadius = radius + size * 0.105;
+  const radius = size * radiusRatio;
+  const labelRadius = radius + size * labelGapRatio;
 
   const getAngle = (index: number) => (
     (index * 2 * Math.PI) / dimensions.length - Math.PI / 2

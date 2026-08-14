@@ -51,6 +51,17 @@ const compareRepresentativeRoute = (
   || left.config.name.localeCompare(right.config.name)
 );
 
+const compareRawCapabilityRoute = (
+  left: PublicLeaderboardScore,
+  right: PublicLeaderboardScore,
+) => (
+  nullableScore(right.rawCapabilityScore)
+    - nullableScore(left.rawCapabilityScore)
+  || nullableScore(right.practicalBreakdown.practicalScore)
+    - nullableScore(left.practicalBreakdown.practicalScore)
+  || left.config.name.localeCompare(right.config.name)
+);
+
 /**
  * Builds the recording/playback queue.
  *
@@ -78,3 +89,11 @@ export const buildPlayModeQueue = <T extends PublicLeaderboardScore>(
     .map((group) => [...group].sort(compareRepresentativeRoute)[0])
     .sort(compareRepresentativeRoute);
 };
+
+/**
+ * Gives the representative playback routes their radar-overview order without
+ * changing which access route represents each identical radar profile.
+ */
+export const sortRadarOverviewScores = <T extends PublicLeaderboardScore>(
+  representativeScores: readonly T[],
+): T[] => [...representativeScores].sort(compareRawCapabilityRoute);
