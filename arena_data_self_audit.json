@@ -1,13 +1,13 @@
 {
   "schemaVersion": "arena-data-self-audit/v3",
-  "auditTimestamp": "2026-08-14T05:39:23.970Z",
+  "auditTimestamp": "2026-08-16T06:08:06.437Z",
   "auditStatus": "VALIDATED",
   "inputs": {
     "seedCardsPath": "src/data/seedCards.ts",
     "oagxmScopePath": "src/data/oagxmScope.json",
     "rawExtractionPath": "src/data/arenaRawExtraction.json",
     "rawExtractionSchemaVersion": "arena-raw-extraction/v1",
-    "rawExtractionTimestamp": "2026-08-14T05:17:40.171Z"
+    "rawExtractionTimestamp": "2026-08-16T05:57:56.547Z"
   },
   "scope": {
     "scopeId": "oagxm-current-product-lines",
@@ -28,7 +28,7 @@
       "deepseek:deepseek_v4_pro_0813": 4,
       "google:gemini_25_flash_lite": 10,
       "google:gemini_31_pro": 9,
-      "google:gemini_35_flash": 10,
+      "google:gemini_35_flash": 9,
       "google:gemini_35_flash_lite": 6,
       "google:gemini_36_flash": 6,
       "google:gemini_37_flash": 8,
@@ -81,10 +81,10 @@
       "deepseek:deepseek_v4_pro": 71,
       "google:gemini_25_flash_lite": 68,
       "google:gemini_31_pro": 47,
-      "google:gemini_35_flash": 82,
+      "google:gemini_35_flash": 81,
       "google:gemini_35_flash_lite": 37,
       "google:gemini_36_flash": 38,
-      "google:gemini_37_flash": 68,
+      "google:gemini_37_flash": 62,
       "google:gemma_4_26b_a4b": 43,
       "google:gemma_4_31b": 56,
       "zai:glm_52": 55,
@@ -111,7 +111,7 @@
       "nvidia:nemotron_3_super": 32,
       "nvidia:nemotron_3_ultra": 42,
       "alibaba:qwen_36_27b": 38,
-      "alibaba:qwen_36_35b_a3b": 35,
+      "alibaba:qwen_36_35b_a3b": 36,
       "alibaba:qwen_37_max": 30,
       "alibaba:qwen_37_plus": 35,
       "stepfun:step_37_flash": 25,
@@ -139,60 +139,60 @@
     ],
     "formalTextAgentProductLineCount": 53,
     "specializedCatalogOnlyProductLineCount": 0,
-    "sourceCatalogCardCount": 1423,
-    "sourceCatalogObservationCount": 8129,
+    "sourceCatalogCardCount": 1425,
+    "sourceCatalogObservationCount": 8131,
     "findingCount": 0
   },
   "catalog": {
-    "sourceModelCardCount": 1788,
-    "observationCount": 10755,
+    "sourceModelCardCount": 1789,
+    "observationCount": 10751,
     "platformCardCounts": {
       "artificial_analysis": 607,
-      "arena": 440,
-      "openrouter": 741
+      "arena": 439,
+      "openrouter": 743
     },
     "availableObservationCounts": {
-      "artificial_analysis": 6569,
-      "arena": 2704,
-      "openrouter": 1482
+      "artificial_analysis": 6562,
+      "arena": 2703,
+      "openrouter": 1486
     },
     "availableObservationProvenanceFindingCount": 0,
     "unprovenDefaultZeroOrFiftyCount": 0,
-    "sourceProvenFactualZeroOrFiftyCount": 390,
+    "sourceProvenFactualZeroOrFiftyCount": 392,
     "inputs": {
       "refreshStatus": "MIXED_SNAPSHOT_REBUILD",
       "isFullLiveSourceRefresh": false,
       "disclosure": "The catalog mixes direct raw extraction with official-source and/or verified-catalog snapshots. This audit validates provenance and reconciliation, not a fully live three-source refresh.",
-      "snapshotCardCount": 1348,
+      "snapshotCardCount": 1350,
       "unknownInputModeCardCount": 0,
       "modes": [
         {
           "source": "arena",
           "inputMode": "official-arena-raw-extraction",
           "freshnessClass": "direct_source_extraction",
-          "cardCount": 440,
-          "availableObservationCount": 2704
+          "cardCount": 439,
+          "availableObservationCount": 2703
         },
         {
           "source": "artificial_analysis",
           "inputMode": "official-aa-structured-snapshot",
           "freshnessClass": "official_source_snapshot",
           "cardCount": 607,
-          "availableObservationCount": 6569
+          "availableObservationCount": 6562
         },
         {
           "source": "openrouter",
           "inputMode": "3d/1w stabilized endpoint medians, followed by an equal-weight mean across current OpenRouter Standard endpoints; raw current rows, auxiliary traffic-weighted mean, median, quartiles, and range retained in the verified snapshot",
           "freshnessClass": "official_source_snapshot",
-          "cardCount": 361,
-          "availableObservationCount": 722
+          "cardCount": 362,
+          "availableObservationCount": 724
         },
         {
           "source": "openrouter",
           "inputMode": "official-openrouter-local-snapshot",
           "freshnessClass": "official_source_snapshot",
-          "cardCount": 380,
-          "availableObservationCount": 760
+          "cardCount": 381,
+          "availableObservationCount": 762
         }
       ]
     }
@@ -213,7 +213,7 @@
       "arena_agent_bash_recovery",
       "arena_agent_tool_hallucination"
     ],
-    "arenaCardCount": 440,
+    "arenaCardCount": 439,
     "metrics": {
       "arena_text_instruction": {
         "sourceUrl": "https://arena.ai/leaderboard/text/instruction-following",
@@ -308,14 +308,14 @@
       "arena_code_webdev": {
         "sourceUrl": "https://arena.ai/leaderboard/code/webdev",
         "sourceLeaderboard": "Code Arena — WebDev Overall",
-        "extractedRowCount": 47,
+        "extractedRowCount": 46,
         "duplicateRowCount": 0,
-        "uniqueModelCount": 47,
-        "databaseAvailableCount": 47,
-        "databaseAvailableRowCount": 47,
-        "sourceExtractedRowCount": 116,
+        "uniqueModelCount": 46,
+        "databaseAvailableCount": 46,
+        "databaseAvailableRowCount": 46,
+        "sourceExtractedRowCount": 115,
         "sourceDuplicateRowCount": 1,
-        "sourceUniqueModelCount": 115,
+        "sourceUniqueModelCount": 114,
         "outOfScopeRowCount": 69,
         "sourceToDatabaseMatch": true,
         "status": "VALID"
@@ -414,14 +414,14 @@
     "conservation": {
       "expectedMetricCount": 13,
       "auditedMetricCount": 13,
-      "sourceUniqueAvailableSum": 563,
-      "databaseUniqueAvailableSum": 563,
-      "databaseAvailableRowCount": 563,
+      "sourceUniqueAvailableSum": 562,
+      "databaseUniqueAvailableSum": 562,
+      "databaseAvailableRowCount": 562,
       "valid": true
     }
   },
   "runtime": {
-    "productionReachableFileCount": 23,
+    "productionReachableFileCount": 25,
     "prohibitedRuntimePatternFindings": [],
     "prohibitedUnreachablePatternFindings": [],
     "missingMetricDefaultsTo50": false,
@@ -461,31 +461,50 @@
           "source": "arena",
           "inputMode": "official-arena-raw-extraction",
           "freshnessClass": "direct_source_extraction",
-          "cardCount": 440,
-          "availableObservationCount": 2704
+          "cardCount": 439,
+          "availableObservationCount": 2703
         },
         {
           "source": "artificial_analysis",
           "inputMode": "official-aa-structured-snapshot",
           "freshnessClass": "official_source_snapshot",
           "cardCount": 607,
-          "availableObservationCount": 6569
+          "availableObservationCount": 6562
         },
         {
           "source": "openrouter",
           "inputMode": "3d/1w stabilized endpoint medians, followed by an equal-weight mean across current OpenRouter Standard endpoints; raw current rows, auxiliary traffic-weighted mean, median, quartiles, and range retained in the verified snapshot",
           "freshnessClass": "official_source_snapshot",
-          "cardCount": 361,
-          "availableObservationCount": 722
+          "cardCount": 362,
+          "availableObservationCount": 724
         },
         {
           "source": "openrouter",
           "inputMode": "official-openrouter-local-snapshot",
           "freshnessClass": "official_source_snapshot",
-          "cardCount": 380,
-          "availableObservationCount": 760
+          "cardCount": 381,
+          "availableObservationCount": 762
         }
       ]
+    },
+    {
+      "scope": "arena",
+      "issue": "WebDev source changes may be legitimate, but the recorded full-source snapshot does not have the expected 116 / 1 / 115 audit facts.",
+      "actual": {
+        "sourceUrl": "https://arena.ai/leaderboard/code/webdev",
+        "sourceLeaderboard": "Code Arena — WebDev Overall",
+        "extractedRowCount": 46,
+        "duplicateRowCount": 0,
+        "uniqueModelCount": 46,
+        "databaseAvailableCount": 46,
+        "databaseAvailableRowCount": 46,
+        "sourceExtractedRowCount": 115,
+        "sourceDuplicateRowCount": 1,
+        "sourceUniqueModelCount": 114,
+        "outOfScopeRowCount": 69,
+        "sourceToDatabaseMatch": true,
+        "status": "VALID"
+      }
     }
   ]
 }

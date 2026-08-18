@@ -39,11 +39,13 @@ const ARENA_AGENT_MODE_METRIC_IDS: ReadonlySet<string> = new Set([
 ]);
 
 const CODING_AGENT_HARNESS_NAMES: ReadonlySet<string> = new Set([
+  'antigravity sdk',
   'claude code',
   'codex cli',
   'gemini cli',
   'grok build',
   'kimi code cli',
+  'muse code',
   'opencode',
 ]);
 

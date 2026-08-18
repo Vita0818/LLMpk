@@ -80,6 +80,22 @@ export type BuiltInConfigurationPresetOrigin =
 export type BuiltInConfigurationPresetAccess = ConfigurationAccess;
 
 /**
+ * An official direct-provider API price tier that changes access economics,
+ * but not the model, reasoning profile, Harness, or measured serving speed.
+ * The source URL and effective date keep the override auditable instead of
+ * hiding it inside a derived score.
+ */
+export interface BuiltInApiPricingData {
+  tierName: string;
+  inputPricePerMToken: number;
+  outputPricePerMToken: number;
+  cacheReadPricePerMToken?: number;
+  effectiveDate: string;
+  officialSourceUrl: string;
+  speedBasis: 'same-model-standard-route';
+}
+
+/**
  * A source card declared by a shipped preset.  Unlike `sourceCardIds`, this
  * can explicitly record a lower-profile or Chat-to-harness fallback. The
  * installer validates the authored direction; it never guesses ordering from
@@ -102,6 +118,10 @@ export interface BuiltInConfigurationPreset {
   identity: BuiltInConfigurationIdentity;
   origin: BuiltInConfigurationPresetOrigin;
   access: BuiltInConfigurationPresetAccess;
+  /** Optional reader-facing access label when the vendor exposes API tiers. */
+  providerDisplayLabel?: string;
+  /** Official price override for a distinct direct-provider API tier. */
+  apiPricingData?: BuiltInApiPricingData;
   /** Fixed-price plan economics for an explicit subscription route. */
   subscriptionData?: SubscriptionCostData;
   /** Configuration caveats only; never contains a score or source observation. */
@@ -195,7 +215,10 @@ function explicitlyConfiguredProviderName(value: unknown): string | null {
 function displayProviderLabel(
   identity: BuiltInConfigurationIdentity,
   access: BuiltInConfigurationPresetAccess,
+  explicitLabel?: string,
 ): string {
+  if (explicitLabel?.trim()) return explicitLabel.trim();
+
   // Reader-facing API configurations use the model author's vendor, not the
   // particular serving endpoint recorded by one benchmark run. The configured
   // route remains in structured metadata for provenance, while price and speed
@@ -217,6 +240,7 @@ function displayProviderLabel(
 function displayNameOf(
   identity: BuiltInConfigurationIdentity,
   access: BuiltInConfigurationPresetAccess,
+  providerDisplayLabel?: string,
 ): string {
   let conciseProfile = identity.model.profile
     .replace(/^mode\s*=\s*standard,\s*effort\s*=\s*/iu, '')
@@ -249,7 +273,7 @@ function displayNameOf(
   const harnessLabel = /^(?:正常对话|来源已发布配置|fast 路线)$/iu.test(rawHarnessLabel)
     ? 'Chat'
     : rawHarnessLabel;
-  const providerLabel = displayProviderLabel(identity, access);
+  const providerLabel = displayProviderLabel(identity, access, providerDisplayLabel);
   return `${modelLabel} | ${harnessLabel} | ${providerLabel}`;
 }
 
@@ -258,7 +282,11 @@ function definePreset({ key, ...preset }: PresetInput): BuiltInConfigurationPres
     ...preset,
     id: `builtin.${key}`,
     internalName: `builtin_${key.replace(/[^a-z0-9]+/giu, '_')}`,
-    displayName: displayNameOf(preset.identity, preset.access),
+    displayName: displayNameOf(
+      preset.identity,
+      preset.access,
+      preset.providerDisplayLabel,
+    ),
   };
 }
 
@@ -1613,6 +1641,40 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
     note: 'AA Coding Agent 原始行明确使用 Codex；0731 的普通模型数据仅作为 Codex CLI 配置的单向补充。',
   }),
   harnessPreset({
+    key: 'harness.gemini-3-7-flash.high.antigravity-sdk',
+    productLineId: 'gemini_37_flash',
+    modelName: 'Gemini 3.7 Flash',
+    profile: 'High',
+    harness: 'Antigravity SDK',
+    providerName: 'Google AI Studio',
+    upstreamApi: 'Gemini API / Google AI Studio',
+    exactHarnessCardIds: [
+      'card-aa-coding-agent-antigravity-sdk-gemini-3-7-flash-high',
+    ],
+    chatFallbackCardIds: [
+      'card-aa-gemini-3-7-flash',
+      'card-arena-gemini-3-7-flash-high',
+    ],
+    note: 'AA Coding Agent 原始行明确使用 Antigravity SDK；普通 High 模型数据只向该 Harness 配置单向补充。',
+  }),
+  harnessPreset({
+    key: 'harness.gemini-3-7-flash.high.opencode',
+    productLineId: 'gemini_37_flash',
+    modelName: 'Gemini 3.7 Flash',
+    profile: 'High',
+    harness: 'OpenCode',
+    providerName: 'Google AI Studio',
+    upstreamApi: 'Gemini API / Google AI Studio',
+    exactHarnessCardIds: [
+      'card-aa-coding-agent-opencode-gemini-3-7-flash-high',
+    ],
+    chatFallbackCardIds: [
+      'card-aa-gemini-3-7-flash',
+      'card-arena-gemini-3-7-flash-high',
+    ],
+    note: 'AA Coding Agent 原始行明确使用 Opencode；站内执行名称沿用 OpenCode，普通 High 模型数据只向该 Harness 配置单向补充。',
+  }),
+  harnessPreset({
     key: 'harness.gemini-3-6-flash.high.opencode',
     productLineId: 'gemini_36_flash',
     modelName: 'Gemini 3.6 Flash',
@@ -2228,6 +2290,40 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
         'Kimi Code CLI',
       ),
     ],
+  }),
+  harnessPreset({
+    key: 'harness.muse-spark-1-2.xhigh.opencode',
+    productLineId: 'muse_spark_12',
+    modelName: 'Muse Spark 1.2',
+    profile: 'XHigh',
+    harness: 'OpenCode',
+    providerName: 'Meta',
+    upstreamApi: 'Meta API',
+    exactHarnessCardIds: [
+      'card-aa-coding-agent-opencode-muse-spark-1-2-xhigh',
+    ],
+    chatFallbackCardIds: [
+      'card-aa-muse-spark-1-2',
+      'card-arena-muse-spark-1-2-xhigh',
+    ],
+    note: 'AA Coding Agent 原始行明确使用 Opencode；站内执行名称沿用 OpenCode，普通 XHigh 模型数据只向该 Harness 配置单向补充。',
+  }),
+  harnessPreset({
+    key: 'harness.muse-spark-1-2.xhigh.muse-code',
+    productLineId: 'muse_spark_12',
+    modelName: 'Muse Spark 1.2',
+    profile: 'XHigh',
+    harness: 'Muse Code',
+    providerName: 'Meta',
+    upstreamApi: 'Meta API',
+    exactHarnessCardIds: [
+      'card-aa-coding-agent-muse-code-muse-spark-1-2-xhigh',
+    ],
+    chatFallbackCardIds: [
+      'card-aa-muse-spark-1-2',
+      'card-arena-muse-spark-1-2-xhigh',
+    ],
+    note: 'AA 可见 Harness 名为 Muse Code；内部 agentName=tbh 只保留为来源元数据，普通 XHigh 模型数据只向该 Harness 配置单向补充。',
   }),
   harnessPreset({
     key: 'harness.muse-spark-1-1.xhigh.opencode',
@@ -2966,6 +3062,87 @@ const PROVIDER_NEUTRAL_PRACTICAL_AUGMENTATION =
     ...SOURCE_CATALOG_CONFIGURATION_PRESETS,
   ]);
 
+interface ApiPricingVariantSpec {
+  key: string;
+  basePresetId: string;
+  providerDisplayLabel: string;
+  providerUpstream: string;
+  pricing: BuiltInApiPricingData;
+  note: string;
+}
+
+const MUSE_SPARK_1_2_CONTRIBUTOR_PRICING: BuiltInApiPricingData = {
+  tierName: 'Contributor',
+  inputPricePerMToken: 0.1,
+  outputPricePerMToken: 0.2,
+  cacheReadPricePerMToken: 0.002,
+  effectiveDate: '2026-08-05',
+  officialSourceUrl:
+    'https://developer.meta.com/ai/resources/blog/build-with-muse-code/',
+  speedBasis: 'same-model-standard-route',
+};
+
+const API_PRICING_VARIANT_SPECS: readonly ApiPricingVariantSpec[] = [
+  {
+    key: 'api-tier.meta-contributor.muse-spark-1-2.xhigh.opencode',
+    basePresetId: 'builtin.harness.muse-spark-1-2.xhigh.opencode',
+    providerDisplayLabel: 'Meta API Contributor',
+    providerUpstream: 'Meta Model API（Contributor tier）',
+    pricing: MUSE_SPARK_1_2_CONTRIBUTOR_PRICING,
+    note: 'Contributor 档允许 Meta 使用输入与输出改进未来模型，以换取独立低价；能力、Harness 和速度证据保持与同一 Muse Spark 1.2 路线一致。',
+  },
+  {
+    key: 'api-tier.meta-contributor.muse-spark-1-2.xhigh.muse-code',
+    basePresetId: 'builtin.harness.muse-spark-1-2.xhigh.muse-code',
+    providerDisplayLabel: 'Meta API Contributor',
+    providerUpstream: 'Meta Model API（Contributor tier）',
+    pricing: MUSE_SPARK_1_2_CONTRIBUTOR_PRICING,
+    note: 'Contributor 档允许 Meta 使用输入与输出改进未来模型，以换取独立低价；能力、Harness 和速度证据保持与同一 Muse Spark 1.2 路线一致。',
+  },
+];
+
+/**
+ * Direct API price tiers are independent access configurations. They retain
+ * the base route's exact capability stack and same-model performance card,
+ * while the official vendor price replaces only input/output economics.
+ */
+function buildApiPricingVariantPresets(
+  candidates: readonly BuiltInConfigurationPreset[],
+): BuiltInConfigurationPreset[] {
+  return API_PRICING_VARIANT_SPECS.map((spec) => {
+    const base = candidates.find((preset) => preset.id === spec.basePresetId);
+    if (!base) throw new Error(`Missing API pricing base preset ${spec.basePresetId}.`);
+
+    return definePreset({
+      key: spec.key,
+      productLineId: base.productLineId,
+      identity: {
+        model: { ...base.identity.model },
+        harness: { ...base.identity.harness },
+        provider: {
+          ...base.identity.provider,
+          upstream: spec.providerUpstream,
+        },
+      },
+      origin: base.origin,
+      access: 'api',
+      providerDisplayLabel: spec.providerDisplayLabel,
+      apiPricingData: { ...spec.pricing },
+      note: [base.note, spec.note].filter(Boolean).join(' '),
+      ...(base.sourceCardIds
+        ? { sourceCardIds: [...base.sourceCardIds] }
+        : {}),
+      ...(base.sourceCardLinks
+        ? { sourceCardLinks: [...base.sourceCardLinks] }
+        : {}),
+    });
+  });
+}
+
+const API_PRICING_VARIANT_PRESETS = buildApiPricingVariantPresets(
+  PROVIDER_NEUTRAL_PRACTICAL_AUGMENTATION.presets,
+);
+
 interface SubscriptionConfigurationSpec {
   key: string;
   basePresetId: string;
@@ -3111,8 +3288,13 @@ const SUBSCRIPTION_CONFIGURATION_TARGETS:
     plans: [GOOGLE_AI_PRO_PLAN, GOOGLE_AI_ULTRA_20X_PLAN],
   },
   {
-    key: 'gemini-3-7-flash.high.chat',
-    basePresetId: 'builtin.gemini-3-7-flash.high',
+    key: 'gemini-3-7-flash.high.antigravity-sdk',
+    basePresetId: 'builtin.harness.gemini-3-7-flash.high.antigravity-sdk',
+    plans: [GOOGLE_AI_PRO_PLAN, GOOGLE_AI_ULTRA_20X_PLAN],
+  },
+  {
+    key: 'gemini-3-7-flash.high.opencode',
+    basePresetId: 'builtin.harness.gemini-3-7-flash.high.opencode',
     plans: [GOOGLE_AI_PRO_PLAN, GOOGLE_AI_ULTRA_20X_PLAN],
   },
   {
@@ -3316,6 +3498,15 @@ export function buildPresetCoverageProfiles(
           `usableQuota=${preset.subscriptionData.usableQuotaFraction}`,
         ].join(',')
       : null;
+    const apiPricingSignature = preset.apiPricingData
+      ? [
+          `tier=${preset.apiPricingData.tierName}`,
+          `input=${preset.apiPricingData.inputPricePerMToken}`,
+          `output=${preset.apiPricingData.outputPricePerMToken}`,
+          `cacheRead=${preset.apiPricingData.cacheReadPricePerMToken ?? 'unknown'}`,
+          `effectiveDate=${preset.apiPricingData.effectiveDate}`,
+        ].join(',')
+      : null;
     return [preset.id, {
       availableDomainCount,
       availableDomainIds,
@@ -3329,6 +3520,7 @@ export function buildPresetCoverageProfiles(
         ...[...effectiveMetricValues.entries()]
           .sort(([left], [right]) => left.localeCompare(right, 'en-US'))
           .map(([metricId, value]) => `${metricId}=${value}`),
+        ...(apiPricingSignature ? [`apiPricing:${apiPricingSignature}`] : []),
         ...(subscriptionSignature ? [`subscription:${subscriptionSignature}`] : []),
       ].join('|'),
     }];
@@ -3626,10 +3818,22 @@ const READER_FACING_PRESET_EXCLUSIONS = new Set<string>([
 ]);
 
 /**
+ * These model lines are represented by their newly published production
+ * Harness routes. Their ordinary model cards remain available as one-way
+ * capability/practical fallbacks, while plain API configuration boxes stay
+ * out of the reader-facing ranking. Subscription access routes are separate
+ * configurations and are deliberately unaffected.
+ */
+const READER_FACING_PLAIN_API_PRODUCT_LINE_EXCLUSIONS = new Set<string>([
+  'gemini_37_flash',
+  'muse_spark_12',
+]);
+
+/**
  * The source sites expose hundreds of low-value execution variants. The
  * reader-facing catalog keeps only score-ready configurations, with one
- * strongest usable profile per model product line plus explicitly requested
- * subscription access routes. Models
+ * strongest usable profile per independently measured Harness plus explicitly
+ * requested subscription access routes. Models
  * released before the DeepSeek V4 cutoff are excluded. Key vendors may keep
  * several current model lines; every other vendor keeps only its newest
  * score-ready model. General source-catalog entries need five available
@@ -3651,6 +3855,11 @@ function curateReaderFacingPresets(
   const groups = new Map<string, BuiltInConfigurationPreset[]>();
   candidates.forEach((preset) => {
     if (READER_FACING_PRESET_EXCLUSIONS.has(preset.id)) return;
+    if (
+      preset.access === 'api'
+      && isPlainChatPreset(preset)
+      && READER_FACING_PLAIN_API_PRODUCT_LINE_EXCLUSIONS.has(preset.productLineId)
+    ) return;
     const coverage = coverageByPreset.get(preset.id);
     const minimumDomains = preset.origin === 'source-catalog'
       ? 5
@@ -3711,7 +3920,12 @@ function curateReaderFacingPresets(
     const subscriptionPresets = group
       .filter((preset) => preset.access === 'subscription')
       .sort(byHighest);
-    const primaryPresets = group.filter((preset) => preset.access !== 'subscription');
+    const apiPricingVariantPresets = group
+      .filter((preset) => preset.access === 'api' && Boolean(preset.apiPricingData))
+      .sort(byHighest);
+    const primaryPresets = group.filter((preset) => (
+      preset.access !== 'subscription' && !preset.apiPricingData
+    ));
     const byHarness = new Map<string, BuiltInConfigurationPreset[]>();
     primaryPresets.forEach((preset) => {
       const harnessKey = presetHarnessGroupKey(preset);
@@ -3747,12 +3961,17 @@ function curateReaderFacingPresets(
       // evidence supersedes the plain Chat row in the compact leaderboard.
       // Chat observations still fill that configuration in the one permitted
       // direction, so retaining both would duplicate the weaker execution.
-      selectedByGroup.set(modelGroupKey, [bestHarness, ...subscriptionPresets]);
+      selectedByGroup.set(modelGroupKey, [
+        bestHarness,
+        ...apiPricingVariantPresets,
+        ...subscriptionPresets,
+      ]);
       return;
     }
 
     selectedByGroup.set(modelGroupKey, [
       ...selectedPerHarness,
+      ...apiPricingVariantPresets,
       ...subscriptionPresets,
     ]);
   });
@@ -3815,6 +4034,7 @@ function curateReaderFacingPresets(
 
 export const ALL_CONFIGURATION_PRESET_CANDIDATES: readonly BuiltInConfigurationPreset[] = [
   ...PROVIDER_NEUTRAL_PRACTICAL_AUGMENTATION.presets,
+  ...API_PRICING_VARIANT_PRESETS,
   ...SUBSCRIPTION_CONFIGURATION_PRESETS,
 ];
 
@@ -3865,4 +4085,4 @@ export const BUILT_IN_CONFIGURATION_PRESET_COUNT = BUILT_IN_CONFIGURATION_PRESET
  * additions visible during Vite hot updates as well as after a full reload.
  */
 export const BUILT_IN_CONFIGURATION_PRESET_INVENTORY_VERSION =
-  '2026-08-14-aa-agent-harness-labels-v40';
+  '2026-08-16-muse-two-harness-api-price-matrix-v44';

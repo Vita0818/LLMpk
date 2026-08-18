@@ -14,6 +14,7 @@ const expectedProductLines: Array<[string, string]> = [
   ['DeepSeek V4 Pro 0813', 'deepseek_v4_pro_0813'],
   ['deepseek/deepseek-v4-pro-20260813', 'deepseek_v4_pro_0813'],
   ['deepseek-v4-pro-max-20260813', 'deepseek_v4_pro_0813'],
+  ['deepseek-v4-pro-high-20260813', 'deepseek_v4_pro_0813'],
   ['DeepSeek-v4-Pro', 'deepseek_v4_pro'],
   ['GLM-5.2', 'glm_52'],
   ['Hy3', 'hunyuan_hy3'],

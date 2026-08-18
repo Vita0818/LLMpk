@@ -25,15 +25,15 @@ const assert = (condition: unknown, message: string) => {
   if (!condition) throw new Error(message);
 };
 
-assert(snapshot.scores.length === 61, 'Fixture should contain 61 route rows.');
-assert(queue.length === 43, `Expected 43 playback items, received ${queue.length}.`);
+assert(snapshot.scores.length === 67, 'Fixture should contain 67 route rows.');
+assert(queue.length === 45, `Expected 45 playback items, received ${queue.length}.`);
 assert(
   new Set(queue.map(getPlayModeRouteGroupKey)).size === queue.length,
   'Playback queue must contain one representative per identical radar route group.',
 );
 assert(
-  snapshot.scores.length - queue.length === 18,
-  'Playback queue should collapse exactly 18 duplicate route rows.',
+  snapshot.scores.length - queue.length === 22,
+  'Playback queue should collapse exactly 22 duplicate route rows.',
 );
 assert(
   radarOverviewScores.length === queue.length,
@@ -79,13 +79,15 @@ const expectedRepresentatives = [
   'Gemini 3.5 Flash High | AA Agent Harness | Google API',
   'Gemini 3.5 Flash-Lite High | --- | Google AI Pro',
   'Gemini 3.6 Flash High | OpenCode | Google API',
-  'Gemini 3.7 Flash High | --- | Google AI Ultra 20×',
+  'Gemini 3.7 Flash High | Antigravity SDK | Google AI Ultra 20×',
+  'Gemini 3.7 Flash High | OpenCode | Google AI Ultra 20×',
   'Grok 4.3 High | --- | xAI API',
   'Grok 4.5 High | Grok Build | xAI API',
   'Grok 4.6 XHigh | --- | SuperGrok',
   'Grok Build 0.1 Max | AA Agent Harness | xAI API',
   'Muse Glimmer XHigh | --- | Meta API',
-  'Muse Spark 1.2 XHigh | --- | Meta API',
+  'Muse Spark 1.2 XHigh | OpenCode | Meta API Contributor',
+  'Muse Spark 1.2 XHigh | Muse Code | Meta API Contributor',
   'Qwen3.8 Max | Claude Code | Alibaba API',
 ];
 

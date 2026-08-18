@@ -105,11 +105,8 @@ export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
     productLineId: 'deepseek_v4_pro_0813',
     tiers: [
       tier('low', 'Low', 1),
-      tier('high', 'High', 3),
-      tier('max', 'Max', 5, [
-        'card-aa-deepseek-v4-pro',
-        'card-arena-deepseek-v4-pro-max-20260813',
-      ]),
+      tier('high', 'High', 3, ['card-arena-deepseek-v4-pro-high-20260813']),
+      tier('max', 'Max', 5, ['card-aa-deepseek-v4-pro']),
     ],
   },
   {

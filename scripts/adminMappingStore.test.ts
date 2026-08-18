@@ -24,6 +24,7 @@ import {
   isValidExecutionHarnessFallback,
 } from '../src/data/executionMetricPolicy';
 import {
+  ALL_CONFIGURATION_PRESET_CANDIDATES,
   BUILT_IN_CONFIGURATION_CURATION_ROWS,
   BUILT_IN_CONFIGURATION_KEY_VENDOR_KEYS,
   BUILT_IN_CONFIGURATION_MAX_PER_MODEL,
@@ -131,14 +132,14 @@ assert.deepEqual(
 );
 assert.equal(
   VERIFIED_RECOVERED_SOURCE_OBSERVATIONS.length,
-  13,
-  'LongCat 2.0 recovery must expose nine current capability and four AA practical-fallback observations.',
+  14,
+  'LongCat 2.0 recovery must expose ten current capability and four AA practical-fallback observations.',
 );
 assert.ok(
-  !VERIFIED_RECOVERED_SOURCE_OBSERVATIONS.some((observation) => (
+  VERIFIED_RECOVERED_SOURCE_OBSERVATIONS.some((observation) => (
     observation.metricId === 'aa_tau3_banking'
   )),
-  'LongCat 2.0 must preserve the refreshed source\'s missing τ³-Banking value.',
+  'LongCat 2.0 must retain the τ³-Banking value newly published by the refreshed source.',
 );
 
 for (const expectation of [
@@ -795,8 +796,8 @@ assert.ok(
 );
 assert.equal(
   BUILT_IN_CONFIGURATION_MAX_PER_MODEL,
-  3,
-  'A model may expose one strongest API route plus two non-redundant subscription efficiencies.',
+  6,
+  'Two independently measured Harness routes may each expose API, Pro, and Ultra pricing configurations.',
 );
 assert.equal(
   BUILT_IN_CONFIGURATION_CURATION_ROWS.length,
@@ -931,7 +932,10 @@ for (const presetId of [
   'builtin.source-catalog.source-profile-inkling-xhigh.inkling-xhigh',
   'builtin.data-md.longcat-2-0.max',
   'builtin.source-catalog.source-profile-north-mini-code.north-mini-code',
-  'builtin.muse-spark-1-2.xhigh',
+  'builtin.harness.gemini-3-7-flash.high.antigravity-sdk',
+  'builtin.harness.gemini-3-7-flash.high.opencode',
+  'builtin.harness.muse-spark-1-2.xhigh.opencode',
+  'builtin.harness.muse-spark-1-2.xhigh.muse-code',
 ]) {
   assert.ok(
     BUILT_IN_CONFIGURATION_PRESETS.some((preset) => preset.id === presetId),
@@ -987,7 +991,7 @@ assert.equal(
 );
 assert.equal(
   uniqueRouteCountForHarness('---'),
-  13,
+  11,
   'Routes without an AA Coding Agent record must display ---.',
 );
 assert.ok(
@@ -1041,10 +1045,17 @@ for (const omittedPresetId of [
   'builtin.source-catalog.source-profile-motif-3-beta.motif-3-beta',
   'builtin.source-catalog.source-profile-nex-n2-pro.nex-n2-pro',
   'builtin.source-catalog.source-profile-ring-2-6-1t.ring-2-6-1t',
+  'builtin.gemini-3-7-flash.minimal',
+  'builtin.gemini-3-7-flash.low',
+  'builtin.gemini-3-7-flash.medium',
+  'builtin.gemini-3-7-flash.high',
+  'builtin.subscription.google-ai-pro.gemini-3-7-flash.high.chat',
+  'builtin.subscription.google-ai-ultra-20x.gemini-3-7-flash.high.chat',
   'builtin.muse-spark-1-2.minimal',
   'builtin.muse-spark-1-2.low',
   'builtin.muse-spark-1-2.medium',
   'builtin.muse-spark-1-2.high',
+  'builtin.muse-spark-1-2.xhigh',
 ]) {
   assert.ok(
     !BUILT_IN_CONFIGURATION_PRESETS.some((preset) => preset.id === omittedPresetId),
@@ -1058,6 +1069,19 @@ assert.ok(BUILT_IN_CONFIGURATION_PRESETS.every((preset) => (
 )), 'Shipped configuration names must stay compact and free of explanatory prose.');
 for (const preset of BUILT_IN_CONFIGURATION_PRESETS.filter(({ access }) => access === 'api')) {
   const providerLabel = preset.displayName.split(' | ')[2];
+  if (preset.apiPricingData) {
+    assert.equal(
+      providerLabel,
+      preset.providerDisplayLabel,
+      `Tiered API preset ${preset.id} must expose its explicit vendor price tier.`,
+    );
+    assert.match(
+      providerLabel || '',
+      /\bAPI\b/u,
+      `Tiered API preset ${preset.id} must remain visibly identified as an API route.`,
+    );
+    continue;
+  }
   assert.ok(
     providerLabel?.endsWith(' API') && providerLabel !== 'API',
     `API preset ${preset.id} must name the model author's vendor without binding to one serving endpoint.`,
@@ -1135,8 +1159,13 @@ const googleAiProTargets: readonly ExpectedSubscriptionTarget[] = [
     usableQuotaFraction: 1,
   },
   {
-    key: 'gemini-3-7-flash.high.chat',
-    basePresetId: 'builtin.gemini-3-7-flash.high',
+    key: 'gemini-3-7-flash.high.antigravity-sdk',
+    basePresetId: 'builtin.harness.gemini-3-7-flash.high.antigravity-sdk',
+    usableQuotaFraction: 1,
+  },
+  {
+    key: 'gemini-3-7-flash.high.opencode',
+    basePresetId: 'builtin.harness.gemini-3-7-flash.high.opencode',
     usableQuotaFraction: 1,
   },
   {
@@ -1241,7 +1270,7 @@ for (const preset of subscriptionPresets) {
     apiEquivalentCostUSD: expected.apiEquivalentCostUSD,
     usableQuotaFraction: expected.usableQuotaFraction,
   });
-  const basePreset = BUILT_IN_CONFIGURATION_PRESETS.find(
+  const basePreset = ALL_CONFIGURATION_PRESET_CANDIDATES.find(
     (candidate) => candidate.id === expected.basePresetId,
   );
   assert.ok(basePreset);
@@ -1386,7 +1415,7 @@ assert.deepEqual(
 );
 assert.equal(
   deepSeek0731Config.observations.arena_code_webdev?.rawValue,
-  1582.108887462124,
+  1581.1689724767473,
 );
 function expectedOpenRouterDataFromVerifiedCards(
   ...cardIds: string[]
@@ -1439,43 +1468,132 @@ const deepSeek0731Score = scoreByConfigurationId.get(deepSeek0731Box.id);
 assert.equal(deepSeek0731Score?.availableDomainCount, 5);
 assert.equal(deepSeek0731Score?.eligibleForGlobalLeaderboard, true);
 assert.notEqual(deepSeek0731Score?.practicalBreakdown.practicalScore, null);
-const museSpark12Box = installedPresetBoxes.find((box) => (
-  box.builtInPresetId === 'builtin.muse-spark-1-2.xhigh'
-));
-assert.ok(museSpark12Box, 'Muse Spark 1.2 XHigh must be installed as its score-ready profile.');
-assert.deepEqual(
-  reconciledV3Store.getLinkedCardStack(museSpark12Box.id).map(({ card }) => card.id),
-  [
-    'card-aa-muse-spark-1-2',
-    'card-arena-muse-spark-1-2-xhigh',
-    'card-openrouter-meta-muse-spark-1-2',
-    'card-openrouter-standard-performance-meta-muse-spark-1-2',
-  ],
-  'Muse Spark 1.2 XHigh must combine only its exact AA, Arena, and OpenRouter source cards.',
-);
-const museSpark12Config = reconciledV3Store.buildLLMConfiguration(museSpark12Box);
-assert.equal(
-  Object.keys(museSpark12Config.observations).some((metricId) => metricId.startsWith('arena_')),
-  true,
-  'Muse Spark 1.2 XHigh must include its newly published exact Arena evidence.',
-);
-assert.equal(
-  Object.keys(museSpark12Config.observations).some((metricId) => metricId.startsWith('arena_agent_')),
-  false,
-  'Muse Spark 1.2 must not infer Arena Agent Mode evidence that the source does not publish.',
-);
-assert.deepEqual(
-  museSpark12Config.openRouterData,
-  expectedOpenRouterDataFromVerifiedCards(
-    'card-openrouter-meta-muse-spark-1-2',
-    'card-openrouter-standard-performance-meta-muse-spark-1-2',
-  ),
-);
-const museSpark12Score = scoreByConfigurationId.get(museSpark12Box.id);
-assert.equal(museSpark12Score?.availableDomainCount, 6);
-assert.notEqual(museSpark12Score?.rawCapabilityScore, null);
-assert.notEqual(museSpark12Score?.practicalBreakdown.practicalScore, null);
-assert.equal(museSpark12Score?.eligibleForGlobalLeaderboard, true);
+const newAugustHarnessExpectations = [
+  {
+    presetId: 'builtin.harness.gemini-3-7-flash.high.antigravity-sdk',
+    modelName: 'Gemini 3.7 Flash',
+    productLineId: 'gemini_37_flash',
+    harness: 'Antigravity SDK',
+    exactHarnessCardId:
+      'card-aa-coding-agent-antigravity-sdk-gemini-3-7-flash-high',
+    chatCardIds: [
+      'card-aa-gemini-3-7-flash',
+      'card-arena-gemini-3-7-flash-high',
+    ],
+    openRouterCardIds: [
+      'card-openrouter-google-gemini-3-7-flash',
+      'card-openrouter-standard-performance-google-gemini-3-7-flash',
+    ],
+  },
+  {
+    presetId: 'builtin.harness.gemini-3-7-flash.high.opencode',
+    modelName: 'Gemini 3.7 Flash',
+    productLineId: 'gemini_37_flash',
+    harness: 'OpenCode',
+    exactHarnessCardId: 'card-aa-coding-agent-opencode-gemini-3-7-flash-high',
+    chatCardIds: [
+      'card-aa-gemini-3-7-flash',
+      'card-arena-gemini-3-7-flash-high',
+    ],
+    openRouterCardIds: [
+      'card-openrouter-google-gemini-3-7-flash',
+      'card-openrouter-standard-performance-google-gemini-3-7-flash',
+    ],
+  },
+  {
+    presetId: 'builtin.harness.muse-spark-1-2.xhigh.opencode',
+    modelName: 'Muse Spark 1.2',
+    productLineId: 'muse_spark_12',
+    harness: 'OpenCode',
+    exactHarnessCardId: 'card-aa-coding-agent-opencode-muse-spark-1-2-xhigh',
+    chatCardIds: [
+      'card-aa-muse-spark-1-2',
+      'card-arena-muse-spark-1-2-xhigh',
+    ],
+    openRouterCardIds: [
+      'card-openrouter-meta-muse-spark-1-2',
+      'card-openrouter-standard-performance-meta-muse-spark-1-2',
+    ],
+  },
+  {
+    presetId: 'builtin.harness.muse-spark-1-2.xhigh.muse-code',
+    modelName: 'Muse Spark 1.2',
+    productLineId: 'muse_spark_12',
+    harness: 'Muse Code',
+    exactHarnessCardId: 'card-aa-coding-agent-muse-code-muse-spark-1-2-xhigh',
+    chatCardIds: [
+      'card-aa-muse-spark-1-2',
+      'card-arena-muse-spark-1-2-xhigh',
+    ],
+    openRouterCardIds: [
+      'card-openrouter-meta-muse-spark-1-2',
+      'card-openrouter-standard-performance-meta-muse-spark-1-2',
+    ],
+  },
+] as const;
+
+for (const expectation of newAugustHarnessExpectations) {
+  const box = installedPresetBoxes.find((candidate) => (
+    candidate.builtInPresetId === expectation.presetId
+  ));
+  assert.ok(box, `${expectation.presetId} must ship as an independent Harness configuration.`);
+  assert.equal(box.identity?.harness.name, expectation.harness);
+  const stack = reconciledV3Store.getLinkedCardStack(box.id);
+  assert.deepEqual(
+    stack.map(({ card }) => card.id),
+    [
+      expectation.exactHarnessCardId,
+      ...expectation.chatCardIds,
+      ...expectation.openRouterCardIds,
+    ],
+    `${expectation.presetId} must use exact Harness data, one-way Chat fallback, and complete OpenRouter practical data.`,
+  );
+  assert.ok(
+    stack.every(({ card }) => (
+      (card.metadataJson?.scope as Record<string, unknown> | undefined)?.productLineId
+      === expectation.productLineId
+    )),
+    `${expectation.presetId} must not consume another product line.`,
+  );
+  const config = reconciledV3Store.buildLLMConfiguration(box);
+  for (const metricId of [
+    'aa_coding_agent_index',
+    'aa_coding_agent_deepswe',
+    'aa_coding_agent_swe_atlas_qna',
+    'aa_coding_agent_terminalbench_v2',
+  ]) {
+    assert.ok(
+      config.observations[metricId],
+      `${expectation.presetId} must retain exact ${metricId} evidence.`,
+    );
+  }
+  assert.equal(
+    Object.keys(config.observations).some((metricId) => metricId.startsWith('arena_agent_')),
+    false,
+    `${expectation.presetId} must not invent Arena Agent Mode evidence.`,
+  );
+  assert.deepEqual(
+    config.openRouterData,
+    expectedOpenRouterDataFromVerifiedCards(...expectation.openRouterCardIds),
+    `${expectation.presetId} must have complete price, latency, and throughput data.`,
+  );
+  const score = scoreByConfigurationId.get(box.id);
+  assert.equal(score?.availableDomainCount, 6);
+  assert.notEqual(score?.rawCapabilityScore, null);
+  assert.notEqual(score?.practicalBreakdown.practicalScore, null);
+  assert.equal(score?.eligibleForGlobalLeaderboard, true);
+}
+
+for (const productLineId of ['gemini_37_flash', 'muse_spark_12']) {
+  assert.ok(
+    BUILT_IN_CONFIGURATION_PRESETS.every((preset) => !(
+      preset.productLineId === productLineId
+      && preset.access === 'api'
+      && preset.identity.harness.name === '---'
+    )),
+    `${productLineId} must not retain a reader-facing plain API configuration.`,
+  );
+}
 
 const august2026ReleaseExpectations = [
   {
@@ -1509,31 +1627,14 @@ const august2026ReleaseExpectations = [
     ],
   },
   {
-    presetId: 'builtin.gemini-3-7-flash.high',
-    modelName: 'Gemini 3.7 Flash',
-    productLineId: 'gemini_37_flash',
-    cardIds: [
-      'card-aa-gemini-3-7-flash',
-      'card-arena-gemini-3-7-flash-high',
-      'card-openrouter-google-gemini-3-7-flash',
-      'card-openrouter-standard-performance-google-gemini-3-7-flash',
-      'card-aa-gemini-3-7-flash-medium',
-      'card-aa-gemini-3-7-flash-low',
-    ],
-    openRouterCardIds: [
-      'card-openrouter-google-gemini-3-7-flash',
-      'card-openrouter-standard-performance-google-gemini-3-7-flash',
-    ],
-  },
-  {
     presetId: 'builtin.deepseek-v4-pro-0813.max',
     modelName: 'DeepSeek V4 Pro 0813',
     productLineId: 'deepseek_v4_pro_0813',
     cardIds: [
       'card-aa-deepseek-v4-pro',
-      'card-arena-deepseek-v4-pro-max-20260813',
       'card-openrouter-deepseek-deepseek-v4-pro-0813',
       'card-openrouter-standard-performance-deepseek-deepseek-v4-pro-0813',
+      'card-arena-deepseek-v4-pro-high-20260813',
     ],
     openRouterCardIds: [
       'card-openrouter-deepseek-deepseek-v4-pro-0813',
@@ -1588,6 +1689,30 @@ const deepSeekPreviewBox = installedPresetBoxes.find((candidate) => (
 assert.ok(deepSeekPreviewBox, 'The independent DeepSeek-v4-Pro Preview configuration must remain installed.');
 const deepSeek0813Stack = reconciledV3Store.getLinkedCardStack(deepSeek0813Box.id);
 const deepSeekPreviewStack = reconciledV3Store.getLinkedCardStack(deepSeekPreviewBox.id);
+const deepSeek0813ArenaHighCard = baseCards.find(
+  ({ id }) => id === 'card-arena-deepseek-v4-pro-high-20260813',
+);
+assert.ok(
+  deepSeek0813ArenaHighCard,
+  'The refreshed Arena source must preserve the exact DeepSeek V4 Pro 0813 High row.',
+);
+assert.equal(
+  (deepSeek0813ArenaHighCard.metadataJson?.scope as Record<string, unknown> | undefined)
+    ?.productLineId,
+  'deepseek_v4_pro_0813',
+);
+assert.deepEqual(
+  deepSeek0813Stack.find(({ card }) => card.id === deepSeek0813ArenaHighCard.id)
+    ?.link.provenance,
+  {
+    kind: 'lower_profile_fallback',
+    sourceProfile: 'High',
+    sourceLevel: 3,
+    targetProfile: 'Max',
+    targetLevel: 5,
+  },
+  'The High Arena row may fill Max only through the authored High-to-Max fallback.',
+);
 assert.ok(
   deepSeekPreviewStack.every(({ card }) => (
     (card.metadataJson?.scope as Record<string, unknown> | undefined)?.productLineId
@@ -1638,13 +1763,188 @@ function assertSubscriptionRoutesPreserveCapability(
   }
 }
 
-assertSubscriptionRoutesPreserveCapability(
-  'builtin.gemini-3-7-flash.high',
-  [
-    'builtin.subscription.google-ai-pro.gemini-3-7-flash.high.chat',
-    'builtin.subscription.google-ai-ultra-20x.gemini-3-7-flash.high.chat',
-  ],
+const gemini37HarnessPriceMatrices = [
+  {
+    harness: 'Antigravity SDK',
+    apiPresetId: 'builtin.harness.gemini-3-7-flash.high.antigravity-sdk',
+    subscriptionPresetIds: [
+      'builtin.subscription.google-ai-pro.gemini-3-7-flash.high.antigravity-sdk',
+      'builtin.subscription.google-ai-ultra-20x.gemini-3-7-flash.high.antigravity-sdk',
+    ],
+  },
+  {
+    harness: 'OpenCode',
+    apiPresetId: 'builtin.harness.gemini-3-7-flash.high.opencode',
+    subscriptionPresetIds: [
+      'builtin.subscription.google-ai-pro.gemini-3-7-flash.high.opencode',
+      'builtin.subscription.google-ai-ultra-20x.gemini-3-7-flash.high.opencode',
+    ],
+  },
+] as const;
+const gemini37CodingAgentIndexByHarness = new Map<string, number>();
+for (const matrix of gemini37HarnessPriceMatrices) {
+  const subscriptionBoxes = matrix.subscriptionPresetIds.map((presetId) => {
+    const box = installedPresetBoxes.find((candidate) => candidate.builtInPresetId === presetId);
+    assert.ok(box, `Missing independent subscription route ${presetId}.`);
+    assert.equal(box.identity?.harness.name, matrix.harness);
+    return box;
+  });
+  const subscriptionConfigs = subscriptionBoxes.map((box) => (
+    reconciledV3Store.buildLLMConfiguration(box)
+  ));
+  assert.deepEqual(
+    subscriptionConfigs[1].observations,
+    subscriptionConfigs[0].observations,
+    `Google Pro and Ultra must preserve the same ${matrix.harness} capability data.`,
+  );
+  for (const config of subscriptionConfigs) {
+    for (const metricId of [
+      'aa_coding_agent_index',
+      'aa_coding_agent_deepswe',
+      'aa_coding_agent_swe_atlas_qna',
+      'aa_coding_agent_terminalbench_v2',
+    ]) {
+      assert.ok(
+        config.observations[metricId],
+        `Gemini ${matrix.harness} subscription must retain ${metricId}.`,
+      );
+    }
+    assert.equal(
+      Object.keys(config.observations).some((metricId) => metricId.startsWith('arena_agent_')),
+      false,
+      `Gemini ${matrix.harness} subscriptions must not borrow a different Agent harness.`,
+    );
+  }
+  gemini37CodingAgentIndexByHarness.set(
+    matrix.harness,
+    subscriptionConfigs[0].observations.aa_coding_agent_index.rawValue,
+  );
+  const subscriptionScores = subscriptionBoxes.map((box) => (
+    scoreByConfigurationId.get(box.id)
+  ));
+  assert.equal(
+    subscriptionScores[1]?.rawCapabilityScore,
+    subscriptionScores[0]?.rawCapabilityScore,
+  );
+  assert.notEqual(
+    subscriptionScores[1]?.practicalBreakdown.practicalScore,
+    subscriptionScores[0]?.practicalBreakdown.practicalScore,
+    `Google Pro and Ultra must retain independent ${matrix.harness} subscription economics.`,
+  );
+  assertSubscriptionRoutesPreserveCapability(
+    matrix.apiPresetId,
+    matrix.subscriptionPresetIds,
+  );
+}
+assert.notEqual(
+  gemini37CodingAgentIndexByHarness.get('Antigravity SDK'),
+  gemini37CodingAgentIndexByHarness.get('OpenCode'),
+  'Antigravity SDK and OpenCode price matrices must retain their independent AA Agent results.',
 );
+
+const museSpark12HarnessPriceMatrices = [
+  {
+    harness: 'OpenCode',
+    standardPresetId: 'builtin.harness.muse-spark-1-2.xhigh.opencode',
+    contributorPresetId:
+      'builtin.api-tier.meta-contributor.muse-spark-1-2.xhigh.opencode',
+  },
+  {
+    harness: 'Muse Code',
+    standardPresetId: 'builtin.harness.muse-spark-1-2.xhigh.muse-code',
+    contributorPresetId:
+      'builtin.api-tier.meta-contributor.muse-spark-1-2.xhigh.muse-code',
+  },
+] as const;
+const museSpark12CodingAgentIndexByHarness = new Map<string, number>();
+for (const matrix of museSpark12HarnessPriceMatrices) {
+  const standardBox = installedPresetBoxes.find((candidate) => (
+    candidate.builtInPresetId === matrix.standardPresetId
+  ));
+  const contributorBox = installedPresetBoxes.find((candidate) => (
+    candidate.builtInPresetId === matrix.contributorPresetId
+  ));
+  assert.ok(standardBox, `Missing Muse Spark 1.2 ${matrix.harness} Standard API route.`);
+  assert.ok(contributorBox, `Missing Muse Spark 1.2 ${matrix.harness} Contributor API route.`);
+  assert.equal(standardBox.identity?.harness.name, matrix.harness);
+  assert.equal(contributorBox.identity?.harness.name, matrix.harness);
+  assert.equal(
+    contributorBox.displayName,
+    `Muse Spark 1.2 XHigh | ${matrix.harness} | Meta API Contributor`,
+  );
+
+  const standardStack = reconciledV3Store.getLinkedCardStack(standardBox.id);
+  const contributorStack = reconciledV3Store.getLinkedCardStack(contributorBox.id);
+  assert.deepEqual(
+    contributorStack.map(({ card }) => card.id),
+    standardStack.map(({ card }) => card.id),
+    `Contributor must retain the exact ${matrix.harness} capability and speed stack.`,
+  );
+
+  const standardConfig = reconciledV3Store.buildLLMConfiguration(standardBox);
+  const contributorConfig = reconciledV3Store.buildLLMConfiguration(contributorBox);
+  assert.deepEqual(
+    contributorConfig.observations,
+    standardConfig.observations,
+    `Contributor must not replace ${matrix.harness} AA Harness measurements.`,
+  );
+  assert.equal(standardConfig.openRouterData?.inputPricePerMToken, 1.25);
+  assert.equal(standardConfig.openRouterData?.outputPricePerMToken, 4.25);
+  assert.equal(contributorConfig.openRouterData?.inputPricePerMToken, 0.1);
+  assert.equal(contributorConfig.openRouterData?.outputPricePerMToken, 0.2);
+  assert.equal(contributorConfig.openRouterData?.cacheReadPricePerMToken, 0.002);
+  assert.equal(
+    contributorConfig.openRouterData?.ttftP50Seconds,
+    standardConfig.openRouterData?.ttftP50Seconds,
+    `Contributor ${matrix.harness} must use the same-model measured TTFT.`,
+  );
+  assert.equal(
+    contributorConfig.openRouterData?.throughputP50TokensPerSec,
+    standardConfig.openRouterData?.throughputP50TokensPerSec,
+    `Contributor ${matrix.harness} must use the same-model measured throughput.`,
+  );
+  assert.equal(contributorConfig.capabilityReferenceIncluded, false);
+
+  const contributorPreset = BUILT_IN_CONFIGURATION_PRESETS.find((candidate) => (
+    candidate.id === matrix.contributorPresetId
+  ));
+  assert.ok(contributorPreset?.apiPricingData);
+  assert.equal(contributorPreset.apiPricingData.tierName, 'Contributor');
+  assert.equal(contributorPreset.apiPricingData.effectiveDate, '2026-08-05');
+  assert.equal(
+    contributorPreset.apiPricingData.officialSourceUrl,
+    'https://developer.meta.com/ai/resources/blog/build-with-muse-code/',
+  );
+
+  const standardScore = scoreByConfigurationId.get(standardBox.id);
+  const contributorScore = scoreByConfigurationId.get(contributorBox.id);
+  assert.ok(standardScore);
+  assert.ok(contributorScore);
+  assert.deepEqual(contributorScore.domainScores, standardScore.domainScores);
+  assert.equal(contributorScore.rawCapabilityScore, standardScore.rawCapabilityScore);
+  assert.notEqual(
+    contributorScore.practicalBreakdown.practicalScore,
+    standardScore.practicalBreakdown.practicalScore,
+    `Standard and Contributor must independently price ${matrix.harness}.`,
+  );
+  museSpark12CodingAgentIndexByHarness.set(
+    matrix.harness,
+    contributorConfig.observations.aa_coding_agent_index.rawValue,
+  );
+}
+assert.equal(
+  BUILT_IN_CONFIGURATION_PRESETS.filter((preset) => (
+    preset.productLineId === 'muse_spark_12' && preset.access === 'api'
+  )).length,
+  4,
+  'Muse Spark 1.2 must ship two Harnesses multiplied by two API price tiers.',
+);
+assert.notEqual(
+  museSpark12CodingAgentIndexByHarness.get('OpenCode'),
+  museSpark12CodingAgentIndexByHarness.get('Muse Code'),
+  'Muse Spark 1.2 price matrices must retain the two independent AA Harness results.',
+);
+
 assertSubscriptionRoutesPreserveCapability(
   'builtin.grok-4-6.xhigh',
   ['builtin.subscription.supergrok.grok-4-6.xhigh.chat'],

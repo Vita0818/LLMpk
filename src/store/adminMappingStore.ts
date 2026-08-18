@@ -2402,6 +2402,17 @@ export class AdminMappingStore {
     )
       ? sanitizeSubscriptionCostData(builtInPreset.subscriptionData)
       : undefined;
+    const apiPricingData = (
+      builtInPreset?.access === 'api'
+      && isUnchangedBuiltInPreset
+      && builtInPreset.apiPricingData
+      && Number.isFinite(builtInPreset.apiPricingData.inputPricePerMToken)
+      && builtInPreset.apiPricingData.inputPricePerMToken >= 0
+      && Number.isFinite(builtInPreset.apiPricingData.outputPricePerMToken)
+      && builtInPreset.apiPricingData.outputPricePerMToken >= 0
+    )
+      ? builtInPreset.apiPricingData
+      : undefined;
     const promotionalPricing = (
       builtInPreset
       && isUnchangedBuiltInPreset
@@ -2442,11 +2453,12 @@ export class AdminMappingStore {
       });
 
     // OpenRouter is preferred for provider-neutral price and performance.
-    // A current, source-backed OpenRouter promotion for an unchanged shipped
-    // route takes precedence over an older snapshot price. When the exact
-    // model is absent there, the same model's Artificial Analysis price and
-    // median performance fill only the missing practical slots. Capability
-    // observations remain unaffected.
+    // An unchanged built-in route may replace only its price with either an
+    // official direct-provider API tier or a current OpenRouter promotion;
+    // same-model latency/throughput evidence remains independently sourced.
+    // When the exact model is absent there, the same model's Artificial
+    // Analysis price and median performance fill only the missing practical
+    // slots. Capability observations remain unaffected.
     const openRouterByMetric = new Map<string, SourceObservation>();
     linkedStack
       .filter(({ card }) => card.source === 'openrouter')
@@ -2475,9 +2487,11 @@ export class AdminMappingStore {
       ?? artificialAnalysisPracticalByMetric.get('aa_ttft_median');
     const throughputObservation = openRouterByMetric.get('or_throughput_p50')
       ?? artificialAnalysisPracticalByMetric.get('aa_throughput_median');
-    const inputPrice = promotionalPricing?.effectiveInputPricePerMToken
+    const inputPrice = apiPricingData?.inputPricePerMToken
+      ?? promotionalPricing?.effectiveInputPricePerMToken
       ?? inputPriceObservation?.rawValue;
-    const outputPrice = promotionalPricing?.effectiveOutputPricePerMToken
+    const outputPrice = apiPricingData?.outputPricePerMToken
+      ?? promotionalPricing?.effectiveOutputPricePerMToken
       ?? outputPriceObservation?.rawValue;
     const latencySeconds = secondsFromLatencyObservation(latencyObservation);
     const throughput = throughputObservation?.rawValue;
@@ -2491,6 +2505,9 @@ export class AdminMappingStore {
       ? {
           inputPricePerMToken: inputPrice,
           outputPricePerMToken: outputPrice,
+          ...(typeof apiPricingData?.cacheReadPricePerMToken === 'number'
+            ? { cacheReadPricePerMToken: apiPricingData.cacheReadPricePerMToken }
+            : {}),
           ttftP50Seconds: latencySeconds,
           throughputP50TokensPerSec: throughput,
         }
@@ -2524,7 +2541,9 @@ export class AdminMappingStore {
       id: box.id,
       name: configName,
       provider: readerFacingProvider,
-      ...(subscriptionData ? { capabilityReferenceIncluded: false } : {}),
+      ...(subscriptionData || apiPricingData
+        ? { capabilityReferenceIncluded: false }
+        : {}),
       tags: [box.internalName, box.enabled ? '已启用入榜' : '未启用'],
       identity: {
         modelName: configurationIdentity?.model?.name || box.displayName,

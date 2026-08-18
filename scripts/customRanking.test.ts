@@ -214,9 +214,9 @@ const customTopFive = rankTopScoresByPreferences(
   representativePublicScores,
   DEFAULT_PREFERENCE_WEIGHTS,
 );
-assert.equal(representativePublicScores.length, 43);
-assert.equal(publicScores.length - representativePublicScores.length, 18);
-assert.equal(representativePublicRanking.length, 43);
+assert.equal(representativePublicScores.length, 45);
+assert.equal(publicScores.length - representativePublicScores.length, 22);
+assert.equal(representativePublicRanking.length, 45);
 assert.equal(customTopFive.length, CUSTOM_RANKING_RESULT_LIMIT);
 assert.ok(customTopFive.every((result) => representativeIds.has(result.item.config.id)));
 assert.ok(publicScores

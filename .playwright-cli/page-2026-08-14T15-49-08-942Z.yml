@@ -1,0 +1,40 @@
+- generic [ref=e3]:
+  - generic [ref=e1234]:
+    - generic [ref=e1237]:
+      - generic [ref=e1238]:
+        - generic [ref=e1239]: 播放中
+        - generic [ref=e1242]: 片头
+        - generic [ref=e1244]: LLMpk
+      - generic [ref=e1247]:
+        - generic [ref=e1251]:
+          - generic [ref=e1252]: 停留
+          - combobox "每个配置的停留时间" [ref=e1253]:
+            - option "2s"
+            - option "3s"
+            - option "4s"
+            - option "5s" [selected]
+            - option "7s"
+            - option "10s"
+        - generic [ref=e1254]: 5s
+      - generic [ref=e1255]:
+        - button "上一个模型 (靠后名次)" [disabled] [ref=e1256]
+        - button "暂停" [ref=e1259]
+        - button "下一个模型 (靠前名次)" [ref=e1263]
+        - button "准备录屏" [ref=e1266]
+        - button "退出播放模式" [ref=e1273]
+    - generic [ref=e1277]: 空格 播放/暂停 · ← → 切换 · R 重新播放 · H 录屏净画面 · Esc 退出净画面
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - link "LLMpk" [ref=e7] [cursor=pointer]:
+          - /url: /
+        - button "返回" [ref=e1278]
+      - button "播放模式" [active] [ref=e14] [cursor=pointer]
+  - main [ref=e18]:
+    - generic [ref=e1281]:
+      - heading "LLMpk" [level=1] [ref=e1282]
+      - generic [ref=e1283]: 26-08-14
+      - generic [ref=e1285]:
+        - generic [ref=e1286]: Artificial Analysis
+        - generic [ref=e1288]: Arena.ai
+        - generic [ref=e1290]: OpenRouter
