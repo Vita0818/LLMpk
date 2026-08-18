@@ -3,9 +3,9 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  // GitHub Actions publishes this repository at /LLM-pk/. Local development
+  // GitHub Actions publishes this repository at /LLMpk/. Local development
   // keeps the root path used by the existing localhost workflow.
-  base: process.env.GITHUB_ACTIONS === 'true' ? '/LLM-pk/' : '/',
+  base: process.env.GITHUB_ACTIONS === 'true' ? '/LLMpk/' : '/',
   plugins: [react(), tailwindcss()],
   server: {
     proxy: {
