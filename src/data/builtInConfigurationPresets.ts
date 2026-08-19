@@ -671,7 +671,7 @@ const DATA_MD_CONFIGURATION_PRESETS_RAW: readonly BuiltInConfigurationPreset[] =
     key: 'data-md.deepseek-v4-flash-0731.max',
     productLineId: 'deepseek_v4_flash_0731',
     identity: {
-      model: { name: 'DeepSeek V4 Flash 0731', profile: DATA_MD_DEFAULT_REASONING },
+      model: { name: 'DeepSeek-v4-Flash 0731', profile: DATA_MD_DEFAULT_REASONING },
       harness: normalChat('DeepSeek API'),
       provider: { name: 'DeepSeek', upstream: 'DeepSeek API' },
     },
@@ -690,6 +690,7 @@ const DATA_MD_CONFIGURATION_PRESETS_RAW: readonly BuiltInConfigurationPreset[] =
   orcPreset({ key: 'data-md.deepseek-v4-flash.max', productLineId: 'deepseek_v4_flash', modelName: 'DeepSeek-v4-Flash Preview', profile: DATA_MD_DEFAULT_REASONING, providerName: 'DeepSeek', upstreamApi: 'DeepSeek API', sourceCardIds: ['card-aa-deepseek-v4-flash-0420', 'card-openrouter-deepseek-deepseek-v4-flash'] }),
   orcPreset({ key: 'data-md.deepseek-v4-pro.max', productLineId: 'deepseek_v4_pro', modelName: 'DeepSeek-v4-Pro Preview', profile: DATA_MD_DEFAULT_REASONING, providerName: 'DeepSeek', upstreamApi: 'DeepSeek API', sourceCardIds: ['card-aa-deepseek-v4-pro-0424', 'card-openrouter-deepseek-deepseek-v4-pro'] }),
   orcPreset({ key: 'data-md.glm-5-2.max', productLineId: 'glm_52', modelName: 'GLM-5.2', profile: DATA_MD_DEFAULT_REASONING, providerName: 'Z.ai', upstreamApi: 'Z.ai API', sourceCardIds: ['card-aa-glm-5-2', 'card-arena-glm-5-2-max', 'card-openrouter-z-ai-glm-5-2'] }),
+  orcPreset({ key: 'data-md.glm-5-3.max', productLineId: 'glm_53', modelName: 'GLM-5.3', profile: DATA_MD_DEFAULT_REASONING, providerName: 'Z.ai', upstreamApi: 'Z.ai API', sourceCardIds: ['card-aa-glm-5-3', 'card-openrouter-z-ai-glm-5-3', 'card-openrouter-standard-performance-z-ai-glm-5-3'], note: 'Z.ai 官方将 GLM-5.3 定义为仅支持 reasoning 的 Low、High、Max 三档，默认 Max；当前只创建有独立能力测评的 Max 配置。Arena 尚无可用成绩，未添加任何 Arena 或 Harness 估计。' }),
   orcPreset({ key: 'data-md.hy3.max', productLineId: 'hunyuan_hy3', modelName: 'Hy3', profile: DATA_MD_DEFAULT_REASONING, providerName: 'GMICloud', upstreamApi: 'GMICloud API' }),
   definePreset({
     key: 'data-md.kimi-k3.kimi-code',
@@ -718,7 +719,7 @@ const DATA_MD_CONFIGURATION_PRESETS_RAW: readonly BuiltInConfigurationPreset[] =
     note: '原测试在思考超限后改为 Grok 模式；15 credits 不能证明是 QwenCloud/Model Studio 直连，因此不能与通用 Qwen API 混用。',
   }),
   orcPreset({ key: 'data-md.qwen-3-7-max.max', productLineId: 'qwen_37_max', modelName: 'Qwen3.7-Max', profile: DATA_MD_DEFAULT_REASONING, providerName: 'Alibaba', upstreamApi: 'Alibaba Qwen API', sourceCardIds: ['card-openrouter-qwen-qwen3-7-max'] }),
-  orcPreset({ key: 'data-md.qwen-3-7-plus.max', productLineId: 'qwen_37_plus', modelName: 'Qwen3.7-Plus', profile: DATA_MD_DEFAULT_REASONING, providerName: 'Alibaba', upstreamApi: 'Alibaba Qwen API', sourceCardIds: ['card-openrouter-qwen-qwen3-7-plus'] }),
+  orcPreset({ key: 'data-md.qwen-3-7-plus.max', productLineId: 'qwen_37_plus', modelName: 'Qwen3.7 Plus', profile: DATA_MD_DEFAULT_REASONING, providerName: 'Alibaba', upstreamApi: 'Alibaba Qwen API', sourceCardIds: ['card-openrouter-qwen-qwen3-7-plus'] }),
   definePreset({
     key: 'data-md.seed-2-1-turbo.trae-cn',
     productLineId: 'seed_21_turbo',
@@ -929,8 +930,6 @@ const DATA_MD_CONFIGURATION_PRESETS_RAW: readonly BuiltInConfigurationPreset[] =
   orcPreset({ key: 'data-md.qwen-3-6-27b.max.phala', productLineId: 'qwen_36_27b', modelName: 'Qwen3.6 27B', profile: 'Max', providerName: 'Phala', upstreamApi: 'Phala API', sourceCardLinks: [lowerProfileFallback('card-aa-qwen3-6-27b-non-reasoning', 'Non-reasoning / thinking off', 0, 'Max', 5)] }),
   orcPreset({ key: 'data-md.qwen-3-6-27b.max.chutes', productLineId: 'qwen_36_27b', modelName: 'Qwen3.6 27B', profile: 'Max', providerName: 'Chutes', upstreamApi: 'Chutes API', sourceCardLinks: [lowerProfileFallback('card-aa-qwen3-6-27b-non-reasoning', 'Non-reasoning / thinking off', 0, 'Max', 5)] }),
   orcPreset({ key: 'data-md.qwen-3-6-35b-a3b.max.atlascloud', productLineId: 'qwen_36_35b_a3b', modelName: 'Qwen3.6 35B A3B', profile: 'Max', providerName: 'AtlasCloud', upstreamApi: 'AtlasCloud API', sourceCardLinks: [lowerProfileFallback('card-aa-qwen3-6-35b-a3b-non-reasoning', 'Non-reasoning / thinking off', 0, 'Max', 5)] }),
-  orcPreset({ key: 'data-md.gpt-oss-120b.medium.dekallm', productLineId: 'gpt_oss_120b', modelName: 'GPT-OSS-120B', profile: 'Medium', providerName: 'DekaLLM', upstreamApi: 'DekaLLM API', sourceCardLinks: [lowerProfileFallback('card-aa-gpt-oss-120b-low', 'Low', 1, 'Medium', 2)] }),
-  orcPreset({ key: 'data-md.gpt-oss-20b.medium.darkbloom', productLineId: 'gpt_oss_20b', modelName: 'GPT-OSS-20B', profile: 'Medium', providerName: 'Darkbloom', upstreamApi: 'Darkbloom API', sourceCardLinks: [lowerProfileFallback('card-aa-gpt-oss-20b-low', 'Low', 1, 'Medium', 2)] }),
   orcPreset({ key: 'data-md.nemotron-3-ultra.max', productLineId: 'nemotron_3_ultra', modelName: 'Nemotron 3 Ultra', profile: 'Max', providerName: 'NVIDIA', upstreamApi: 'NVIDIA API', sourceCardIds: ['card-openrouter-nvidia-nemotron-3-ultra-550b-a55b'] }),
   orcPreset({ key: 'data-md.nemotron-3-super.max', productLineId: 'nemotron_3_super', modelName: 'Nemotron 3 Super', profile: 'Max', providerName: 'NVIDIA', upstreamApi: 'NVIDIA API', sourceCardIds: ['card-openrouter-nvidia-nemotron-3-super-120b-a12b'] }),
   orcPreset({ key: 'data-md.nemotron-3-nano.max', productLineId: 'nemotron_3_nano', modelName: 'Nemotron 3 Nano', profile: 'Max', providerName: 'NVIDIA', upstreamApi: 'NVIDIA API', sourceCardIds: ['card-openrouter-nvidia-nemotron-3-nano-30b-a3b'], sourceCardLinks: [lowerProfileFallback('card-aa-nvidia-nemotron-3-nano-30b-a3b', 'Non-reasoning / thinking off', 0, 'Max', 5)] }),
@@ -1192,14 +1191,6 @@ const API_PROFILE_EXPANSION_PRESETS: readonly BuiltInConfigurationPreset[] = [
     profileKeys: ['none', 'reasoning'], providerName: 'AtlasCloud', upstreamApi: 'AtlasCloud API',
   }),
   ...apiProfilePresets({
-    keyPrefix: 'data-md.gpt-oss-120b', keySuffix: '.dekallm', productLineId: 'gpt_oss_120b', modelName: 'GPT-OSS-120B',
-    profileKeys: ['low', 'high'], providerName: 'DekaLLM', upstreamApi: 'DekaLLM API',
-  }),
-  ...apiProfilePresets({
-    keyPrefix: 'data-md.gpt-oss-20b', keySuffix: '.darkbloom', productLineId: 'gpt_oss_20b', modelName: 'GPT-OSS-20B',
-    profileKeys: ['low', 'high'], providerName: 'Darkbloom', upstreamApi: 'Darkbloom API',
-  }),
-  ...apiProfilePresets({
     keyPrefix: 'data-md.grok-4-5', productLineId: 'grok_45', modelName: 'Grok 4.5',
     profileKeys: ['low', 'medium'], providerName: 'xAI', upstreamApi: 'xAI API',
     sharedExactCardIds: ['card-openrouter-x-ai-grok-4-5'],
@@ -1341,13 +1332,143 @@ const AUGUST_2026_RELEASE_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPr
   ...apiProfilePresets({
     keyPrefix: 'deepseek-v4-pro-0813',
     productLineId: 'deepseek_v4_pro_0813',
-    modelName: 'DeepSeek V4 Pro 0813',
+    modelName: 'DeepSeek-v4-Pro 0813',
     profileKeys: ['low', 'high', 'max'],
     providerName: 'DeepSeek',
     upstreamApi: 'DeepSeek API',
     sharedExactCardIds: ['card-openrouter-deepseek-deepseek-v4-pro-0813'],
     origin: 'source-backed',
     note: '0813 是独立产品线；只使用带 0813/20260813 身份的 AA、Arena 与 OpenRouter 记录，绝不连接 0424 Preview 卡。',
+  }),
+];
+
+/**
+ * Explicitly requested source-backed configurations.  Each one uses only the
+ * source records that identify the same published model/profile; lower Arena
+ * defaults are declared as one-way fallbacks where a higher AA effort exists.
+ */
+const ADDITIONAL_SOURCE_BACKED_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
+  definePreset({
+    key: 'qwen3-8-27b.xhigh',
+    productLineId: 'qwen_38_27b',
+    identity: {
+      model: { name: 'Qwen3.8 27B', profile: 'XHigh' },
+      harness: normalChat(),
+      provider: viaOpenRouter('Alibaba', 'Alibaba Qwen API'),
+    },
+    origin: 'source-backed',
+    access: 'api',
+    note: 'OpenRouter 官方目录将 Qwen3.8 27B 的默认 reasoning effort 标为 XHigh；AA 提供同一当前模型的能力记录，OpenRouter Standard 提供价格与速度。',
+    sourceCardIds: [
+      'card-aa-qwen3-8-27b',
+      'card-openrouter-qwen-qwen3-8-27b',
+      'card-openrouter-standard-performance-qwen-qwen3-8-27b',
+    ],
+  }),
+  definePreset({
+    key: 'command-a-plus.reasoning',
+    productLineId: 'command_a_plus',
+    identity: {
+      model: { name: 'Command A+', profile: 'Thinking' },
+      harness: normalChat('Cohere API'),
+      provider: {
+        name: 'Cohere',
+        upstream: 'Cohere Model Vault / command-a-plus-05-2026',
+      },
+    },
+    origin: 'source-backed',
+    access: 'api',
+    note: 'Cohere 官方将 Command A+ 作为 reasoning / agentic 模型发布，并在当前试用与生产 key 下免费至各自限额；AA 当前提供该 reasoning 模型的能力、价格与速度记录。',
+    sourceCardIds: ['card-aa-command-a-plus'],
+  }),
+  definePreset({
+    key: 'nemotron-3-5-lightning.reasoning',
+    productLineId: 'nemotron_35_lightning',
+    identity: {
+      model: { name: 'Nemotron 3.5 Lightning', profile: 'Thinking' },
+      harness: normalChat(),
+      provider: viaOpenRouter('NVIDIA', 'NVIDIA NIM / NVIDIA API'),
+    },
+    origin: 'source-backed',
+    access: 'api',
+    note: 'NVIDIA 将 Nemotron 3.5 Lightning 作为 reasoning 模型发布；Arena 的 NVFP4 行是同一 Lightning 30B A3B 模型的量化服务记录，只补入其普通 Chat 分项。',
+    sourceCardIds: [
+      'card-aa-nemotron-3-5-lightning',
+      'card-arena-nvidia-nemotron-3-5-lightning-30b-a3b-nvfp4',
+      'card-openrouter-nvidia-nemotron-3-5-lightning',
+      'card-openrouter-standard-performance-nvidia-nemotron-3-5-lightning',
+    ],
+  }),
+  definePreset({
+    key: 'gpt-oss-20b.high',
+    productLineId: 'gpt_oss_20b',
+    identity: {
+      model: { name: 'GPT-OSS 20B', profile: 'High' },
+      harness: normalChat(),
+      provider: {
+        name: 'OpenAI',
+        upstream: 'Open-weight GPT-OSS；OpenRouter Standard 路线（OpenAI 官方 API 不提供托管）',
+      },
+    },
+    origin: 'source-backed',
+    access: 'api',
+    providerDisplayLabel: 'OpenAI API',
+    note: 'OpenAI 官方文档确认 GPT-OSS 20B 支持 Low、Medium、High reasoning effort；AA 的当前能力记录为 High。Arena 未标注 effort 的文本行只按 Default→High 单向补缺。',
+    sourceCardIds: [
+      'card-aa-gpt-oss-20b',
+      'card-openrouter-openai-gpt-oss-20b',
+      'card-openrouter-standard-performance-openai-gpt-oss-20b',
+    ],
+    sourceCardLinks: [
+      lowerProfileFallback('card-arena-gpt-oss-20b', 'Default', 0, 'High', 3),
+    ],
+  }),
+  definePreset({
+    key: 'gpt-oss-120b.high',
+    productLineId: 'gpt_oss_120b',
+    identity: {
+      model: { name: 'GPT-OSS 120B', profile: 'High' },
+      harness: normalChat(),
+      provider: {
+        name: 'OpenAI',
+        upstream: 'Open-weight GPT-OSS；OpenRouter Standard 路线（OpenAI 官方 API 不提供托管）',
+      },
+    },
+    origin: 'source-backed',
+    access: 'api',
+    providerDisplayLabel: 'OpenAI API',
+    note: 'OpenAI 官方文档确认 GPT-OSS 120B 支持 Low、Medium、High reasoning effort；AA 的当前能力记录为 High。Arena 未标注 effort 的文本行只按 Default→High 单向补缺。',
+    sourceCardIds: [
+      'card-aa-gpt-oss-120b',
+      'card-openrouter-openai-gpt-oss-120b',
+      'card-openrouter-standard-performance-openai-gpt-oss-120b',
+    ],
+    sourceCardLinks: [
+      lowerProfileFallback('card-arena-gpt-oss-120b', 'Default', 0, 'High', 3),
+    ],
+  }),
+  definePreset({
+    key: 'inkling.xhigh',
+    productLineId: 'inkling',
+    identity: {
+      model: { name: 'Inkling', profile: 'XHigh' },
+      harness: normalChat(),
+      provider: {
+        name: 'Thinking Machines',
+        upstream: 'thinkingmachines/inkling · OpenRouter Standard route',
+      },
+    },
+    origin: 'source-backed',
+    access: 'api',
+    note: '使用 Thinking Machines 原始 Inkling，而非 Inkling Small。AA 当前模型记录为 XHigh；Arena 未标注 effort 的 Inkling 行只按 Default→XHigh 单向补缺。',
+    sourceCardIds: [
+      'card-aa-inkling',
+      'card-openrouter-thinkingmachines-inkling',
+      'card-openrouter-standard-performance-thinkingmachines-inkling',
+    ],
+    sourceCardLinks: [
+      lowerProfileFallback('card-arena-inkling', 'Default', 0, 'XHigh', 4),
+    ],
   }),
 ];
 
@@ -1417,45 +1538,30 @@ const CLAUDE_OPUS_5_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[]
 const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
   harnessPreset({
     key: 'agent.arena.deepseek-v4-flash.max',
-    productLineId: 'deepseek_v4_flash',
-    modelName: 'DeepSeek-v4-Flash Preview',
+    productLineId: 'deepseek_v4_flash_0731',
+    modelName: 'DeepSeek-v4-Flash 0731',
     profile: 'Max',
     harness: 'AA Agent Harness',
     providerName: 'DeepSeek',
     upstreamApi: 'DeepSeek API',
     exactHarnessCardIds: [],
     chatFallbackCardIds: [
-      'card-aa-deepseek-v4-flash-0420',
-      'card-arena-deepseek-v4-flash-high-preview',
-      'card-openrouter-deepseek-deepseek-v4-flash',
+      'card-aa-deepseek-v4-flash',
+      'card-arena-deepseek-v4-flash-high',
+      'card-openrouter-deepseek-deepseek-v4-flash-0731',
     ],
     sameHarnessFallbackLinks: [
       lowerProfileFallback(
-        productionAgentModeCardId('card-arena-deepseek-v4-flash'),
-        'None',
-        0,
+        productionAgentModeCardId('card-arena-deepseek-v4-flash-high-20260731'),
+        'High',
+        3,
         'Max',
         5,
       ),
     ],
     environment: 'Arena Agent Mode',
-    fallbackPolicyNote: 'Arena 已发布的 None Agent 数据只向 Max Agent 单向补缺；Max 的 Chat/AA 数据再按 Chat→Agent 单向补齐其余领域。',
-    note: '保留最高可用 Max 配置，不再让数据更少的 None Agent 代表整个模型。',
-  }),
-  arenaAgentModePreset({
-    key: 'agent.arena.deepseek-v4-flash.none',
-    productLineId: 'deepseek_v4_flash',
-    modelName: 'DeepSeek-v4-Flash Preview',
-    profile: 'None',
-    providerName: 'DeepSeek',
-    upstreamApi: 'DeepSeek API',
-    arenaBaseCardId: 'card-arena-deepseek-v4-flash',
-    chatFallbackCardIds: [
-      'card-aa-deepseek-v4-flash-non-reasoning',
-      'card-arena-deepseek-v4-flash',
-      'card-openrouter-deepseek-deepseek-v4-flash',
-    ],
-    note: 'Arena 的 Agent 行对应无 thinking 标签的已发布配置，因此保留为 None，不冒充 Max。',
+    fallbackPolicyNote: 'Arena 当前只发布了 0731 版本的 High Agent 数据；该数据仅按 High→Max 单向补缺，Max 的 AA 与 OpenRouter 记录再按 Chat→Agent 单向补齐其余领域。',
+    note: '旧的无档位 Flash Agent 行已从 Arena 消失，改用当前公开的 0731 High Agent 行；不再保留无来源的 None 配置。',
   }),
   arenaAgentModePreset({
     key: 'agent.arena.hy3.high',
@@ -1616,7 +1722,7 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
   harnessPreset({
     key: 'harness.deepseek-v4-flash-0731.max.codex-cli',
     productLineId: 'deepseek_v4_flash_0731',
-    modelName: 'DeepSeek V4 Flash 0731',
+    modelName: 'DeepSeek-v4-Flash 0731',
     profile: 'Max',
     harness: 'Codex CLI',
     providerName: 'DeepSeek',
@@ -1703,9 +1809,9 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
   }),
   harnessPreset({
     key: 'harness.qwen3-8.max.claude-code',
-    productLineId: 'source-profile-qwen3-8-max',
-    modelName: 'Qwen3.8',
-    profile: 'Max',
+    productLineId: 'qwen_38_max',
+    modelName: 'Qwen3.8 Max',
+    profile: 'XHigh',
     harness: 'Claude Code',
     providerName: 'Alibaba',
     upstreamApi: 'Alibaba Qwen API',
@@ -1717,7 +1823,7 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
       'card-arena-qwen3-8-max',
       'card-openrouter-qwen-qwen3-8-max',
     ],
-    note: 'AA Coding Agent 原始行明确使用 Claude Code；普通 Qwen3.8 Max 数据仅向该 Harness 配置单向补充。',
+    note: 'AA Coding Agent 原始行明确使用 Claude Code；OpenRouter 官方目录将 Qwen3.8 Max 的默认 reasoning effort 标为 XHigh，故补全展示档位。普通 Qwen3.8 Max 数据仅向该 Harness 配置单向补充。',
   }),
   harnessPreset({
     key: 'harness.gpt-5-5.xhigh.codex-cli',
@@ -2063,7 +2169,16 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
         5,
         'Codex CLI',
       ),
+      lowerProfileHarnessFallback(
+        'card-arena-gpt-5-6-terra-xhigh',
+        'XHigh',
+        4,
+        'Max',
+        5,
+        'Codex CLI',
+      ),
     ],
+    note: 'Arena Text 已发布 Terra XHigh 的六个文本赛道；按 XHigh→Max 的单向规则，只补充非 Harness 的文本能力，不覆盖 Codex CLI 专属评测。',
   }),
   harnessPreset({
     key: 'harness.gpt-5-6-luna.max.codex-cli',
@@ -2087,7 +2202,16 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
         5,
         'Codex CLI',
       ),
+      lowerProfileHarnessFallback(
+        'card-arena-gpt-5-6-luna-xhigh',
+        'XHigh',
+        4,
+        'Max',
+        5,
+        'Codex CLI',
+      ),
     ],
+    note: 'Arena Text 已发布 Luna XHigh 的六个文本赛道；按 XHigh→Max 的单向规则，只补充非 Harness 的文本能力，不覆盖 Codex CLI 专属评测。',
   }),
   harnessPreset({
     key: 'harness.glm-5-2.max.claude-code',
@@ -2225,7 +2349,7 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
   harnessPreset({
     key: 'harness.qwen-3-7-plus.max.claude-code',
     productLineId: 'qwen_37_plus',
-    modelName: 'Qwen3.7-Plus',
+    modelName: 'Qwen3.7 Plus',
     profile: 'Max',
     harness: 'Claude Code',
     providerName: 'Alibaba',
@@ -2490,7 +2614,6 @@ const PRACTICAL_METRIC_IDS = new Set([
 export const READER_APPROVED_SOURCE_CATALOG_PRODUCT_LINE_IDS = [
   'source-profile-grok-4-3-high',
   'source-profile-grok-build-0-1-0616',
-  'source-profile-inkling-xhigh',
   'source-profile-north-mini-code',
 ] as const;
 
@@ -2992,6 +3115,7 @@ const BASE_HAND_AUTHORED_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPre
   ...DATA_MD_CONFIGURATION_PRESETS,
   ...MUSE_SPARK_1_2_CONFIGURATION_PRESETS,
   ...AUGUST_2026_RELEASE_CONFIGURATION_PRESETS,
+  ...ADDITIONAL_SOURCE_BACKED_CONFIGURATION_PRESETS,
   ...CLAUDE_OPUS_5_CONFIGURATION_PRESETS,
   ...HARNESS_CONFIGURATION_PRESETS,
 ];
@@ -3015,18 +3139,6 @@ readonly BuiltInConfigurationPresetSourceCardLink[]
         0,
         'High',
         3,
-      ),
-    ],
-  ],
-  [
-    'builtin.source-catalog.source-profile-inkling-xhigh.inkling-xhigh',
-    [
-      lowerProfileFallback(
-        reviewedFamilyCardId('inkling-arena-default'),
-        'Default',
-        0,
-        'XHigh',
-        4,
       ),
     ],
   ],
@@ -3580,6 +3692,8 @@ export const BUILT_IN_CONFIGURATION_RELEASE_CUTOFF = '2026-04-24';
 export const BUILT_IN_CONFIGURATION_PINNED_MODEL_GROUP_KEYS = [
   'gemini_31_pro',
   'gpt_55',
+  'gpt_oss_120b',
+  'gpt_oss_20b',
   'source-model:gpt-5.4',
   'claude_opus_47',
   'claude_opus_46',
@@ -3596,6 +3710,7 @@ export const BUILT_IN_CONFIGURATION_KEY_VENDOR_KEYS = [
   'alibaba',
   'anthropic',
   'bytedance',
+  'cohere',
   'deepseek',
   'google',
   'meta',
@@ -3810,11 +3925,18 @@ function buildModelGroupMetadata(
  * shipped configuration boxes are omitted.
  */
 const READER_FACING_PRESET_EXCLUSIONS = new Set<string>([
+  'builtin.agent.arena.deepseek-v4-flash.max',
   'builtin.source-catalog.source-profile-granite-4-1-8b.granite-4-1-8b',
   'builtin.source-catalog.source-profile-grok-4-3.grok-4-3',
   'builtin.source-catalog.source-profile-kimi-k2-7-code.kimi-k2-7-code',
   'builtin.source-catalog.source-profile-gemma-4-12b-reasoning.gemma-4-12b-reasoning',
   'builtin.source-catalog.source-profile-gemini-3-1-flash-lite-preview.gemini-3-1-flash-lite-preview',
+]);
+
+/** Reader-facing removals that apply to every route of the retired model line. */
+const READER_FACING_PRODUCT_LINE_EXCLUSIONS = new Set<string>([
+  'qwen_37_max',
+  'source-profile-inkling-small',
 ]);
 
 /**
@@ -3855,6 +3977,7 @@ function curateReaderFacingPresets(
   const groups = new Map<string, BuiltInConfigurationPreset[]>();
   candidates.forEach((preset) => {
     if (READER_FACING_PRESET_EXCLUSIONS.has(preset.id)) return;
+    if (READER_FACING_PRODUCT_LINE_EXCLUSIONS.has(preset.productLineId)) return;
     if (
       preset.access === 'api'
       && isPlainChatPreset(preset)

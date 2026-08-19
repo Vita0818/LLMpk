@@ -74,10 +74,10 @@
       "name": "DeepSeek",
       "officialModelsUrl": "https://api-docs.deepseek.com/quick_start/pricing",
       "productLines": [
-        { "id": "deepseek_v4_flash_0731", "name": "DeepSeek V4 Flash 0731", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[- ]flash[- ]0731\\b", "2083084415157022911", "date[- ]2026[- ]07[- ]31"] },
-        { "id": "deepseek_v4_flash", "name": "DeepSeek V4 Flash Preview", "tier": "preview", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[- ]flash\\b"] },
-        { "id": "deepseek_v4_pro_0813", "name": "DeepSeek V4 Pro 0813", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[- ]pro(?:[- ](?:max|high|low|xhigh|reasoning))*[- ](?:0813|20260813)\\b"] },
-        { "id": "deepseek_v4_pro", "name": "DeepSeek V4 Pro", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[- ]pro\\b(?![- ]?(?:0813|20260813)\\b)"] }
+        { "id": "deepseek_v4_flash_0731", "name": "DeepSeek-v4-Flash 0731", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[- ]flash[- ]0731\\b", "\\bdeepseek[- ]v?4[- ]flash.*\\b20260731\\b", "2083084415157022911", "date[- ]2026[- ]07[- ]31"] },
+        { "id": "deepseek_v4_flash", "name": "DeepSeek-v4-Flash Preview", "tier": "preview", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[- ]flash\\b"] },
+        { "id": "deepseek_v4_pro_0813", "name": "DeepSeek-v4-Pro 0813", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[- ]pro(?:[- ](?:max|high|low|xhigh|reasoning))*[- ](?:0813|20260813)\\b"] },
+        { "id": "deepseek_v4_pro", "name": "DeepSeek-v4-Pro", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[- ]pro\\b(?![- ]?(?:0813|20260813)\\b)"] }
       ]
     },
     {
@@ -85,7 +85,24 @@
       "name": "Z.ai",
       "officialModelsUrl": "https://docs.z.ai/",
       "productLines": [
+        { "id": "glm_53", "name": "GLM-5.3", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bglm[- ]5[._-]3\\b"] },
         { "id": "glm_52", "name": "GLM-5.2", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bglm[- ]5[._-]2\\b"] }
+      ]
+    },
+    {
+      "id": "cohere",
+      "name": "Cohere",
+      "officialModelsUrl": "https://docs.cohere.com/docs/models",
+      "productLines": [
+        { "id": "command_a_plus", "name": "Command A+", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bcommand[- ]a\\+"] }
+      ]
+    },
+    {
+      "id": "thinking_machines",
+      "name": "Thinking Machines",
+      "officialModelsUrl": "https://thinkingmachines.ai/inkling/",
+      "productLines": [
+        { "id": "inkling", "name": "Inkling", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\binkling\\b(?![- ]small\\b)"] }
       ]
     },
     {
@@ -119,6 +136,8 @@
       "officialModelsUrl": "https://www.alibabacloud.com/help/en/model-studio/models",
       "productLines": [
         { "id": "qwen_38_max_preview", "name": "Qwen 3.8 Max Preview", "tier": "preview", "rankingClass": "formal_text_agent", "patterns": ["\\bqwen[- ]?3[._-]8[- ]max[- ]preview\\b"] },
+        { "id": "qwen_38_max", "name": "Qwen 3.8 Max", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bqwen[- ]?3[._-]8[- ]max\\b(?![- ]preview\\b)"] },
+        { "id": "qwen_38_27b", "name": "Qwen 3.8 27B", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bqwen[- ]?3[._-]8[- ]27b\\b"] },
         { "id": "qwen_37_max", "name": "Qwen 3.7 Max", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bqwen[- ]?3[._-]7[- ]max\\b"], "allowPreviewSourceRecords": false },
         { "id": "qwen_37_plus", "name": "Qwen 3.7 Plus", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bqwen[- ]?3[._-]7[- ]plus\\b"] },
         { "id": "qwen_36_27b", "name": "Qwen 3.6 27B", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bqwen[- ]?3[._-]6[- ]27b\\b"] },
@@ -178,6 +197,7 @@
       "name": "NVIDIA",
       "officialModelsUrl": "https://build.nvidia.com/explore/discover",
       "productLines": [
+        { "id": "nemotron_35_lightning", "name": "Nemotron 3.5 Lightning", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\b(?:nvidia[- ]?)?nemotron[- ]3[._-]5[- ]lightning\\b"] },
         { "id": "nemotron_3_ultra", "name": "Nemotron 3 Ultra", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\b(?:nvidia[- ]?)?nemotron[- ]3[- ]ultra\\b"] },
         { "id": "nemotron_3_super", "name": "Nemotron 3 Super", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\b(?:nvidia[- ]?)?nemotron[- ]3[- ]super\\b"] },
         { "id": "nemotron_3_nano", "name": "Nemotron 3 Nano", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\b(?:nvidia[- ]?)?nemotron[- ]3[- ]nano\\b"] }

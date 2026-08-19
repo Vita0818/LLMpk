@@ -128,6 +128,15 @@ export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
     ],
   },
   {
+    productLineId: 'glm_53',
+    tiers: [
+      // Z.ai also documents Low and High, but the published leaderboard only
+      // exposes a score-backed Max configuration until those tiers receive
+      // independent capability measurements.
+      tier('max', 'Max', 5, ['card-aa-glm-5-3']),
+    ],
+  },
+  {
     productLineId: 'claude_fable_5',
     tiers: [
       tier('minimal', 'Minimal', 0),
@@ -383,6 +392,22 @@ export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
       tier('none', 'None', 0, ['card-aa-qwen3-6-35b-a3b-non-reasoning']),
       tier('reasoning', 'Reasoning', 1, ['card-aa-qwen3-6-35b-a3b']),
       tier('max', 'Max', 5),
+    ],
+  },
+  {
+    productLineId: 'qwen_38_max',
+    tiers: [
+      // OpenRouter publishes XHigh as Qwen3.8 Max's default reasoning effort;
+      // the AA Coding Agent row uses that model identity without restating it.
+      tier('xhigh', 'XHigh', 4, ['card-aa-qwen3-8-max']),
+    ],
+  },
+  {
+    productLineId: 'qwen_38_27b',
+    tiers: [
+      // The official OpenRouter route defaults to XHigh and AA publishes the
+      // corresponding current model record.
+      tier('xhigh', 'XHigh', 4, ['card-aa-qwen3-8-27b']),
     ],
   },
   {

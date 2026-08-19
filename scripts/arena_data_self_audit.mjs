@@ -47,6 +47,8 @@ const EXPECTED_SOURCE_VENDOR_PATTERNS = {
   openai: [/^openai$/i, /^openai\//i],
   anthropic: [/^anthropic$/i, /^anthropic\//i],
   google: [/^google(?: deepmind)?$/i, /^google\//i],
+  cohere: [/^cohere(?: inc[.]?)?$/i, /^cohere\//i],
+  thinking_machines: [/^thinking machines(?: lab)?$/i, /^thinkingmachines\//i],
   xai: [/^xai$/i, /^x-ai\//i],
   meta: [/^meta$/i, /^meta(?:-llama)?\//i],
   deepseek: [/^deepseek(?: ai)?$/i, /^deepseek\//i],

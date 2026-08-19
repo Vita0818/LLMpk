@@ -911,9 +911,7 @@ for (const presetId of [
   'builtin.harness.gpt-5-6-terra.max.codex-cli',
   'builtin.harness.claude-opus-4-8.max.claude-code',
   'builtin.agent.arena.claude-sonnet-5.max',
-  'builtin.agent.arena.deepseek-v4-flash.max',
   'builtin.agent.arena.gemini-3-5-flash.high',
-  'builtin.agent.arena.qwen-3-7-max.max',
   'builtin.agent.arena.nemotron-3-ultra.high',
   'builtin.data-md.step-3-7-flash.max',
   'builtin.harness.deepseek-v4-pro.high.claude-code',
@@ -929,7 +927,6 @@ for (const presetId of [
   'builtin.data-md.claude-haiku-4-5.max.vertex',
   'builtin.source-catalog.source-profile-grok-4-3-high.grok-4-3-high',
   'builtin.agent.arena.grok-build-0-1.max',
-  'builtin.source-catalog.source-profile-inkling-xhigh.inkling-xhigh',
   'builtin.data-md.longcat-2-0.max',
   'builtin.source-catalog.source-profile-north-mini-code.north-mini-code',
   'builtin.harness.gemini-3-7-flash.high.antigravity-sdk',
@@ -986,13 +983,64 @@ const uniqueRouteCountForHarness = (harnessName: string): number => new Set(
 ).size;
 assert.equal(
   uniqueRouteCountForHarness('AA Agent Harness'),
-  8,
-  'The eight former Arena Agent Mode routes must display AA Agent Harness.',
+  6,
+  'Only the six remaining source-backed Arena Agent Mode routes must display AA Agent Harness.',
 );
 assert.equal(
   uniqueRouteCountForHarness('---'),
-  11,
-  'Routes without an AA Coding Agent record must display ---.',
+  18,
+  'Routes without an AA Coding Agent record must display --- in the refreshed catalog.',
+);
+const glm53Candidates = ALL_CONFIGURATION_PRESET_CANDIDATES
+  .filter((preset) => preset.productLineId === 'glm_53');
+assert.deepEqual(
+  glm53Candidates.map((preset) => preset.id),
+  ['builtin.data-md.glm-5-3.max'],
+  'GLM-5.3 must ship only the score-backed Max configuration.',
+);
+const glm53Presets = BUILT_IN_CONFIGURATION_PRESETS
+  .filter((preset) => preset.productLineId === 'glm_53');
+assert.deepEqual(
+  glm53Presets.map((preset) => preset.id),
+  ['builtin.data-md.glm-5-3.max'],
+  'Only GLM-5.3 Max currently has a source-backed capability score and should enter the compact ranking.',
+);
+assert.ok(
+  glm53Candidates.every((preset) => preset.identity.harness.name === '---'),
+  'GLM-5.3 has no AA Coding Agent record and must not be labelled with a vendor or AA Agent Harness.',
+);
+for (const [presetId, expectedModelLabel, expectedHarness] of [
+  ['builtin.harness.qwen3-8.max.claude-code', 'Qwen3.8 Max XHigh', 'Claude Code'],
+  ['builtin.qwen3-8-27b.xhigh', 'Qwen3.8 27B XHigh', '---'],
+  ['builtin.command-a-plus.reasoning', 'Command A+ Thinking', '---'],
+  ['builtin.nemotron-3-5-lightning.reasoning', 'Nemotron 3.5 Lightning Thinking', '---'],
+  ['builtin.gpt-oss-20b.high', 'GPT-OSS 20B High', '---'],
+  ['builtin.gpt-oss-120b.high', 'GPT-OSS 120B High', '---'],
+  ['builtin.inkling.xhigh', 'Inkling XHigh', '---'],
+] as const) {
+  const preset = BUILT_IN_CONFIGURATION_PRESETS.find((candidate) => candidate.id === presetId);
+  assert.ok(preset, `${presetId} must be shipped after its source-backed addition.`);
+  assert.equal(
+    preset.identity.harness.name,
+    expectedHarness,
+    `${presetId} must retain its source-backed harness identity.`,
+  );
+  assert.ok(
+    preset.displayName.startsWith(expectedModelLabel),
+    `${presetId} must expose the normalized reader-facing model and effort label.`,
+  );
+}
+assert.equal(
+  BUILT_IN_CONFIGURATION_PRESETS.some((preset) => preset.productLineId === 'qwen_37_max'),
+  false,
+  'Qwen3.7 Max must be removed from the reader-facing inventory.',
+);
+assert.equal(
+  BUILT_IN_CONFIGURATION_PRESETS.some((preset) => (
+    preset.id === 'builtin.agent.arena.deepseek-v4-flash.max'
+  )),
+  false,
+  'DeepSeek-v4-Flash 0731 must retain only its exact Codex CLI configuration.',
 );
 assert.ok(
   BUILT_IN_CONFIGURATION_PRESETS.every(
@@ -1005,7 +1053,9 @@ for (const omittedPresetId of [
   'builtin.data-md.claude-sonnet-5.max.vertex',
   'builtin.agent.arena.claude-sonnet-5.high',
   'builtin.agent.arena.deepseek-v4-flash.none',
+  'builtin.agent.arena.deepseek-v4-flash.max',
   'builtin.data-md.qwen-3-7-max.max',
+  'builtin.agent.arena.qwen-3-7-max.max',
   'builtin.data-md.nemotron-3-ultra.max',
   'builtin.data-md.gpt-5-6-sol.xhigh',
   'builtin.data-md.gpt-5-6-luna.xhigh',
@@ -1344,6 +1394,60 @@ for (const box of installedPresetBoxes) {
 const scoreByConfigurationId = new Map(
   reconciledV3Store.computeLeaderboardScores().map((score) => [score.config.id, score]),
 );
+const gpt56TextFallbackExpectations = [
+  {
+    presetId: 'builtin.harness.gpt-5-6-terra.max.codex-cli',
+    modelName: 'GPT-5.6 Terra',
+    arenaTextCardId: 'card-arena-gpt-5-6-terra-xhigh',
+  },
+  {
+    presetId: 'builtin.harness.gpt-5-6-luna.max.codex-cli',
+    modelName: 'GPT-5.6 Luna',
+    arenaTextCardId: 'card-arena-gpt-5-6-luna-xhigh',
+  },
+] as const;
+const arenaTextMetricIds = [
+  'arena_text_instruction',
+  'arena_text_multiturn',
+  'arena_text_creative',
+  'arena_text_hard',
+  'arena_text_math',
+  'arena_text_coding',
+] as const;
+for (const expectation of gpt56TextFallbackExpectations) {
+  const box = installedPresetBoxes.find((candidate) => (
+    candidate.builtInPresetId === expectation.presetId
+  ));
+  assert.ok(box, `${expectation.modelName} must retain its Codex CLI configuration.`);
+  const stack = reconciledV3Store.getLinkedCardStack(box.id);
+  const textFallback = stack.find(({ card }) => card.id === expectation.arenaTextCardId);
+  assert.deepEqual(
+    textFallback?.link.provenance,
+    {
+      kind: 'lower_profile_harness_fallback',
+      sourceProfile: 'XHigh',
+      sourceProfileLevel: 4,
+      targetProfile: 'Max',
+      targetProfileLevel: 5,
+      sourceHarness: 'Chat',
+      sourceHarnessLevel: 0,
+      targetHarness: 'Codex CLI',
+      targetHarnessLevel: 1,
+    },
+    `${expectation.modelName} must use its exact Arena Text XHigh card only as an XHigh-to-Max Chat fallback.`,
+  );
+  const config = reconciledV3Store.buildLLMConfiguration(box);
+  assert.deepEqual(
+    arenaTextMetricIds.filter((metricId) => config.observations[metricId]),
+    arenaTextMetricIds,
+    `${expectation.modelName} must retain all six exact Arena Text metrics.`,
+  );
+  assert.equal(
+    typeof scoreByConfigurationId.get(box.id)?.domainScores.chatting.score,
+    'number',
+    `${expectation.modelName} must receive a Chatting score from its exact Arena Text row.`,
+  );
+}
 for (const box of installedPresetBoxes) {
   const preset = BUILT_IN_CONFIGURATION_PRESETS.find(
     (candidate) => candidate.id === box.builtInPresetId,
@@ -1395,7 +1499,7 @@ for (const box of installedPresetBoxes) {
 const deepSeek0731Box = installedPresetBoxes.find((box) => (
   box.builtInPresetId === 'builtin.harness.deepseek-v4-flash-0731.max.codex-cli'
 ));
-assert.ok(deepSeek0731Box, 'DeepSeek V4 Flash 0731 Max must use its exact Codex configuration.');
+assert.ok(deepSeek0731Box, 'DeepSeek-v4-Flash 0731 Max must use its exact Codex configuration.');
 assert.deepEqual(
   reconciledV3Store.getLinkedCardStack(deepSeek0731Box.id).map(({ card }) => card.id),
   [
@@ -1628,7 +1732,7 @@ const august2026ReleaseExpectations = [
   },
   {
     presetId: 'builtin.deepseek-v4-pro-0813.max',
-    modelName: 'DeepSeek V4 Pro 0813',
+    modelName: 'DeepSeek-v4-Pro 0813',
     productLineId: 'deepseek_v4_pro_0813',
     cardIds: [
       'card-aa-deepseek-v4-pro',
@@ -1694,7 +1798,7 @@ const deepSeek0813ArenaHighCard = baseCards.find(
 );
 assert.ok(
   deepSeek0813ArenaHighCard,
-  'The refreshed Arena source must preserve the exact DeepSeek V4 Pro 0813 High row.',
+  'The refreshed Arena source must preserve the exact DeepSeek-v4-Pro 0813 High row.',
 );
 assert.equal(
   (deepSeek0813ArenaHighCard.metadataJson?.scope as Record<string, unknown> | undefined)
@@ -1718,12 +1822,12 @@ assert.ok(
     (card.metadataJson?.scope as Record<string, unknown> | undefined)?.productLineId
     === 'deepseek_v4_pro'
   )),
-  'The Preview configuration must use only the original DeepSeek V4 Pro product line.',
+  'The Preview configuration must use only the original DeepSeek-v4-Pro product line.',
 );
 const deepSeek0813CardIds = new Set(deepSeek0813Stack.map(({ card }) => card.id));
 assert.ok(
   deepSeekPreviewStack.every(({ card }) => !deepSeek0813CardIds.has(card.id)),
-  'DeepSeek V4 Pro 0813 and Preview must share no source card.',
+  'DeepSeek-v4-Pro 0813 and Preview must share no source card.',
 );
 
 function assertSubscriptionRoutesPreserveCapability(
@@ -2087,18 +2191,16 @@ assert.ok(
 );
 assert.equal(kimiCodeScore?.domainScores.math_science.score !== null, true);
 assert.equal(kimiCodeScore?.domainScores.search_knowledge.score !== null, true);
-for (const presetId of [
-  'builtin.agent.arena.claude-sonnet-5.max',
-  'builtin.agent.arena.deepseek-v4-flash.max',
-  'builtin.agent.arena.qwen-3-7-max.max',
-]) {
+for (const [presetId, expectedDomainCount] of [
+  ['builtin.agent.arena.claude-sonnet-5.max', 6],
+] as const) {
   const box = installedPresetBoxes.find((candidate) => candidate.builtInPresetId === presetId);
   assert.ok(box, `Gap-repaired preset ${presetId} must be installed.`);
   const score = scoreByConfigurationId.get(box.id);
   assert.equal(
     score?.availableDomainCount,
-    6,
-    `Gap-repaired preset ${presetId} must expose all six domains.`,
+    expectedDomainCount,
+    `Gap-repaired preset ${presetId} must expose its source-backed domain coverage.`,
   );
 }
 const sonnet5MaxAgentBox = installedPresetBoxes.find((box) => (
@@ -2117,17 +2219,6 @@ assert.deepEqual(
     targetLevel: 5,
   },
   'Sonnet 5 High Agent evidence must move only upward into Max Agent.',
-);
-const qwen37MaxAgentBox = installedPresetBoxes.find((box) => (
-  box.builtInPresetId === 'builtin.agent.arena.qwen-3-7-max.max'
-));
-assert.ok(qwen37MaxAgentBox);
-assert.equal(
-  reconciledV3Store.getLinkedCardStack(qwen37MaxAgentBox.id)
-    .find(({ card }) => card.id === 'card-reviewed-family-qwen37max-arena-preview')
-    ?.link.provenance?.kind,
-  'lower_profile_harness_fallback',
-  'Qwen3.7-Max Preview text evidence must remain an explicit lower-profile Chat→Agent fallback.',
 );
 for (const [presetId, expectedAuthorProvider] of [
   ['builtin.harness.claude-opus-4-8.max.claude-code', 'Anthropic'],
@@ -2150,7 +2241,6 @@ for (const [presetId, expectedAuthorProvider] of [
 for (const presetId of [
   'builtin.source-catalog.source-profile-grok-4-3-high.grok-4-3-high',
   'builtin.agent.arena.grok-build-0-1.max',
-  'builtin.source-catalog.source-profile-inkling-xhigh.inkling-xhigh',
 ] as const) {
   const box = installedPresetBoxes.find((candidate) => candidate.builtInPresetId === presetId);
   assert.ok(box, `Practical-source repair preset ${presetId} must be installed.`);

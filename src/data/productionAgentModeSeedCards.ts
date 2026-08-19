@@ -19,7 +19,9 @@ const ARENA_AGENT_METRIC_IDS = new Set([
 ]);
 
 const REVIEWED_ARENA_AGENT_BASE_CARD_IDS = [
-  'card-arena-deepseek-v4-flash',
+  // Arena's current Agent leaderboard publishes the 0731 release as this
+  // dated High-effort identity. The undated Flash card now has Text rows only.
+  'card-arena-deepseek-v4-flash-high-20260731',
   'card-arena-hy3',
   'card-arena-minimax-m3',
   'card-arena-claude-sonnet-5-high',

@@ -11,17 +11,23 @@ import { OAGXM_SCOPE, classifyOagxmModel } from '../src/data/oagxmScope';
 const expectedProductLines: Array<[string, string]> = [
   ['DeepSeek-v4-Flash', 'deepseek_v4_flash'],
   ['DeepSeek-v4-Flash-0731', 'deepseek_v4_flash_0731'],
-  ['DeepSeek V4 Pro 0813', 'deepseek_v4_pro_0813'],
+  ['DeepSeek-v4-Pro 0813', 'deepseek_v4_pro_0813'],
   ['deepseek/deepseek-v4-pro-20260813', 'deepseek_v4_pro_0813'],
   ['deepseek-v4-pro-max-20260813', 'deepseek_v4_pro_0813'],
   ['deepseek-v4-pro-high-20260813', 'deepseek_v4_pro_0813'],
   ['DeepSeek-v4-Pro', 'deepseek_v4_pro'],
+  ['Deepseek V4 Flash (High) (20260731)', 'deepseek_v4_flash_0731'],
+  ['GLM-5.3', 'glm_53'],
   ['GLM-5.2', 'glm_52'],
+  ['Command A+', 'command_a_plus'],
+  ['Inkling', 'inkling'],
   ['Hy3', 'hunyuan_hy3'],
   ['Kimi K2.6', 'kimi_k26'],
   ['Kimi K3', 'kimi_k3'],
   ['MiniMax M3', 'minimax_m3'],
   ['Qwen3.8-Max-Preview', 'qwen_38_max_preview'],
+  ['Qwen3.8 Max', 'qwen_38_max'],
+  ['Qwen3.8 27B', 'qwen_38_27b'],
   ['Qwen3.7-Max', 'qwen_37_max'],
   ['Qwen3.7-Plus', 'qwen_37_plus'],
   ['Seed-2.1-Turbo', 'seed_21_turbo'],
@@ -64,6 +70,7 @@ const expectedProductLines: Array<[string, string]> = [
   ['Qwen3.6 27B', 'qwen_36_27b'],
   ['Qwen3.6 35B A3B', 'qwen_36_35b_a3b'],
   ['Nemotron 3 Ultra', 'nemotron_3_ultra'],
+  ['Nemotron 3.5 Lightning', 'nemotron_35_lightning'],
   ['Nemotron 3 Super', 'nemotron_3_super'],
   ['Nemotron 3 Nano', 'nemotron_3_nano'],
 ];
@@ -77,7 +84,7 @@ for (const [sourceName, productLineId] of expectedProductLines) {
 }
 
 const configuredProductLines = OAGXM_SCOPE.vendors.flatMap((vendor) => vendor.productLines);
-assert.equal(configuredProductLines.length, 53, 'Curated inventory should include all four 2026-08 release product lines');
+assert.equal(configuredProductLines.length, 59, 'Curated inventory should include the newly requested source-backed model lines');
 assert.ok(
   configuredProductLines.every((line) => line.rankingClass === 'formal_text_agent'),
   'Image/audio/safety-only product lines must not enter the Data.md capability scope',
@@ -112,12 +119,12 @@ assert.equal(
 assert.equal(
   classifyOagxmModel('DeepSeek V4 Pro 0813 (Reasoning, Max Effort)')?.productLineId,
   'deepseek_v4_pro_0813',
-  'The August 13 release must never collapse into the older DeepSeek V4 Pro Preview line.',
+  'The August 13 release must never collapse into the older DeepSeek-v4-Pro Preview line.',
 );
 assert.equal(
   classifyOagxmModel('DeepSeek V4 Pro Preview')?.productLineId,
   'deepseek_v4_pro',
-  'The older DeepSeek V4 Pro Preview line must remain independently addressable.',
+  'The older DeepSeek-v4-Pro Preview line must remain independently addressable.',
 );
 
 console.log(`OAGXM scope inventory passed: ${configuredProductLines.length} product lines.`);

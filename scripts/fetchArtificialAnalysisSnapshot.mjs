@@ -102,7 +102,12 @@ function detailedModelRecords(payload) {
 }
 
 function evaluationRecords(payload, evaluationId) {
-  const candidates = extractJsonArraysAfterMarker(payload, '"defaultData":')
+  // Artificial Analysis migrated its evaluation pages from `defaultData` to
+  // `initialModels` in August 2026. Both are first-party Flight payloads
+  // containing the same model-record shape, so accept either transport key
+  // and retain the largest validated record set.
+  const candidates = ['"defaultData":', '"initialModels":']
+    .flatMap((marker) => extractJsonArraysAfterMarker(payload, marker))
     .map((records) => records.filter((record) => (
       record
       && typeof record === 'object'
@@ -113,7 +118,9 @@ function evaluationRecords(payload, evaluationId) {
     )))
     .sort((left, right) => right.length - left.length);
   if ((candidates[0]?.length ?? 0) < 5) {
-    throw new Error(`AA ${evaluationId} page did not expose a usable defaultData array.`);
+    throw new Error(
+      `AA ${evaluationId} page did not expose a usable defaultData or initialModels array.`,
+    );
   }
   return uniqueBy(candidates[0], (record) => record.id, `AA ${evaluationId}`);
 }
@@ -146,17 +153,25 @@ function metricCoverage(models) {
 
 function evaluationCoverage(recordsByEvaluation) {
   const valueSelectors = {
-    'aa-briefcase': (record) => record.briefcase?.elo ?? record.briefcase_breakdown?.elo,
+    'aa-briefcase': (record) => (
+      record.briefcaseElo
+      ?? record.briefcaseBreakdown?.elo
+      ?? record.briefcase?.elo
+      ?? record.briefcase_breakdown?.elo
+    ),
     'automationbench-aa': (record) => (
-      record.automationBenchBreakdown?.summary?.strictScore
+      record.automationBenchBreakdown?.strictScore
+      ?? record.automationBenchBreakdown?.summary?.strictScore
       ?? record.automation_bench_breakdown?.summary?.strict_score
     ),
     'harvey-lab-aa': (record) => (
-      record.harveyLabBreakdown?.criteriaPass
+      record.harveyLabCriteriaPass
+      ?? record.harveyLabBreakdown?.criteriaPass
       ?? record.harvey_lab_breakdown?.criteria_pass
     ),
     'enterprise-ops-gym-aa': (record) => (
-      record.enterpriseOpsGymBreakdown?.summary?.successRate
+      record.enterpriseOpsGym
+      ?? record.enterpriseOpsGymBreakdown?.summary?.successRate
       ?? record.enterprise_ops_gym_breakdown?.summary?.success_rate
     ),
   };
@@ -274,4 +289,3 @@ async function main() {
 }
 
 await main();
-

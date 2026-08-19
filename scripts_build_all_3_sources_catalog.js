@@ -82,43 +82,51 @@ const AA_DETAIL_ONLY_METRICS = [
   {
     id: 'aa_briefcase',
     pageId: 'aa-briefcase',
-    field: (record) => record?.briefcase?.elo ?? record?.briefcase_breakdown?.elo,
+    field: (record) => (
+      record?.briefcaseElo
+      ?? record?.briefcaseBreakdown?.elo
+      ?? record?.briefcase?.elo
+      ?? record?.briefcase_breakdown?.elo
+    ),
     unit: 'Elo',
     sourceLeaderboard: 'https://artificialanalysis.ai/evaluations/aa-briefcase',
-    sourceField: 'briefcase.elo | briefcase_breakdown.elo',
+    sourceField: 'briefcaseElo | briefcaseBreakdown.elo | briefcase.elo | briefcase_breakdown.elo',
   },
   {
     id: 'aa_automationbench',
     pageId: 'automationbench-aa',
     field: (record) => (
-      record?.automationBenchBreakdown?.summary?.strictScore
+      record?.automationBenchBreakdown?.strictScore
+      ?? record?.automationBenchBreakdown?.summary?.strictScore
       ?? record?.automation_bench_breakdown?.summary?.strict_score
     ),
     unit: 'ratio',
     sourceLeaderboard: 'https://artificialanalysis.ai/evaluations/automationbench-aa',
-    sourceField: 'automationBenchBreakdown.summary.strictScore | automation_bench_breakdown.summary.strict_score',
+    sourceField: 'automationBenchBreakdown.strictScore | automationBenchBreakdown.summary.strictScore | automation_bench_breakdown.summary.strict_score',
   },
   {
     id: 'aa_harvey_lab',
     pageId: 'harvey-lab-aa',
     field: (record) => (
-      record?.harveyLabBreakdown?.criteriaPass
+      record?.harveyLabCriteriaPass
+      ?? record?.harveyLabBreakdown?.criteriaPass
       ?? record?.harvey_lab_breakdown?.criteria_pass
     ),
     unit: 'ratio',
     sourceLeaderboard: 'https://artificialanalysis.ai/evaluations/harvey-lab-aa',
-    sourceField: 'harveyLabBreakdown.criteriaPass | harvey_lab_breakdown.criteria_pass',
+    sourceField: 'harveyLabCriteriaPass | harveyLabBreakdown.criteriaPass | harvey_lab_breakdown.criteria_pass',
   },
   {
     id: 'aa_enterprise_ops_gym',
     pageId: 'enterprise-ops-gym-aa',
     field: (record) => (
-      record?.enterpriseOpsGymBreakdown?.summary?.successRate
+      record?.enterpriseOpsGym
+      ?? record?.enterpriseOpsGymBreakdown?.summary?.successRate
       ?? record?.enterprise_ops_gym_breakdown?.summary?.success_rate
     ),
     unit: 'ratio',
     sourceLeaderboard: 'https://artificialanalysis.ai/evaluations/enterprise-ops-gym-aa',
-    sourceField: 'enterpriseOpsGymBreakdown.summary.successRate | enterprise_ops_gym_breakdown.summary.success_rate',
+    sourceField: 'enterpriseOpsGym | enterpriseOpsGymBreakdown.summary.successRate | enterprise_ops_gym_breakdown.summary.success_rate',
   },
 ];
 
@@ -386,9 +394,11 @@ function isValidCatalogScope(scope) {
 function hasExpectedSourceVendor(scopeMatch, source, ...sourceIdentities) {
   if (scopeMatch?.scopeId === SOURCE_CATALOG_SCOPE_ID) return true;
   const expected = {
-    openai: [/^openai$/, /^openai\//],
-    anthropic: [/^anthropic$/, /^anthropic\//],
-    google: [/^google(?: deepmind)?$/, /^google\//],
+  openai: [/^openai$/, /^openai\//],
+  anthropic: [/^anthropic$/, /^anthropic\//],
+  google: [/^google(?: deepmind)?$/, /^google\//],
+  cohere: [/^cohere(?: inc[.]?)?$/i, /^cohere\//i],
+  thinking_machines: [/^thinking machines(?: lab)?$/i, /^thinkingmachines\//i],
   xai: [/^xai$/, /^x-ai\//],
   meta: [/^meta$/, /^meta(?:-llama)?\//],
   deepseek: [/^deepseek(?: ai)?$/i, /^deepseek\//i],

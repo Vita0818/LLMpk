@@ -13,6 +13,8 @@ const SCOPE_VERSION = 'oagxm-current-product-lines/v5-2026-08-13-releases';
 interface HarnessCodingAgentRow {
   key: string;
   sourceRecordId: string;
+  /** Exact upstream AA label; differs only when LLMpk normalizes display copy. */
+  sourceDisplayLabel?: string;
   displayLabel: string;
   harness: string;
   sourceHarnessLabel: string;
@@ -136,13 +138,14 @@ const BASE_HARNESS_CODING_AGENT_ROWS: readonly HarnessCodingAgentRow[] = [
   {
     key: 'claude-code-deepseek-v4-pro-high',
     sourceRecordId: 'e1d299b2461811a5e3922910872e21ac',
-    displayLabel: 'Claude Code - DeepSeek V4 Pro (high)',
+    sourceDisplayLabel: 'Claude Code - DeepSeek V4 Pro (high)',
+    displayLabel: 'Claude Code - DeepSeek-v4-Pro (high)',
     harness: 'Claude Code',
     sourceHarnessLabel: 'Claude Code',
     provider: 'deepseek',
     hostModelSlug: 'deepseek_deepseek-v4-pro-1m',
     productLineId: 'deepseek_v4_pro',
-    productLineName: 'DeepSeek V4 Pro',
+    productLineName: 'DeepSeek-v4-Pro',
     canonicalProfileKey: 'deepseek-v4-pro-high-claude-code',
     vendorId: 'deepseek',
     vendorName: 'DeepSeek',
@@ -323,6 +326,8 @@ interface StructuredHarnessBinding {
   key: string;
   sourceRecordId: string;
   expectedDisplayLabel: string;
+  /** Reader-facing label, when it intentionally differs from the AA label. */
+  displayLabel?: string;
   harness: string;
   productLineId: string;
   productLineName: string;
@@ -391,9 +396,10 @@ const STRUCTURED_HARNESS_BINDINGS: readonly StructuredHarnessBinding[] = [
     key: 'codex-deepseek-v4-flash-0731-max',
     sourceRecordId: 'ba75b0f1ce2019c511374b7a7f850ce5',
     expectedDisplayLabel: 'Codex - DeepSeek V4 Flash (max)',
+    displayLabel: 'Codex - DeepSeek-v4-Flash (max)',
     harness: 'Codex CLI',
     productLineId: 'deepseek_v4_flash_0731',
-    productLineName: 'DeepSeek V4 Flash 0731',
+    productLineName: 'DeepSeek-v4-Flash 0731',
     canonicalProfileKey: 'deepseek-v4-flash-0731-max-codex',
     vendorId: 'deepseek',
     vendorName: 'DeepSeek',
@@ -416,9 +422,9 @@ const STRUCTURED_HARNESS_BINDINGS: readonly StructuredHarnessBinding[] = [
     sourceRecordId: 'f06493dca66d238f2252adb8092dd10f',
     expectedDisplayLabel: 'Claude Code - Qwen3.8 Max',
     harness: 'Claude Code',
-    productLineId: 'source-profile-qwen3-8-max',
-    productLineName: 'Qwen3.8',
-    canonicalProfileKey: 'qwen3-8-max-claude-code',
+    productLineId: 'qwen_38_max',
+    productLineName: 'Qwen3.8 Max',
+    canonicalProfileKey: 'qwen3-8-max-xhigh-claude-code',
     vendorId: 'alibaba',
     vendorName: 'Alibaba / Qwen',
     tier: 'official',
@@ -584,7 +590,8 @@ function projectStructuredHarnessRow(
 
   return {
     ...binding,
-    displayLabel: binding.expectedDisplayLabel,
+    sourceDisplayLabel: binding.expectedDisplayLabel,
+    displayLabel: binding.displayLabel || binding.expectedDisplayLabel,
     sourceHarnessLabel: record.agentName || binding.harness,
     provider: record.provider || binding.vendorId,
     hostModelSlug: record.hostModelSlug || '',
@@ -606,12 +613,13 @@ function projectStructuredHarnessRow(
  * scope never leaves stale benchmark values behind after a source refresh.
  */
 function projectCurrentBaseHarnessRow(row: HarnessCodingAgentRow): HarnessCodingAgentRow {
+  const sourceDisplayLabel = row.sourceDisplayLabel || row.displayLabel;
   const matches = STRUCTURED_CODING_AGENT_RECORDS.filter(
-    (candidate) => candidate.displayLabel === row.displayLabel,
+    (candidate) => candidate.displayLabel === sourceDisplayLabel,
   );
   if (matches.length !== 1) {
     throw new Error(
-      `Expected one current AA coding-agent row for ${row.displayLabel}; found ${matches.length}.`,
+      `Expected one current AA coding-agent row for ${sourceDisplayLabel}; found ${matches.length}.`,
     );
   }
   const record = matches[0];
@@ -627,7 +635,7 @@ function projectCurrentBaseHarnessRow(row: HarnessCodingAgentRow): HarnessCoding
     || meanAgentWallTimeSec === undefined
     || meanSteps === undefined
   ) {
-    throw new Error(`Current AA coding-agent row ${row.displayLabel} is missing required fields.`);
+    throw new Error(`Current AA coding-agent row ${sourceDisplayLabel} is missing required fields.`);
   }
   const rewardFor = (datasetIndexName: string): number | undefined => finiteNumber(
     record.evals?.find((evaluation) => (
@@ -675,7 +683,7 @@ export const VERIFIED_HARNESS_SOURCE_MODEL_CARDS: readonly SourceModelCard[] =
   HARNESS_CODING_AGENT_ROWS.map((row) => ({
     id: `card-aa-coding-agent-${row.key}`,
     source: 'artificial_analysis',
-    exactSourceModelName: row.displayLabel,
+    exactSourceModelName: row.sourceDisplayLabel || row.displayLabel,
     latestSnapshotDate: SNAPSHOT_DATE,
     metadataJson: {
       sourceUrl: SOURCE_URL,
@@ -685,7 +693,7 @@ export const VERIFIED_HARNESS_SOURCE_MODEL_CARDS: readonly SourceModelCard[] =
       sourceIdentity: {
         source: 'artificial_analysis',
         sourceRecordId: row.sourceRecordId,
-        exactSourceModelName: row.displayLabel,
+        exactSourceModelName: row.sourceDisplayLabel || row.displayLabel,
         selectionMethod: 'official-aa-coding-agent-local-snapshot',
         canonicalProfileKey: row.canonicalProfileKey,
         harnessName: row.harness,
