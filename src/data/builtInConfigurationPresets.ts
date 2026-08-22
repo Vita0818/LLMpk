@@ -138,6 +138,13 @@ export interface BuiltInConfigurationPreset {
    * and are installed above these entries in the card stack.
    */
   sourceCardLinks?: readonly BuiltInConfigurationPresetSourceCardLink[];
+  /**
+   * Preserve an intentionally selected source route. This is used when a
+   * configuration deliberately chooses a free price route while retaining a
+   * separate verified Standard route for speed; automatic alias completion
+   * must not silently add a paid price card back into that configuration.
+   */
+  lockExplicitSourceCards?: boolean;
 }
 
 type PresetInput = Omit<BuiltInConfigurationPreset, 'id' | 'internalName' | 'displayName'> & {
@@ -690,7 +697,7 @@ const DATA_MD_CONFIGURATION_PRESETS_RAW: readonly BuiltInConfigurationPreset[] =
   orcPreset({ key: 'data-md.deepseek-v4-flash.max', productLineId: 'deepseek_v4_flash', modelName: 'DeepSeek-v4-Flash Preview', profile: DATA_MD_DEFAULT_REASONING, providerName: 'DeepSeek', upstreamApi: 'DeepSeek API', sourceCardIds: ['card-aa-deepseek-v4-flash-0420', 'card-openrouter-deepseek-deepseek-v4-flash'] }),
   orcPreset({ key: 'data-md.deepseek-v4-pro.max', productLineId: 'deepseek_v4_pro', modelName: 'DeepSeek-v4-Pro Preview', profile: DATA_MD_DEFAULT_REASONING, providerName: 'DeepSeek', upstreamApi: 'DeepSeek API', sourceCardIds: ['card-aa-deepseek-v4-pro-0424', 'card-openrouter-deepseek-deepseek-v4-pro'] }),
   orcPreset({ key: 'data-md.glm-5-2.max', productLineId: 'glm_52', modelName: 'GLM-5.2', profile: DATA_MD_DEFAULT_REASONING, providerName: 'Z.ai', upstreamApi: 'Z.ai API', sourceCardIds: ['card-aa-glm-5-2', 'card-arena-glm-5-2-max', 'card-openrouter-z-ai-glm-5-2'] }),
-  orcPreset({ key: 'data-md.glm-5-3.max', productLineId: 'glm_53', modelName: 'GLM-5.3', profile: DATA_MD_DEFAULT_REASONING, providerName: 'Z.ai', upstreamApi: 'Z.ai API', sourceCardIds: ['card-aa-glm-5-3', 'card-openrouter-z-ai-glm-5-3', 'card-openrouter-standard-performance-z-ai-glm-5-3'], note: 'Z.ai 官方将 GLM-5.3 定义为仅支持 reasoning 的 Low、High、Max 三档，默认 Max；当前只创建有独立能力测评的 Max 配置。Arena 尚无可用成绩，未添加任何 Arena 或 Harness 估计。' }),
+  orcPreset({ key: 'data-md.glm-5-3.max', productLineId: 'glm_53', modelName: 'GLM-5.3', profile: DATA_MD_DEFAULT_REASONING, providerName: 'Z.ai', upstreamApi: 'Z.ai API', sourceCardIds: ['card-aa-glm-5-3', 'card-arena-glm-5-3-max', 'card-openrouter-z-ai-glm-5-3', 'card-openrouter-standard-performance-z-ai-glm-5-3'], note: 'Z.ai 官方将 GLM-5.3 定义为仅支持 reasoning 的 Low、High、Max 三档，默认 Max；Arena 已发布同一 Max 版本的 Text 与 WebDev 记录，直接接入，不引入任何 Harness 估计。' }),
   orcPreset({ key: 'data-md.hy3.max', productLineId: 'hunyuan_hy3', modelName: 'Hy3', profile: DATA_MD_DEFAULT_REASONING, providerName: 'GMICloud', upstreamApi: 'GMICloud API' }),
   definePreset({
     key: 'data-md.kimi-k3.kimi-code',
@@ -1358,11 +1365,14 @@ const ADDITIONAL_SOURCE_BACKED_CONFIGURATION_PRESETS: readonly BuiltInConfigurat
     },
     origin: 'source-backed',
     access: 'api',
-    note: 'OpenRouter 官方目录将 Qwen3.8 27B 的默认 reasoning effort 标为 XHigh；AA 提供同一当前模型的能力记录，OpenRouter Standard 提供价格与速度。',
+    note: 'OpenRouter 官方目录将 Qwen3.8 27B 的默认 reasoning effort 标为 XHigh；AA 提供同一当前模型的能力记录，OpenRouter Standard 提供价格与速度。Arena 的同模型 Text/WebDev 行未标 effort，按 Default→XHigh 单向补缺并保留原始未标档位身份。',
     sourceCardIds: [
       'card-aa-qwen3-8-27b',
       'card-openrouter-qwen-qwen3-8-27b',
       'card-openrouter-standard-performance-qwen-qwen3-8-27b',
+    ],
+    sourceCardLinks: [
+      lowerProfileFallback('card-arena-qwen3-8-27b', 'Default', 0, 'XHigh', 4),
     ],
   }),
   definePreset({
@@ -1455,15 +1465,16 @@ const ADDITIONAL_SOURCE_BACKED_CONFIGURATION_PRESETS: readonly BuiltInConfigurat
       harness: normalChat(),
       provider: {
         name: 'Thinking Machines',
-        upstream: 'thinkingmachines/inkling · OpenRouter Standard route',
+        upstream: 'thinkingmachines/inkling:free · free public route',
       },
     },
     origin: 'source-backed',
     access: 'api',
-    note: '使用 Thinking Machines 原始 Inkling，而非 Inkling Small。AA 当前模型记录为 XHigh；Arena 未标注 effort 的 Inkling 行只按 Default→XHigh 单向补缺。',
+    lockExplicitSourceCards: true,
+    note: '使用 Thinking Machines 原始 Inkling，而非 Inkling Small。Thinking Machines 已开放 free 路由，因此输入/输出成本按 0 计；免费路由未单列可验证速度时，速度继续采用同模型 Standard 端点实测。AA 当前模型记录为 XHigh；Arena 未标注 effort 的 Inkling 行只按 Default→XHigh 单向补缺。',
     sourceCardIds: [
       'card-aa-inkling',
-      'card-openrouter-thinkingmachines-inkling',
+      'card-openrouter-thinkingmachines-inkling-free',
       'card-openrouter-standard-performance-thinkingmachines-inkling',
     ],
     sourceCardLinks: [
@@ -1934,13 +1945,6 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
         'Codex CLI',
       ),
       lowerProfileFallback(
-        'card-aa-coding-agent-codex-gpt-5-4-medium',
-        'Medium',
-        2,
-        'XHigh',
-        4,
-      ),
-      lowerProfileFallback(
         'card-arena-gpt-5-4',
         'Default',
         0,
@@ -1948,7 +1952,7 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
         4,
       ),
     ],
-    fallbackPolicyNote: '榜单保留来源中更高的 XHigh，而不再保留残缺的 High。AA 只发布了 GPT-5.4 Medium 的 Codex 行，因此 Medium Codex 与 High Arena 数据仅按档位/执行层级单向补齐到 XHigh。',
+    fallbackPolicyNote: '榜单保留来源中更高的 XHigh，而不再保留残缺的 High。当前 AA Coding Agent Index 已不再发布 GPT-5.4 Codex 行，因此仅保留仍可验证的 High Arena 与 Chat 数据按档位/执行层级单向补齐。',
   }),
   harnessPreset({
     key: 'harness.claude-opus-4-7.max.claude-code',
@@ -2028,15 +2032,8 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
         5,
         'Claude Code',
       ),
-      lowerProfileFallback(
-        'card-aa-coding-agent-claude-code-claude-opus-4-6-medium',
-        'Medium',
-        2,
-        'Max',
-        5,
-      ),
     ],
-    fallbackPolicyNote: '榜单保留来源中更高的 Max，而不再保留残缺的 High。AA 只发布了 Opus 4.6 Medium 的 Claude Code 行；Medium Harness 与 High Arena/Chat 数据仅单向补齐到 Max。',
+    fallbackPolicyNote: '榜单保留来源中更高的 Max，而不再保留残缺的 High。当前 AA Coding Agent Index 已不再发布 Opus 4.6 的 Claude Code 行，因此仅保留仍可验证的 High Arena/Chat 数据单向补齐到 Max。',
   }),
   harnessPreset({
     key: 'harness.claude-sonnet-4-6.max.claude-code',
@@ -2950,6 +2947,7 @@ function attachEquivalentCardsToHandAuthoredPresets(
 
   let attachedCardCount = 0;
   const augmented = presets.map((preset) => {
+    if (preset.lockExplicitSourceCards) return preset;
     const existingIds = new Set([
       ...(preset.sourceCardIds || []),
       ...(preset.sourceCardLinks || []).map((link) => link.cardId),

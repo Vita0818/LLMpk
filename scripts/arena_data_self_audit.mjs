@@ -656,7 +656,7 @@ function auditArena(rawManifest, scope, cards, observations, failures, warnings)
       databaseAvailableCount: databaseGroups.size,
       databaseAvailableRowCount: databaseRows.length,
       // Preserve the full raw-source facts for traceability.  For example,
-      // the current WebDev snapshot has 116 extracted / 1 duplicate / 115
+      // the current WebDev snapshot has 118 extracted / 1 duplicate / 117
       // unique rows even when only its OAGXM rows are admitted to this catalog.
       sourceExtractedRowCount: rawMetric.rows.length,
       sourceDuplicateRowCount: calculatedDuplicateRowCount,
@@ -688,10 +688,10 @@ function auditArena(rawManifest, scope, cards, observations, failures, warnings)
   }
 
   const webdev = metrics.arena_code_webdev;
-  if (webdev?.sourceExtractedRowCount !== 116 || webdev?.sourceDuplicateRowCount !== 1 || webdev?.sourceUniqueModelCount !== 115) {
+  if (webdev?.sourceExtractedRowCount !== 118 || webdev?.sourceDuplicateRowCount !== 1 || webdev?.sourceUniqueModelCount !== 117) {
     warnings.push({
       scope: 'arena',
-      issue: 'WebDev source changes may be legitimate, but the recorded full-source snapshot does not have the expected 116 / 1 / 115 audit facts.',
+      issue: 'WebDev source changes may be legitimate, but the recorded full-source snapshot does not have the expected 118 / 1 / 117 audit facts.',
       actual: webdev,
     });
   }

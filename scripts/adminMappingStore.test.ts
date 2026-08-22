@@ -5,6 +5,10 @@ import {
   VERIFIED_HARNESS_SOURCE_OBSERVATIONS,
 } from '../src/data/harnessSeedCards';
 import {
+  codingAgentRecords,
+  evaluationRecords,
+} from '../src/data/artificialAnalysisSourceSnapshot.json';
+import {
   VERIFIED_PRODUCTION_AGENT_MODE_SOURCE_MODEL_CARDS,
   VERIFIED_PRODUCTION_AGENT_MODE_SOURCE_OBSERVATIONS,
 } from '../src/data/productionAgentModeSeedCards';
@@ -141,23 +145,33 @@ assert.ok(
   )),
   'LongCat 2.0 must retain the τ³-Banking value newly published by the refreshed source.',
 );
+const aaBriefcaseRecords = evaluationRecords['aa-briefcase'] || [];
+assert.ok(
+  aaBriefcaseRecords.length > 19,
+  'AA-Briefcase must use the complete public leaderboard rather than the 19-row initial chart subset.',
+);
+for (const expectedName of ['Grok 4.6 (xhigh)', 'Qwen3.8 Max']) {
+  const record = aaBriefcaseRecords.find((candidate) => candidate.name === expectedName);
+  assert.ok(record, `AA-Briefcase must retain the public ${expectedName} row.`);
+  assert.equal(typeof record.briefcaseElo, 'number');
+}
 
 for (const expectation of [
   {
     cardId: 'card-aa-coding-agent-codex-deepseek-v4-flash-0731-max',
-    sourceRecordId: 'ba75b0f1ce2019c511374b7a7f850ce5',
+    sourceDisplayLabel: 'Codex - DeepSeek V4 Flash 0731 (max)',
     sourceHarnessLabel: 'Codex',
     harnessName: 'Codex CLI',
   },
   {
     cardId: 'card-aa-coding-agent-opencode-gemini-3-6-flash-high',
-    sourceRecordId: '4fb40d5633b706eecb1da0a68cb4f1ed',
+    sourceDisplayLabel: 'Opencode - Gemini 3.6 Flash (high)',
     sourceHarnessLabel: 'Opencode',
     harnessName: 'OpenCode',
   },
   {
     cardId: 'card-aa-coding-agent-claude-code-qwen3-8-max',
-    sourceRecordId: 'f06493dca66d238f2252adb8092dd10f',
+    sourceDisplayLabel: 'Claude Code - Qwen3.8 Max',
     sourceHarnessLabel: 'Claude Code',
     harnessName: 'Claude Code',
   },
@@ -166,7 +180,12 @@ for (const expectation of [
     (candidate) => candidate.id === expectation.cardId,
   );
   assert.ok(card, `Corrected AA Agent Harness card ${expectation.cardId} must be projected.`);
-  assert.equal(card.metadataJson?.sourceIdentity?.sourceRecordId, expectation.sourceRecordId);
+  const currentSourceRow = codingAgentRecords.find((record) => (
+    record.displayLabel === expectation.sourceDisplayLabel
+  ));
+  assert.ok(currentSourceRow, `${expectation.sourceDisplayLabel} must exist in the current AA snapshot.`);
+  assert.equal(card.metadataJson?.sourceIdentity?.sourceRecordId, currentSourceRow.id);
+  assert.equal(card.metadataJson?.sourceIdentity?.exactSourceModelName, expectation.sourceDisplayLabel);
   assert.equal(card.metadataJson?.sourceIdentity?.sourceHarnessLabel, expectation.sourceHarnessLabel);
   assert.equal(card.metadataJson?.sourceIdentity?.harnessName, expectation.harnessName);
   const metricIds = new Set(
@@ -1448,6 +1467,77 @@ for (const expectation of gpt56TextFallbackExpectations) {
     `${expectation.modelName} must receive a Chatting score from its exact Arena Text row.`,
   );
 }
+const newlyConnectedArenaChatExpectations = [
+  {
+    presetId: 'builtin.data-md.glm-5-3.max',
+    modelName: 'GLM-5.3',
+    arenaCardId: 'card-arena-glm-5-3-max',
+  },
+  {
+    presetId: 'builtin.deepseek-v4-pro-0813.max',
+    modelName: 'DeepSeek-v4-Pro 0813',
+    arenaCardId: 'card-arena-deepseek-v4-pro-high-20260813',
+  },
+  {
+    presetId: 'builtin.qwen3-8-27b.xhigh',
+    modelName: 'Qwen3.8 27B',
+    arenaCardId: 'card-arena-qwen3-8-27b',
+  },
+] as const;
+for (const expectation of newlyConnectedArenaChatExpectations) {
+  const box = installedPresetBoxes.find((candidate) => (
+    candidate.builtInPresetId === expectation.presetId
+  ));
+  assert.ok(box, `${expectation.modelName} must retain its reader-facing configuration.`);
+  const stack = reconciledV3Store.getLinkedCardStack(box.id);
+  assert.ok(
+    stack.some(({ card }) => card.id === expectation.arenaCardId),
+    `${expectation.modelName} must consume its exact current Arena card.`,
+  );
+  assert.equal(
+    typeof scoreByConfigurationId.get(box.id)?.domainScores.chatting.score,
+    'number',
+    `${expectation.modelName} must receive a Chatting score from current Arena Text evidence.`,
+  );
+}
+const qwen27bBox = installedPresetBoxes.find((box) => (
+  box.builtInPresetId === 'builtin.qwen3-8-27b.xhigh'
+));
+assert.ok(qwen27bBox);
+assert.deepEqual(
+  reconciledV3Store.getLinkedCardStack(qwen27bBox.id)
+    .find(({ card }) => card.id === 'card-arena-qwen3-8-27b')
+    ?.link.provenance,
+  {
+    kind: 'lower_profile_fallback',
+    sourceProfile: 'Default',
+    sourceLevel: 0,
+    targetProfile: 'XHigh',
+    targetLevel: 4,
+  },
+  'An Arena row without a published effort must remain an authored Default-to-XHigh fallback.',
+);
+const inklingBox = installedPresetBoxes.find((box) => (
+  box.builtInPresetId === 'builtin.inkling.xhigh'
+));
+assert.ok(inklingBox);
+const inklingStack = reconciledV3Store.getLinkedCardStack(inklingBox.id);
+assert.ok(inklingStack.some(({ card }) => (
+  card.id === 'card-openrouter-thinkingmachines-inkling-free'
+)));
+assert.ok(inklingStack.some(({ card }) => (
+  card.id === 'card-openrouter-standard-performance-thinkingmachines-inkling'
+)));
+assert.equal(
+  inklingStack.some(({ card }) => card.id === 'card-openrouter-thinkingmachines-inkling'),
+  false,
+  'Inkling must not regain the paid price card through automatic source aliases.',
+);
+const inklingConfig = reconciledV3Store.buildLLMConfiguration(inklingBox);
+assert.equal(inklingConfig.openRouterData?.inputPricePerMToken, 0);
+assert.equal(inklingConfig.openRouterData?.outputPricePerMToken, 0);
+assert.ok((inklingConfig.openRouterData?.ttftP50Seconds || 0) > 0);
+assert.ok((inklingConfig.openRouterData?.throughputP50TokensPerSec || 0) > 0);
 for (const box of installedPresetBoxes) {
   const preset = BUILT_IN_CONFIGURATION_PRESETS.find(
     (candidate) => candidate.id === box.builtInPresetId,
@@ -1517,9 +1607,14 @@ assert.deepEqual(
   ['arena_code_webdev'],
   'Only the independently versioned 0731 Arena WebDev row may be connected.',
 );
+const deepSeek0731ArenaWebDevObservation = reconciledV3Store
+  .getCardObservations('card-arena-deepseek-v4-flash-high')
+  .find((observation) => observation.metricId === 'arena_code_webdev');
+assert.ok(deepSeek0731ArenaWebDevObservation);
 assert.equal(
   deepSeek0731Config.observations.arena_code_webdev?.rawValue,
-  1581.1689724767473,
+  deepSeek0731ArenaWebDevObservation.rawValue,
+  'The 0731 configuration must copy the current exact Arena WebDev value rather than pinning a stale snapshot score.',
 );
 function expectedOpenRouterDataFromVerifiedCards(
   ...cardIds: string[]
@@ -1705,10 +1800,13 @@ const august2026ReleaseExpectations = [
     modelName: 'Grok 4.6',
     productLineId: 'grok_46',
     cardIds: [
+      'card-aa-grok-4-6-xhigh',
       'card-openrouter-x-ai-grok-4-6',
       'card-openrouter-standard-performance-x-ai-grok-4-6',
       'card-aa-grok-4-6',
       'card-arena-grok-4-6-high',
+      'card-aa-grok-4-6-medium',
+      'card-aa-grok-4-6-low',
     ],
     openRouterCardIds: [
       'card-openrouter-x-ai-grok-4-6',

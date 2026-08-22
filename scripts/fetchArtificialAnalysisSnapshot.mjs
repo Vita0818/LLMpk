@@ -101,17 +101,32 @@ function detailedModelRecords(payload) {
   return uniqueBy(candidates[0], (record) => record.id, 'AA model leaderboard');
 }
 
-function evaluationRecords(payload, evaluationId) {
+function evaluationRecords(payload, evaluationId, modelById) {
   // Artificial Analysis migrated its evaluation pages from `defaultData` to
-  // `initialModels` in August 2026. Both are first-party Flight payloads
-  // containing the same model-record shape, so accept either transport key
-  // and retain the largest validated record set.
-  const candidates = ['"defaultData":', '"initialModels":']
+  // `initialModels` in August 2026. AA-Briefcase additionally exposes the
+  // complete public leaderboard under `models`, while `initialModels` is only
+  // a smaller initial chart subset. Accept every first-party transport key
+  // and retain the largest validated evaluation-shaped record set.
+  const markers = evaluationId === 'aa-briefcase'
+    ? ['"defaultData":', '"initialModels":', '"models":']
+    : ['"defaultData":', '"initialModels":'];
+  const candidates = markers
     .flatMap((marker) => extractJsonArraysAfterMarker(payload, marker))
-    .map((records) => records.filter((record) => (
+    .map((records) => records.map((record) => {
+      if (!record || typeof record !== 'object' || Array.isArray(record)) return null;
+      const model = typeof record.id === 'string' ? modelById.get(record.id) : undefined;
+      return {
+        ...model,
+        ...record,
+        slug: record.slug ?? model?.slug,
+        name: record.name ?? model?.name,
+        // AA-Briefcase's public leaderboard emits `elo`, while its smaller
+        // chart subset emits `briefcaseElo`. Keep a stable source field for
+        // the catalog without discarding the source-native value.
+        briefcaseElo: record.briefcaseElo ?? record.elo ?? model?.briefcaseElo,
+      };
+    }).filter((record) => (
       record
-      && typeof record === 'object'
-      && !Array.isArray(record)
       && typeof record.id === 'string'
       && typeof record.slug === 'string'
       && typeof record.name === 'string'
@@ -119,7 +134,7 @@ function evaluationRecords(payload, evaluationId) {
     .sort((left, right) => right.length - left.length);
   if ((candidates[0]?.length ?? 0) < 5) {
     throw new Error(
-      `AA ${evaluationId} page did not expose a usable defaultData or initialModels array.`,
+      `AA ${evaluationId} page did not expose a usable evaluation model array.`,
     );
   }
   return uniqueBy(candidates[0], (record) => record.id, `AA ${evaluationId}`);
@@ -209,12 +224,13 @@ async function main() {
 
   const pageById = new Map(fetchedPages.map((page) => [page.definition.id, page]));
   const models = detailedModelRecords(pageById.get('model-leaderboard').decoded.payload);
+  const modelById = new Map(models.map((model) => [model.id, model]));
   const evaluationRecordsById = Object.fromEntries(
     fetchedPages
       .filter((page) => page.definition.kind === 'evaluation')
       .map((page) => [
         page.definition.id,
-        evaluationRecords(page.decoded.payload, page.definition.id),
+        evaluationRecords(page.decoded.payload, page.definition.id, modelById),
       ]),
   );
 

@@ -133,7 +133,7 @@ export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
       // Z.ai also documents Low and High, but the published leaderboard only
       // exposes a score-backed Max configuration until those tiers receive
       // independent capability measurements.
-      tier('max', 'Max', 5, ['card-aa-glm-5-3']),
+      tier('max', 'Max', 5, ['card-aa-glm-5-3', 'card-arena-glm-5-3-max']),
     ],
   },
   {
@@ -348,10 +348,10 @@ export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
   {
     productLineId: 'grok_46',
     tiers: [
-      tier('low', 'Low', 1),
-      tier('medium', 'Medium', 2),
+      tier('low', 'Low', 1, ['card-aa-grok-4-6-low']),
+      tier('medium', 'Medium', 2, ['card-aa-grok-4-6-medium']),
       tier('high', 'High', 3, ['card-aa-grok-4-6', 'card-arena-grok-4-6-high']),
-      tier('xhigh', 'XHigh', 4),
+      tier('xhigh', 'XHigh', 4, ['card-aa-grok-4-6-xhigh']),
     ],
   },
   {

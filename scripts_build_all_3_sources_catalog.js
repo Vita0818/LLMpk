@@ -444,7 +444,7 @@ function isGeneralTextOpenRouterModel(model) {
   // Keep general-purpose language / multimodal foundation models, but do not
   // turn image, video, speech, embedding, safety, or routing products into
   // capability-leaderboard entries merely because they accept text prompts.
-  if (/\b(?:image|video|speech|audio|tts|transcri(?:be|ption)|embedding|moderation|safeguard|guard|music|lyria|router)\b/iu.test(identity)) {
+  if (/\b(?:image|video|vision|speech|audio|tts|transcri(?:be|ption)|embedding|moderation|safeguard|guard|music|lyria|router)\b/iu.test(identity)) {
     return false;
   }
   // Older official snapshots did not expose architecture. Retain those
@@ -1346,7 +1346,15 @@ async function buildVerifiedCatalog() {
         selectionMethod,
       },
     });
-    const performanceAggregate = openRouterPerformanceByModelId.get(model.id);
+    // OpenRouter's endpoint-statistics API resolves a `:free` alias to the
+    // underlying paid Standard pool. Its aggregate price therefore describes
+    // that pool rather than the explicit free route. A free configuration must
+    // keep the catalog's published zero price and may separately link the
+    // non-free Standard companion for speed.
+    const isExplicitFreeRoute = /:free$/iu.test(model.id);
+    const performanceAggregate = isExplicitFreeRoute
+      ? null
+      : openRouterPerformanceByModelId.get(model.id);
     const inputPricePerToken = performanceAggregate?.inputPricePerToken
       ?? asFiniteNumber(model.pricing?.prompt);
     const outputPricePerToken = performanceAggregate?.outputPricePerToken
@@ -1452,6 +1460,11 @@ async function buildVerifiedCatalog() {
     catalogInputModes.push('official-openrouter-standard-performance-snapshot');
   }
   for (const record of openRouterPerformanceAggregates) {
+    // Standard endpoint stats for a `:free` alias are really stats for the
+    // underlying paid Standard pool. Do not expose them as a free-route speed
+    // card; an approved free configuration explicitly reuses its non-free
+    // same-model companion when validated speed is needed.
+    if (/:free$/iu.test(record.modelId)) continue;
     const companionForCardId = `card-openrouter-${slugify(record.modelId)}`;
     const baseCard = cardsById.get(companionForCardId);
     if (!baseCard) continue;

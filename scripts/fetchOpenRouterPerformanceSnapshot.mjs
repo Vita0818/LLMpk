@@ -90,7 +90,7 @@ function isGeneralTextModel(model) {
   const inputModalities = model?.architecture?.input_modalities;
   const outputModalities = model?.architecture?.output_modalities;
   const identity = `${model?.id || ''}\n${model?.name || ''}`.toLocaleLowerCase('en-US');
-  if (/\b(?:image|video|speech|audio|tts|transcri(?:be|ption)|embedding|moderation|safeguard|guard|music|lyria|router)\b/iu.test(identity)) {
+  if (/\b(?:image|video|vision|speech|audio|tts|transcri(?:be|ption)|embedding|moderation|safeguard|guard|music|lyria|router)\b/iu.test(identity)) {
     return false;
   }
   if (!Array.isArray(inputModalities) || !Array.isArray(outputModalities)) return true;
