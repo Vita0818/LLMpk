@@ -1356,6 +1356,26 @@ const AUGUST_2026_RELEASE_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPr
  */
 const ADDITIONAL_SOURCE_BACKED_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
   definePreset({
+    key: 'glm-5-3-flash.max',
+    productLineId: 'glm_53_flash',
+    identity: {
+      model: { name: 'GLM-5.3-Flash', profile: 'Max' },
+      harness: normalChat(),
+      provider: viaOpenRouter('Z.ai', 'Z.ai API'),
+    },
+    origin: 'source-backed',
+    access: 'api',
+    note: 'GLM-5.3-Flash 官方支持 Low、High、Max；当前 Artificial Analysis 已发布 Max 能力记录，OpenRouter Standard 提供当前价格与速度。Arena 当前仅有未标 effort 的 WebDev 行，因此按 Default→Max 单向补缺，不把它当作 Max 原生能力卡，也不添加任何未记录的 Harness。',
+    sourceCardIds: [
+      'card-aa-glm-5-3-flash',
+      'card-openrouter-z-ai-glm-5-3-flash',
+      'card-openrouter-standard-performance-z-ai-glm-5-3-flash',
+    ],
+    sourceCardLinks: [
+      lowerProfileFallback('card-arena-glm-5-3-flash', 'Default', 0, 'Max', 5),
+    ],
+  }),
+  definePreset({
     key: 'qwen3-8-27b.xhigh',
     productLineId: 'qwen_38_27b',
     identity: {

@@ -1,17 +1,17 @@
 {
   "schemaVersion": "arena-data-self-audit/v3",
-  "auditTimestamp": "2026-08-22T11:55:44.219Z",
+  "auditTimestamp": "2026-08-26T16:10:12.099Z",
   "auditStatus": "VALIDATED",
   "inputs": {
     "seedCardsPath": "src/data/seedCards.ts",
     "oagxmScopePath": "src/data/oagxmScope.json",
     "rawExtractionPath": "src/data/arenaRawExtraction.json",
     "rawExtractionSchemaVersion": "arena-raw-extraction/v1",
-    "rawExtractionTimestamp": "2026-08-22T11:43:32.841Z"
+    "rawExtractionTimestamp": "2026-08-26T15:55:17.784Z"
   },
   "scope": {
     "scopeId": "oagxm-current-product-lines",
-    "scopeVersion": "oagxm-current-product-lines/v5-2026-08-13-releases",
+    "scopeVersion": "oagxm-current-product-lines/v6-2026-08-26-releases",
     "benchmarkBoundary": "General-purpose text or multimodal foundation models supported by the LLM capability registry. Historical Data.md entries are retained only when an exact record is published by Artificial Analysis, Arena, or OpenRouter. Dedicated image, video, speech, embedding, moderation, and safety-only APIs are outside the formal capability leaderboard unless a corresponding source benchmark is added.",
     "sourceCardCountsByProductLine": {
       "anthropic:claude_fable_5": 7,
@@ -22,7 +22,7 @@
       "anthropic:claude_opus_48": 9,
       "anthropic:claude_opus_5": 13,
       "anthropic:claude_sonnet_5": 12,
-      "deepseek:deepseek_v4_flash": 7,
+      "deepseek:deepseek_v4_flash": 8,
       "deepseek:deepseek_v4_flash_0731": 5,
       "deepseek:deepseek_v4_pro": 7,
       "deepseek:deepseek_v4_pro_0813": 5,
@@ -35,6 +35,7 @@
       "google:gemma_4_26b_a4b": 6,
       "google:gemma_4_31b": 6,
       "zai:glm_52": 8,
+      "zai:glm_53_flash": 4,
       "zai:glm_53": 4,
       "openai:gpt_55": 23,
       "openai:gpt_56_luna": 16,
@@ -51,18 +52,18 @@
       "meta:llama_4_maverick": 4,
       "meta:llama_4_scout": 4,
       "xiaomi:mimo_v25_pro": 5,
-      "minimax:minimax_m3": 6,
+      "minimax:minimax_m3": 7,
       "mistral:mistral_medium_35": 4,
       "meta:muse_glimmer": 4,
       "meta:muse_spark_11": 4,
       "meta:muse_spark_12": 6,
       "nvidia:nemotron_3_ultra": 8,
       "nvidia:nemotron_35_lightning": 5,
-      "nvidia:nemotron_3_nano": 9,
+      "nvidia:nemotron_3_nano": 8,
       "nvidia:nemotron_3_super": 5,
+      "alibaba:qwen_38_27b": 8,
       "alibaba:qwen_37_max": 5,
       "alibaba:qwen_37_plus": 4,
-      "alibaba:qwen_38_27b": 6,
       "alibaba:qwen_38_max": 4,
       "cohere:command_a_plus": 1,
       "alibaba:qwen_36_27b": 4,
@@ -83,7 +84,7 @@
       "anthropic:claude_sonnet_5": 76,
       "cohere:command_a_plus": 17,
       "deepseek:deepseek_v4_flash_0731": 25,
-      "deepseek:deepseek_v4_flash": 55,
+      "deepseek:deepseek_v4_flash": 70,
       "deepseek:deepseek_v4_pro_0813": 29,
       "deepseek:deepseek_v4_pro": 68,
       "google:gemini_25_flash_lite": 68,
@@ -94,15 +95,16 @@
       "google:gemini_37_flash": 68,
       "google:gemma_4_26b_a4b": 41,
       "google:gemma_4_31b": 52,
-      "zai:glm_52": 54,
-      "zai:glm_53": 24,
+      "zai:glm_52": 55,
+      "zai:glm_53": 29,
+      "zai:glm_53_flash": 17,
       "openai:gpt_55": 164,
       "openai:gpt_56_luna": 122,
-      "openai:gpt_56_sol": 128,
+      "openai:gpt_56_sol": 129,
       "openai:gpt_56_terra": 127,
       "openai:gpt_oss_120b": 45,
       "openai:gpt_oss_20b": 39,
-      "xai:grok_45": 34,
+      "xai:grok_45": 35,
       "xai:grok_46": 71,
       "tencent:hunyuan_hy3": 61,
       "thinking_machines:inkling": 39,
@@ -111,20 +113,20 @@
       "meta:llama_4_maverick": 27,
       "meta:llama_4_scout": 26,
       "xiaomi:mimo_v25_pro": 46,
-      "minimax:minimax_m3": 40,
+      "minimax:minimax_m3": 42,
       "mistral:mistral_medium_35": 36,
       "meta:muse_glimmer": 26,
-      "meta:muse_spark_11": 33,
+      "meta:muse_spark_11": 31,
       "meta:muse_spark_12": 32,
       "nvidia:nemotron_35_lightning": 25,
-      "nvidia:nemotron_3_nano": 67,
+      "nvidia:nemotron_3_nano": 65,
       "nvidia:nemotron_3_super": 30,
       "nvidia:nemotron_3_ultra": 40,
       "alibaba:qwen_36_27b": 37,
       "alibaba:qwen_36_35b_a3b": 36,
       "alibaba:qwen_37_max": 27,
       "alibaba:qwen_37_plus": 32,
-      "alibaba:qwen_38_27b": 55,
+      "alibaba:qwen_38_27b": 75,
       "alibaba:qwen_38_max": 32,
       "stepfun:step_37_flash": 22,
       "google:gemini_31_flash_lite": 8,
@@ -149,62 +151,62 @@
         "rankingClass": "formal_text_agent"
       }
     ],
-    "formalTextAgentProductLineCount": 59,
+    "formalTextAgentProductLineCount": 60,
     "specializedCatalogOnlyProductLineCount": 0,
-    "sourceCatalogCardCount": 1411,
-    "sourceCatalogObservationCount": 8025,
+    "sourceCatalogCardCount": 1401,
+    "sourceCatalogObservationCount": 8005,
     "findingCount": 0
   },
   "catalog": {
-    "sourceModelCardCount": 1802,
-    "observationCount": 10844,
+    "sourceModelCardCount": 1799,
+    "observationCount": 10882,
     "platformCardCounts": {
-      "artificial_analysis": 615,
-      "arena": 443,
-      "openrouter": 744
+      "artificial_analysis": 618,
+      "arena": 446,
+      "openrouter": 735
     },
     "availableObservationCounts": {
-      "artificial_analysis": 6614,
-      "arena": 2742,
-      "openrouter": 1488
+      "artificial_analysis": 6656,
+      "arena": 2756,
+      "openrouter": 1470
     },
     "availableObservationProvenanceFindingCount": 0,
     "unprovenDefaultZeroOrFiftyCount": 0,
-    "sourceProvenFactualZeroOrFiftyCount": 417,
+    "sourceProvenFactualZeroOrFiftyCount": 413,
     "inputs": {
       "refreshStatus": "MIXED_SNAPSHOT_REBUILD",
       "isFullLiveSourceRefresh": false,
       "disclosure": "The catalog mixes direct raw extraction with official-source and/or verified-catalog snapshots. This audit validates provenance and reconciliation, not a fully live three-source refresh.",
-      "snapshotCardCount": 1359,
+      "snapshotCardCount": 1353,
       "unknownInputModeCardCount": 0,
       "modes": [
         {
           "source": "arena",
           "inputMode": "official-arena-raw-extraction",
           "freshnessClass": "direct_source_extraction",
-          "cardCount": 443,
-          "availableObservationCount": 2742
+          "cardCount": 446,
+          "availableObservationCount": 2756
         },
         {
           "source": "artificial_analysis",
           "inputMode": "official-aa-structured-snapshot",
           "freshnessClass": "official_source_snapshot",
-          "cardCount": 615,
-          "availableObservationCount": 6614
+          "cardCount": 618,
+          "availableObservationCount": 6656
         },
         {
           "source": "openrouter",
           "inputMode": "3d/1w stabilized endpoint medians, followed by an equal-weight mean across current OpenRouter Standard endpoints; raw current rows, auxiliary traffic-weighted mean, median, quartiles, and range retained in the verified snapshot",
           "freshnessClass": "official_source_snapshot",
-          "cardCount": 357,
-          "availableObservationCount": 714
+          "cardCount": 352,
+          "availableObservationCount": 704
         },
         {
           "source": "openrouter",
           "inputMode": "official-openrouter-local-snapshot",
           "freshnessClass": "official_source_snapshot",
-          "cardCount": 387,
-          "availableObservationCount": 774
+          "cardCount": 383,
+          "availableObservationCount": 766
         }
       ]
     }
@@ -225,7 +227,7 @@
       "arena_agent_bash_recovery",
       "arena_agent_tool_hallucination"
     ],
-    "arenaCardCount": 443,
+    "arenaCardCount": 446,
     "metrics": {
       "arena_text_instruction": {
         "sourceUrl": "https://arena.ai/leaderboard/text/instruction-following",
@@ -320,29 +322,29 @@
       "arena_code_webdev": {
         "sourceUrl": "https://arena.ai/leaderboard/code/webdev",
         "sourceLeaderboard": "Code Arena — WebDev Overall",
-        "extractedRowCount": 50,
+        "extractedRowCount": 51,
         "duplicateRowCount": 0,
-        "uniqueModelCount": 50,
-        "databaseAvailableCount": 50,
-        "databaseAvailableRowCount": 50,
-        "sourceExtractedRowCount": 118,
+        "uniqueModelCount": 51,
+        "databaseAvailableCount": 51,
+        "databaseAvailableRowCount": 51,
+        "sourceExtractedRowCount": 120,
         "sourceDuplicateRowCount": 1,
-        "sourceUniqueModelCount": 117,
-        "outOfScopeRowCount": 68,
+        "sourceUniqueModelCount": 119,
+        "outOfScopeRowCount": 69,
         "sourceToDatabaseMatch": true,
         "status": "VALID"
       },
       "arena_search": {
         "sourceUrl": "https://arena.ai/leaderboard/search",
         "sourceLeaderboard": "Arena Search — Overall",
-        "extractedRowCount": 8,
+        "extractedRowCount": 10,
         "duplicateRowCount": 0,
-        "uniqueModelCount": 8,
-        "databaseAvailableCount": 8,
-        "databaseAvailableRowCount": 8,
-        "sourceExtractedRowCount": 32,
+        "uniqueModelCount": 10,
+        "databaseAvailableCount": 10,
+        "databaseAvailableRowCount": 10,
+        "sourceExtractedRowCount": 34,
         "sourceDuplicateRowCount": 0,
-        "sourceUniqueModelCount": 32,
+        "sourceUniqueModelCount": 34,
         "outOfScopeRowCount": 24,
         "sourceToDatabaseMatch": true,
         "status": "VALID"
@@ -350,14 +352,14 @@
       "arena_agent_success": {
         "sourceUrl": "https://arena.ai/leaderboard/agent",
         "sourceLeaderboard": "Arena Agent — Confirmed Success",
-        "extractedRowCount": 40,
+        "extractedRowCount": 42,
         "duplicateRowCount": 0,
-        "uniqueModelCount": 40,
-        "databaseAvailableCount": 40,
-        "databaseAvailableRowCount": 40,
-        "sourceExtractedRowCount": 51,
+        "uniqueModelCount": 42,
+        "databaseAvailableCount": 42,
+        "databaseAvailableRowCount": 42,
+        "sourceExtractedRowCount": 53,
         "sourceDuplicateRowCount": 0,
-        "sourceUniqueModelCount": 51,
+        "sourceUniqueModelCount": 53,
         "outOfScopeRowCount": 11,
         "sourceToDatabaseMatch": true,
         "status": "VALID"
@@ -365,14 +367,14 @@
       "arena_agent_praise": {
         "sourceUrl": "https://arena.ai/leaderboard/agent",
         "sourceLeaderboard": "Arena Agent — Praise vs Complaint",
-        "extractedRowCount": 40,
+        "extractedRowCount": 42,
         "duplicateRowCount": 0,
-        "uniqueModelCount": 40,
-        "databaseAvailableCount": 40,
-        "databaseAvailableRowCount": 40,
-        "sourceExtractedRowCount": 51,
+        "uniqueModelCount": 42,
+        "databaseAvailableCount": 42,
+        "databaseAvailableRowCount": 42,
+        "sourceExtractedRowCount": 53,
         "sourceDuplicateRowCount": 0,
-        "sourceUniqueModelCount": 51,
+        "sourceUniqueModelCount": 53,
         "outOfScopeRowCount": 11,
         "sourceToDatabaseMatch": true,
         "status": "VALID"
@@ -380,14 +382,14 @@
       "arena_agent_steerability": {
         "sourceUrl": "https://arena.ai/leaderboard/agent",
         "sourceLeaderboard": "Arena Agent — Steerability",
-        "extractedRowCount": 40,
+        "extractedRowCount": 42,
         "duplicateRowCount": 0,
-        "uniqueModelCount": 40,
-        "databaseAvailableCount": 40,
-        "databaseAvailableRowCount": 40,
-        "sourceExtractedRowCount": 51,
+        "uniqueModelCount": 42,
+        "databaseAvailableCount": 42,
+        "databaseAvailableRowCount": 42,
+        "sourceExtractedRowCount": 53,
         "sourceDuplicateRowCount": 0,
-        "sourceUniqueModelCount": 51,
+        "sourceUniqueModelCount": 53,
         "outOfScopeRowCount": 11,
         "sourceToDatabaseMatch": true,
         "status": "VALID"
@@ -395,14 +397,14 @@
       "arena_agent_bash_recovery": {
         "sourceUrl": "https://arena.ai/leaderboard/agent",
         "sourceLeaderboard": "Arena Agent — Bash Recovery",
-        "extractedRowCount": 40,
+        "extractedRowCount": 42,
         "duplicateRowCount": 0,
-        "uniqueModelCount": 40,
-        "databaseAvailableCount": 40,
-        "databaseAvailableRowCount": 40,
-        "sourceExtractedRowCount": 51,
+        "uniqueModelCount": 42,
+        "databaseAvailableCount": 42,
+        "databaseAvailableRowCount": 42,
+        "sourceExtractedRowCount": 53,
         "sourceDuplicateRowCount": 0,
-        "sourceUniqueModelCount": 51,
+        "sourceUniqueModelCount": 53,
         "outOfScopeRowCount": 11,
         "sourceToDatabaseMatch": true,
         "status": "VALID"
@@ -410,14 +412,14 @@
       "arena_agent_tool_hallucination": {
         "sourceUrl": "https://arena.ai/leaderboard/agent",
         "sourceLeaderboard": "Arena Agent — Tool Hallucination",
-        "extractedRowCount": 40,
+        "extractedRowCount": 42,
         "duplicateRowCount": 0,
-        "uniqueModelCount": 40,
-        "databaseAvailableCount": 40,
-        "databaseAvailableRowCount": 40,
-        "sourceExtractedRowCount": 51,
+        "uniqueModelCount": 42,
+        "databaseAvailableCount": 42,
+        "databaseAvailableRowCount": 42,
+        "sourceExtractedRowCount": 53,
         "sourceDuplicateRowCount": 0,
-        "sourceUniqueModelCount": 51,
+        "sourceUniqueModelCount": 53,
         "outOfScopeRowCount": 11,
         "sourceToDatabaseMatch": true,
         "status": "VALID"
@@ -426,9 +428,9 @@
     "conservation": {
       "expectedMetricCount": 13,
       "auditedMetricCount": 13,
-      "sourceUniqueAvailableSum": 613,
-      "databaseUniqueAvailableSum": 613,
-      "databaseAvailableRowCount": 613,
+      "sourceUniqueAvailableSum": 626,
+      "databaseUniqueAvailableSum": 626,
+      "databaseAvailableRowCount": 626,
       "valid": true
     }
   },
@@ -473,29 +475,29 @@
           "source": "arena",
           "inputMode": "official-arena-raw-extraction",
           "freshnessClass": "direct_source_extraction",
-          "cardCount": 443,
-          "availableObservationCount": 2742
+          "cardCount": 446,
+          "availableObservationCount": 2756
         },
         {
           "source": "artificial_analysis",
           "inputMode": "official-aa-structured-snapshot",
           "freshnessClass": "official_source_snapshot",
-          "cardCount": 615,
-          "availableObservationCount": 6614
+          "cardCount": 618,
+          "availableObservationCount": 6656
         },
         {
           "source": "openrouter",
           "inputMode": "3d/1w stabilized endpoint medians, followed by an equal-weight mean across current OpenRouter Standard endpoints; raw current rows, auxiliary traffic-weighted mean, median, quartiles, and range retained in the verified snapshot",
           "freshnessClass": "official_source_snapshot",
-          "cardCount": 357,
-          "availableObservationCount": 714
+          "cardCount": 352,
+          "availableObservationCount": 704
         },
         {
           "source": "openrouter",
           "inputMode": "official-openrouter-local-snapshot",
           "freshnessClass": "official_source_snapshot",
-          "cardCount": 387,
-          "availableObservationCount": 774
+          "cardCount": 383,
+          "availableObservationCount": 766
         }
       ]
     }

@@ -16,6 +16,7 @@ const expectedProductLines: Array<[string, string]> = [
   ['deepseek-v4-pro-max-20260813', 'deepseek_v4_pro_0813'],
   ['deepseek-v4-pro-high-20260813', 'deepseek_v4_pro_0813'],
   ['DeepSeek-v4-Pro', 'deepseek_v4_pro'],
+  ['GLM-5.3-Flash', 'glm_53_flash'],
   ['Deepseek V4 Flash (High) (20260731)', 'deepseek_v4_flash_0731'],
   ['GLM-5.3', 'glm_53'],
   ['GLM-5.2', 'glm_52'],
@@ -84,7 +85,7 @@ for (const [sourceName, productLineId] of expectedProductLines) {
 }
 
 const configuredProductLines = OAGXM_SCOPE.vendors.flatMap((vendor) => vendor.productLines);
-assert.equal(configuredProductLines.length, 59, 'Curated inventory should include the newly requested source-backed model lines');
+assert.equal(configuredProductLines.length, 60, 'Curated inventory should include the newly requested source-backed model lines');
 assert.ok(
   configuredProductLines.every((line) => line.rankingClass === 'formal_text_agent'),
   'Image/audio/safety-only product lines must not enter the Data.md capability scope',

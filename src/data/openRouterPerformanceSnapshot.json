@@ -1,6 +1,6 @@
 {
   "schemaVersion": "openrouter-performance-snapshot/v2",
-  "fetchedAt": "2026-08-22T11:46:17.644Z",
+  "fetchedAt": "2026-08-26T15:58:54.268Z",
   "source": {
     "modelCatalogUrl": "https://openrouter.ai/api/v1/models",
     "statsEndpointUrl": "https://openrouter.ai/api/frontend/v1/stats/endpoint",
@@ -12,7 +12,12 @@
       "3d hourly curve",
       "1w daily curve"
     ],
-    "inputMode": "official-openrouter-live"
+    "inputMode": "official-openrouter-live-incremental",
+    "baseSnapshotFetchedAt": "2026-08-22T11:46:17.644Z",
+    "incrementalRefreshModelIds": [
+      "z-ai/glm-5.3-flash"
+    ],
+    "incrementalRefreshAt": "2026-08-26T15:58:54.268Z"
   },
   "selectionPolicy": {
     "modelRecords": "canonical general text-output records from /api/v1/models",
@@ -50,34 +55,34 @@
     ]
   },
   "counts": {
-    "queriedModels": 388,
-    "modelsWithPerformance": 369,
-    "endpointRecords": 1247,
-    "modelAggregates": 369,
-    "modelsWithSingleEndpoint": 165,
+    "queriedModels": 389,
+    "modelsWithPerformance": 370,
+    "endpointRecords": 1248,
+    "modelAggregates": 370,
+    "modelsWithSingleEndpoint": 166,
     "modelsWithMultipleEndpoints": 204,
     "unavailableModels": 10,
     "noStatisticsModels": 9,
     "failedModels": 0,
-    "historyRequestsAttempted": 1476,
-    "historyRequestsSucceeded": 1476,
+    "historyRequestsAttempted": 1480,
+    "historyRequestsSucceeded": 1480,
     "historyRequestsFailed": 0,
-    "returnedEndpointRows": 1318,
-    "acceptedEndpointRows": 1247,
+    "returnedEndpointRows": 1319,
+    "acceptedEndpointRows": 1248,
     "rejectedEndpointRows": 71,
     "rejectedMissingLatency": 71,
     "rejectedMissingThroughput": 71,
     "rejectedMissingOrZeroRequestCount": 71,
-    "stabilizedMeasureValues": 2494,
+    "stabilizedMeasureValues": 2496,
     "historyBackedMeasureValues": 2447,
-    "currentWindowFallbackMeasureValues": 47,
-    "historyBackedMeasureCoverage": 0.9811547714514836,
+    "currentWindowFallbackMeasureValues": 49,
+    "historyBackedMeasureCoverage": 0.9803685897435898,
     "endpointRecordsWithBothMeasuresHistoryBacked": 1223,
     "stabilizationSources": {
       "threeDayPlusOneWeek": 2263,
       "threeDayOnly": 34,
       "oneWeekOnly": 150,
-      "currentWindowFallback": 47
+      "currentWindowFallback": 49
     }
   },
   "records": [
@@ -233254,6 +233259,185 @@
       ]
     },
     {
+      "modelId": "z-ai/glm-5.3-flash",
+      "canonicalSlug": "z-ai/glm-5.3-flash-20260826",
+      "exactModelName": "Z.ai: GLM 5.3 Flash",
+      "variant": "standard",
+      "sourceOrder": 0,
+      "endpointId": "8e9fe48b-2f91-41c3-a8a7-e4a93a8c4ff0",
+      "endpointName": "Z.AI | z-ai/glm-5.3-flash-20260826",
+      "providerName": "Z.AI",
+      "providerDisplayName": "Z.ai",
+      "providerSlug": "z-ai/fp8",
+      "providerRegion": null,
+      "stats": {
+        "p50LatencyMilliseconds": 4100,
+        "p50ThroughputTokensPerSecond": 36,
+        "requestCount": 161820,
+        "windowMinutes": 30,
+        "p75LatencyMilliseconds": 7069.25,
+        "p90LatencyMilliseconds": 11854.400000000009,
+        "p95LatencyMilliseconds": 18400.44999999999,
+        "p99LatencyMilliseconds": 38543.03000000001,
+        "p75ThroughputTokensPerSecond": 45.25,
+        "p90ThroughputTokensPerSecond": 59.900000000000546,
+        "p95ThroughputTokensPerSecond": 72.44999999999982,
+        "p99ThroughputTokensPerSecond": 102,
+        "stabilizedP50LatencyMilliseconds": 4100,
+        "stabilizedP50ThroughputTokensPerSecond": 36,
+        "speedStabilization": {
+          "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+          "latencyMilliseconds": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 4100,
+            "source": "current-window-fallback",
+            "currentWindowValue": 4100,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 1,
+                "coverageRatio": 0.013888888888888888,
+                "median": 4927.5,
+                "relativeToCurrentWindow": 1.201829268292683,
+                "firstBucketAt": "2026-08-26T14:00:00.000Z",
+                "lastBucketAt": "2026-08-26T14:00:00.000Z",
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          },
+          "throughputTokensPerSecond": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 36,
+            "source": "current-window-fallback",
+            "currentWindowValue": 36,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 1,
+                "coverageRatio": 0.013888888888888888,
+                "median": 35,
+                "relativeToCurrentWindow": 0.9722222222222222,
+                "firstBucketAt": "2026-08-26T14:00:00.000Z",
+                "lastBucketAt": "2026-08-26T14:00:00.000Z",
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          }
+        }
+      },
+      "pricing": {
+        "inputPricePerToken": 7.5e-8,
+        "outputPricePerToken": 2.5e-7,
+        "cacheReadPricePerToken": 1.5e-8,
+        "cacheWritePricePerToken": null,
+        "cacheWriteOneHourPricePerToken": null,
+        "reasoningPricePerToken": null,
+        "requestPrice": null,
+        "webSearchPrice": null,
+        "imagePrice": null,
+        "audioPrice": null,
+        "rawPublishedPricing": {
+          "prompt": "0.000000075",
+          "completion": "0.00000025",
+          "input_cache_read": "0.000000015",
+          "discount": 0.5,
+          "display_pricing": [
+            {
+              "kind": "token",
+              "sku_label": "Input Price",
+              "price": "0.000000075",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Output Price",
+              "price": "0.00000025",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Read",
+              "price": "0.000000015",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            }
+          ]
+        }
+      },
+      "sourceUrl": "https://openrouter.ai/api/frontend/v1/stats/endpoint?permaslug=z-ai%2Fglm-5.3-flash-20260826&variant=standard",
+      "sourcePageUrl": "https://openrouter.ai/z-ai/glm-5.3-flash",
+      "sourceFields": {
+        "p50LatencyMilliseconds": "data[].stats.p50_latency",
+        "p50ThroughputTokensPerSecond": "data[].stats.p50_throughput",
+        "requestCount": "data[].stats.request_count",
+        "windowMinutes": "data[].stats.window_minutes",
+        "inputPricePerToken": "data[].pricing.prompt",
+        "outputPricePerToken": "data[].pricing.completion",
+        "cacheReadPricePerToken": "data[].pricing.input_cache_read",
+        "cacheWritePricePerToken": "data[].pricing.input_cache_write",
+        "cacheWriteOneHourPricePerToken": "data[].pricing.input_cache_write_1h",
+        "reasoningPricePerToken": "data[].pricing.internal_reasoning",
+        "requestPrice": "data[].pricing.request",
+        "webSearchPrice": "data[].pricing.web_search",
+        "imagePrice": "data[].pricing.image",
+        "audioPrice": "data[].pricing.audio",
+        "stabilizedP50LatencyMilliseconds": "3d/1w latency-comparison data[].y[endpointId::default], with current p50 fallback",
+        "stabilizedP50ThroughputTokensPerSecond": "3d/1w throughput-comparison data[].y[endpointId::default], with current p50 fallback"
+      },
+      "historySourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=z-ai%2Fglm-5.3-flash-20260826&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=z-ai%2Fglm-5.3-flash-20260826&timeRange=3d&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=z-ai%2Fglm-5.3-flash-20260826&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=z-ai%2Fglm-5.3-flash-20260826&timeRange=3d&variant=standard"
+      ]
+    },
+    {
       "modelId": "z-ai/glm-5v-turbo",
       "canonicalSlug": "z-ai/glm-5v-turbo-20260401",
       "exactModelName": "Z.ai: GLM 5V Turbo",
@@ -269409,6 +269593,99 @@
         "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=z-ai%2Fglm-5.3-20260816&timeRange=3d&variant=standard",
         "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=z-ai%2Fglm-5.3-20260816&timeRange=1w&variant=standard",
         "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=z-ai%2Fglm-5.3-20260816&timeRange=3d&variant=standard"
+      ]
+    },
+    {
+      "modelId": "z-ai/glm-5.3-flash",
+      "canonicalSlug": "z-ai/glm-5.3-flash-20260826",
+      "exactModelName": "Z.ai: GLM 5.3 Flash",
+      "variant": "standard",
+      "endpointCount": 1,
+      "providerCount": 1,
+      "totalRequestCount": 161820,
+      "measures": {
+        "inputPricePerToken": {
+          "contributingEndpointCount": 1,
+          "arithmeticMean": 7.5e-8,
+          "requestWeightedMean": 7.5e-8,
+          "median": 7.5e-8,
+          "percentile25": 7.5e-8,
+          "percentile75": 7.5e-8,
+          "minimum": 7.5e-8,
+          "maximum": 7.5e-8,
+          "totalRequestCount": 161820
+        },
+        "outputPricePerToken": {
+          "contributingEndpointCount": 1,
+          "arithmeticMean": 2.5e-7,
+          "requestWeightedMean": 2.5e-7,
+          "median": 2.5e-7,
+          "percentile25": 2.5e-7,
+          "percentile75": 2.5e-7,
+          "minimum": 2.5e-7,
+          "maximum": 2.5e-7,
+          "totalRequestCount": 161820
+        },
+        "timeToFirstTokenMilliseconds": {
+          "contributingEndpointCount": 1,
+          "arithmeticMean": 4100,
+          "requestWeightedMean": 4100,
+          "median": 4100,
+          "percentile25": 4100,
+          "percentile75": 4100,
+          "minimum": 4100,
+          "maximum": 4100,
+          "totalRequestCount": 161820
+        },
+        "outputSpeedTokensPerSecond": {
+          "contributingEndpointCount": 1,
+          "arithmeticMean": 36,
+          "requestWeightedMean": 36,
+          "median": 36,
+          "percentile25": 36,
+          "percentile75": 36,
+          "minimum": 36,
+          "maximum": 36,
+          "totalRequestCount": 161820
+        },
+        "instantaneousTimeToFirstTokenMilliseconds": {
+          "contributingEndpointCount": 1,
+          "arithmeticMean": 4100,
+          "requestWeightedMean": 4100,
+          "median": 4100,
+          "percentile25": 4100,
+          "percentile75": 4100,
+          "minimum": 4100,
+          "maximum": 4100,
+          "totalRequestCount": 161820
+        },
+        "instantaneousOutputSpeedTokensPerSecond": {
+          "contributingEndpointCount": 1,
+          "arithmeticMean": 36,
+          "requestWeightedMean": 36,
+          "median": 36,
+          "percentile25": 36,
+          "percentile75": 36,
+          "minimum": 36,
+          "maximum": 36,
+          "totalRequestCount": 161820
+        }
+      },
+      "endpointIds": [
+        "8e9fe48b-2f91-41c3-a8a7-e4a93a8c4ff0"
+      ],
+      "providerSlugs": [
+        "z-ai/fp8"
+      ],
+      "sourcePageUrl": "https://openrouter.ai/z-ai/glm-5.3-flash",
+      "sourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/endpoint?permaslug=z-ai%2Fglm-5.3-flash-20260826&variant=standard"
+      ],
+      "historySourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=z-ai%2Fglm-5.3-flash-20260826&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=z-ai%2Fglm-5.3-flash-20260826&timeRange=3d&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=z-ai%2Fglm-5.3-flash-20260826&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=z-ai%2Fglm-5.3-flash-20260826&timeRange=3d&variant=standard"
       ]
     },
     {

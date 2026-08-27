@@ -237,6 +237,7 @@ function validateArtificialAnalysis(snapshot) {
     ['GPT-5.4', /GPT-5[.]4/iu],
     ['Claude Sonnet 4.6', /Claude Sonnet 4[.]6/iu],
     ['Claude Opus 4.6', /Claude Opus 4[.]6/iu],
+    ['GLM-5.3-Flash', /GLM-5[.]3-Flash/iu],
   ];
   check(
     'aa-target-models',
@@ -252,9 +253,9 @@ function validateArtificialAnalysis(snapshot) {
 
   const targetHarnessRows = [
     ['Kimi Code CLI / Kimi K3', /Kimi Code CLI - Kimi K3/iu],
-    ['Codex / GPT-5.4', /Codex - GPT-5[.]4/iu],
+    ['Codex / GPT-5.6 Sol', /Codex - GPT-5[.]6 Sol/iu],
     ['Claude Code / Sonnet 4.6', /Claude Code - Sonnet 4[.]6/iu],
-    ['Claude Code / Opus 4.6', /Claude Code - Opus 4[.]6/iu],
+    ['Claude Code / Opus 4.8', /Claude Code - Opus 4[.]8/iu],
     ['Claude Code / Kimi K2.6', /Claude Code - Kimi K2[.]6/iu],
   ];
   check(

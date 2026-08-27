@@ -8,7 +8,7 @@ const SOURCE_URL = 'https://artificialanalysis.ai/agents/coding-agents';
 const SOURCE_LEADERBOARD = 'Artificial Analysis Coding Agent Index v1.3';
 const SNAPSHOT_DATE = artificialAnalysisFetchedAt.slice(0, 10) || '2026-07-27';
 const SCOPE_ID = 'oagxm-current-product-lines';
-const SCOPE_VERSION = 'oagxm-current-product-lines/v5-2026-08-13-releases';
+const SCOPE_VERSION = 'oagxm-current-product-lines/v6-2026-08-26-releases';
 
 interface HarnessCodingAgentRow {
   key: string;

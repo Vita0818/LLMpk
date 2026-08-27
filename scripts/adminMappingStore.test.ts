@@ -657,8 +657,8 @@ assert.deepEqual(
     card.metadataJson?.scope?.scopeVersion
   )),
   [
-    'oagxm-current-product-lines/v5-2026-08-13-releases',
-    'oagxm-current-product-lines/v5-2026-08-13-releases',
+    'oagxm-current-product-lines/v6-2026-08-26-releases',
+    'oagxm-current-product-lines/v6-2026-08-26-releases',
   ],
 );
 
@@ -1007,8 +1007,26 @@ assert.equal(
 );
 assert.equal(
   uniqueRouteCountForHarness('---'),
-  18,
+  19,
   'Routes without an AA Coding Agent record must display --- in the refreshed catalog.',
+);
+const glm53FlashCandidates = ALL_CONFIGURATION_PRESET_CANDIDATES
+  .filter((preset) => preset.productLineId === 'glm_53_flash');
+assert.deepEqual(
+  glm53FlashCandidates.map((preset) => preset.id),
+  ['builtin.glm-5-3-flash.max'],
+  'GLM-5.3-Flash must ship only the score-backed Max configuration.',
+);
+const glm53FlashPresets = BUILT_IN_CONFIGURATION_PRESETS
+  .filter((preset) => preset.productLineId === 'glm_53_flash');
+assert.deepEqual(
+  glm53FlashPresets.map((preset) => preset.id),
+  ['builtin.glm-5-3-flash.max'],
+  'Only GLM-5.3-Flash Max currently has a source-backed capability score and should enter the compact ranking.',
+);
+assert.ok(
+  glm53FlashCandidates.every((preset) => preset.identity.harness.name === '---'),
+  'GLM-5.3-Flash has no AA Coding Agent record and must not be labelled with a vendor or AA Agent Harness.',
 );
 const glm53Candidates = ALL_CONFIGURATION_PRESET_CANDIDATES
   .filter((preset) => preset.productLineId === 'glm_53');
@@ -1036,6 +1054,7 @@ for (const [presetId, expectedModelLabel, expectedHarness] of [
   ['builtin.gpt-oss-20b.high', 'GPT-OSS 20B High', '---'],
   ['builtin.gpt-oss-120b.high', 'GPT-OSS 120B High', '---'],
   ['builtin.inkling.xhigh', 'Inkling XHigh', '---'],
+  ['builtin.glm-5-3-flash.max', 'GLM-5.3-Flash Max', '---'],
 ] as const) {
   const preset = BUILT_IN_CONFIGURATION_PRESETS.find((candidate) => candidate.id === presetId);
   assert.ok(preset, `${presetId} must be shipped after its source-backed addition.`);
@@ -1500,6 +1519,21 @@ for (const expectation of newlyConnectedArenaChatExpectations) {
     `${expectation.modelName} must receive a Chatting score from current Arena Text evidence.`,
   );
 }
+const glm53FlashBox = installedPresetBoxes.find((box) => (
+  box.builtInPresetId === 'builtin.glm-5-3-flash.max'
+));
+assert.ok(glm53FlashBox, 'GLM-5.3-Flash must retain its reader-facing configuration.');
+assert.ok(
+  reconciledV3Store
+    .getLinkedCardStack(glm53FlashBox.id)
+    .some(({ card }) => card.id === 'card-arena-glm-5-3-flash'),
+  'GLM-5.3-Flash must consume its exact current Arena WebDev card.',
+);
+assert.equal(
+  typeof scoreByConfigurationId.get(glm53FlashBox.id)?.domainScores.coding.score,
+  'number',
+  'GLM-5.3-Flash must receive a Coding score from its current Arena WebDev evidence.',
+);
 const qwen27bBox = installedPresetBoxes.find((box) => (
   box.builtInPresetId === 'builtin.qwen3-8-27b.xhigh'
 ));

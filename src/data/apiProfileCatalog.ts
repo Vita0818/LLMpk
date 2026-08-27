@@ -4,7 +4,7 @@
  * This is intentionally a small curated table, not a model-name matcher.
  * Every card ID is a stable record from the bundled three-source catalog.
  * Availability-only tiers were cross-checked against the official OpenRouter
- * `/api/v1/models` `reasoning.supported_efforts` field on 2026-07-27. A
+ * `/api/v1/models` `reasoning.supported_efforts` field on 2026-08-26. A
  * profile can borrow only cards from a strictly lower numeric level; the
  * caller receives those cards in nearest-lower-first order.
  */
@@ -134,6 +134,16 @@ export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
       // exposes a score-backed Max configuration until those tiers receive
       // independent capability measurements.
       tier('max', 'Max', 5, ['card-aa-glm-5-3', 'card-arena-glm-5-3-max']),
+    ],
+  },
+  {
+    productLineId: 'glm_53_flash',
+    tiers: [
+      // GLM-5.3-Flash publishes Low, High, and Max availability.  The first
+      // independent capability record is the AA Max row; keep the lower
+      // availability tiers out of the ranking until they receive their own
+      // source-backed measurements.
+      tier('max', 'Max', 5, ['card-aa-glm-5-3-flash']),
     ],
   },
   {
