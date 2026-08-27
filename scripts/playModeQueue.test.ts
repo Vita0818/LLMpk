@@ -25,8 +25,8 @@ const assert = (condition: unknown, message: string) => {
   if (!condition) throw new Error(message);
 };
 
-assert(snapshot.scores.length === 72, 'Fixture should contain 72 route rows.');
-assert(queue.length === 50, `Expected 50 playback items, received ${queue.length}.`);
+assert(snapshot.scores.length === 73, 'Fixture should contain 73 route rows.');
+assert(queue.length === 51, `Expected 51 playback items, received ${queue.length}.`);
 assert(
   new Set(queue.map(getPlayModeRouteGroupKey)).size === queue.length,
   'Playback queue must contain one representative per identical radar route group.',
