@@ -145,6 +145,8 @@ export interface BuiltInConfigurationPreset {
    * must not silently add a paid price card back into that configuration.
    */
   lockExplicitSourceCards?: boolean;
+  /** Keep exact AA per-effort latency/speed instead of a route-wide OpenRouter aggregate. */
+  lockProviderNeutralPracticalCards?: boolean;
 }
 
 type PresetInput = Omit<BuiltInConfigurationPreset, 'id' | 'internalName' | 'displayName'> & {
@@ -584,6 +586,8 @@ function apiProfilePresets(input: {
   sharedExactCardIds?: readonly string[];
   note?: string;
   origin?: BuiltInConfigurationPresetOrigin;
+  lockExplicitSourceCards?: boolean;
+  lockProviderNeutralPracticalCards?: boolean;
   identityForProfile?: (profile: string) => BuiltInConfigurationIdentity;
 }): BuiltInConfigurationPreset[] {
   return input.profileKeys.map((profileKey) => {
@@ -616,6 +620,8 @@ function apiProfilePresets(input: {
       identity,
       origin: input.origin ?? 'data-md',
       access: 'api',
+      lockExplicitSourceCards: input.lockExplicitSourceCards,
+      lockProviderNeutralPracticalCards: input.lockProviderNeutralPracticalCards,
       ...(note ? { note } : {}),
       sourceCardIds: uniqueCardIds(plan.exactCardIds, input.sharedExactCardIds),
       sourceCardLinks: profileFallbackLinks(input.productLineId, profileKey, profile.label),
@@ -631,6 +637,28 @@ const ROUTE_EFFORT_LABELS: Readonly<Record<string, string>> = {
   xhigh: 'XHigh',
   max: 'Max',
 };
+
+const SEPTEMBER_2026_RELEASE_CONFIGURATION_PRESETS:
+readonly BuiltInConfigurationPreset[] = [
+  ...apiProfilePresets({
+    keyPrefix: 'claude-fable-5-1',
+    productLineId: 'claude_fable_51',
+    modelName: 'Claude Fable 5.1',
+    profileKeys: ['low', 'medium', 'high', 'xhigh', 'max'],
+    origin: 'source-backed',
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+    identityForProfile: (profile) => ({
+      model: { name: 'Claude Fable 5.1', profile },
+      harness: normalChat('Anthropic API'),
+      provider: {
+        name: 'Anthropic',
+        upstream: 'Anthropic API · claude-fable-5-1',
+      },
+    }),
+    note: 'AA 独立发布 Low、Medium、High、XHigh、Max 五档，并将每档标为 Default Fallback；保留该披露。当前 AA Coding Agent Index 没有 Fable 5.1 的 Claude Code 行，因此 Harness 必须为 ---。价格和速度采用 AA 的精确 effort 记录，不用 OpenRouter 默认 High 的路线级速度覆盖 Max 等档位。官方输入/输出价格为 $10/$50，缓存读取为 $0.25/M。',
+  }),
+];
 
 /**
  * Some official API routes publish their available effort list before a
@@ -1312,7 +1340,8 @@ const AUGUST_2026_RELEASE_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPr
     upstreamApi: 'xAI API',
     sharedExactCardIds: ['card-openrouter-x-ai-grok-4-6'],
     origin: 'source-backed',
-    note: 'OpenRouter 发布 Low、Medium、High、XHigh；AA 与 Arena 当前只提供 High 能力观测，XHigh 仅按 High→XHigh 单向补缺。',
+    lockExplicitSourceCards: true,
+    note: 'OpenRouter 与 AA 均发布 Low、Medium、High、XHigh。Arena Text 的 High 行保持在 Chat 路线；新出现的 Arena Agent XHigh 行属于独立 Harness，不自动连接普通 API 配置。',
   }),
   ...apiProfilePresets({
     keyPrefix: 'muse-glimmer',
@@ -1355,6 +1384,46 @@ const AUGUST_2026_RELEASE_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPr
  * defaults are declared as one-way fallbacks where a higher AA effort exists.
  */
 const ADDITIONAL_SOURCE_BACKED_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
+  definePreset({
+    key: 'qwen3-8-flash-next.xhigh',
+    productLineId: 'qwen_38_flash_next',
+    identity: {
+      model: { name: 'Qwen3.8-Flash-Next', profile: 'XHigh' },
+      harness: normalChat('Alibaba Qwen API'),
+      provider: {
+        name: 'Alibaba',
+        upstream: 'Alibaba Qwen API',
+      },
+    },
+    origin: 'source-backed',
+    access: 'api',
+    note: 'Qwen3.8-Flash-Next 是独立的开放权重预览版本，不与正式 API 版 Qwen3.8 Flash 合并。官方模型卡将 XHigh 标为默认 effort；AA 提供该精确版本的能力、价格和速度，Arena 未标 effort 的同名 WebDev 行仅按 Default→XHigh 单向补缺。',
+    sourceCardIds: [
+      'card-aa-qwen3-8-flash-next',
+    ],
+    sourceCardLinks: [
+      lowerProfileFallback('card-arena-qwen3-8-flash-next', 'Default', 0, 'XHigh', 4),
+    ],
+  }),
+  definePreset({
+    key: 'hy4-preview.high',
+    productLineId: 'hy4_preview',
+    identity: {
+      model: { name: 'Hy4 Preview', profile: 'High' },
+      harness: normalChat(),
+      provider: viaOpenRouter('Tencent', 'Tencent API'),
+    },
+    origin: 'source-backed',
+    access: 'api',
+    note: 'OpenRouter 明确发布 None、Low、High，并将 High 设为默认 effort；当前仅 High 配置接入。Arena 只有未标 effort 的 WebDev 行，按 Default→High 单向补缺；其他能力维度保持缺失，不从 Hy3 或厂商自报评测推断。',
+    sourceCardIds: [
+      'card-openrouter-tencent-hy4-preview',
+      'card-openrouter-standard-performance-tencent-hy4-preview',
+    ],
+    sourceCardLinks: [
+      lowerProfileFallback('card-arena-hy4-preview', 'Default', 0, 'High', 3),
+    ],
+  }),
   definePreset({
     key: 'glm-5-3-flash.max',
     productLineId: 'glm_53_flash',
@@ -3071,6 +3140,7 @@ function attachProviderNeutralOpenRouterPracticalCards(
   let attachedCardCount = 0;
   const augmented = presets.map((preset) => {
     if (preset.access !== 'api') return preset;
+    if (preset.lockProviderNeutralPracticalCards) return preset;
 
     const existingIds = new Set(presetCardIds(preset));
     const existingPracticalMetrics = new Set(
@@ -3132,6 +3202,7 @@ function attachProviderNeutralOpenRouterPracticalCards(
 const BASE_HAND_AUTHORED_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
   ...DATA_MD_CONFIGURATION_PRESETS,
   ...MUSE_SPARK_1_2_CONFIGURATION_PRESETS,
+  ...SEPTEMBER_2026_RELEASE_CONFIGURATION_PRESETS,
   ...AUGUST_2026_RELEASE_CONFIGURATION_PRESETS,
   ...ADDITIONAL_SOURCE_BACKED_CONFIGURATION_PRESETS,
   ...CLAUDE_OPUS_5_CONFIGURATION_PRESETS,
@@ -3388,9 +3459,16 @@ const SUBSCRIPTION_CONFIGURATION_TARGETS:
   {
     key: 'claude-fable-5.max.claude-code',
     basePresetId: 'builtin.harness.claude-fable-5.max.claude-code',
-    plans: [CLAUDE_PRO_PLAN, CLAUDE_MAX_20X_PLAN],
+    plans: [CLAUDE_MAX_20X_PLAN],
     usableQuotaFraction: 0.5,
-    note: 'Fable 5 仅可使用该计划总额度的 50%；实用分按折后可用额度计算。',
+    note: 'Fable 5 的 Claude Pro 额度推广已结束；Max 计划内最多使用每周总额度的 50%，实用分按折后可用额度计算。',
+  },
+  {
+    key: 'claude-fable-5-1.max.chat',
+    basePresetId: 'builtin.claude-fable-5-1.max',
+    plans: [CLAUDE_MAX_20X_PLAN],
+    usableQuotaFraction: 0.5,
+    note: 'Fable 5.1 在 Claude Pro 上从一开始即按量付费，不建立 Pro 订阅额度配置；Max 计划内最多使用每周总额度的 50%。当前没有 AA Claude Code Harness 记录，因此第二项保持 ---。',
   },
   {
     key: 'claude-opus-5.max.claude-code',
@@ -3945,6 +4023,7 @@ function buildModelGroupMetadata(
 const READER_FACING_PRESET_EXCLUSIONS = new Set<string>([
   'builtin.agent.arena.deepseek-v4-flash.max',
   'builtin.source-catalog.source-profile-granite-4-1-8b.granite-4-1-8b',
+  'builtin.source-catalog.source-profile-granite-4-2-30b.granite-4-2-30b',
   'builtin.source-catalog.source-profile-grok-4-3.grok-4-3',
   'builtin.source-catalog.source-profile-kimi-k2-7-code.kimi-k2-7-code',
   'builtin.source-catalog.source-profile-gemma-4-12b-reasoning.gemma-4-12b-reasoning',
@@ -3955,6 +4034,9 @@ const READER_FACING_PRESET_EXCLUSIONS = new Set<string>([
 const READER_FACING_PRODUCT_LINE_EXCLUSIONS = new Set<string>([
   'qwen_37_max',
   'source-profile-inkling-small',
+  'source-profile-granite-4-2-3b',
+  'source-profile-granite-4-2-8b',
+  'source-profile-granite-4-2-30b',
 ]);
 
 /**
@@ -3967,6 +4049,15 @@ const READER_FACING_PRODUCT_LINE_EXCLUSIONS = new Set<string>([
 const READER_FACING_PLAIN_API_PRODUCT_LINE_EXCLUSIONS = new Set<string>([
   'gemini_37_flash',
   'muse_spark_12',
+]);
+
+/**
+ * Reader-approved new releases that may enter with the scoring engine's
+ * one-domain minimum while independent general benchmarks are still pending.
+ * Missing domains remain missing and are shown as incomplete coverage.
+ */
+const READER_APPROVED_SPARSE_PRODUCT_LINES = new Set<string>([
+  'hy4_preview',
 ]);
 
 /**
@@ -4002,9 +4093,11 @@ function curateReaderFacingPresets(
       && READER_FACING_PLAIN_API_PRODUCT_LINE_EXCLUSIONS.has(preset.productLineId)
     ) return;
     const coverage = coverageByPreset.get(preset.id);
-    const minimumDomains = preset.origin === 'source-catalog'
-      ? 5
-      : SCORING_CONFIG.readerCuration.minimumAvailableDomains;
+    const minimumDomains = READER_APPROVED_SPARSE_PRODUCT_LINES.has(preset.productLineId)
+      ? SCORING_CONFIG.capabilityAggregate.minimumAvailableDomains
+      : preset.origin === 'source-catalog'
+        ? 5
+        : SCORING_CONFIG.readerCuration.minimumAvailableDomains;
     const sourceCatalogPromotionApproved = preset.origin !== 'source-catalog'
       || READER_APPROVED_SOURCE_CATALOG_PRODUCT_LINES.has(preset.productLineId)
       || coverage?.availableDomainIds.includes('chatting')
@@ -4226,4 +4319,4 @@ export const BUILT_IN_CONFIGURATION_PRESET_COUNT = BUILT_IN_CONFIGURATION_PRESET
  * additions visible during Vite hot updates as well as after a full reload.
  */
 export const BUILT_IN_CONFIGURATION_PRESET_INVENTORY_VERSION =
-  '2026-08-16-muse-two-harness-api-price-matrix-v44';
+  '2026-09-01-fable-5-1-v45';

@@ -22,10 +22,12 @@ const expectedProductLines: Array<[string, string]> = [
   ['GLM-5.2', 'glm_52'],
   ['Command A+', 'command_a_plus'],
   ['Inkling', 'inkling'],
+  ['Hy4 Preview', 'hy4_preview'],
   ['Hy3', 'hunyuan_hy3'],
   ['Kimi K2.6', 'kimi_k26'],
   ['Kimi K3', 'kimi_k3'],
   ['MiniMax M3', 'minimax_m3'],
+  ['Qwen3.8-Flash-Next', 'qwen_38_flash_next'],
   ['Qwen3.8-Max-Preview', 'qwen_38_max_preview'],
   ['Qwen3.8 Max', 'qwen_38_max'],
   ['Qwen3.8 27B', 'qwen_38_27b'],
@@ -42,6 +44,7 @@ const expectedProductLines: Array<[string, string]> = [
   ['GPT-5.5', 'gpt_55'],
   ['GPT-OSS-120B', 'gpt_oss_120b'],
   ['GPT-OSS-20B', 'gpt_oss_20b'],
+  ['Claude Fable 5.1', 'claude_fable_51'],
   ['Claude Fable 5', 'claude_fable_5'],
   ['Claude Opus 4.8', 'claude_opus_48'],
   ['Claude Opus 4.7', 'claude_opus_47'],
@@ -85,7 +88,12 @@ for (const [sourceName, productLineId] of expectedProductLines) {
 }
 
 const configuredProductLines = OAGXM_SCOPE.vendors.flatMap((vendor) => vendor.productLines);
-assert.equal(configuredProductLines.length, 60, 'Curated inventory should include the newly requested source-backed model lines');
+assert.equal(configuredProductLines.length, 63, 'Curated inventory should include the newly requested source-backed model lines');
+assert.equal(
+  classifyOagxmModel('Claude Fable 5.1')?.productLineId,
+  'claude_fable_51',
+  'Fable 5.1 must never collapse into the historical Fable 5 product line.',
+);
 assert.ok(
   configuredProductLines.every((line) => line.rankingClass === 'formal_text_agent'),
   'Image/audio/safety-only product lines must not enter the Data.md capability scope',

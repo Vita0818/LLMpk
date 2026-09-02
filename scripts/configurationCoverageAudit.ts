@@ -305,7 +305,7 @@ const nonKeyVendorsWithMultipleModels = [...nonKeyModelGroupsByVendor.entries()]
     modelGroupCount: groups.size,
     modelGroupKeys: [...groups].sort(),
   }));
-const domainCoverageDistribution = [4, 5, 6].reduce<Record<string, number>>((result, count) => {
+const domainCoverageDistribution = [1, 2, 3, 4, 5, 6].reduce<Record<string, number>>((result, count) => {
   result[String(count)] = scores.filter((score) => score.availableDomainCount === count).length;
   return result;
 }, {});

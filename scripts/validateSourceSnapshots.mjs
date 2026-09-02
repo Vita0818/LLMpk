@@ -237,7 +237,9 @@ function validateArtificialAnalysis(snapshot) {
     ['GPT-5.4', /GPT-5[.]4/iu],
     ['Claude Sonnet 4.6', /Claude Sonnet 4[.]6/iu],
     ['Claude Opus 4.6', /Claude Opus 4[.]6/iu],
+    ['Claude Fable 5.1', /Claude Fable 5[.]1/iu],
     ['GLM-5.3-Flash', /GLM-5[.]3-Flash/iu],
+    ['Qwen3.8-Flash-Next', /Qwen3[.]8-Flash-Next/iu],
   ];
   check(
     'aa-target-models',
@@ -429,7 +431,12 @@ function validateOpenRouterCatalog(snapshot) {
       uniqueIds: new Set(records.map((record) => record?.id)).size,
     },
   );
-  const targetIds = ['openai/gpt-5.4', 'anthropic/claude-opus-4.6'];
+  const targetIds = [
+    'openai/gpt-5.4',
+    'anthropic/claude-opus-4.6',
+    'anthropic/claude-fable-5.1',
+    'tencent/hy4-preview',
+  ];
   check(
     'openrouter-target-models',
     'OpenRouter contains target flagship API model records.',

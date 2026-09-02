@@ -657,8 +657,8 @@ assert.deepEqual(
     card.metadataJson?.scope?.scopeVersion
   )),
   [
-    'oagxm-current-product-lines/v6-2026-08-26-releases',
-    'oagxm-current-product-lines/v6-2026-08-26-releases',
+    'oagxm-current-product-lines/v8-2026-09-01-releases',
+    'oagxm-current-product-lines/v8-2026-09-01-releases',
   ],
 );
 
@@ -1007,11 +1007,14 @@ assert.equal(
 );
 assert.equal(
   uniqueRouteCountForHarness('---'),
-  19,
+  22,
   'Routes without an AA Coding Agent record must display --- in the refreshed catalog.',
 );
 const glm53FlashCandidates = ALL_CONFIGURATION_PRESET_CANDIDATES
-  .filter((preset) => preset.productLineId === 'glm_53_flash');
+  .filter((preset) => (
+    preset.productLineId === 'glm_53_flash'
+    && preset.origin !== 'source-catalog'
+  ));
 assert.deepEqual(
   glm53FlashCandidates.map((preset) => preset.id),
   ['builtin.glm-5-3-flash.max'],
@@ -1049,12 +1052,15 @@ assert.ok(
 for (const [presetId, expectedModelLabel, expectedHarness] of [
   ['builtin.harness.qwen3-8.max.claude-code', 'Qwen3.8 Max XHigh', 'Claude Code'],
   ['builtin.qwen3-8-27b.xhigh', 'Qwen3.8 27B XHigh', '---'],
+  ['builtin.qwen3-8-flash-next.xhigh', 'Qwen3.8-Flash-Next XHigh', '---'],
+  ['builtin.hy4-preview.high', 'Hy4 Preview High', '---'],
   ['builtin.command-a-plus.reasoning', 'Command A+ Thinking', '---'],
   ['builtin.nemotron-3-5-lightning.reasoning', 'Nemotron 3.5 Lightning Thinking', '---'],
   ['builtin.gpt-oss-20b.high', 'GPT-OSS 20B High', '---'],
   ['builtin.gpt-oss-120b.high', 'GPT-OSS 120B High', '---'],
   ['builtin.inkling.xhigh', 'Inkling XHigh', '---'],
   ['builtin.glm-5-3-flash.max', 'GLM-5.3-Flash Max', '---'],
+  ['builtin.claude-fable-5-1.max', 'Claude Fable 5.1 Max', '---'],
 ] as const) {
   const preset = BUILT_IN_CONFIGURATION_PRESETS.find((candidate) => candidate.id === presetId);
   assert.ok(preset, `${presetId} must be shipped after its source-backed addition.`);
@@ -1214,11 +1220,6 @@ const chatGptPlusTargets: readonly ExpectedSubscriptionTarget[] = [
 
 const claudeProTargets: readonly ExpectedSubscriptionTarget[] = [
   {
-    key: 'claude-fable-5.max.claude-code',
-    basePresetId: 'builtin.harness.claude-fable-5.max.claude-code',
-    usableQuotaFraction: 0.5,
-  },
-  {
     key: 'claude-opus-5.max.claude-code',
     basePresetId: 'builtin.harness.claude-opus-5.max.claude-code',
     usableQuotaFraction: 1,
@@ -1236,6 +1237,24 @@ const claudeProTargets: readonly ExpectedSubscriptionTarget[] = [
   {
     key: 'claude-haiku-4-5.max.chat',
     basePresetId: 'builtin.data-md.claude-haiku-4-5.max.vertex',
+    usableQuotaFraction: 1,
+  },
+];
+
+const claudeMaxTargets: readonly ExpectedSubscriptionTarget[] = [
+  {
+    key: 'claude-fable-5.max.claude-code',
+    basePresetId: 'builtin.harness.claude-fable-5.max.claude-code',
+    usableQuotaFraction: 0.5,
+  },
+  {
+    key: 'claude-fable-5-1.max.chat',
+    basePresetId: 'builtin.claude-fable-5-1.max',
+    usableQuotaFraction: 0.5,
+  },
+  {
+    key: 'claude-opus-5.max.claude-code',
+    basePresetId: 'builtin.harness.claude-opus-5.max.claude-code',
     usableQuotaFraction: 1,
   },
 ];
@@ -1301,7 +1320,7 @@ const expectedSubscriptionPlans = [
     providerLabel: 'Claude Max 20×',
     monthlyPriceUSD: 200,
     apiEquivalentCostUSD: 1600,
-    targets: claudeProTargets.slice(0, 2),
+    targets: claudeMaxTargets,
   },
   {
     key: 'google-ai-pro',
@@ -1551,6 +1570,127 @@ assert.deepEqual(
   },
   'An Arena row without a published effort must remain an authored Default-to-XHigh fallback.',
 );
+const qwenFlashNextBox = installedPresetBoxes.find((box) => (
+  box.builtInPresetId === 'builtin.qwen3-8-flash-next.xhigh'
+));
+assert.ok(qwenFlashNextBox, 'Qwen3.8-Flash-Next XHigh must enter the reader-facing catalog.');
+const qwenFlashNextStack = reconciledV3Store.getLinkedCardStack(qwenFlashNextBox.id);
+assert.ok(qwenFlashNextStack.some(({ card }) => card.id === 'card-aa-qwen3-8-flash-next'));
+assert.deepEqual(
+  qwenFlashNextStack
+    .find(({ card }) => card.id === 'card-arena-qwen3-8-flash-next')
+    ?.link.provenance,
+  {
+    kind: 'lower_profile_fallback',
+    sourceProfile: 'Default',
+    sourceLevel: 0,
+    targetProfile: 'XHigh',
+    targetLevel: 4,
+  },
+  'Qwen3.8-Flash-Next Arena evidence must remain an explicit Default-to-XHigh fallback.',
+);
+const qwenFlashNextConfig = reconciledV3Store.buildLLMConfiguration(qwenFlashNextBox);
+assert.deepEqual(qwenFlashNextConfig.openRouterData, {
+  inputPricePerMToken: 0.15,
+  outputPricePerMToken: 0.47,
+  ttftP50Seconds: 2.61456804249997,
+  throughputP50TokensPerSec: 88.9960206464471,
+});
+assert.equal(scoreByConfigurationId.get(qwenFlashNextBox.id)?.availableDomainCount, 5);
+assert.equal(scoreByConfigurationId.get(qwenFlashNextBox.id)?.eligibleForGlobalLeaderboard, true);
+const hy4Box = installedPresetBoxes.find((box) => (
+  box.builtInPresetId === 'builtin.hy4-preview.high'
+));
+assert.ok(hy4Box, 'Hy4 Preview High must enter as the explicitly approved sparse release.');
+const hy4Stack = reconciledV3Store.getLinkedCardStack(hy4Box.id);
+assert.deepEqual(
+  hy4Stack.map(({ card }) => card.id),
+  [
+    'card-openrouter-tencent-hy4-preview',
+    'card-openrouter-standard-performance-tencent-hy4-preview',
+    'card-arena-hy4-preview',
+  ],
+  'Hy4 Preview must use only its exact OpenRouter practical cards and current Arena WebDev row.',
+);
+assert.deepEqual(
+  hy4Stack.find(({ card }) => card.id === 'card-arena-hy4-preview')?.link.provenance,
+  {
+    kind: 'lower_profile_fallback',
+    sourceProfile: 'Default',
+    sourceLevel: 0,
+    targetProfile: 'High',
+    targetLevel: 3,
+  },
+  'Hy4 Preview WebDev evidence must remain an explicit Default-to-High fallback.',
+);
+const hy4Config = reconciledV3Store.buildLLMConfiguration(hy4Box);
+assert.deepEqual(hy4Config.openRouterData, {
+  inputPricePerMToken: 0.834,
+  outputPricePerMToken: 2.501,
+  ttftP50Seconds: 3.09675,
+  throughputP50TokensPerSec: 35,
+});
+assert.equal(scoreByConfigurationId.get(hy4Box.id)?.availableDomainCount, 1);
+assert.equal(scoreByConfigurationId.get(hy4Box.id)?.eligibleForGlobalLeaderboard, true);
+assert.equal(typeof scoreByConfigurationId.get(hy4Box.id)?.domainScores.engineering.score, 'number');
+assert.equal(scoreByConfigurationId.get(hy4Box.id)?.domainScores.coding.score, null);
+assert.equal(scoreByConfigurationId.get(hy4Box.id)?.domainScores.chatting.score, null);
+assert.equal(scoreByConfigurationId.get(hy4Box.id)?.domainScores.math_science.score, null);
+const fable51Candidates = ALL_CONFIGURATION_PRESET_CANDIDATES.filter((preset) => (
+  preset.productLineId === 'claude_fable_51'
+  && preset.origin !== 'source-catalog'
+  && preset.access === 'api'
+));
+assert.deepEqual(
+  fable51Candidates.map((preset) => preset.id),
+  [
+    'builtin.claude-fable-5-1.low',
+    'builtin.claude-fable-5-1.medium',
+    'builtin.claude-fable-5-1.high',
+    'builtin.claude-fable-5-1.xhigh',
+    'builtin.claude-fable-5-1.max',
+  ],
+  'Fable 5.1 must retain all five independently evaluated API effort profiles.',
+);
+assert.ok(
+  fable51Candidates.every((preset) => preset.identity.harness.name === '---'),
+  'Fable 5.1 must not claim Claude Code before AA publishes that exact Coding Agent row.',
+);
+const fable51Box = installedPresetBoxes.find((box) => (
+  box.builtInPresetId === 'builtin.claude-fable-5-1.max'
+));
+assert.ok(fable51Box, 'Fable 5.1 Max must be the reader-facing API representative.');
+const fable51Stack = reconciledV3Store.getLinkedCardStack(fable51Box.id);
+assert.deepEqual(
+  fable51Stack.map(({ card }) => card.id),
+  [
+    'card-aa-claude-fable-5-1',
+    'card-aa-claude-fable-5-1-xhigh',
+    'card-aa-claude-fable-5-1-high',
+    'card-aa-claude-fable-5-1-medium',
+    'card-aa-claude-fable-5-1-low',
+  ],
+  'Fable 5.1 Max must use only its exact AA card plus authored lower-effort fallbacks.',
+);
+assert.ok(fable51Stack.every(({ card }) => (
+  card.metadataJson?.scope?.productLineId === 'claude_fable_51'
+)));
+const fable51Config = reconciledV3Store.buildLLMConfiguration(fable51Box);
+assert.deepEqual(fable51Config.openRouterData, {
+  inputPricePerMToken: 10,
+  outputPricePerMToken: 50,
+  ttftP50Seconds: 291.071658884,
+  throughputP50TokensPerSec: 66.2348899764153,
+});
+assert.equal(
+  Object.keys(fable51Config.observations).some((metricId) => (
+    metricId.startsWith('arena_') || metricId.startsWith('aa_coding_agent_')
+  )),
+  false,
+  'Fable 5.1 must not borrow old Fable 5 Arena or Claude Code Harness observations.',
+);
+assert.equal(scoreByConfigurationId.get(fable51Box.id)?.availableDomainCount, 5);
+assert.equal(scoreByConfigurationId.get(fable51Box.id)?.eligibleForGlobalLeaderboard, true);
 const inklingBox = installedPresetBoxes.find((box) => (
   box.builtInPresetId === 'builtin.inkling.xhigh'
 ));
@@ -2188,6 +2328,18 @@ assertSubscriptionRoutesPreserveCapability(
 assertSubscriptionRoutesPreserveCapability(
   'builtin.harness.gpt-5-5.xhigh.codex-cli',
   ['builtin.subscription.chatgpt-plus.gpt-5-5.xhigh.codex-cli'],
+);
+assertSubscriptionRoutesPreserveCapability(
+  'builtin.claude-fable-5-1.max',
+  ['builtin.subscription.claude-max-20x.claude-fable-5-1.max.chat'],
+);
+assert.equal(
+  BUILT_IN_CONFIGURATION_PRESETS.some((preset) => (
+    preset.id === 'builtin.subscription.claude-pro.claude-fable-5.max.claude-code'
+    || preset.id === 'builtin.subscription.claude-pro.claude-fable-5-1.max.chat'
+  )),
+  false,
+  'Fable 5 and 5.1 must not expose Claude Pro as included subscription quota after the promotion ended.',
 );
 for (const presetId of [
   'builtin.harness.claude-fable-5.max.claude-code',

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "openrouter-performance-snapshot/v2",
-  "fetchedAt": "2026-08-26T15:58:54.268Z",
+  "fetchedAt": "2026-09-02T01:10:04.397Z",
   "source": {
     "modelCatalogUrl": "https://openrouter.ai/api/v1/models",
     "statsEndpointUrl": "https://openrouter.ai/api/frontend/v1/stats/endpoint",
@@ -15,9 +15,11 @@
     "inputMode": "official-openrouter-live-incremental",
     "baseSnapshotFetchedAt": "2026-08-22T11:46:17.644Z",
     "incrementalRefreshModelIds": [
-      "z-ai/glm-5.3-flash"
+      "z-ai/glm-5.3-flash",
+      "tencent/hy4-preview",
+      "anthropic/claude-fable-5.1"
     ],
-    "incrementalRefreshAt": "2026-08-26T15:58:54.268Z"
+    "incrementalRefreshAt": "2026-09-02T01:10:04.397Z"
   },
   "selectionPolicy": {
     "modelRecords": "canonical general text-output records from /api/v1/models",
@@ -55,34 +57,34 @@
     ]
   },
   "counts": {
-    "queriedModels": 389,
-    "modelsWithPerformance": 370,
-    "endpointRecords": 1248,
-    "modelAggregates": 370,
-    "modelsWithSingleEndpoint": 166,
-    "modelsWithMultipleEndpoints": 204,
+    "queriedModels": 391,
+    "modelsWithPerformance": 372,
+    "endpointRecords": 1253,
+    "modelAggregates": 372,
+    "modelsWithSingleEndpoint": 167,
+    "modelsWithMultipleEndpoints": 205,
     "unavailableModels": 10,
     "noStatisticsModels": 9,
     "failedModels": 0,
-    "historyRequestsAttempted": 1480,
-    "historyRequestsSucceeded": 1480,
+    "historyRequestsAttempted": 1488,
+    "historyRequestsSucceeded": 1488,
     "historyRequestsFailed": 0,
-    "returnedEndpointRows": 1319,
-    "acceptedEndpointRows": 1248,
+    "returnedEndpointRows": 1324,
+    "acceptedEndpointRows": 1253,
     "rejectedEndpointRows": 71,
     "rejectedMissingLatency": 71,
     "rejectedMissingThroughput": 71,
     "rejectedMissingOrZeroRequestCount": 71,
-    "stabilizedMeasureValues": 2496,
-    "historyBackedMeasureValues": 2447,
-    "currentWindowFallbackMeasureValues": 49,
-    "historyBackedMeasureCoverage": 0.9803685897435898,
-    "endpointRecordsWithBothMeasuresHistoryBacked": 1223,
+    "stabilizedMeasureValues": 2506,
+    "historyBackedMeasureValues": 2449,
+    "currentWindowFallbackMeasureValues": 57,
+    "historyBackedMeasureCoverage": 0.9772545889864326,
+    "endpointRecordsWithBothMeasuresHistoryBacked": 1224,
     "stabilizationSources": {
       "threeDayPlusOneWeek": 2263,
-      "threeDayOnly": 34,
+      "threeDayOnly": 36,
       "oneWeekOnly": 150,
-      "currentWindowFallback": 49
+      "currentWindowFallback": 57
     }
   },
   "records": [
@@ -233615,6 +233617,977 @@
         "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=z-ai%2Fglm-5v-turbo-20260401&timeRange=1w&variant=standard",
         "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=z-ai%2Fglm-5v-turbo-20260401&timeRange=3d&variant=standard"
       ]
+    },
+    {
+      "modelId": "tencent/hy4-preview",
+      "canonicalSlug": "tencent/hy4-preview-20260827",
+      "exactModelName": "Tencent: Hy4 preview",
+      "variant": "standard",
+      "sourceOrder": 0,
+      "endpointId": "ad2a4093-3d2a-41d9-adf1-8b499ac8445d",
+      "endpointName": "Tencent | tencent/hy4-preview-20260827",
+      "providerName": "Tencent",
+      "providerDisplayName": "Tencent Cloud",
+      "providerSlug": "tencent/fp8",
+      "providerRegion": null,
+      "stats": {
+        "p50LatencyMilliseconds": 3875.5,
+        "p50ThroughputTokensPerSecond": 32,
+        "requestCount": 157030,
+        "windowMinutes": 30,
+        "p75LatencyMilliseconds": 8488.5,
+        "p90LatencyMilliseconds": 81989.1,
+        "p95LatencyMilliseconds": 89265.7,
+        "p99LatencyMilliseconds": 177804.18,
+        "p75ThroughputTokensPerSecond": 48,
+        "p90ThroughputTokensPerSecond": 55,
+        "p95ThroughputTokensPerSecond": 62,
+        "p99ThroughputTokensPerSecond": 72,
+        "stabilizedP50LatencyMilliseconds": 3096.75,
+        "stabilizedP50ThroughputTokensPerSecond": 35,
+        "speedStabilization": {
+          "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+          "latencyMilliseconds": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 3096.75,
+            "source": "three-day-history",
+            "currentWindowValue": 3875.5,
+            "normalizedWeights": {
+              "threeDay": 1,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 72,
+                "coverageRatio": 1,
+                "median": 3096.75,
+                "relativeToCurrentWindow": 0.7990581860405109,
+                "firstBucketAt": "2026-08-28T09:00:00.000Z",
+                "lastBucketAt": "2026-08-31T08:00:00.000Z",
+                "usable": true,
+                "rejectionReason": null
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          },
+          "throughputTokensPerSecond": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 35,
+            "source": "three-day-history",
+            "currentWindowValue": 32,
+            "normalizedWeights": {
+              "threeDay": 1,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 72,
+                "coverageRatio": 1,
+                "median": 35,
+                "relativeToCurrentWindow": 1.09375,
+                "firstBucketAt": "2026-08-28T09:00:00.000Z",
+                "lastBucketAt": "2026-08-31T08:00:00.000Z",
+                "usable": true,
+                "rejectionReason": null
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          }
+        }
+      },
+      "pricing": {
+        "inputPricePerToken": 8.34e-7,
+        "outputPricePerToken": 0.000002501,
+        "cacheReadPricePerToken": 4.2e-8,
+        "cacheWritePricePerToken": null,
+        "cacheWriteOneHourPricePerToken": null,
+        "reasoningPricePerToken": null,
+        "requestPrice": null,
+        "webSearchPrice": null,
+        "imagePrice": null,
+        "audioPrice": null,
+        "rawPublishedPricing": {
+          "prompt": "0.000000834",
+          "completion": "0.000002501",
+          "input_cache_read": "0.000000042",
+          "discount": 0,
+          "display_pricing": [
+            {
+              "kind": "token",
+              "sku_label": "Input Price",
+              "price": "0.000000834",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Output Price",
+              "price": "0.000002501",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Read",
+              "price": "0.000000042",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            }
+          ]
+        }
+      },
+      "sourceUrl": "https://openrouter.ai/api/frontend/v1/stats/endpoint?permaslug=tencent%2Fhy4-preview-20260827&variant=standard",
+      "sourcePageUrl": "https://openrouter.ai/tencent/hy4-preview",
+      "sourceFields": {
+        "p50LatencyMilliseconds": "data[].stats.p50_latency",
+        "p50ThroughputTokensPerSecond": "data[].stats.p50_throughput",
+        "requestCount": "data[].stats.request_count",
+        "windowMinutes": "data[].stats.window_minutes",
+        "inputPricePerToken": "data[].pricing.prompt",
+        "outputPricePerToken": "data[].pricing.completion",
+        "cacheReadPricePerToken": "data[].pricing.input_cache_read",
+        "cacheWritePricePerToken": "data[].pricing.input_cache_write",
+        "cacheWriteOneHourPricePerToken": "data[].pricing.input_cache_write_1h",
+        "reasoningPricePerToken": "data[].pricing.internal_reasoning",
+        "requestPrice": "data[].pricing.request",
+        "webSearchPrice": "data[].pricing.web_search",
+        "imagePrice": "data[].pricing.image",
+        "audioPrice": "data[].pricing.audio",
+        "stabilizedP50LatencyMilliseconds": "3d/1w latency-comparison data[].y[endpointId::default], with current p50 fallback",
+        "stabilizedP50ThroughputTokensPerSecond": "3d/1w throughput-comparison data[].y[endpointId::default], with current p50 fallback"
+      },
+      "historySourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=tencent%2Fhy4-preview-20260827&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=tencent%2Fhy4-preview-20260827&timeRange=3d&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=tencent%2Fhy4-preview-20260827&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=tencent%2Fhy4-preview-20260827&timeRange=3d&variant=standard"
+      ]
+    },
+    {
+      "modelId": "anthropic/claude-fable-5.1",
+      "canonicalSlug": "anthropic/claude-fable-5.1-20260831",
+      "exactModelName": "Anthropic: Claude Fable 5.1",
+      "variant": "standard",
+      "sourceOrder": 1,
+      "endpointId": "36ca6ce4-8e92-4ad6-bb37-728544d6eb09",
+      "endpointName": "Amazon Bedrock | anthropic/claude-fable-5.1-20260831",
+      "providerName": "Amazon Bedrock",
+      "providerDisplayName": "Amazon Bedrock (BYOK Only)",
+      "providerSlug": "amazon-bedrock",
+      "providerRegion": null,
+      "stats": {
+        "p50LatencyMilliseconds": 6845,
+        "p50ThroughputTokensPerSecond": 40.5,
+        "requestCount": 40,
+        "windowMinutes": 30,
+        "p75LatencyMilliseconds": 9715,
+        "p90LatencyMilliseconds": 12846.500000000002,
+        "p95LatencyMilliseconds": 15788.449999999988,
+        "p99LatencyMilliseconds": 25618.499999999996,
+        "p75ThroughputTokensPerSecond": 56.25,
+        "p90ThroughputTokensPerSecond": 67,
+        "p95ThroughputTokensPerSecond": 68.24999999999999,
+        "p99ThroughputTokensPerSecond": 78.49,
+        "stabilizedP50LatencyMilliseconds": 6845,
+        "stabilizedP50ThroughputTokensPerSecond": 40.5,
+        "speedStabilization": {
+          "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+          "latencyMilliseconds": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 6845,
+            "source": "current-window-fallback",
+            "currentWindowValue": 6845,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          },
+          "throughputTokensPerSecond": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 40.5,
+            "source": "current-window-fallback",
+            "currentWindowValue": 40.5,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          }
+        }
+      },
+      "pricing": {
+        "inputPricePerToken": 0.00001,
+        "outputPricePerToken": 0.00005,
+        "cacheReadPricePerToken": 2.5e-7,
+        "cacheWritePricePerToken": 0.0000125,
+        "cacheWriteOneHourPricePerToken": 0.00002,
+        "reasoningPricePerToken": null,
+        "requestPrice": null,
+        "webSearchPrice": 0.01,
+        "imagePrice": null,
+        "audioPrice": null,
+        "rawPublishedPricing": {
+          "prompt": "0.00001",
+          "completion": "0.00005",
+          "input_cache_read": "0.00000025",
+          "input_cache_write": "0.0000125",
+          "input_cache_write_1h": "0.00002",
+          "web_search": "0.01",
+          "discount": 0,
+          "display_pricing": [
+            {
+              "kind": "token",
+              "sku_label": "Input Price",
+              "price": "0.00001",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Output Price",
+              "price": "0.00005",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Read",
+              "price": "0.00000025",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Write",
+              "price": "0.0000125",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Write (1h)",
+              "price": "0.00002",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            }
+          ]
+        }
+      },
+      "sourceUrl": "https://openrouter.ai/api/frontend/v1/stats/endpoint?permaslug=anthropic%2Fclaude-fable-5.1-20260831&variant=standard",
+      "sourcePageUrl": "https://openrouter.ai/anthropic/claude-fable-5.1",
+      "sourceFields": {
+        "p50LatencyMilliseconds": "data[].stats.p50_latency",
+        "p50ThroughputTokensPerSecond": "data[].stats.p50_throughput",
+        "requestCount": "data[].stats.request_count",
+        "windowMinutes": "data[].stats.window_minutes",
+        "inputPricePerToken": "data[].pricing.prompt",
+        "outputPricePerToken": "data[].pricing.completion",
+        "cacheReadPricePerToken": "data[].pricing.input_cache_read",
+        "cacheWritePricePerToken": "data[].pricing.input_cache_write",
+        "cacheWriteOneHourPricePerToken": "data[].pricing.input_cache_write_1h",
+        "reasoningPricePerToken": "data[].pricing.internal_reasoning",
+        "requestPrice": "data[].pricing.request",
+        "webSearchPrice": "data[].pricing.web_search",
+        "imagePrice": "data[].pricing.image",
+        "audioPrice": "data[].pricing.audio",
+        "stabilizedP50LatencyMilliseconds": "3d/1w latency-comparison data[].y[endpointId::default], with current p50 fallback",
+        "stabilizedP50ThroughputTokensPerSecond": "3d/1w throughput-comparison data[].y[endpointId::default], with current p50 fallback"
+      },
+      "historySourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=anthropic%2Fclaude-fable-5.1-20260831&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=anthropic%2Fclaude-fable-5.1-20260831&timeRange=3d&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=anthropic%2Fclaude-fable-5.1-20260831&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=anthropic%2Fclaude-fable-5.1-20260831&timeRange=3d&variant=standard"
+      ]
+    },
+    {
+      "modelId": "anthropic/claude-fable-5.1",
+      "canonicalSlug": "anthropic/claude-fable-5.1-20260831",
+      "exactModelName": "Anthropic: Claude Fable 5.1",
+      "variant": "standard",
+      "sourceOrder": 2,
+      "endpointId": "72afe8d6-08ba-4171-a15f-fab2259daf02",
+      "endpointName": "Anthropic | anthropic/claude-fable-5.1-20260831",
+      "providerName": "Anthropic",
+      "providerDisplayName": "Anthropic",
+      "providerSlug": "anthropic",
+      "providerRegion": null,
+      "stats": {
+        "p50LatencyMilliseconds": 5867,
+        "p50ThroughputTokensPerSecond": 44,
+        "requestCount": 5853,
+        "windowMinutes": 30,
+        "p75LatencyMilliseconds": 7068,
+        "p90LatencyMilliseconds": 8269,
+        "p95LatencyMilliseconds": 9586.199999999984,
+        "p99LatencyMilliseconds": 15070.279999999984,
+        "p75ThroughputTokensPerSecond": 56,
+        "p90ThroughputTokensPerSecond": 70,
+        "p95ThroughputTokensPerSecond": 78,
+        "p99ThroughputTokensPerSecond": 94.47999999999956,
+        "stabilizedP50LatencyMilliseconds": 5867,
+        "stabilizedP50ThroughputTokensPerSecond": 44,
+        "speedStabilization": {
+          "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+          "latencyMilliseconds": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 5867,
+            "source": "current-window-fallback",
+            "currentWindowValue": 5867,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          },
+          "throughputTokensPerSecond": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 44,
+            "source": "current-window-fallback",
+            "currentWindowValue": 44,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          }
+        }
+      },
+      "pricing": {
+        "inputPricePerToken": 0.00001,
+        "outputPricePerToken": 0.00005,
+        "cacheReadPricePerToken": 2.5e-7,
+        "cacheWritePricePerToken": 0.0000125,
+        "cacheWriteOneHourPricePerToken": 0.00002,
+        "reasoningPricePerToken": null,
+        "requestPrice": null,
+        "webSearchPrice": 0.01,
+        "imagePrice": null,
+        "audioPrice": null,
+        "rawPublishedPricing": {
+          "prompt": "0.00001",
+          "completion": "0.00005",
+          "input_cache_read": "0.00000025",
+          "input_cache_write": "0.0000125",
+          "input_cache_write_1h": "0.00002",
+          "web_search": "0.01",
+          "discount": 0,
+          "display_pricing": [
+            {
+              "kind": "token",
+              "sku_label": "Input Price",
+              "price": "0.00001",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Output Price",
+              "price": "0.00005",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Read",
+              "price": "0.00000025",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Write",
+              "price": "0.0000125",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Write (1h)",
+              "price": "0.00002",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "unit",
+              "sku_label": "Web Search",
+              "price": "0.01",
+              "displayMultiplier": 1000,
+              "unitLabel": "/1K calls",
+              "isServerTool": true
+            }
+          ]
+        }
+      },
+      "sourceUrl": "https://openrouter.ai/api/frontend/v1/stats/endpoint?permaslug=anthropic%2Fclaude-fable-5.1-20260831&variant=standard",
+      "sourcePageUrl": "https://openrouter.ai/anthropic/claude-fable-5.1",
+      "sourceFields": {
+        "p50LatencyMilliseconds": "data[].stats.p50_latency",
+        "p50ThroughputTokensPerSecond": "data[].stats.p50_throughput",
+        "requestCount": "data[].stats.request_count",
+        "windowMinutes": "data[].stats.window_minutes",
+        "inputPricePerToken": "data[].pricing.prompt",
+        "outputPricePerToken": "data[].pricing.completion",
+        "cacheReadPricePerToken": "data[].pricing.input_cache_read",
+        "cacheWritePricePerToken": "data[].pricing.input_cache_write",
+        "cacheWriteOneHourPricePerToken": "data[].pricing.input_cache_write_1h",
+        "reasoningPricePerToken": "data[].pricing.internal_reasoning",
+        "requestPrice": "data[].pricing.request",
+        "webSearchPrice": "data[].pricing.web_search",
+        "imagePrice": "data[].pricing.image",
+        "audioPrice": "data[].pricing.audio",
+        "stabilizedP50LatencyMilliseconds": "3d/1w latency-comparison data[].y[endpointId::default], with current p50 fallback",
+        "stabilizedP50ThroughputTokensPerSecond": "3d/1w throughput-comparison data[].y[endpointId::default], with current p50 fallback"
+      },
+      "historySourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=anthropic%2Fclaude-fable-5.1-20260831&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=anthropic%2Fclaude-fable-5.1-20260831&timeRange=3d&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=anthropic%2Fclaude-fable-5.1-20260831&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=anthropic%2Fclaude-fable-5.1-20260831&timeRange=3d&variant=standard"
+      ]
+    },
+    {
+      "modelId": "anthropic/claude-fable-5.1",
+      "canonicalSlug": "anthropic/claude-fable-5.1-20260831",
+      "exactModelName": "Anthropic: Claude Fable 5.1",
+      "variant": "standard",
+      "sourceOrder": 3,
+      "endpointId": "0436a142-e531-4024-bd04-4d77cb7c342e",
+      "endpointName": "Azure | anthropic/claude-fable-5.1-20260831",
+      "providerName": "Azure",
+      "providerDisplayName": "Azure",
+      "providerSlug": "azure",
+      "providerRegion": null,
+      "stats": {
+        "p50LatencyMilliseconds": 14106.5,
+        "p50ThroughputTokensPerSecond": 55,
+        "requestCount": 4,
+        "windowMinutes": 30,
+        "p75LatencyMilliseconds": 15912,
+        "p90LatencyMilliseconds": 15975,
+        "p95LatencyMilliseconds": 15996,
+        "p99LatencyMilliseconds": 16012.8,
+        "p75ThroughputTokensPerSecond": 62,
+        "p90ThroughputTokensPerSecond": 71,
+        "p95ThroughputTokensPerSecond": 74,
+        "p99ThroughputTokensPerSecond": 76.39999999999999,
+        "stabilizedP50LatencyMilliseconds": 14106.5,
+        "stabilizedP50ThroughputTokensPerSecond": 55,
+        "speedStabilization": {
+          "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+          "latencyMilliseconds": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 14106.5,
+            "source": "current-window-fallback",
+            "currentWindowValue": 14106.5,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          },
+          "throughputTokensPerSecond": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 55,
+            "source": "current-window-fallback",
+            "currentWindowValue": 55,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          }
+        }
+      },
+      "pricing": {
+        "inputPricePerToken": 0.00001,
+        "outputPricePerToken": 0.00005,
+        "cacheReadPricePerToken": 2.5e-7,
+        "cacheWritePricePerToken": 0.0000125,
+        "cacheWriteOneHourPricePerToken": 0.00002,
+        "reasoningPricePerToken": null,
+        "requestPrice": null,
+        "webSearchPrice": 0.01,
+        "imagePrice": null,
+        "audioPrice": null,
+        "rawPublishedPricing": {
+          "prompt": "0.00001",
+          "completion": "0.00005",
+          "input_cache_read": "0.00000025",
+          "input_cache_write": "0.0000125",
+          "input_cache_write_1h": "0.00002",
+          "web_search": "0.01",
+          "discount": 0,
+          "display_pricing": [
+            {
+              "kind": "token",
+              "sku_label": "Input Price",
+              "price": "0.00001",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Output Price",
+              "price": "0.00005",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Read",
+              "price": "0.00000025",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Write",
+              "price": "0.0000125",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Write (1h)",
+              "price": "0.00002",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            }
+          ]
+        }
+      },
+      "sourceUrl": "https://openrouter.ai/api/frontend/v1/stats/endpoint?permaslug=anthropic%2Fclaude-fable-5.1-20260831&variant=standard",
+      "sourcePageUrl": "https://openrouter.ai/anthropic/claude-fable-5.1",
+      "sourceFields": {
+        "p50LatencyMilliseconds": "data[].stats.p50_latency",
+        "p50ThroughputTokensPerSecond": "data[].stats.p50_throughput",
+        "requestCount": "data[].stats.request_count",
+        "windowMinutes": "data[].stats.window_minutes",
+        "inputPricePerToken": "data[].pricing.prompt",
+        "outputPricePerToken": "data[].pricing.completion",
+        "cacheReadPricePerToken": "data[].pricing.input_cache_read",
+        "cacheWritePricePerToken": "data[].pricing.input_cache_write",
+        "cacheWriteOneHourPricePerToken": "data[].pricing.input_cache_write_1h",
+        "reasoningPricePerToken": "data[].pricing.internal_reasoning",
+        "requestPrice": "data[].pricing.request",
+        "webSearchPrice": "data[].pricing.web_search",
+        "imagePrice": "data[].pricing.image",
+        "audioPrice": "data[].pricing.audio",
+        "stabilizedP50LatencyMilliseconds": "3d/1w latency-comparison data[].y[endpointId::default], with current p50 fallback",
+        "stabilizedP50ThroughputTokensPerSecond": "3d/1w throughput-comparison data[].y[endpointId::default], with current p50 fallback"
+      },
+      "historySourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=anthropic%2Fclaude-fable-5.1-20260831&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=anthropic%2Fclaude-fable-5.1-20260831&timeRange=3d&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=anthropic%2Fclaude-fable-5.1-20260831&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=anthropic%2Fclaude-fable-5.1-20260831&timeRange=3d&variant=standard"
+      ]
+    },
+    {
+      "modelId": "anthropic/claude-fable-5.1",
+      "canonicalSlug": "anthropic/claude-fable-5.1-20260831",
+      "exactModelName": "Anthropic: Claude Fable 5.1",
+      "variant": "standard",
+      "sourceOrder": 0,
+      "endpointId": "94d16598-ea5b-4a68-9f25-89d39e74ade9",
+      "endpointName": "Google | anthropic/claude-fable-5.1-20260831",
+      "providerName": "Google",
+      "providerDisplayName": "Google Vertex",
+      "providerSlug": "google-vertex/global",
+      "providerRegion": "global",
+      "stats": {
+        "p50LatencyMilliseconds": 3665,
+        "p50ThroughputTokensPerSecond": 47,
+        "requestCount": 672,
+        "windowMinutes": 30,
+        "p75LatencyMilliseconds": 4929.25,
+        "p90LatencyMilliseconds": 5899.4,
+        "p95LatencyMilliseconds": 6953.899999999996,
+        "p99LatencyMilliseconds": 20767.379999999997,
+        "p75ThroughputTokensPerSecond": 65,
+        "p90ThroughputTokensPerSecond": 86.89999999999998,
+        "p95ThroughputTokensPerSecond": 98,
+        "p99ThroughputTokensPerSecond": 107.28999999999996,
+        "stabilizedP50LatencyMilliseconds": 3665,
+        "stabilizedP50ThroughputTokensPerSecond": 47,
+        "speedStabilization": {
+          "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+          "latencyMilliseconds": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 3665,
+            "source": "current-window-fallback",
+            "currentWindowValue": 3665,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          },
+          "throughputTokensPerSecond": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 47,
+            "source": "current-window-fallback",
+            "currentWindowValue": 47,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          }
+        }
+      },
+      "pricing": {
+        "inputPricePerToken": 0.00001,
+        "outputPricePerToken": 0.00005,
+        "cacheReadPricePerToken": 2.5e-7,
+        "cacheWritePricePerToken": 0.0000125,
+        "cacheWriteOneHourPricePerToken": 0.00002,
+        "reasoningPricePerToken": null,
+        "requestPrice": null,
+        "webSearchPrice": 0.01,
+        "imagePrice": null,
+        "audioPrice": null,
+        "rawPublishedPricing": {
+          "prompt": "0.00001",
+          "completion": "0.00005",
+          "input_cache_read": "0.00000025",
+          "input_cache_write": "0.0000125",
+          "input_cache_write_1h": "0.00002",
+          "web_search": "0.01",
+          "discount": 0,
+          "display_pricing": [
+            {
+              "kind": "token",
+              "sku_label": "Input Price",
+              "price": "0.00001",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Output Price",
+              "price": "0.00005",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Read",
+              "price": "0.00000025",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Write",
+              "price": "0.0000125",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Write (1h)",
+              "price": "0.00002",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            }
+          ]
+        }
+      },
+      "sourceUrl": "https://openrouter.ai/api/frontend/v1/stats/endpoint?permaslug=anthropic%2Fclaude-fable-5.1-20260831&variant=standard",
+      "sourcePageUrl": "https://openrouter.ai/anthropic/claude-fable-5.1",
+      "sourceFields": {
+        "p50LatencyMilliseconds": "data[].stats.p50_latency",
+        "p50ThroughputTokensPerSecond": "data[].stats.p50_throughput",
+        "requestCount": "data[].stats.request_count",
+        "windowMinutes": "data[].stats.window_minutes",
+        "inputPricePerToken": "data[].pricing.prompt",
+        "outputPricePerToken": "data[].pricing.completion",
+        "cacheReadPricePerToken": "data[].pricing.input_cache_read",
+        "cacheWritePricePerToken": "data[].pricing.input_cache_write",
+        "cacheWriteOneHourPricePerToken": "data[].pricing.input_cache_write_1h",
+        "reasoningPricePerToken": "data[].pricing.internal_reasoning",
+        "requestPrice": "data[].pricing.request",
+        "webSearchPrice": "data[].pricing.web_search",
+        "imagePrice": "data[].pricing.image",
+        "audioPrice": "data[].pricing.audio",
+        "stabilizedP50LatencyMilliseconds": "3d/1w latency-comparison data[].y[endpointId::default], with current p50 fallback",
+        "stabilizedP50ThroughputTokensPerSecond": "3d/1w throughput-comparison data[].y[endpointId::default], with current p50 fallback"
+      },
+      "historySourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=anthropic%2Fclaude-fable-5.1-20260831&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=anthropic%2Fclaude-fable-5.1-20260831&timeRange=3d&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=anthropic%2Fclaude-fable-5.1-20260831&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=anthropic%2Fclaude-fable-5.1-20260831&timeRange=3d&variant=standard"
+      ]
     }
   ],
   "modelAggregates": [
@@ -269779,6 +270752,198 @@
         "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=z-ai%2Fglm-5v-turbo-20260401&timeRange=3d&variant=standard",
         "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=z-ai%2Fglm-5v-turbo-20260401&timeRange=1w&variant=standard",
         "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=z-ai%2Fglm-5v-turbo-20260401&timeRange=3d&variant=standard"
+      ]
+    },
+    {
+      "modelId": "tencent/hy4-preview",
+      "canonicalSlug": "tencent/hy4-preview-20260827",
+      "exactModelName": "Tencent: Hy4 preview",
+      "variant": "standard",
+      "endpointCount": 1,
+      "providerCount": 1,
+      "totalRequestCount": 157030,
+      "measures": {
+        "inputPricePerToken": {
+          "contributingEndpointCount": 1,
+          "arithmeticMean": 8.34e-7,
+          "requestWeightedMean": 8.339999999999999e-7,
+          "median": 8.34e-7,
+          "percentile25": 8.34e-7,
+          "percentile75": 8.34e-7,
+          "minimum": 8.34e-7,
+          "maximum": 8.34e-7,
+          "totalRequestCount": 157030
+        },
+        "outputPricePerToken": {
+          "contributingEndpointCount": 1,
+          "arithmeticMean": 0.000002501,
+          "requestWeightedMean": 0.000002501,
+          "median": 0.000002501,
+          "percentile25": 0.000002501,
+          "percentile75": 0.000002501,
+          "minimum": 0.000002501,
+          "maximum": 0.000002501,
+          "totalRequestCount": 157030
+        },
+        "timeToFirstTokenMilliseconds": {
+          "contributingEndpointCount": 1,
+          "arithmeticMean": 3096.75,
+          "requestWeightedMean": 3096.75,
+          "median": 3096.75,
+          "percentile25": 3096.75,
+          "percentile75": 3096.75,
+          "minimum": 3096.75,
+          "maximum": 3096.75,
+          "totalRequestCount": 157030
+        },
+        "outputSpeedTokensPerSecond": {
+          "contributingEndpointCount": 1,
+          "arithmeticMean": 35,
+          "requestWeightedMean": 35,
+          "median": 35,
+          "percentile25": 35,
+          "percentile75": 35,
+          "minimum": 35,
+          "maximum": 35,
+          "totalRequestCount": 157030
+        },
+        "instantaneousTimeToFirstTokenMilliseconds": {
+          "contributingEndpointCount": 1,
+          "arithmeticMean": 3875.5,
+          "requestWeightedMean": 3875.5,
+          "median": 3875.5,
+          "percentile25": 3875.5,
+          "percentile75": 3875.5,
+          "minimum": 3875.5,
+          "maximum": 3875.5,
+          "totalRequestCount": 157030
+        },
+        "instantaneousOutputSpeedTokensPerSecond": {
+          "contributingEndpointCount": 1,
+          "arithmeticMean": 32,
+          "requestWeightedMean": 32,
+          "median": 32,
+          "percentile25": 32,
+          "percentile75": 32,
+          "minimum": 32,
+          "maximum": 32,
+          "totalRequestCount": 157030
+        }
+      },
+      "endpointIds": [
+        "ad2a4093-3d2a-41d9-adf1-8b499ac8445d"
+      ],
+      "providerSlugs": [
+        "tencent/fp8"
+      ],
+      "sourcePageUrl": "https://openrouter.ai/tencent/hy4-preview",
+      "sourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/endpoint?permaslug=tencent%2Fhy4-preview-20260827&variant=standard"
+      ],
+      "historySourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=tencent%2Fhy4-preview-20260827&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=tencent%2Fhy4-preview-20260827&timeRange=3d&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=tencent%2Fhy4-preview-20260827&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=tencent%2Fhy4-preview-20260827&timeRange=3d&variant=standard"
+      ]
+    },
+    {
+      "modelId": "anthropic/claude-fable-5.1",
+      "canonicalSlug": "anthropic/claude-fable-5.1-20260831",
+      "exactModelName": "Anthropic: Claude Fable 5.1",
+      "variant": "standard",
+      "endpointCount": 4,
+      "providerCount": 4,
+      "totalRequestCount": 6569,
+      "measures": {
+        "inputPricePerToken": {
+          "contributingEndpointCount": 4,
+          "arithmeticMean": 0.00001,
+          "requestWeightedMean": 0.000009999999999999999,
+          "median": 0.00001,
+          "percentile25": 0.00001,
+          "percentile75": 0.00001,
+          "minimum": 0.00001,
+          "maximum": 0.00001,
+          "totalRequestCount": 6569
+        },
+        "outputPricePerToken": {
+          "contributingEndpointCount": 4,
+          "arithmeticMean": 0.00005,
+          "requestWeightedMean": 0.00005,
+          "median": 0.00005,
+          "percentile25": 0.00005,
+          "percentile75": 0.00005,
+          "minimum": 0.00005,
+          "maximum": 0.00005,
+          "totalRequestCount": 6569
+        },
+        "timeToFirstTokenMilliseconds": {
+          "contributingEndpointCount": 4,
+          "arithmeticMean": 7620.875,
+          "requestWeightedMean": 5652.710762673162,
+          "median": 6356,
+          "percentile25": 5316.5,
+          "percentile75": 8660.375,
+          "minimum": 3665,
+          "maximum": 14106.5,
+          "totalRequestCount": 6569
+        },
+        "outputSpeedTokensPerSecond": {
+          "contributingEndpointCount": 4,
+          "arithmeticMean": 46.625,
+          "requestWeightedMean": 44.292281930278584,
+          "median": 45.5,
+          "percentile25": 43.125,
+          "percentile75": 49,
+          "minimum": 40.5,
+          "maximum": 55,
+          "totalRequestCount": 6569
+        },
+        "instantaneousTimeToFirstTokenMilliseconds": {
+          "contributingEndpointCount": 4,
+          "arithmeticMean": 7620.875,
+          "requestWeightedMean": 5652.710762673162,
+          "median": 6356,
+          "percentile25": 5316.5,
+          "percentile75": 8660.375,
+          "minimum": 3665,
+          "maximum": 14106.5,
+          "totalRequestCount": 6569
+        },
+        "instantaneousOutputSpeedTokensPerSecond": {
+          "contributingEndpointCount": 4,
+          "arithmeticMean": 46.625,
+          "requestWeightedMean": 44.292281930278584,
+          "median": 45.5,
+          "percentile25": 43.125,
+          "percentile75": 49,
+          "minimum": 40.5,
+          "maximum": 55,
+          "totalRequestCount": 6569
+        }
+      },
+      "endpointIds": [
+        "0436a142-e531-4024-bd04-4d77cb7c342e",
+        "36ca6ce4-8e92-4ad6-bb37-728544d6eb09",
+        "72afe8d6-08ba-4171-a15f-fab2259daf02",
+        "94d16598-ea5b-4a68-9f25-89d39e74ade9"
+      ],
+      "providerSlugs": [
+        "amazon-bedrock",
+        "anthropic",
+        "azure",
+        "google-vertex/global"
+      ],
+      "sourcePageUrl": "https://openrouter.ai/anthropic/claude-fable-5.1",
+      "sourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/endpoint?permaslug=anthropic%2Fclaude-fable-5.1-20260831&variant=standard"
+      ],
+      "historySourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=anthropic%2Fclaude-fable-5.1-20260831&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=anthropic%2Fclaude-fable-5.1-20260831&timeRange=3d&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=anthropic%2Fclaude-fable-5.1-20260831&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=anthropic%2Fclaude-fable-5.1-20260831&timeRange=3d&variant=standard"
       ]
     }
   ],

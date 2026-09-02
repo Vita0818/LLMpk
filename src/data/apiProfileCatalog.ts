@@ -4,7 +4,7 @@
  * This is intentionally a small curated table, not a model-name matcher.
  * Every card ID is a stable record from the bundled three-source catalog.
  * Availability-only tiers were cross-checked against the official OpenRouter
- * `/api/v1/models` `reasoning.supported_efforts` field on 2026-08-26. A
+ * `/api/v1/models` `reasoning.supported_efforts` field on 2026-09-02. A
  * profile can borrow only cards from a strictly lower numeric level; the
  * caller receives those cards in nearest-lower-first order.
  */
@@ -147,6 +147,16 @@ export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
     ],
   },
   {
+    productLineId: 'claude_fable_51',
+    tiers: [
+      tier('low', 'Low', 1, ['card-aa-claude-fable-5-1-low']),
+      tier('medium', 'Medium', 2, ['card-aa-claude-fable-5-1-medium']),
+      tier('high', 'High', 3, ['card-aa-claude-fable-5-1-high']),
+      tier('xhigh', 'XHigh', 4, ['card-aa-claude-fable-5-1-xhigh']),
+      tier('max', 'Max', 5, ['card-aa-claude-fable-5-1']),
+    ],
+  },
+  {
     productLineId: 'claude_fable_5',
     tiers: [
       tier('minimal', 'Minimal', 0),
@@ -286,6 +296,16 @@ export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
     ],
   },
   {
+    productLineId: 'hy4_preview',
+    tiers: [
+      tier('none', 'None', 0),
+      tier('low', 'Low', 1),
+      // OpenRouter publishes High as the default effort. Arena's current
+      // WebDev row omits effort and is linked explicitly as Default→High.
+      tier('high', 'High', 3),
+    ],
+  },
+  {
     productLineId: 'hunyuan_hy3',
     tiers: [
       tier('none', 'None', 0),
@@ -402,6 +422,17 @@ export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
       tier('none', 'None', 0, ['card-aa-qwen3-6-35b-a3b-non-reasoning']),
       tier('reasoning', 'Reasoning', 1, ['card-aa-qwen3-6-35b-a3b']),
       tier('max', 'Max', 5),
+    ],
+  },
+  {
+    productLineId: 'qwen_38_flash_next',
+    tiers: [
+      tier('none', 'None', 0),
+      tier('low', 'Low', 1),
+      tier('medium', 'Medium', 2),
+      // Qwen's open-weight model card publishes XHigh as the default effort;
+      // the exact AA evaluation uses that default profile.
+      tier('xhigh', 'XHigh', 4, ['card-aa-qwen3-8-flash-next']),
     ],
   },
   {

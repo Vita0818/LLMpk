@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "oagxm-current-product-lines/v6-2026-08-26-releases",
+  "schemaVersion": "oagxm-current-product-lines/v8-2026-09-01-releases",
   "scopeId": "oagxm-current-product-lines",
   "snapshotPolicy": "Keep every source-published execution profile for the listed product lines, including the Data.md model inventory. Never merge reasoning effort, harness, fast, pro, custom-tools, or serving-environment variants by name. Arena Search and Grounding suffixes are benchmark row labels, so their observations belong to the underlying model rather than a separate execution configuration; the original row identity remains in provenance. Exclude variable latest aliases and :free routes unless a reader-facing configuration explicitly names that free route as its price source; Thinking Machines Inkling is the approved current exception. A model mentioned only through a client or IDE environment is not automatically represented as that environment; it needs a source-published record for the exact profile.",
   "benchmarkBoundary": "General-purpose text or multimodal foundation models supported by the LLM capability registry. Historical Data.md entries are retained only when an exact record is published by Artificial Analysis, Arena, or OpenRouter. Dedicated image, video, speech, embedding, moderation, and safety-only APIs are outside the formal capability leaderboard unless a corresponding source benchmark is added.",
@@ -22,7 +22,8 @@
       "name": "Anthropic",
       "officialModelsUrl": "https://platform.claude.com/docs/en/about-claude/models/overview",
       "productLines": [
-        { "id": "claude_fable_5", "name": "Claude Fable 5", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ]fable[- ]5\\b"] },
+        { "id": "claude_fable_51", "name": "Claude Fable 5.1", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ]fable[- ]5[._-]1\\b"] },
+        { "id": "claude_fable_5", "name": "Claude Fable 5", "tier": "historical", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ]fable[- ]5\\b(?![._-]1\\b)"] },
         { "id": "claude_opus_5", "name": "Claude Opus 5", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ]opus[- ]5\\b"] },
         { "id": "claude_opus_48", "name": "Claude Opus 4.8", "tier": "historical", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ]opus[- ]4[._-]8\\b"] },
         { "id": "claude_opus_47", "name": "Claude Opus 4.7", "tier": "historical", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ]opus[- ]4[._-]7\\b"] },
@@ -111,6 +112,7 @@
       "name": "Tencent / GMICloud",
       "officialModelsUrl": "https://cloud.tencent.com/document/product/1729",
       "productLines": [
+        { "id": "hy4_preview", "name": "Hy4 Preview", "tier": "preview", "rankingClass": "formal_text_agent", "patterns": ["(?:\\bhy[- ]?4[- ]preview\\b|\\bhunyuan[- ]hy4[- ]preview\\b)"] },
         { "id": "hunyuan_hy3", "name": "Hunyuan Hy3", "tier": "preview", "rankingClass": "formal_text_agent", "patterns": ["(?:\\bhy[- ]?3\\b|\\bhunyuan[- ]hy3\\b)"] }
       ]
     },
@@ -136,6 +138,7 @@
       "name": "Alibaba / Qwen",
       "officialModelsUrl": "https://www.alibabacloud.com/help/en/model-studio/models",
       "productLines": [
+        { "id": "qwen_38_flash_next", "name": "Qwen3.8-Flash-Next", "tier": "preview", "rankingClass": "formal_text_agent", "patterns": ["\\bqwen[- ]?3[._-]8[- ]flash[- ]next\\b"] },
         { "id": "qwen_38_max_preview", "name": "Qwen 3.8 Max Preview", "tier": "preview", "rankingClass": "formal_text_agent", "patterns": ["\\bqwen[- ]?3[._-]8[- ]max[- ]preview\\b"] },
         { "id": "qwen_38_max", "name": "Qwen 3.8 Max", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bqwen[- ]?3[._-]8[- ]max\\b(?![- ]preview\\b)"] },
         { "id": "qwen_38_27b", "name": "Qwen 3.8 27B", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bqwen[- ]?3[._-]8[- ]27b\\b"] },

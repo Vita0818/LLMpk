@@ -25,8 +25,8 @@ const assert = (condition: unknown, message: string) => {
   if (!condition) throw new Error(message);
 };
 
-assert(snapshot.scores.length === 73, 'Fixture should contain 73 route rows.');
-assert(queue.length === 51, `Expected 51 playback items, received ${queue.length}.`);
+assert(snapshot.scores.length === 76, 'Fixture should contain 76 route rows.');
+assert(queue.length === 54, `Expected 54 playback items, received ${queue.length}.`);
 assert(
   new Set(queue.map(getPlayModeRouteGroupKey)).size === queue.length,
   'Playback queue must contain one representative per identical radar route group.',
@@ -67,6 +67,7 @@ const expectedRepresentatives = [
   'DeepSeek-v4-Flash 0731 Max | Codex CLI | DeepSeek API',
   'DeepSeek-v4-Pro 0813 Max | --- | DeepSeek API',
   'Claude Fable 5 Max | Claude Code | Claude Max 20×',
+  'Claude Fable 5.1 Max | --- | Claude Max 20×',
   'Claude Haiku 4.5 Max | --- | Claude Pro',
   'Claude Opus 5 Max | Claude Code | Claude Max 20×',
   'Claude Sonnet 4.6 Max | Claude Code | Claude Pro',
@@ -88,8 +89,10 @@ const expectedRepresentatives = [
   'Muse Glimmer XHigh | --- | Meta API',
   'Muse Spark 1.2 XHigh | OpenCode | Meta API Contributor',
   'Muse Spark 1.2 XHigh | Muse Code | Meta API Contributor',
+  'Qwen3.8-Flash-Next XHigh | --- | Alibaba API',
   'Qwen3.8 27B XHigh | --- | Alibaba API',
   'Qwen3.8 Max XHigh | Claude Code | Alibaba API',
+  'Hy4 Preview High | --- | Tencent API',
   'Command A+ Thinking | --- | Cohere API',
   'Nemotron 3.5 Lightning Thinking | --- | NVIDIA API',
   'GPT-OSS 20B High | --- | OpenAI API',
