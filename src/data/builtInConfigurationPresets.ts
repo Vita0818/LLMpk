@@ -356,6 +356,8 @@ function harnessPreset(input: {
   environment?: string;
   fallbackPolicyNote?: string;
   note?: string;
+  lockExplicitSourceCards?: boolean;
+  lockProviderNeutralPracticalCards?: boolean;
 }): BuiltInConfigurationPreset {
   return definePreset({
     key: input.key,
@@ -374,6 +376,8 @@ function harnessPreset(input: {
     },
     origin: 'data-md',
     access: 'api',
+    lockExplicitSourceCards: input.lockExplicitSourceCards,
+    lockProviderNeutralPracticalCards: input.lockProviderNeutralPracticalCards,
     note: [
       input.note,
       input.fallbackPolicyNote
@@ -400,6 +404,8 @@ function arenaAgentModePreset(input: {
   chatFallbackCardIds: readonly string[];
   additionalFallbackLinks?: readonly BuiltInConfigurationPresetSourceCardLink[];
   note?: string;
+  lockExplicitSourceCards?: boolean;
+  lockProviderNeutralPracticalCards?: boolean;
 }): BuiltInConfigurationPreset {
   return harnessPreset({
     key: input.key,
@@ -415,6 +421,8 @@ function arenaAgentModePreset(input: {
     environment: 'Arena Agent Mode',
     fallbackPolicyNote: 'AA Agent Harness 展示项使用 Arena Agent Mode 的已发布 Agent 数据；同档无 Harness 数据仅可单向向上补缺，禁止反向回填或串入其他 Harness。',
     note: input.note,
+    lockExplicitSourceCards: input.lockExplicitSourceCards,
+    lockProviderNeutralPracticalCards: input.lockProviderNeutralPracticalCards,
   });
 }
 
@@ -640,6 +648,42 @@ const ROUTE_EFFORT_LABELS: Readonly<Record<string, string>> = {
 
 const SEPTEMBER_2026_RELEASE_CONFIGURATION_PRESETS:
 readonly BuiltInConfigurationPreset[] = [
+  ...apiProfilePresets({
+    keyPrefix: 'gemini-3-8-flash',
+    productLineId: 'gemini_38_flash',
+    modelName: 'Gemini 3.8 Flash',
+    profileKeys: ['low', 'medium', 'high'],
+    origin: 'source-backed',
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+    identityForProfile: (profile) => ({
+      model: { name: 'Gemini 3.8 Flash', profile },
+      harness: normalChat('Gemini API / Google AI Studio'),
+      provider: {
+        name: 'Google',
+        upstream: 'Gemini API / Google AI Studio · gemini-3.8-flash',
+      },
+    }),
+    note: 'Google 与 AA 均只发布 Low、Medium、High，且官方不支持 Minimal。每档价格和速度采用 AA 的精确 effort 记录，避免用 OpenRouter 默认 Medium 的路线级速度覆盖 High。普通 API 路线仅作为同模型 Harness 的单向能力与实用数据来源。',
+  }),
+  ...apiProfilePresets({
+    keyPrefix: 'muse-spark-1-3',
+    productLineId: 'muse_spark_13',
+    modelName: 'Muse Spark 1.3',
+    profileKeys: ['minimal', 'low', 'medium', 'high', 'xhigh'],
+    origin: 'source-backed',
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+    identityForProfile: (profile) => ({
+      model: { name: 'Muse Spark 1.3', profile },
+      harness: normalChat('Meta Model API'),
+      provider: {
+        name: 'Meta',
+        upstream: 'Meta Model API · muse-spark-1.3',
+      },
+    }),
+    note: 'Meta Model API 当前公开 Minimal、Low、Medium、High、XHigh，默认 Medium；AA 已发布 XHigh 精确能力和实用数据。AA 虽已有 Max 评测，但 Meta 官方说明 Max 仍待额外安全测试完成后开放，因此本轮不创建 Max 用户配置。',
+  }),
   ...apiProfilePresets({
     keyPrefix: 'claude-fable-5-1',
     productLineId: 'claude_fable_51',
@@ -1747,6 +1791,22 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
     note: '合并同模型已发布的 Max 通用评测与 High Agent 评测，保留一个数据更完整的 Max Agent 配置。',
   }),
   arenaAgentModePreset({
+    key: 'agent.arena.gemini-3-8-flash.high',
+    productLineId: 'gemini_38_flash',
+    modelName: 'Gemini 3.8 Flash',
+    profile: 'High',
+    providerName: 'Google',
+    upstreamApi: 'Gemini API / Google AI Studio',
+    arenaBaseCardId: 'card-arena-gemini-3-8-flash-high',
+    chatFallbackCardIds: [
+      'card-aa-gemini-3-8-flash',
+      'card-arena-gemini-3-8-flash-high',
+    ],
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+    note: 'Arena Agent Mode 的 Gemini 3.8 Flash High 独立显示为 AA Agent Harness；普通 High 数据只向该执行配置单向补缺，Antigravity SDK 与 OpenCode 数据不会串入。',
+  }),
+  arenaAgentModePreset({
     key: 'agent.arena.gemini-3-5-flash.high',
     productLineId: 'gemini_35_flash',
     modelName: 'Gemini 3.5 Flash',
@@ -1845,6 +1905,44 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
       ),
     ],
     note: 'AA Coding Agent 原始行明确使用 Codex；0731 的普通模型数据仅作为 Codex CLI 配置的单向补充。',
+  }),
+  harnessPreset({
+    key: 'harness.gemini-3-8-flash.high.antigravity-sdk',
+    productLineId: 'gemini_38_flash',
+    modelName: 'Gemini 3.8 Flash',
+    profile: 'High',
+    harness: 'Antigravity SDK',
+    providerName: 'Google AI Studio',
+    upstreamApi: 'Gemini API / Google AI Studio',
+    exactHarnessCardIds: [
+      'card-aa-coding-agent-antigravity-sdk-gemini-3-8-flash-high',
+    ],
+    chatFallbackCardIds: [
+      'card-aa-gemini-3-8-flash',
+      'card-arena-gemini-3-8-flash-high',
+    ],
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+    note: 'AA Coding Agent 原始行明确使用 Antigravity SDK v0.1.12；普通 High 模型数据只向该 Harness 配置单向补充，速度采用 High 精确记录。',
+  }),
+  harnessPreset({
+    key: 'harness.gemini-3-8-flash.high.opencode',
+    productLineId: 'gemini_38_flash',
+    modelName: 'Gemini 3.8 Flash',
+    profile: 'High',
+    harness: 'OpenCode',
+    providerName: 'Google AI Studio',
+    upstreamApi: 'Gemini API / Google AI Studio',
+    exactHarnessCardIds: [
+      'card-aa-coding-agent-opencode-gemini-3-8-flash-high',
+    ],
+    chatFallbackCardIds: [
+      'card-aa-gemini-3-8-flash',
+      'card-arena-gemini-3-8-flash-high',
+    ],
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+    note: 'AA Coding Agent 原始行明确使用 Opencode；站内执行名称沿用 OpenCode，普通 High 模型数据只向该 Harness 配置单向补充，速度采用 High 精确记录。',
   }),
   harnessPreset({
     key: 'harness.gemini-3-7-flash.high.antigravity-sdk',
@@ -2500,6 +2598,24 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
         'Kimi Code CLI',
       ),
     ],
+  }),
+  harnessPreset({
+    key: 'harness.muse-spark-1-3.xhigh.muse-code',
+    productLineId: 'muse_spark_13',
+    modelName: 'Muse Spark 1.3',
+    profile: 'XHigh',
+    harness: 'Muse Code',
+    providerName: 'Meta',
+    upstreamApi: 'Meta Model API',
+    exactHarnessCardIds: [
+      'card-aa-coding-agent-muse-code-muse-spark-1-3-xhigh',
+    ],
+    chatFallbackCardIds: [
+      'card-aa-muse-spark-1-3-xhigh',
+    ],
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+    note: 'AA Coding Agent 原始行明确使用 Muse Code 1.0.2 RC；公开 API 当前最高为 XHigh，价格和速度采用 AA 的 XHigh 精确记录。Max 尚待 Meta 完成额外安全测试，因此不向用户发布。',
   }),
   harnessPreset({
     key: 'harness.muse-spark-1-2.xhigh.opencode',
@@ -3283,7 +3399,25 @@ const MUSE_SPARK_1_2_CONTRIBUTOR_PRICING: BuiltInApiPricingData = {
   speedBasis: 'same-model-standard-route',
 };
 
+const MUSE_SPARK_1_3_CONTRIBUTOR_PRICING: BuiltInApiPricingData = {
+  tierName: 'Contributor',
+  inputPricePerMToken: 0.1,
+  outputPricePerMToken: 0.2,
+  cacheReadPricePerMToken: 0.002,
+  effectiveDate: '2026-09-02',
+  officialSourceUrl: 'https://openrouter.ai/meta/muse-spark-1.3-contributor',
+  speedBasis: 'same-model-standard-route',
+};
+
 const API_PRICING_VARIANT_SPECS: readonly ApiPricingVariantSpec[] = [
+  {
+    key: 'api-tier.meta-contributor.muse-spark-1-3.xhigh.muse-code',
+    basePresetId: 'builtin.harness.muse-spark-1-3.xhigh.muse-code',
+    providerDisplayLabel: 'Meta API Contributor',
+    providerUpstream: 'Meta Model API（Contributor tier）',
+    pricing: MUSE_SPARK_1_3_CONTRIBUTOR_PRICING,
+    note: 'Contributor 档允许 Meta 使用输入与输出改进未来模型，以换取独立低价；能力、Muse Code Harness 和 XHigh 精确速度保持不变。',
+  },
   {
     key: 'api-tier.meta-contributor.muse-spark-1-2.xhigh.opencode',
     basePresetId: 'builtin.harness.muse-spark-1-2.xhigh.opencode',
@@ -3493,6 +3627,16 @@ const SUBSCRIPTION_CONFIGURATION_TARGETS:
   {
     key: 'gemini-3-1-pro.high.gemini-cli',
     basePresetId: 'builtin.harness.gemini-3-1-pro.high.gemini-cli',
+    plans: [GOOGLE_AI_PRO_PLAN, GOOGLE_AI_ULTRA_20X_PLAN],
+  },
+  {
+    key: 'gemini-3-8-flash.high.antigravity-sdk',
+    basePresetId: 'builtin.harness.gemini-3-8-flash.high.antigravity-sdk',
+    plans: [GOOGLE_AI_PRO_PLAN, GOOGLE_AI_ULTRA_20X_PLAN],
+  },
+  {
+    key: 'gemini-3-8-flash.high.opencode',
+    basePresetId: 'builtin.harness.gemini-3-8-flash.high.opencode',
     plans: [GOOGLE_AI_PRO_PLAN, GOOGLE_AI_ULTRA_20X_PLAN],
   },
   {
@@ -4047,7 +4191,9 @@ const READER_FACING_PRODUCT_LINE_EXCLUSIONS = new Set<string>([
  * configurations and are deliberately unaffected.
  */
 const READER_FACING_PLAIN_API_PRODUCT_LINE_EXCLUSIONS = new Set<string>([
+  'gemini_38_flash',
   'gemini_37_flash',
+  'muse_spark_13',
   'muse_spark_12',
 ]);
 
@@ -4319,4 +4465,4 @@ export const BUILT_IN_CONFIGURATION_PRESET_COUNT = BUILT_IN_CONFIGURATION_PRESET
  * additions visible during Vite hot updates as well as after a full reload.
  */
 export const BUILT_IN_CONFIGURATION_PRESET_INVENTORY_VERSION =
-  '2026-09-01-fable-5-1-v45';
+  '2026-09-02-gemini-3-8-muse-1-3-v46';

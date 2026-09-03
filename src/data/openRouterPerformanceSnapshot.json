@@ -1,6 +1,6 @@
 {
   "schemaVersion": "openrouter-performance-snapshot/v2",
-  "fetchedAt": "2026-09-02T01:10:04.397Z",
+  "fetchedAt": "2026-09-03T06:50:01.763Z",
   "source": {
     "modelCatalogUrl": "https://openrouter.ai/api/v1/models",
     "statsEndpointUrl": "https://openrouter.ai/api/frontend/v1/stats/endpoint",
@@ -17,9 +17,12 @@
     "incrementalRefreshModelIds": [
       "z-ai/glm-5.3-flash",
       "tencent/hy4-preview",
-      "anthropic/claude-fable-5.1"
+      "anthropic/claude-fable-5.1",
+      "google/gemini-3.8-flash",
+      "meta/muse-spark-1.3",
+      "meta/muse-spark-1.3-contributor"
     ],
-    "incrementalRefreshAt": "2026-09-02T01:10:04.397Z"
+    "incrementalRefreshAt": "2026-09-03T06:50:01.763Z"
   },
   "selectionPolicy": {
     "modelRecords": "canonical general text-output records from /api/v1/models",
@@ -57,34 +60,34 @@
     ]
   },
   "counts": {
-    "queriedModels": 391,
-    "modelsWithPerformance": 372,
-    "endpointRecords": 1253,
-    "modelAggregates": 372,
-    "modelsWithSingleEndpoint": 167,
-    "modelsWithMultipleEndpoints": 205,
+    "queriedModels": 394,
+    "modelsWithPerformance": 375,
+    "endpointRecords": 1261,
+    "modelAggregates": 375,
+    "modelsWithSingleEndpoint": 169,
+    "modelsWithMultipleEndpoints": 206,
     "unavailableModels": 10,
     "noStatisticsModels": 9,
     "failedModels": 0,
-    "historyRequestsAttempted": 1488,
-    "historyRequestsSucceeded": 1488,
+    "historyRequestsAttempted": 1500,
+    "historyRequestsSucceeded": 1500,
     "historyRequestsFailed": 0,
-    "returnedEndpointRows": 1324,
-    "acceptedEndpointRows": 1253,
+    "returnedEndpointRows": 1332,
+    "acceptedEndpointRows": 1261,
     "rejectedEndpointRows": 71,
     "rejectedMissingLatency": 71,
     "rejectedMissingThroughput": 71,
     "rejectedMissingOrZeroRequestCount": 71,
-    "stabilizedMeasureValues": 2506,
+    "stabilizedMeasureValues": 2522,
     "historyBackedMeasureValues": 2449,
-    "currentWindowFallbackMeasureValues": 57,
-    "historyBackedMeasureCoverage": 0.9772545889864326,
+    "currentWindowFallbackMeasureValues": 73,
+    "historyBackedMeasureCoverage": 0.9710547184773989,
     "endpointRecordsWithBothMeasuresHistoryBacked": 1224,
     "stabilizationSources": {
       "threeDayPlusOneWeek": 2263,
       "threeDayOnly": 36,
       "oneWeekOnly": 150,
-      "currentWindowFallback": 57
+      "currentWindowFallback": 73
     }
   },
   "records": [
@@ -234588,6 +234591,1714 @@
         "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=anthropic%2Fclaude-fable-5.1-20260831&timeRange=1w&variant=standard",
         "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=anthropic%2Fclaude-fable-5.1-20260831&timeRange=3d&variant=standard"
       ]
+    },
+    {
+      "modelId": "google/gemini-3.8-flash",
+      "canonicalSlug": "google/gemini-3.8-flash-20260902",
+      "exactModelName": "Google: Gemini 3.8 Flash",
+      "variant": "standard",
+      "sourceOrder": 2,
+      "endpointId": "d376f781-516d-42f9-936d-46f19abca6cc",
+      "endpointName": "Google AI Studio | google/gemini-3.8-flash-20260902",
+      "providerName": "Google AI Studio",
+      "providerDisplayName": "Google AI Studio",
+      "providerSlug": "google-ai-studio",
+      "providerRegion": null,
+      "stats": {
+        "p50LatencyMilliseconds": 1743.5,
+        "p50ThroughputTokensPerSecond": 126,
+        "requestCount": 12560,
+        "windowMinutes": 30,
+        "p75LatencyMilliseconds": 2717,
+        "p90LatencyMilliseconds": 4297.600000000002,
+        "p95LatencyMilliseconds": 5805.149999999999,
+        "p99LatencyMilliseconds": 10765.610000000004,
+        "p75ThroughputTokensPerSecond": 215,
+        "p90ThroughputTokensPerSecond": 283,
+        "p95ThroughputTokensPerSecond": 318,
+        "p99ThroughputTokensPerSecond": 372.27000000000044,
+        "stabilizedP50LatencyMilliseconds": 1743.5,
+        "stabilizedP50ThroughputTokensPerSecond": 126,
+        "speedStabilization": {
+          "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+          "latencyMilliseconds": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 1743.5,
+            "source": "current-window-fallback",
+            "currentWindowValue": 1743.5,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          },
+          "throughputTokensPerSecond": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 126,
+            "source": "current-window-fallback",
+            "currentWindowValue": 126,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          }
+        }
+      },
+      "pricing": {
+        "inputPricePerToken": 7.5e-7,
+        "outputPricePerToken": 0.00000375,
+        "cacheReadPricePerToken": 7.5e-8,
+        "cacheWritePricePerToken": 4.166666666666667e-8,
+        "cacheWriteOneHourPricePerToken": null,
+        "reasoningPricePerToken": 0.00000375,
+        "requestPrice": null,
+        "webSearchPrice": 0.014,
+        "imagePrice": 7.5e-7,
+        "audioPrice": 7.5e-7,
+        "rawPublishedPricing": {
+          "prompt": "0.00000075",
+          "completion": "0.00000375",
+          "image": "0.00000075",
+          "audio": "0.00000075",
+          "input_audio_cache": "0.000000075",
+          "input_cache_read": "0.000000075",
+          "input_cache_write": "0.00000004166666666666667",
+          "web_search": "0.014",
+          "internal_reasoning": "0.00000375",
+          "discount": 0.5,
+          "display_pricing": [
+            {
+              "kind": "token",
+              "sku_label": "Input Price",
+              "price": "0.00000075",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Output Price",
+              "price": "0.00000375",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Read",
+              "price": "0.000000075",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Write",
+              "price": "0.00000004166666666666667",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Image Input",
+              "price": "0.00000075",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Input Audio",
+              "price": "0.00000075",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Input Audio Cache",
+              "price": "0.000000075",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "unit",
+              "sku_label": "Web Search",
+              "price": "0.014",
+              "displayMultiplier": 1000,
+              "unitLabel": "/1K calls",
+              "isServerTool": true,
+              "isDiscountExempt": true
+            }
+          ]
+        }
+      },
+      "sourceUrl": "https://openrouter.ai/api/frontend/v1/stats/endpoint?permaslug=google%2Fgemini-3.8-flash-20260902&variant=standard",
+      "sourcePageUrl": "https://openrouter.ai/google/gemini-3.8-flash",
+      "sourceFields": {
+        "p50LatencyMilliseconds": "data[].stats.p50_latency",
+        "p50ThroughputTokensPerSecond": "data[].stats.p50_throughput",
+        "requestCount": "data[].stats.request_count",
+        "windowMinutes": "data[].stats.window_minutes",
+        "inputPricePerToken": "data[].pricing.prompt",
+        "outputPricePerToken": "data[].pricing.completion",
+        "cacheReadPricePerToken": "data[].pricing.input_cache_read",
+        "cacheWritePricePerToken": "data[].pricing.input_cache_write",
+        "cacheWriteOneHourPricePerToken": "data[].pricing.input_cache_write_1h",
+        "reasoningPricePerToken": "data[].pricing.internal_reasoning",
+        "requestPrice": "data[].pricing.request",
+        "webSearchPrice": "data[].pricing.web_search",
+        "imagePrice": "data[].pricing.image",
+        "audioPrice": "data[].pricing.audio",
+        "stabilizedP50LatencyMilliseconds": "3d/1w latency-comparison data[].y[endpointId::default], with current p50 fallback",
+        "stabilizedP50ThroughputTokensPerSecond": "3d/1w throughput-comparison data[].y[endpointId::default], with current p50 fallback"
+      },
+      "historySourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=3d&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=3d&variant=standard"
+      ]
+    },
+    {
+      "modelId": "google/gemini-3.8-flash",
+      "canonicalSlug": "google/gemini-3.8-flash-20260902",
+      "exactModelName": "Google: Gemini 3.8 Flash",
+      "variant": "standard",
+      "sourceOrder": 0,
+      "endpointId": "1c23c105-3636-4602-8147-e4474f76bc45",
+      "endpointName": "Google AI Studio | google/gemini-3.8-flash-20260902",
+      "providerName": "Google AI Studio",
+      "providerDisplayName": "Google AI Studio Flex",
+      "providerSlug": "google-ai-studio/flex",
+      "providerRegion": null,
+      "stats": {
+        "p50LatencyMilliseconds": 1232,
+        "p50ThroughputTokensPerSecond": 189.5,
+        "requestCount": 3590,
+        "windowMinutes": 30,
+        "p75LatencyMilliseconds": 2262.75,
+        "p90LatencyMilliseconds": 3916.199999999999,
+        "p95LatencyMilliseconds": 5131.099999999999,
+        "p99LatencyMilliseconds": 9884.77,
+        "p75ThroughputTokensPerSecond": 250,
+        "p90ThroughputTokensPerSecond": 293,
+        "p95ThroughputTokensPerSecond": 317,
+        "p99ThroughputTokensPerSecond": 360.1100000000001,
+        "stabilizedP50LatencyMilliseconds": 1232,
+        "stabilizedP50ThroughputTokensPerSecond": 189.5,
+        "speedStabilization": {
+          "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+          "latencyMilliseconds": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 1232,
+            "source": "current-window-fallback",
+            "currentWindowValue": 1232,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          },
+          "throughputTokensPerSecond": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 189.5,
+            "source": "current-window-fallback",
+            "currentWindowValue": 189.5,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          }
+        }
+      },
+      "pricing": {
+        "inputPricePerToken": 3.75e-7,
+        "outputPricePerToken": 0.000001875,
+        "cacheReadPricePerToken": 3.75e-8,
+        "cacheWritePricePerToken": 2.0833333333333335e-8,
+        "cacheWriteOneHourPricePerToken": null,
+        "reasoningPricePerToken": 0.000001875,
+        "requestPrice": null,
+        "webSearchPrice": 0.014,
+        "imagePrice": 3.75e-7,
+        "audioPrice": 3.75e-7,
+        "rawPublishedPricing": {
+          "prompt": "0.000000375",
+          "completion": "0.000001875",
+          "image": "0.000000375",
+          "audio": "0.000000375",
+          "input_audio_cache": "0.0000000375",
+          "input_cache_read": "0.0000000375",
+          "input_cache_write": "0.000000020833333333333335",
+          "web_search": "0.014",
+          "internal_reasoning": "0.000001875",
+          "discount": 0.5,
+          "display_pricing": [
+            {
+              "kind": "token",
+              "sku_label": "Input Price",
+              "price": "0.000000375",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Output Price",
+              "price": "0.000001875",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Read",
+              "price": "0.0000000375",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Write",
+              "price": "0.000000020833333333333335",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Image Input",
+              "price": "0.000000375",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Input Audio",
+              "price": "0.000000375",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Input Audio Cache",
+              "price": "0.0000000375",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "unit",
+              "sku_label": "Web Search",
+              "price": "0.014",
+              "displayMultiplier": 1000,
+              "unitLabel": "/1K calls",
+              "isServerTool": true,
+              "isDiscountExempt": true
+            }
+          ]
+        }
+      },
+      "sourceUrl": "https://openrouter.ai/api/frontend/v1/stats/endpoint?permaslug=google%2Fgemini-3.8-flash-20260902&variant=standard",
+      "sourcePageUrl": "https://openrouter.ai/google/gemini-3.8-flash",
+      "sourceFields": {
+        "p50LatencyMilliseconds": "data[].stats.p50_latency",
+        "p50ThroughputTokensPerSecond": "data[].stats.p50_throughput",
+        "requestCount": "data[].stats.request_count",
+        "windowMinutes": "data[].stats.window_minutes",
+        "inputPricePerToken": "data[].pricing.prompt",
+        "outputPricePerToken": "data[].pricing.completion",
+        "cacheReadPricePerToken": "data[].pricing.input_cache_read",
+        "cacheWritePricePerToken": "data[].pricing.input_cache_write",
+        "cacheWriteOneHourPricePerToken": "data[].pricing.input_cache_write_1h",
+        "reasoningPricePerToken": "data[].pricing.internal_reasoning",
+        "requestPrice": "data[].pricing.request",
+        "webSearchPrice": "data[].pricing.web_search",
+        "imagePrice": "data[].pricing.image",
+        "audioPrice": "data[].pricing.audio",
+        "stabilizedP50LatencyMilliseconds": "3d/1w latency-comparison data[].y[endpointId::default], with current p50 fallback",
+        "stabilizedP50ThroughputTokensPerSecond": "3d/1w throughput-comparison data[].y[endpointId::default], with current p50 fallback"
+      },
+      "historySourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=3d&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=3d&variant=standard"
+      ]
+    },
+    {
+      "modelId": "google/gemini-3.8-flash",
+      "canonicalSlug": "google/gemini-3.8-flash-20260902",
+      "exactModelName": "Google: Gemini 3.8 Flash",
+      "variant": "standard",
+      "sourceOrder": 4,
+      "endpointId": "7ad7b95e-757c-4693-83ba-b1e5c0b045fe",
+      "endpointName": "Google AI Studio | google/gemini-3.8-flash-20260902",
+      "providerName": "Google AI Studio",
+      "providerDisplayName": "Google AI Studio Priority",
+      "providerSlug": "google-ai-studio/priority",
+      "providerRegion": null,
+      "stats": {
+        "p50LatencyMilliseconds": 2454.5,
+        "p50ThroughputTokensPerSecond": 171,
+        "requestCount": 436,
+        "windowMinutes": 30,
+        "p75LatencyMilliseconds": 3318,
+        "p90LatencyMilliseconds": 4638.5,
+        "p95LatencyMilliseconds": 5714.25,
+        "p99LatencyMilliseconds": 7834.599999999974,
+        "p75ThroughputTokensPerSecond": 211,
+        "p90ThroughputTokensPerSecond": 238,
+        "p95ThroughputTokensPerSecond": 252.75,
+        "p99ThroughputTokensPerSecond": 288.5999999999999,
+        "stabilizedP50LatencyMilliseconds": 2454.5,
+        "stabilizedP50ThroughputTokensPerSecond": 171,
+        "speedStabilization": {
+          "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+          "latencyMilliseconds": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 2454.5,
+            "source": "current-window-fallback",
+            "currentWindowValue": 2454.5,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          },
+          "throughputTokensPerSecond": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 171,
+            "source": "current-window-fallback",
+            "currentWindowValue": 171,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          }
+        }
+      },
+      "pricing": {
+        "inputPricePerToken": 0.00000135,
+        "outputPricePerToken": 0.00000675,
+        "cacheReadPricePerToken": 1.35e-7,
+        "cacheWritePricePerToken": 7.5e-8,
+        "cacheWriteOneHourPricePerToken": null,
+        "reasoningPricePerToken": 0.00000675,
+        "requestPrice": null,
+        "webSearchPrice": 0.014,
+        "imagePrice": 0.00000135,
+        "audioPrice": 0.00000135,
+        "rawPublishedPricing": {
+          "prompt": "0.00000135",
+          "completion": "0.00000675",
+          "image": "0.00000135",
+          "audio": "0.00000135",
+          "input_audio_cache": "0.000000135",
+          "input_cache_read": "0.000000135",
+          "input_cache_write": "0.000000075",
+          "web_search": "0.014",
+          "internal_reasoning": "0.00000675",
+          "discount": 0.5,
+          "display_pricing": [
+            {
+              "kind": "token",
+              "sku_label": "Input Price",
+              "price": "0.00000135",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Output Price",
+              "price": "0.00000675",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Read",
+              "price": "0.000000135",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Write",
+              "price": "0.000000075",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Image Input",
+              "price": "0.00000135",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Input Audio",
+              "price": "0.00000135",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Input Audio Cache",
+              "price": "0.000000135",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "unit",
+              "sku_label": "Web Search",
+              "price": "0.014",
+              "displayMultiplier": 1000,
+              "unitLabel": "/1K calls",
+              "isServerTool": true,
+              "isDiscountExempt": true
+            }
+          ]
+        }
+      },
+      "sourceUrl": "https://openrouter.ai/api/frontend/v1/stats/endpoint?permaslug=google%2Fgemini-3.8-flash-20260902&variant=standard",
+      "sourcePageUrl": "https://openrouter.ai/google/gemini-3.8-flash",
+      "sourceFields": {
+        "p50LatencyMilliseconds": "data[].stats.p50_latency",
+        "p50ThroughputTokensPerSecond": "data[].stats.p50_throughput",
+        "requestCount": "data[].stats.request_count",
+        "windowMinutes": "data[].stats.window_minutes",
+        "inputPricePerToken": "data[].pricing.prompt",
+        "outputPricePerToken": "data[].pricing.completion",
+        "cacheReadPricePerToken": "data[].pricing.input_cache_read",
+        "cacheWritePricePerToken": "data[].pricing.input_cache_write",
+        "cacheWriteOneHourPricePerToken": "data[].pricing.input_cache_write_1h",
+        "reasoningPricePerToken": "data[].pricing.internal_reasoning",
+        "requestPrice": "data[].pricing.request",
+        "webSearchPrice": "data[].pricing.web_search",
+        "imagePrice": "data[].pricing.image",
+        "audioPrice": "data[].pricing.audio",
+        "stabilizedP50LatencyMilliseconds": "3d/1w latency-comparison data[].y[endpointId::default], with current p50 fallback",
+        "stabilizedP50ThroughputTokensPerSecond": "3d/1w throughput-comparison data[].y[endpointId::default], with current p50 fallback"
+      },
+      "historySourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=3d&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=3d&variant=standard"
+      ]
+    },
+    {
+      "modelId": "google/gemini-3.8-flash",
+      "canonicalSlug": "google/gemini-3.8-flash-20260902",
+      "exactModelName": "Google: Gemini 3.8 Flash",
+      "variant": "standard",
+      "sourceOrder": 3,
+      "endpointId": "10520141-5227-49ce-a7c8-a81bfaab8e01",
+      "endpointName": "Google | google/gemini-3.8-flash-20260902",
+      "providerName": "Google",
+      "providerDisplayName": "Google Vertex",
+      "providerSlug": "google-vertex/global",
+      "providerRegion": "global",
+      "stats": {
+        "p50LatencyMilliseconds": 2540,
+        "p50ThroughputTokensPerSecond": 68,
+        "requestCount": 46748,
+        "windowMinutes": 30,
+        "p75LatencyMilliseconds": 4002.25,
+        "p90LatencyMilliseconds": 7715.100000000005,
+        "p95LatencyMilliseconds": 13762.599999999999,
+        "p99LatencyMilliseconds": 48743.95000000006,
+        "p75ThroughputTokensPerSecond": 106.25,
+        "p90ThroughputTokensPerSecond": 141,
+        "p95ThroughputTokensPerSecond": 163,
+        "p99ThroughputTokensPerSecond": 202,
+        "stabilizedP50LatencyMilliseconds": 2540,
+        "stabilizedP50ThroughputTokensPerSecond": 68,
+        "speedStabilization": {
+          "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+          "latencyMilliseconds": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 2540,
+            "source": "current-window-fallback",
+            "currentWindowValue": 2540,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          },
+          "throughputTokensPerSecond": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 68,
+            "source": "current-window-fallback",
+            "currentWindowValue": 68,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          }
+        }
+      },
+      "pricing": {
+        "inputPricePerToken": 7.5e-7,
+        "outputPricePerToken": 0.00000375,
+        "cacheReadPricePerToken": 7.5e-8,
+        "cacheWritePricePerToken": 4.166666666666667e-8,
+        "cacheWriteOneHourPricePerToken": null,
+        "reasoningPricePerToken": 0.00000375,
+        "requestPrice": null,
+        "webSearchPrice": 0.014,
+        "imagePrice": 7.5e-7,
+        "audioPrice": 7.5e-7,
+        "rawPublishedPricing": {
+          "prompt": "0.00000075",
+          "completion": "0.00000375",
+          "image": "0.00000075",
+          "audio": "0.00000075",
+          "input_audio_cache": "0.000000075",
+          "input_cache_read": "0.000000075",
+          "input_cache_write": "0.00000004166666666666667",
+          "web_search": "0.014",
+          "internal_reasoning": "0.00000375",
+          "discount": 0.5,
+          "display_pricing": [
+            {
+              "kind": "token",
+              "sku_label": "Input Price",
+              "price": "0.00000075",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Output Price",
+              "price": "0.00000375",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Read",
+              "price": "0.000000075",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Write",
+              "price": "0.00000004166666666666667",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Image Input",
+              "price": "0.00000075",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Input Audio",
+              "price": "0.00000075",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Input Audio Cache",
+              "price": "0.000000075",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "unit",
+              "sku_label": "Web Search",
+              "price": "0.014",
+              "displayMultiplier": 1000,
+              "unitLabel": "/1K calls",
+              "isServerTool": true,
+              "isDiscountExempt": true
+            }
+          ]
+        }
+      },
+      "sourceUrl": "https://openrouter.ai/api/frontend/v1/stats/endpoint?permaslug=google%2Fgemini-3.8-flash-20260902&variant=standard",
+      "sourcePageUrl": "https://openrouter.ai/google/gemini-3.8-flash",
+      "sourceFields": {
+        "p50LatencyMilliseconds": "data[].stats.p50_latency",
+        "p50ThroughputTokensPerSecond": "data[].stats.p50_throughput",
+        "requestCount": "data[].stats.request_count",
+        "windowMinutes": "data[].stats.window_minutes",
+        "inputPricePerToken": "data[].pricing.prompt",
+        "outputPricePerToken": "data[].pricing.completion",
+        "cacheReadPricePerToken": "data[].pricing.input_cache_read",
+        "cacheWritePricePerToken": "data[].pricing.input_cache_write",
+        "cacheWriteOneHourPricePerToken": "data[].pricing.input_cache_write_1h",
+        "reasoningPricePerToken": "data[].pricing.internal_reasoning",
+        "requestPrice": "data[].pricing.request",
+        "webSearchPrice": "data[].pricing.web_search",
+        "imagePrice": "data[].pricing.image",
+        "audioPrice": "data[].pricing.audio",
+        "stabilizedP50LatencyMilliseconds": "3d/1w latency-comparison data[].y[endpointId::default], with current p50 fallback",
+        "stabilizedP50ThroughputTokensPerSecond": "3d/1w throughput-comparison data[].y[endpointId::default], with current p50 fallback"
+      },
+      "historySourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=3d&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=3d&variant=standard"
+      ]
+    },
+    {
+      "modelId": "google/gemini-3.8-flash",
+      "canonicalSlug": "google/gemini-3.8-flash-20260902",
+      "exactModelName": "Google: Gemini 3.8 Flash",
+      "variant": "standard",
+      "sourceOrder": 1,
+      "endpointId": "a077f3f7-c904-477a-8a8b-877b853b17d9",
+      "endpointName": "Google | google/gemini-3.8-flash-20260902",
+      "providerName": "Google",
+      "providerDisplayName": "Google Vertex Flex",
+      "providerSlug": "google-vertex/global/flex",
+      "providerRegion": "global",
+      "stats": {
+        "p50LatencyMilliseconds": 14451,
+        "p50ThroughputTokensPerSecond": 45,
+        "requestCount": 1866,
+        "windowMinutes": 30,
+        "p75LatencyMilliseconds": 16866,
+        "p90LatencyMilliseconds": 30958.5,
+        "p95LatencyMilliseconds": 57164.25,
+        "p99LatencyMilliseconds": 138806.4,
+        "p75ThroughputTokensPerSecond": 53,
+        "p90ThroughputTokensPerSecond": 62,
+        "p95ThroughputTokensPerSecond": 69.75,
+        "p99ThroughputTokensPerSecond": 141.69999999999982,
+        "stabilizedP50LatencyMilliseconds": 14451,
+        "stabilizedP50ThroughputTokensPerSecond": 45,
+        "speedStabilization": {
+          "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+          "latencyMilliseconds": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 14451,
+            "source": "current-window-fallback",
+            "currentWindowValue": 14451,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          },
+          "throughputTokensPerSecond": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 45,
+            "source": "current-window-fallback",
+            "currentWindowValue": 45,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          }
+        }
+      },
+      "pricing": {
+        "inputPricePerToken": 3.75e-7,
+        "outputPricePerToken": 0.000001875,
+        "cacheReadPricePerToken": 3.75e-8,
+        "cacheWritePricePerToken": 2.0833333333333335e-8,
+        "cacheWriteOneHourPricePerToken": null,
+        "reasoningPricePerToken": 0.000001875,
+        "requestPrice": null,
+        "webSearchPrice": 0.014,
+        "imagePrice": 3.75e-7,
+        "audioPrice": 3.75e-7,
+        "rawPublishedPricing": {
+          "prompt": "0.000000375",
+          "completion": "0.000001875",
+          "image": "0.000000375",
+          "audio": "0.000000375",
+          "input_audio_cache": "0.0000000375",
+          "input_cache_read": "0.0000000375",
+          "input_cache_write": "0.000000020833333333333335",
+          "web_search": "0.014",
+          "internal_reasoning": "0.000001875",
+          "discount": 0.5,
+          "display_pricing": [
+            {
+              "kind": "token",
+              "sku_label": "Input Price",
+              "price": "0.000000375",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Output Price",
+              "price": "0.000001875",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Read",
+              "price": "0.0000000375",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Write",
+              "price": "0.000000020833333333333335",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Image Input",
+              "price": "0.000000375",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Input Audio",
+              "price": "0.000000375",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Input Audio Cache",
+              "price": "0.0000000375",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "unit",
+              "sku_label": "Web Search",
+              "price": "0.014",
+              "displayMultiplier": 1000,
+              "unitLabel": "/1K calls",
+              "isServerTool": true,
+              "isDiscountExempt": true
+            }
+          ]
+        }
+      },
+      "sourceUrl": "https://openrouter.ai/api/frontend/v1/stats/endpoint?permaslug=google%2Fgemini-3.8-flash-20260902&variant=standard",
+      "sourcePageUrl": "https://openrouter.ai/google/gemini-3.8-flash",
+      "sourceFields": {
+        "p50LatencyMilliseconds": "data[].stats.p50_latency",
+        "p50ThroughputTokensPerSecond": "data[].stats.p50_throughput",
+        "requestCount": "data[].stats.request_count",
+        "windowMinutes": "data[].stats.window_minutes",
+        "inputPricePerToken": "data[].pricing.prompt",
+        "outputPricePerToken": "data[].pricing.completion",
+        "cacheReadPricePerToken": "data[].pricing.input_cache_read",
+        "cacheWritePricePerToken": "data[].pricing.input_cache_write",
+        "cacheWriteOneHourPricePerToken": "data[].pricing.input_cache_write_1h",
+        "reasoningPricePerToken": "data[].pricing.internal_reasoning",
+        "requestPrice": "data[].pricing.request",
+        "webSearchPrice": "data[].pricing.web_search",
+        "imagePrice": "data[].pricing.image",
+        "audioPrice": "data[].pricing.audio",
+        "stabilizedP50LatencyMilliseconds": "3d/1w latency-comparison data[].y[endpointId::default], with current p50 fallback",
+        "stabilizedP50ThroughputTokensPerSecond": "3d/1w throughput-comparison data[].y[endpointId::default], with current p50 fallback"
+      },
+      "historySourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=3d&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=3d&variant=standard"
+      ]
+    },
+    {
+      "modelId": "google/gemini-3.8-flash",
+      "canonicalSlug": "google/gemini-3.8-flash-20260902",
+      "exactModelName": "Google: Gemini 3.8 Flash",
+      "variant": "standard",
+      "sourceOrder": 5,
+      "endpointId": "b9096b4d-8998-45cb-b43b-ff98f5398e20",
+      "endpointName": "Google | google/gemini-3.8-flash-20260902",
+      "providerName": "Google",
+      "providerDisplayName": "Google Vertex Priority",
+      "providerSlug": "google-vertex/global/priority",
+      "providerRegion": "global",
+      "stats": {
+        "p50LatencyMilliseconds": 2737.5,
+        "p50ThroughputTokensPerSecond": 69.5,
+        "requestCount": 158,
+        "windowMinutes": 30,
+        "p75LatencyMilliseconds": 4270,
+        "p90LatencyMilliseconds": 7018.1,
+        "p95LatencyMilliseconds": 9766.7,
+        "p99LatencyMilliseconds": 14708.620000000006,
+        "p75ThroughputTokensPerSecond": 102,
+        "p90ThroughputTokensPerSecond": 134.3,
+        "p95ThroughputTokensPerSecond": 165.15,
+        "p99ThroughputTokensPerSecond": 193.58000000000004,
+        "stabilizedP50LatencyMilliseconds": 2737.5,
+        "stabilizedP50ThroughputTokensPerSecond": 69.5,
+        "speedStabilization": {
+          "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+          "latencyMilliseconds": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 2737.5,
+            "source": "current-window-fallback",
+            "currentWindowValue": 2737.5,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          },
+          "throughputTokensPerSecond": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 69.5,
+            "source": "current-window-fallback",
+            "currentWindowValue": 69.5,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          }
+        }
+      },
+      "pricing": {
+        "inputPricePerToken": 0.00000135,
+        "outputPricePerToken": 0.00000675,
+        "cacheReadPricePerToken": 1.35e-7,
+        "cacheWritePricePerToken": 7.5e-8,
+        "cacheWriteOneHourPricePerToken": null,
+        "reasoningPricePerToken": 0.00000675,
+        "requestPrice": null,
+        "webSearchPrice": 0.014,
+        "imagePrice": 0.00000135,
+        "audioPrice": 0.00000135,
+        "rawPublishedPricing": {
+          "prompt": "0.00000135",
+          "completion": "0.00000675",
+          "image": "0.00000135",
+          "audio": "0.00000135",
+          "input_audio_cache": "0.000000135",
+          "input_cache_read": "0.000000135",
+          "input_cache_write": "0.000000075",
+          "web_search": "0.014",
+          "internal_reasoning": "0.00000675",
+          "discount": 0.5,
+          "display_pricing": [
+            {
+              "kind": "token",
+              "sku_label": "Input Price",
+              "price": "0.00000135",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Output Price",
+              "price": "0.00000675",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Read",
+              "price": "0.000000135",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Write",
+              "price": "0.000000075",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Image Input",
+              "price": "0.00000135",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Input Audio",
+              "price": "0.00000135",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Input Audio Cache",
+              "price": "0.000000135",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "unit",
+              "sku_label": "Web Search",
+              "price": "0.014",
+              "displayMultiplier": 1000,
+              "unitLabel": "/1K calls",
+              "isServerTool": true,
+              "isDiscountExempt": true
+            }
+          ]
+        }
+      },
+      "sourceUrl": "https://openrouter.ai/api/frontend/v1/stats/endpoint?permaslug=google%2Fgemini-3.8-flash-20260902&variant=standard",
+      "sourcePageUrl": "https://openrouter.ai/google/gemini-3.8-flash",
+      "sourceFields": {
+        "p50LatencyMilliseconds": "data[].stats.p50_latency",
+        "p50ThroughputTokensPerSecond": "data[].stats.p50_throughput",
+        "requestCount": "data[].stats.request_count",
+        "windowMinutes": "data[].stats.window_minutes",
+        "inputPricePerToken": "data[].pricing.prompt",
+        "outputPricePerToken": "data[].pricing.completion",
+        "cacheReadPricePerToken": "data[].pricing.input_cache_read",
+        "cacheWritePricePerToken": "data[].pricing.input_cache_write",
+        "cacheWriteOneHourPricePerToken": "data[].pricing.input_cache_write_1h",
+        "reasoningPricePerToken": "data[].pricing.internal_reasoning",
+        "requestPrice": "data[].pricing.request",
+        "webSearchPrice": "data[].pricing.web_search",
+        "imagePrice": "data[].pricing.image",
+        "audioPrice": "data[].pricing.audio",
+        "stabilizedP50LatencyMilliseconds": "3d/1w latency-comparison data[].y[endpointId::default], with current p50 fallback",
+        "stabilizedP50ThroughputTokensPerSecond": "3d/1w throughput-comparison data[].y[endpointId::default], with current p50 fallback"
+      },
+      "historySourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=3d&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=3d&variant=standard"
+      ]
+    },
+    {
+      "modelId": "meta/muse-spark-1.3",
+      "canonicalSlug": "meta/muse-spark-1.3-20260902",
+      "exactModelName": "Meta: Muse Spark 1.3",
+      "variant": "standard",
+      "sourceOrder": 0,
+      "endpointId": "cf4f1b4e-1719-4b65-9111-7dd7635e5a2f",
+      "endpointName": "Meta | meta/muse-spark-1.3-20260902",
+      "providerName": "Meta",
+      "providerDisplayName": "Meta",
+      "providerSlug": "meta",
+      "providerRegion": null,
+      "stats": {
+        "p50LatencyMilliseconds": 3567,
+        "p50ThroughputTokensPerSecond": 56,
+        "requestCount": 24036,
+        "windowMinutes": 30,
+        "p75LatencyMilliseconds": 5876.75,
+        "p90LatencyMilliseconds": 9190.300000000003,
+        "p95LatencyMilliseconds": 13816.949999999997,
+        "p99LatencyMilliseconds": 45638.68000000001,
+        "p75ThroughputTokensPerSecond": 82,
+        "p90ThroughputTokensPerSecond": 114,
+        "p95ThroughputTokensPerSecond": 140,
+        "p99ThroughputTokensPerSecond": 195,
+        "stabilizedP50LatencyMilliseconds": 3567,
+        "stabilizedP50ThroughputTokensPerSecond": 56,
+        "speedStabilization": {
+          "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+          "latencyMilliseconds": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 3567,
+            "source": "current-window-fallback",
+            "currentWindowValue": 3567,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          },
+          "throughputTokensPerSecond": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 56,
+            "source": "current-window-fallback",
+            "currentWindowValue": 56,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          }
+        }
+      },
+      "pricing": {
+        "inputPricePerToken": 0.00000125,
+        "outputPricePerToken": 0.00000425,
+        "cacheReadPricePerToken": 1.5e-7,
+        "cacheWritePricePerToken": null,
+        "cacheWriteOneHourPricePerToken": null,
+        "reasoningPricePerToken": null,
+        "requestPrice": null,
+        "webSearchPrice": 0.0025,
+        "imagePrice": null,
+        "audioPrice": null,
+        "rawPublishedPricing": {
+          "prompt": "0.00000125",
+          "completion": "0.00000425",
+          "input_cache_read": "0.00000015",
+          "web_search": "0.0025",
+          "discount": 0,
+          "display_pricing": [
+            {
+              "kind": "token",
+              "sku_label": "Input Price",
+              "price": "0.00000125",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Output Price",
+              "price": "0.00000425",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Read",
+              "price": "0.00000015",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "unit",
+              "sku_label": "Web Search",
+              "price": "0.0025",
+              "displayMultiplier": 1000,
+              "unitLabel": "/1K calls",
+              "isServerTool": true
+            }
+          ]
+        }
+      },
+      "sourceUrl": "https://openrouter.ai/api/frontend/v1/stats/endpoint?permaslug=meta%2Fmuse-spark-1.3-20260902&variant=standard",
+      "sourcePageUrl": "https://openrouter.ai/meta/muse-spark-1.3",
+      "sourceFields": {
+        "p50LatencyMilliseconds": "data[].stats.p50_latency",
+        "p50ThroughputTokensPerSecond": "data[].stats.p50_throughput",
+        "requestCount": "data[].stats.request_count",
+        "windowMinutes": "data[].stats.window_minutes",
+        "inputPricePerToken": "data[].pricing.prompt",
+        "outputPricePerToken": "data[].pricing.completion",
+        "cacheReadPricePerToken": "data[].pricing.input_cache_read",
+        "cacheWritePricePerToken": "data[].pricing.input_cache_write",
+        "cacheWriteOneHourPricePerToken": "data[].pricing.input_cache_write_1h",
+        "reasoningPricePerToken": "data[].pricing.internal_reasoning",
+        "requestPrice": "data[].pricing.request",
+        "webSearchPrice": "data[].pricing.web_search",
+        "imagePrice": "data[].pricing.image",
+        "audioPrice": "data[].pricing.audio",
+        "stabilizedP50LatencyMilliseconds": "3d/1w latency-comparison data[].y[endpointId::default], with current p50 fallback",
+        "stabilizedP50ThroughputTokensPerSecond": "3d/1w throughput-comparison data[].y[endpointId::default], with current p50 fallback"
+      },
+      "historySourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=meta%2Fmuse-spark-1.3-20260902&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=meta%2Fmuse-spark-1.3-20260902&timeRange=3d&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=meta%2Fmuse-spark-1.3-20260902&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=meta%2Fmuse-spark-1.3-20260902&timeRange=3d&variant=standard"
+      ]
+    },
+    {
+      "modelId": "meta/muse-spark-1.3-contributor",
+      "canonicalSlug": "meta/muse-spark-1.3-contributor-20260902",
+      "exactModelName": "Meta: Muse Spark 1.3 Contributor",
+      "variant": "standard",
+      "sourceOrder": 0,
+      "endpointId": "5091e855-21de-4496-86fc-76185d0d1096",
+      "endpointName": "Meta | meta/muse-spark-1.3-contributor-20260902",
+      "providerName": "Meta",
+      "providerDisplayName": "Meta",
+      "providerSlug": "meta",
+      "providerRegion": null,
+      "stats": {
+        "p50LatencyMilliseconds": 4904,
+        "p50ThroughputTokensPerSecond": 57,
+        "requestCount": 19023,
+        "windowMinutes": 30,
+        "p75LatencyMilliseconds": 8051,
+        "p90LatencyMilliseconds": 13635.200000000004,
+        "p95LatencyMilliseconds": 19134.699999999997,
+        "p99LatencyMilliseconds": 39990.36,
+        "p75ThroughputTokensPerSecond": 85,
+        "p90ThroughputTokensPerSecond": 113,
+        "p95ThroughputTokensPerSecond": 132,
+        "p99ThroughputTokensPerSecond": 170.09000000000015,
+        "stabilizedP50LatencyMilliseconds": 4904,
+        "stabilizedP50ThroughputTokensPerSecond": 57,
+        "speedStabilization": {
+          "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+          "latencyMilliseconds": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 4904,
+            "source": "current-window-fallback",
+            "currentWindowValue": 4904,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          },
+          "throughputTokensPerSecond": {
+            "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
+            "value": 57,
+            "source": "current-window-fallback",
+            "currentWindowValue": 57,
+            "normalizedWeights": {
+              "threeDay": 0,
+              "oneWeek": 0
+            },
+            "windows": {
+              "threeDay": {
+                "apiTimeRange": "3d",
+                "bucketUnit": "hour",
+                "expectedCompletedBucketCount": 72,
+                "minimumSampleCount": 18,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              },
+              "oneWeek": {
+                "apiTimeRange": "1w",
+                "bucketUnit": "day",
+                "expectedCompletedBucketCount": 7,
+                "minimumSampleCount": 3,
+                "sampleCount": 0,
+                "coverageRatio": 0,
+                "median": null,
+                "relativeToCurrentWindow": null,
+                "firstBucketAt": null,
+                "lastBucketAt": null,
+                "usable": false,
+                "rejectionReason": "insufficient-completed-bucket-samples"
+              }
+            }
+          }
+        }
+      },
+      "pricing": {
+        "inputPricePerToken": 1e-7,
+        "outputPricePerToken": 2e-7,
+        "cacheReadPricePerToken": 2e-9,
+        "cacheWritePricePerToken": null,
+        "cacheWriteOneHourPricePerToken": null,
+        "reasoningPricePerToken": null,
+        "requestPrice": null,
+        "webSearchPrice": 0.0025,
+        "imagePrice": null,
+        "audioPrice": null,
+        "rawPublishedPricing": {
+          "prompt": "0.0000001",
+          "completion": "0.0000002",
+          "input_cache_read": "0.000000002",
+          "web_search": "0.0025",
+          "discount": 0,
+          "display_pricing": [
+            {
+              "kind": "token",
+              "sku_label": "Input Price",
+              "price": "0.0000001",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Output Price",
+              "price": "0.0000002",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "token",
+              "sku_label": "Cache Read",
+              "price": "0.000000002",
+              "displayMultiplier": 1000000,
+              "unitLabel": "/M tokens"
+            },
+            {
+              "kind": "unit",
+              "sku_label": "Web Search",
+              "price": "0.0025",
+              "displayMultiplier": 1000,
+              "unitLabel": "/1K calls",
+              "isServerTool": true
+            }
+          ]
+        }
+      },
+      "sourceUrl": "https://openrouter.ai/api/frontend/v1/stats/endpoint?permaslug=meta%2Fmuse-spark-1.3-contributor-20260902&variant=standard",
+      "sourcePageUrl": "https://openrouter.ai/meta/muse-spark-1.3-contributor",
+      "sourceFields": {
+        "p50LatencyMilliseconds": "data[].stats.p50_latency",
+        "p50ThroughputTokensPerSecond": "data[].stats.p50_throughput",
+        "requestCount": "data[].stats.request_count",
+        "windowMinutes": "data[].stats.window_minutes",
+        "inputPricePerToken": "data[].pricing.prompt",
+        "outputPricePerToken": "data[].pricing.completion",
+        "cacheReadPricePerToken": "data[].pricing.input_cache_read",
+        "cacheWritePricePerToken": "data[].pricing.input_cache_write",
+        "cacheWriteOneHourPricePerToken": "data[].pricing.input_cache_write_1h",
+        "reasoningPricePerToken": "data[].pricing.internal_reasoning",
+        "requestPrice": "data[].pricing.request",
+        "webSearchPrice": "data[].pricing.web_search",
+        "imagePrice": "data[].pricing.image",
+        "audioPrice": "data[].pricing.audio",
+        "stabilizedP50LatencyMilliseconds": "3d/1w latency-comparison data[].y[endpointId::default], with current p50 fallback",
+        "stabilizedP50ThroughputTokensPerSecond": "3d/1w throughput-comparison data[].y[endpointId::default], with current p50 fallback"
+      },
+      "historySourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=meta%2Fmuse-spark-1.3-contributor-20260902&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=meta%2Fmuse-spark-1.3-contributor-20260902&timeRange=3d&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=meta%2Fmuse-spark-1.3-contributor-20260902&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=meta%2Fmuse-spark-1.3-contributor-20260902&timeRange=3d&variant=standard"
+      ]
     }
   ],
   "modelAggregates": [
@@ -270944,6 +272655,295 @@
         "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=anthropic%2Fclaude-fable-5.1-20260831&timeRange=3d&variant=standard",
         "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=anthropic%2Fclaude-fable-5.1-20260831&timeRange=1w&variant=standard",
         "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=anthropic%2Fclaude-fable-5.1-20260831&timeRange=3d&variant=standard"
+      ]
+    },
+    {
+      "modelId": "google/gemini-3.8-flash",
+      "canonicalSlug": "google/gemini-3.8-flash-20260902",
+      "exactModelName": "Google: Gemini 3.8 Flash",
+      "variant": "standard",
+      "endpointCount": 6,
+      "providerCount": 6,
+      "totalRequestCount": 65358,
+      "measures": {
+        "inputPricePerToken": {
+          "contributingEndpointCount": 6,
+          "arithmeticMean": 8.25e-7,
+          "requestWeightedMean": 7.241485357569081e-7,
+          "median": 7.5e-7,
+          "percentile25": 4.6875e-7,
+          "percentile75": 0.0000012,
+          "minimum": 3.75e-7,
+          "maximum": 0.00000135,
+          "totalRequestCount": 65358
+        },
+        "outputPricePerToken": {
+          "contributingEndpointCount": 6,
+          "arithmeticMean": 0.0000041249999999999995,
+          "requestWeightedMean": 0.0000036207426787845405,
+          "median": 0.00000375,
+          "percentile25": 0.0000023437500000000002,
+          "percentile75": 0.000006,
+          "minimum": 0.000001875,
+          "maximum": 0.00000675,
+          "totalRequestCount": 65358
+        },
+        "timeToFirstTokenMilliseconds": {
+          "contributingEndpointCount": 6,
+          "arithmeticMean": 4193.083333333333,
+          "requestWeightedMean": 2655.0600232565257,
+          "median": 2497.25,
+          "percentile25": 1921.25,
+          "percentile75": 2688.125,
+          "minimum": 1232,
+          "maximum": 14451,
+          "totalRequestCount": 65358
+        },
+        "outputSpeedTokensPerSecond": {
+          "contributingEndpointCount": 6,
+          "arithmeticMean": 111.5,
+          "requestWeightedMean": 85.85385109703479,
+          "median": 97.75,
+          "percentile25": 68.375,
+          "percentile75": 159.75,
+          "minimum": 45,
+          "maximum": 189.5,
+          "totalRequestCount": 65358
+        },
+        "instantaneousTimeToFirstTokenMilliseconds": {
+          "contributingEndpointCount": 6,
+          "arithmeticMean": 4193.083333333333,
+          "requestWeightedMean": 2655.0600232565257,
+          "median": 2497.25,
+          "percentile25": 1921.25,
+          "percentile75": 2688.125,
+          "minimum": 1232,
+          "maximum": 14451,
+          "totalRequestCount": 65358
+        },
+        "instantaneousOutputSpeedTokensPerSecond": {
+          "contributingEndpointCount": 6,
+          "arithmeticMean": 111.5,
+          "requestWeightedMean": 85.85385109703479,
+          "median": 97.75,
+          "percentile25": 68.375,
+          "percentile75": 159.75,
+          "minimum": 45,
+          "maximum": 189.5,
+          "totalRequestCount": 65358
+        }
+      },
+      "endpointIds": [
+        "10520141-5227-49ce-a7c8-a81bfaab8e01",
+        "1c23c105-3636-4602-8147-e4474f76bc45",
+        "7ad7b95e-757c-4693-83ba-b1e5c0b045fe",
+        "a077f3f7-c904-477a-8a8b-877b853b17d9",
+        "b9096b4d-8998-45cb-b43b-ff98f5398e20",
+        "d376f781-516d-42f9-936d-46f19abca6cc"
+      ],
+      "providerSlugs": [
+        "google-ai-studio",
+        "google-ai-studio/flex",
+        "google-ai-studio/priority",
+        "google-vertex/global",
+        "google-vertex/global/flex",
+        "google-vertex/global/priority"
+      ],
+      "sourcePageUrl": "https://openrouter.ai/google/gemini-3.8-flash",
+      "sourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/endpoint?permaslug=google%2Fgemini-3.8-flash-20260902&variant=standard"
+      ],
+      "historySourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=3d&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=google%2Fgemini-3.8-flash-20260902&timeRange=3d&variant=standard"
+      ]
+    },
+    {
+      "modelId": "meta/muse-spark-1.3",
+      "canonicalSlug": "meta/muse-spark-1.3-20260902",
+      "exactModelName": "Meta: Muse Spark 1.3",
+      "variant": "standard",
+      "endpointCount": 1,
+      "providerCount": 1,
+      "totalRequestCount": 24036,
+      "measures": {
+        "inputPricePerToken": {
+          "contributingEndpointCount": 1,
+          "arithmeticMean": 0.00000125,
+          "requestWeightedMean": 0.00000125,
+          "median": 0.00000125,
+          "percentile25": 0.00000125,
+          "percentile75": 0.00000125,
+          "minimum": 0.00000125,
+          "maximum": 0.00000125,
+          "totalRequestCount": 24036
+        },
+        "outputPricePerToken": {
+          "contributingEndpointCount": 1,
+          "arithmeticMean": 0.00000425,
+          "requestWeightedMean": 0.00000425,
+          "median": 0.00000425,
+          "percentile25": 0.00000425,
+          "percentile75": 0.00000425,
+          "minimum": 0.00000425,
+          "maximum": 0.00000425,
+          "totalRequestCount": 24036
+        },
+        "timeToFirstTokenMilliseconds": {
+          "contributingEndpointCount": 1,
+          "arithmeticMean": 3567,
+          "requestWeightedMean": 3567,
+          "median": 3567,
+          "percentile25": 3567,
+          "percentile75": 3567,
+          "minimum": 3567,
+          "maximum": 3567,
+          "totalRequestCount": 24036
+        },
+        "outputSpeedTokensPerSecond": {
+          "contributingEndpointCount": 1,
+          "arithmeticMean": 56,
+          "requestWeightedMean": 56,
+          "median": 56,
+          "percentile25": 56,
+          "percentile75": 56,
+          "minimum": 56,
+          "maximum": 56,
+          "totalRequestCount": 24036
+        },
+        "instantaneousTimeToFirstTokenMilliseconds": {
+          "contributingEndpointCount": 1,
+          "arithmeticMean": 3567,
+          "requestWeightedMean": 3567,
+          "median": 3567,
+          "percentile25": 3567,
+          "percentile75": 3567,
+          "minimum": 3567,
+          "maximum": 3567,
+          "totalRequestCount": 24036
+        },
+        "instantaneousOutputSpeedTokensPerSecond": {
+          "contributingEndpointCount": 1,
+          "arithmeticMean": 56,
+          "requestWeightedMean": 56,
+          "median": 56,
+          "percentile25": 56,
+          "percentile75": 56,
+          "minimum": 56,
+          "maximum": 56,
+          "totalRequestCount": 24036
+        }
+      },
+      "endpointIds": [
+        "cf4f1b4e-1719-4b65-9111-7dd7635e5a2f"
+      ],
+      "providerSlugs": [
+        "meta"
+      ],
+      "sourcePageUrl": "https://openrouter.ai/meta/muse-spark-1.3",
+      "sourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/endpoint?permaslug=meta%2Fmuse-spark-1.3-20260902&variant=standard"
+      ],
+      "historySourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=meta%2Fmuse-spark-1.3-20260902&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=meta%2Fmuse-spark-1.3-20260902&timeRange=3d&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=meta%2Fmuse-spark-1.3-20260902&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=meta%2Fmuse-spark-1.3-20260902&timeRange=3d&variant=standard"
+      ]
+    },
+    {
+      "modelId": "meta/muse-spark-1.3-contributor",
+      "canonicalSlug": "meta/muse-spark-1.3-contributor-20260902",
+      "exactModelName": "Meta: Muse Spark 1.3 Contributor",
+      "variant": "standard",
+      "endpointCount": 1,
+      "providerCount": 1,
+      "totalRequestCount": 19023,
+      "measures": {
+        "inputPricePerToken": {
+          "contributingEndpointCount": 1,
+          "arithmeticMean": 1e-7,
+          "requestWeightedMean": 1e-7,
+          "median": 1e-7,
+          "percentile25": 1e-7,
+          "percentile75": 1e-7,
+          "minimum": 1e-7,
+          "maximum": 1e-7,
+          "totalRequestCount": 19023
+        },
+        "outputPricePerToken": {
+          "contributingEndpointCount": 1,
+          "arithmeticMean": 2e-7,
+          "requestWeightedMean": 2e-7,
+          "median": 2e-7,
+          "percentile25": 2e-7,
+          "percentile75": 2e-7,
+          "minimum": 2e-7,
+          "maximum": 2e-7,
+          "totalRequestCount": 19023
+        },
+        "timeToFirstTokenMilliseconds": {
+          "contributingEndpointCount": 1,
+          "arithmeticMean": 4904,
+          "requestWeightedMean": 4904,
+          "median": 4904,
+          "percentile25": 4904,
+          "percentile75": 4904,
+          "minimum": 4904,
+          "maximum": 4904,
+          "totalRequestCount": 19023
+        },
+        "outputSpeedTokensPerSecond": {
+          "contributingEndpointCount": 1,
+          "arithmeticMean": 57,
+          "requestWeightedMean": 57,
+          "median": 57,
+          "percentile25": 57,
+          "percentile75": 57,
+          "minimum": 57,
+          "maximum": 57,
+          "totalRequestCount": 19023
+        },
+        "instantaneousTimeToFirstTokenMilliseconds": {
+          "contributingEndpointCount": 1,
+          "arithmeticMean": 4904,
+          "requestWeightedMean": 4904,
+          "median": 4904,
+          "percentile25": 4904,
+          "percentile75": 4904,
+          "minimum": 4904,
+          "maximum": 4904,
+          "totalRequestCount": 19023
+        },
+        "instantaneousOutputSpeedTokensPerSecond": {
+          "contributingEndpointCount": 1,
+          "arithmeticMean": 57,
+          "requestWeightedMean": 57,
+          "median": 57,
+          "percentile25": 57,
+          "percentile75": 57,
+          "minimum": 57,
+          "maximum": 57,
+          "totalRequestCount": 19023
+        }
+      },
+      "endpointIds": [
+        "5091e855-21de-4496-86fc-76185d0d1096"
+      ],
+      "providerSlugs": [
+        "meta"
+      ],
+      "sourcePageUrl": "https://openrouter.ai/meta/muse-spark-1.3-contributor",
+      "sourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/endpoint?permaslug=meta%2Fmuse-spark-1.3-contributor-20260902&variant=standard"
+      ],
+      "historySourceUrls": [
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=meta%2Fmuse-spark-1.3-contributor-20260902&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/latency-comparison?permaslug=meta%2Fmuse-spark-1.3-contributor-20260902&timeRange=3d&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=meta%2Fmuse-spark-1.3-contributor-20260902&timeRange=1w&variant=standard",
+        "https://openrouter.ai/api/frontend/v1/stats/throughput-comparison?permaslug=meta%2Fmuse-spark-1.3-contributor-20260902&timeRange=3d&variant=standard"
       ]
     }
   ],

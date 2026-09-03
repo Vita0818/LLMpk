@@ -55,6 +55,7 @@ const expectedProductLines: Array<[string, string]> = [
   ['Claude Opus 5', 'claude_opus_5'],
   ['Gemini 3.1 Pro', 'gemini_31_pro'],
   ['Gemini 3.1 Pro Preview', 'gemini_31_pro'],
+  ['Gemini 3.8 Flash', 'gemini_38_flash'],
   ['Gemini 3.7 Flash', 'gemini_37_flash'],
   ['Gemini 3.6 Flash', 'gemini_36_flash'],
   ['Gemini 3.5 Flash', 'gemini_35_flash'],
@@ -64,6 +65,7 @@ const expectedProductLines: Array<[string, string]> = [
   ['Grok 4.6', 'grok_46'],
   ['Grok 4.5', 'grok_45'],
   ['Muse Glimmer 30B', 'muse_glimmer'],
+  ['Muse Spark 1.3', 'muse_spark_13'],
   ['Muse Spark 1.2', 'muse_spark_12'],
   ['Muse Spark 1.1', 'muse_spark_11'],
   ['Mistral Medium 3.5', 'mistral_medium_35'],
@@ -88,7 +90,7 @@ for (const [sourceName, productLineId] of expectedProductLines) {
 }
 
 const configuredProductLines = OAGXM_SCOPE.vendors.flatMap((vendor) => vendor.productLines);
-assert.equal(configuredProductLines.length, 63, 'Curated inventory should include the newly requested source-backed model lines');
+assert.equal(configuredProductLines.length, 65, 'Curated inventory should include the newly requested source-backed model lines');
 assert.equal(
   classifyOagxmModel('Claude Fable 5.1')?.productLineId,
   'claude_fable_51',

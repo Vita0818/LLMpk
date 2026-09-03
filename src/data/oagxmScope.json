@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "oagxm-current-product-lines/v8-2026-09-01-releases",
+  "schemaVersion": "oagxm-current-product-lines/v9-2026-09-02-releases",
   "scopeId": "oagxm-current-product-lines",
   "snapshotPolicy": "Keep every source-published execution profile for the listed product lines, including the Data.md model inventory. Never merge reasoning effort, harness, fast, pro, custom-tools, or serving-environment variants by name. Arena Search and Grounding suffixes are benchmark row labels, so their observations belong to the underlying model rather than a separate execution configuration; the original row identity remains in provenance. Exclude variable latest aliases and :free routes unless a reader-facing configuration explicitly names that free route as its price source; Thinking Machines Inkling is the approved current exception. A model mentioned only through a client or IDE environment is not automatically represented as that environment; it needs a source-published record for the exact profile.",
   "benchmarkBoundary": "General-purpose text or multimodal foundation models supported by the LLM capability registry. Historical Data.md entries are retained only when an exact record is published by Artificial Analysis, Arena, or OpenRouter. Dedicated image, video, speech, embedding, moderation, and safety-only APIs are outside the formal capability leaderboard unless a corresponding source benchmark is added.",
@@ -39,6 +39,7 @@
       "officialModelsUrl": "https://ai.google.dev/gemini-api/docs/models",
       "productLines": [
         { "id": "gemini_31_pro", "name": "Gemini 3.1 Pro", "tier": "preview", "rankingClass": "formal_text_agent", "patterns": ["\\bgemini[- ]3\\.1[- ]pro\\b"] },
+        { "id": "gemini_38_flash", "name": "Gemini 3.8 Flash", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bgemini[- ]3[._-]8[- ]flash\\b"] },
         { "id": "gemini_37_flash", "name": "Gemini 3.7 Flash", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bgemini[- ]3[._-]7[- ]flash\\b"] },
         { "id": "gemini_36_flash", "name": "Gemini 3.6 Flash", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bgemini[- ]3\\.6[- ]flash\\b"] },
         { "id": "gemini_35_flash", "name": "Gemini 3.5 Flash", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bgemini[- ]3\\.5[- ]flash(?![- ]lite)\\b"], "allowPreviewSourceRecords": false },
@@ -64,6 +65,7 @@
       "officialModelsUrl": "https://ai.meta.com/llama",
       "productLines": [
         { "id": "muse_glimmer", "name": "Muse Glimmer", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bmuse[- ]glimmer(?:[- ]30b)?\\b"] },
+        { "id": "muse_spark_13", "name": "Muse Spark 1.3", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bmuse[- ]spark[- ]1\\.3\\b"] },
         { "id": "muse_spark_12", "name": "Muse Spark 1.2", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bmuse[- ]spark[- ]1\\.2\\b"] },
         { "id": "muse_spark_11", "name": "Muse Spark 1.1", "tier": "preview", "rankingClass": "formal_text_agent", "patterns": ["\\bmuse[- ]spark[- ]1\\.1\\b"] },
         { "id": "llama_4_maverick", "name": "Llama 4 Maverick", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bllama[- ]4[- ]maverick\\b"] },

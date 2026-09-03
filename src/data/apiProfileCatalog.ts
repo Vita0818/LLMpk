@@ -4,7 +4,7 @@
  * This is intentionally a small curated table, not a model-name matcher.
  * Every card ID is a stable record from the bundled three-source catalog.
  * Availability-only tiers were cross-checked against the official OpenRouter
- * `/api/v1/models` `reasoning.supported_efforts` field on 2026-09-02. A
+ * `/api/v1/models` `reasoning.supported_efforts` field on 2026-09-03. A
  * profile can borrow only cards from a strictly lower numeric level; the
  * caller receives those cards in nearest-lower-first order.
  */
@@ -238,6 +238,14 @@ export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
     ],
   },
   {
+    productLineId: 'gemini_38_flash',
+    tiers: [
+      tier('low', 'Low', 1, ['card-aa-gemini-3-8-flash-low']),
+      tier('medium', 'Medium', 2, ['card-aa-gemini-3-8-flash-medium']),
+      tier('high', 'High', 3, ['card-aa-gemini-3-8-flash']),
+    ],
+  },
+  {
     productLineId: 'gemini_37_flash',
     tiers: [
       tier('low', 'Low', 1, ['card-aa-gemini-3-7-flash-low']),
@@ -333,6 +341,20 @@ export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
       tier('medium', 'Medium', 2, ['card-arena-muse-glimmer']),
       tier('high', 'High', 3, ['card-aa-muse-glimmer']),
       tier('xhigh', 'XHigh', 4),
+    ],
+  },
+  {
+    productLineId: 'muse_spark_13',
+    tiers: [
+      tier('minimal', 'Minimal', 0),
+      tier('low', 'Low', 1),
+      tier('medium', 'Medium', 2),
+      tier('high', 'High', 3),
+      tier('xhigh', 'XHigh', 4, ['card-aa-muse-spark-1-3-xhigh']),
+      // AA has evaluated Max, but Meta says public Max access follows after
+      // additional safety testing. Keep the source evidence without shipping
+      // a user-selectable Max route yet.
+      tier('max', 'Max', 5, ['card-aa-muse-spark-1-3']),
     ],
   },
   {

@@ -25,6 +25,7 @@ const REVIEWED_ARENA_AGENT_BASE_CARD_IDS = [
   'card-arena-hy3',
   'card-arena-minimax-m3',
   'card-arena-claude-sonnet-5-high',
+  'card-arena-gemini-3-8-flash-high',
   'card-arena-gemini-3-5-flash-high',
   'card-arena-qwen3-7-max',
   'card-arena-nemotron-3-ultra',

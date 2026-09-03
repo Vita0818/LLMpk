@@ -238,6 +238,8 @@ function validateArtificialAnalysis(snapshot) {
     ['Claude Sonnet 4.6', /Claude Sonnet 4[.]6/iu],
     ['Claude Opus 4.6', /Claude Opus 4[.]6/iu],
     ['Claude Fable 5.1', /Claude Fable 5[.]1/iu],
+    ['Gemini 3.8 Flash', /Gemini 3[.]8 Flash/iu],
+    ['Muse Spark 1.3', /Muse Spark 1[.]3/iu],
     ['GLM-5.3-Flash', /GLM-5[.]3-Flash/iu],
     ['Qwen3.8-Flash-Next', /Qwen3[.]8-Flash-Next/iu],
   ];
@@ -259,6 +261,10 @@ function validateArtificialAnalysis(snapshot) {
     ['Claude Code / Sonnet 4.6', /Claude Code - Sonnet 4[.]6/iu],
     ['Claude Code / Opus 4.8', /Claude Code - Opus 4[.]8/iu],
     ['Claude Code / Kimi K2.6', /Claude Code - Kimi K2[.]6/iu],
+    ['Antigravity SDK / Gemini 3.8 Flash', /Antigravity SDK - Gemini 3[.]8 Flash/iu],
+    ['OpenCode / Gemini 3.8 Flash', /Opencode - Gemini 3[.]8 Flash/iu],
+    ['Muse Code / Muse Spark 1.3 XHigh', /Muse Code - Muse Spark 1[.]3 [(]xhigh[)]/iu],
+    ['Muse Code / Muse Spark 1.3 Max', /Muse Code - Muse Spark 1[.]3 [(]max[)]/iu],
   ];
   check(
     'aa-target-harness-rows',
@@ -435,6 +441,9 @@ function validateOpenRouterCatalog(snapshot) {
     'openai/gpt-5.4',
     'anthropic/claude-opus-4.6',
     'anthropic/claude-fable-5.1',
+    'google/gemini-3.8-flash',
+    'meta/muse-spark-1.3',
+    'meta/muse-spark-1.3-contributor',
     'tencent/hy4-preview',
   ];
   check(

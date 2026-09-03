@@ -5,10 +5,10 @@ import {
 } from './artificialAnalysisSourceSnapshot.json';
 
 const SOURCE_URL = 'https://artificialanalysis.ai/agents/coding-agents';
-const SOURCE_LEADERBOARD = 'Artificial Analysis Coding Agent Index v1.3';
+const SOURCE_LEADERBOARD = 'Artificial Analysis Coding Agent Index v1.4';
 const SNAPSHOT_DATE = artificialAnalysisFetchedAt.slice(0, 10) || '2026-07-27';
 const SCOPE_ID = 'oagxm-current-product-lines';
-const SCOPE_VERSION = 'oagxm-current-product-lines/v8-2026-09-01-releases';
+const SCOPE_VERSION = 'oagxm-current-product-lines/v9-2026-09-02-releases';
 
 interface HarnessCodingAgentRow {
   key: string;
@@ -348,6 +348,39 @@ interface StructuredHarnessBinding {
  * the checked-in official snapshot.
  */
 const STRUCTURED_HARNESS_BINDINGS: readonly StructuredHarnessBinding[] = [
+  {
+    key: 'antigravity-sdk-gemini-3-8-flash-high',
+    expectedDisplayLabel: 'Antigravity SDK - Gemini 3.8 Flash (high)',
+    harness: 'Antigravity SDK',
+    productLineId: 'gemini_38_flash',
+    productLineName: 'Gemini 3.8 Flash',
+    canonicalProfileKey: 'gemini-3-8-flash-high-antigravity-sdk',
+    vendorId: 'google',
+    vendorName: 'Google',
+    tier: 'official',
+  },
+  {
+    key: 'opencode-gemini-3-8-flash-high',
+    expectedDisplayLabel: 'Opencode - Gemini 3.8 Flash (high)',
+    harness: 'OpenCode',
+    productLineId: 'gemini_38_flash',
+    productLineName: 'Gemini 3.8 Flash',
+    canonicalProfileKey: 'gemini-3-8-flash-high-opencode',
+    vendorId: 'google',
+    vendorName: 'Google',
+    tier: 'official',
+  },
+  {
+    key: 'muse-code-muse-spark-1-3-xhigh',
+    expectedDisplayLabel: 'Muse Code - Muse Spark 1.3 (xhigh)',
+    harness: 'Muse Code',
+    productLineId: 'muse_spark_13',
+    productLineName: 'Muse Spark 1.3',
+    canonicalProfileKey: 'muse-spark-1-3-xhigh-muse-code',
+    vendorId: 'meta',
+    vendorName: 'Meta',
+    tier: 'official',
+  },
   {
     key: 'antigravity-sdk-gemini-3-7-flash-high',
     expectedDisplayLabel: 'Antigravity SDK - Gemini 3.7 Flash (high)',

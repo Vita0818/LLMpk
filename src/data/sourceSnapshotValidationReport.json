@@ -1,6 +1,6 @@
 {
   "schemaVersion": "source-snapshot-validation-report/v1",
-  "validatedAt": "2026-09-02T01:17:27.377Z",
+  "validatedAt": "2026-09-03T06:58:08.249Z",
   "status": "PASS",
   "inputs": {
     "artificialAnalysis": "src/data/artificialAnalysisSourceSnapshot.json",
@@ -15,9 +15,10 @@
   },
   "coverage": {
     "artificialAnalysis": {
-      "modelRecords": 631,
-      "codingAgentRecords": 61,
+      "modelRecords": 636,
+      "codingAgentRecords": 65,
       "codingAgentHarnesses": [
+        "Antigravity SDK v0.1.12",
         "Antigravity SDK v0.1.8",
         "Claude Code",
         "Codex",
@@ -27,59 +28,60 @@
         "Grok Build",
         "Kimi Code CLI",
         "Muse Code",
+        "Muse Code 1.0.2 RC",
         "Opencode"
       ],
       "metricCoverage": {
-        "hle": 590,
-        "gpqa": 599,
-        "critpt": 505,
-        "scicode": 590,
-        "lcr": 523,
-        "omniscienceAccuracy": 502,
-        "omniscienceNonHallucination": 502,
-        "gdpvalNormalized": 226,
-        "tauBanking": 191,
-        "terminalbenchV21": 223,
+        "hle": 595,
+        "gpqa": 604,
+        "critpt": 510,
+        "scicode": 595,
+        "lcr": 528,
+        "omniscienceAccuracy": 507,
+        "omniscienceNonHallucination": 507,
+        "gdpvalNormalized": 231,
+        "tauBanking": 196,
+        "terminalbenchV21": 228,
         "ifbench": 450,
         "apexAgents": 30,
         "itbenchSre": 33,
-        "mmmuPro": 248
+        "mmmuPro": 252
       },
       "evaluationRows": {
-        "aa-briefcase": 87,
-        "automationbench-aa": 13,
-        "harvey-lab-aa": 14,
-        "enterprise-ops-gym-aa": 22
+        "aa-briefcase": 88,
+        "automationbench-aa": 16,
+        "harvey-lab-aa": 18,
+        "enterprise-ops-gym-aa": 26
       }
     },
     "arena": {
       "metricRowCounts": {
-        "arena_text_instruction": 398,
-        "arena_text_multiturn": 396,
-        "arena_text_creative": 396,
-        "arena_text_hard": 398,
-        "arena_text_math": 381,
-        "arena_text_coding": 393,
-        "arena_code_webdev": 121,
+        "arena_text_instruction": 400,
+        "arena_text_multiturn": 398,
+        "arena_text_creative": 398,
+        "arena_text_hard": 400,
+        "arena_text_math": 383,
+        "arena_text_coding": 395,
+        "arena_code_webdev": 124,
         "arena_search": 34,
-        "arena_agent_success": 56,
-        "arena_agent_praise": 56,
-        "arena_agent_steerability": 56,
-        "arena_agent_bash_recovery": 56,
-        "arena_agent_tool_hallucination": 56
+        "arena_agent_success": 58,
+        "arena_agent_praise": 58,
+        "arena_agent_steerability": 58,
+        "arena_agent_bash_recovery": 58,
+        "arena_agent_tool_hallucination": 58
       }
     },
     "openRouterCatalog": {
-      "modelRecords": 419,
-      "canonicalTextModelRecords": 386,
+      "modelRecords": 424,
+      "canonicalTextModelRecords": 390,
       "pricingCoverage": {
-        "prompt": 419,
-        "completion": 419,
-        "cacheRead": 252,
-        "cacheWrite": 74,
-        "reasoning": 30,
+        "prompt": 424,
+        "completion": 424,
+        "cacheRead": 257,
+        "cacheWrite": 77,
+        "reasoning": 32,
         "request": 0,
-        "webSearch": 150
+        "webSearch": 155
       },
       "pricingFields": [
         "audio",
@@ -98,40 +100,40 @@
       ]
     },
     "openRouterPerformance": {
-      "queriedModels": 391,
-      "modelsWithPerformance": 372,
-      "endpointRecords": 1253,
-      "modelAggregates": 372,
-      "modelsWithSingleEndpoint": 167,
-      "modelsWithMultipleEndpoints": 205,
+      "queriedModels": 394,
+      "modelsWithPerformance": 375,
+      "endpointRecords": 1261,
+      "modelAggregates": 375,
+      "modelsWithSingleEndpoint": 169,
+      "modelsWithMultipleEndpoints": 206,
       "unavailableModels": 10,
       "noStatisticsModels": 9,
       "failedModels": 0,
-      "historyRequestsAttempted": 1488,
-      "historyRequestsSucceeded": 1488,
+      "historyRequestsAttempted": 1500,
+      "historyRequestsSucceeded": 1500,
       "historyRequestsFailed": 0,
-      "returnedEndpointRows": 1324,
-      "acceptedEndpointRows": 1253,
+      "returnedEndpointRows": 1332,
+      "acceptedEndpointRows": 1261,
       "rejectedEndpointRows": 71,
       "rejectedMissingLatency": 71,
       "rejectedMissingThroughput": 71,
       "rejectedMissingOrZeroRequestCount": 71,
-      "stabilizedMeasureValues": 2506,
+      "stabilizedMeasureValues": 2522,
       "historyBackedMeasureValues": 2449,
-      "currentWindowFallbackMeasureValues": 57,
-      "historyBackedMeasureCoverage": 0.9772545889864326,
+      "currentWindowFallbackMeasureValues": 73,
+      "historyBackedMeasureCoverage": 0.9710547184773989,
       "endpointRecordsWithBothMeasuresHistoryBacked": 1224,
       "stabilizationSources": {
         "threeDayPlusOneWeek": 2263,
         "threeDayOnly": 36,
         "oneWeekOnly": 150,
-        "currentWindowFallback": 57
+        "currentWindowFallback": 73
       },
       "aggregateCoverage": {
-        "modelAggregates": 372,
-        "singleEndpointModels": 167,
-        "multipleEndpointModels": 205,
-        "fourMeasureCompleteModels": 372
+        "modelAggregates": 375,
+        "singleEndpointModels": 169,
+        "multipleEndpointModels": 206,
+        "fourMeasureCompleteModels": 375
       }
     }
   },
@@ -149,7 +151,7 @@
       "description": "Artificial Analysis snapshot was fetched recently.",
       "passed": true,
       "details": {
-        "fetchedAt": "2026-09-02T01:08:30.574Z"
+        "fetchedAt": "2026-09-03T06:46:08.245Z"
       }
     },
     {
@@ -157,7 +159,7 @@
       "description": "Artificial Analysis contains a non-truncated model catalog.",
       "passed": true,
       "details": {
-        "modelRecords": 631,
+        "modelRecords": 636,
         "minimum": 400
       }
     },
@@ -166,8 +168,8 @@
       "description": "Artificial Analysis model IDs and slugs are unique and complete.",
       "passed": true,
       "details": {
-        "uniqueIds": 631,
-        "uniqueSlugs": 631
+        "uniqueIds": 636,
+        "uniqueSlugs": 636
       }
     },
     {
@@ -198,9 +200,9 @@
       "description": "High-coverage AA atomics were not truncated.",
       "passed": true,
       "details": {
-        "hle": 590,
-        "gpqa": 599,
-        "scicode": 590,
+        "hle": 595,
+        "gpqa": 604,
+        "scicode": 595,
         "minimumEach": 400
       }
     },
@@ -212,7 +214,7 @@
         "ifbench": 450,
         "apexAgents": 30,
         "itbenchSre": 33,
-        "mmmuPro": 248
+        "mmmuPro": 252
       }
     },
     {
@@ -221,10 +223,10 @@
       "passed": true,
       "details": {
         "rows": {
-          "aa-briefcase": 87,
-          "automationbench-aa": 13,
-          "harvey-lab-aa": 14,
-          "enterprise-ops-gym-aa": 22
+          "aa-briefcase": 88,
+          "automationbench-aa": 16,
+          "harvey-lab-aa": 18,
+          "enterprise-ops-gym-aa": 26
         }
       }
     },
@@ -266,6 +268,15 @@
             "Claude Fable 5.1 (Adaptive Reasoning, Xhigh Effort, Default Fallback)",
             "Claude Fable 5.1 (Adaptive Reasoning, High Effort, Default Fallback)"
           ],
+          "Gemini 3.8 Flash": [
+            "Gemini 3.8 Flash (medium)",
+            "Gemini 3.8 Flash (high)",
+            "Gemini 3.8 Flash (low)"
+          ],
+          "Muse Spark 1.3": [
+            "Muse Spark 1.3 (max)",
+            "Muse Spark 1.3 (xhigh)"
+          ],
           "GLM-5.3-Flash": [
             "GLM-5.3-Flash"
           ],
@@ -304,6 +315,18 @@
           ],
           "Claude Code / Kimi K2.6": [
             "Claude Code - Kimi K2.6"
+          ],
+          "Antigravity SDK / Gemini 3.8 Flash": [
+            "Antigravity SDK - Gemini 3.8 Flash (high)"
+          ],
+          "OpenCode / Gemini 3.8 Flash": [
+            "Opencode - Gemini 3.8 Flash (high)"
+          ],
+          "Muse Code / Muse Spark 1.3 XHigh": [
+            "Muse Code - Muse Spark 1.3 (xhigh)"
+          ],
+          "Muse Code / Muse Spark 1.3 Max": [
+            "Muse Code - Muse Spark 1.3 (max)"
           ]
         }
       }
@@ -313,8 +336,9 @@
       "description": "AA Coding Agent rows have unique IDs, model+harness identity, and finite component scores.",
       "passed": true,
       "details": {
-        "rows": 61,
+        "rows": 65,
         "harnesses": [
+          "Antigravity SDK v0.1.12",
           "Antigravity SDK v0.1.8",
           "Claude Code",
           "Codex",
@@ -324,6 +348,7 @@
           "Grok Build",
           "Kimi Code CLI",
           "Muse Code",
+          "Muse Code 1.0.2 RC",
           "Opencode"
         ]
       }
@@ -341,7 +366,7 @@
       "description": "Arena extraction was produced recently.",
       "passed": true,
       "details": {
-        "extractedAt": "2026-09-02T01:08:34.372Z"
+        "extractedAt": "2026-09-03T06:46:16.547Z"
       }
     },
     {
@@ -387,19 +412,19 @@
       "passed": true,
       "details": {
         "rowCounts": {
-          "arena_text_instruction": 398,
-          "arena_text_multiturn": 396,
-          "arena_text_creative": 396,
-          "arena_text_hard": 398,
-          "arena_text_math": 381,
-          "arena_text_coding": 393,
-          "arena_code_webdev": 121,
+          "arena_text_instruction": 400,
+          "arena_text_multiturn": 398,
+          "arena_text_creative": 398,
+          "arena_text_hard": 400,
+          "arena_text_math": 383,
+          "arena_text_coding": 395,
+          "arena_code_webdev": 124,
           "arena_search": 34,
-          "arena_agent_success": 56,
-          "arena_agent_praise": 56,
-          "arena_agent_steerability": 56,
-          "arena_agent_bash_recovery": 56,
-          "arena_agent_tool_hallucination": 56
+          "arena_agent_success": 58,
+          "arena_agent_praise": 58,
+          "arena_agent_steerability": 58,
+          "arena_agent_bash_recovery": 58,
+          "arena_agent_tool_hallucination": 58
         },
         "minimumEach": 5
       }
@@ -417,7 +442,7 @@
       "description": "OpenRouter catalog was fetched recently.",
       "passed": true,
       "details": {
-        "fetchedAt": "2026-09-02T01:08:31.987Z"
+        "fetchedAt": "2026-09-03T06:46:11.815Z"
       }
     },
     {
@@ -425,8 +450,8 @@
       "description": "OpenRouter catalog is non-trivial and has unique model IDs.",
       "passed": true,
       "details": {
-        "modelRecords": 419,
-        "uniqueIds": 419
+        "modelRecords": 424,
+        "uniqueIds": 424
       }
     },
     {
@@ -438,6 +463,9 @@
           "openai/gpt-5.4": true,
           "anthropic/claude-opus-4.6": true,
           "anthropic/claude-fable-5.1": true,
+          "google/gemini-3.8-flash": true,
+          "meta/muse-spark-1.3": true,
+          "meta/muse-spark-1.3-contributor": true,
           "tencent/hy4-preview": true
         }
       }
@@ -447,13 +475,13 @@
       "description": "OpenRouter retained base and optional published pricing fields.",
       "passed": true,
       "details": {
-        "prompt": 419,
-        "completion": 419,
-        "cacheRead": 252,
-        "cacheWrite": 74,
-        "reasoning": 30,
+        "prompt": 424,
+        "completion": 424,
+        "cacheRead": 257,
+        "cacheWrite": 77,
+        "reasoning": 32,
         "request": 0,
-        "webSearch": 150
+        "webSearch": 155
       }
     },
     {
@@ -469,7 +497,7 @@
       "description": "OpenRouter performance snapshot was fetched recently.",
       "passed": true,
       "details": {
-        "fetchedAt": "2026-09-02T01:10:04.397Z"
+        "fetchedAt": "2026-09-03T06:50:01.763Z"
       }
     },
     {
@@ -477,10 +505,10 @@
       "description": "OpenRouter performance refresh had no transient request failures.",
       "passed": true,
       "details": {
-        "endpointRecords": 1253,
+        "endpointRecords": 1261,
         "failedModels": 0,
         "failedHistoryRequests": 0,
-        "modelsWithPerformance": 372
+        "modelsWithPerformance": 375
       }
     },
     {
@@ -488,7 +516,7 @@
       "description": "Every retained Standard endpoint has finite p50 latency, throughput and request count.",
       "passed": true,
       "details": {
-        "endpointRecords": 1253
+        "endpointRecords": 1261
       }
     },
     {
@@ -497,10 +525,10 @@
       "passed": true,
       "details": {
         "algorithmVersion": "openrouter-endpoint-history-median-geomean/v1",
-        "historyBackedMeasureCoverage": 0.9772545889864326,
+        "historyBackedMeasureCoverage": 0.9710547184773989,
         "historyBackedMeasureValues": 2449,
-        "currentWindowFallbackMeasureValues": 57,
-        "historyRequestsAttempted": 1488,
+        "currentWindowFallbackMeasureValues": 73,
+        "historyRequestsAttempted": 1500,
         "historyRequestsFailed": 0
       }
     },
@@ -509,8 +537,8 @@
       "description": "Every model with performance has provider-neutral price, TTFT, and output-speed summaries.",
       "passed": true,
       "details": {
-        "modelAggregates": 372,
-        "modelsWithPerformance": 372,
+        "modelAggregates": 375,
+        "modelsWithPerformance": 375,
         "requiredMeasures": [
           "inputPricePerToken",
           "outputPricePerToken",
@@ -519,8 +547,8 @@
           "instantaneousTimeToFirstTokenMilliseconds",
           "instantaneousOutputSpeedTokensPerSecond"
         ],
-        "singleEndpointModels": 167,
-        "multipleEndpointModels": 205
+        "singleEndpointModels": 169,
+        "multipleEndpointModels": 206
       }
     },
     {
@@ -528,8 +556,8 @@
       "description": "OpenRouter reports how many returned endpoint rows were accepted or rejected.",
       "passed": true,
       "details": {
-        "returned": 1324,
-        "accepted": 1253,
+        "returned": 1332,
+        "accepted": 1261,
         "rejected": 71,
         "rejectedMissingLatency": 71,
         "rejectedMissingThroughput": 71,
