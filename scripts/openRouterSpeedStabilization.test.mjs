@@ -53,6 +53,22 @@ assert.equal(completedHours.median, 100, 'a completed-hour outlier must not move
 assert.equal(completedHours.coverageRatio, 1);
 assert.equal(completedHours.usable, true);
 
+const bareEndpointSeries = summarizeOpenRouterHistoryWindow({
+  payload: {
+    data: hourlyPayload(() => 90).data.map((row) => ({
+      x: row.x,
+      y: { [ENDPOINT_ID]: 90 },
+    })),
+  },
+  endpointId: ENDPOINT_ID,
+  windowName: 'threeDay',
+  currentValue: 100,
+  now: NOW,
+});
+assert.equal(bareEndpointSeries.sampleCount, 72);
+assert.equal(bareEndpointSeries.median, 90);
+assert.equal(bareEndpointSeries.usable, true);
+
 const completedDays = summarizeOpenRouterHistoryWindow({
   payload: dailyPayload((index) => (index === 7 ? 999_999 : 200)),
   endpointId: ENDPOINT_ID,
@@ -64,6 +80,22 @@ assert.equal(completedDays.sampleCount, 7);
 assert.equal(completedDays.firstBucketAt, '2026-07-31T00:00:00.000Z');
 assert.equal(completedDays.lastBucketAt, '2026-08-06T00:00:00.000Z');
 assert.equal(completedDays.median, 200, 'the incomplete current day must be discarded');
+
+const dateOnlyDays = summarizeOpenRouterHistoryWindow({
+  payload: {
+    data: dailyPayload(() => 200).data.map((row) => ({
+      ...row,
+      x: row.x.slice(0, 10),
+      y: { [ENDPOINT_ID]: 200 },
+    })),
+  },
+  endpointId: ENDPOINT_ID,
+  windowName: 'oneWeek',
+  currentValue: 200,
+  now: NOW,
+});
+assert.equal(dateOnlyDays.sampleCount, 7);
+assert.equal(dateOnlyDays.usable, true);
 
 const fullCoverageBlend = stabilizeOpenRouterEndpointMetric({
   currentValue: 125,

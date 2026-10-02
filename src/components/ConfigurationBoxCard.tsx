@@ -32,6 +32,10 @@ const sourceLabels: Record<SourceType, string> = {
   artificial_analysis: 'Artificial Analysis',
   arena: 'Arena.ai',
   openrouter: 'OpenRouter',
+  scale_labs: 'Scale Labs',
+  terminal_bench: 'Terminal-Bench',
+  swe_rebench: 'SWE-rebench',
+  frontier_code: 'FrontierCode',
 };
 
 export const ConfigurationBoxCard: React.FC<ConfigurationBoxCardProps> = React.memo(({

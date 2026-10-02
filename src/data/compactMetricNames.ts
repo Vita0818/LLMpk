@@ -7,7 +7,11 @@
 const COMPACT_METRIC_NAMES: Readonly<Record<string, string>> = {
   aa_coding_agent_deepswe: 'DeepSWE',
   aa_coding_agent_swe_atlas_qna: 'SWE-Atlas Q&A',
-  aa_coding_agent_terminalbench_v2: 'Terminal-Bench v2',
+  tbench_science_v01: 'TB-Science 0.1',
+  tbench_v4: 'Terminal-Bench 4.0',
+  frontiercode_v11_main_pass_rate: 'FrontierCode 1.1',
+  swe_rebench_v2: 'SWE-rebench v2',
+  scale_enigmaeval: 'EnigmaEval',
   arena_code_webdev: 'WebDev Overall',
   aa_coding_agent_index: 'Coding Agent Index',
   aa_omniscience_accuracy: 'Omniscience Accuracy',

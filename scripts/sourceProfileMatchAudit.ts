@@ -86,6 +86,10 @@ const sourceOrder: Record<SourceType, number> = {
   artificial_analysis: 0,
   arena: 1,
   openrouter: 2,
+  scale_labs: 3,
+  terminal_bench: 4,
+  swe_rebench: 5,
+  frontier_code: 6,
 };
 
 const candidates = [...groups.entries()].flatMap(([matchKey, group]) => {

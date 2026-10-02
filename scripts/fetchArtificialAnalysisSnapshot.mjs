@@ -1,6 +1,7 @@
-import { mkdirSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { detailedModelRecords } from './artificialAnalysisModelExtraction.mjs';
 import {
   atomicWriteFile,
   atomicWriteJson,
@@ -20,6 +21,7 @@ const RAW_DIRECTORY = path.resolve(
   process.env.AA_RAW_SNAPSHOT_DIR
     ?? path.join(ROOT, '.cache', 'oagxm-source-snapshots', 'artificial-analysis'),
 );
+const PREVIOUS_SNAPSHOT_PATH = path.join(ROOT, 'src', 'data', 'artificialAnalysisSourceSnapshot.json');
 
 const PAGE_DEFINITIONS = [
   {
@@ -32,6 +34,12 @@ const PAGE_DEFINITIONS = [
     id: 'aa-briefcase',
     url: 'https://artificialanalysis.ai/evaluations/aa-briefcase',
     filename: 'evaluation-aa-briefcase.html',
+    kind: 'evaluation',
+  },
+  {
+    id: 'gdp-pdf',
+    url: 'https://artificialanalysis.ai/evaluations/gdp-pdf',
+    filename: 'evaluation-gdp-pdf.html',
     kind: 'evaluation',
   },
   {
@@ -58,12 +66,6 @@ const PAGE_DEFINITIONS = [
     filename: 'coding-agents.html',
     kind: 'coding-agents',
   },
-  {
-    id: 'coding-agents-comparison',
-    url: 'https://artificialanalysis.ai/agents/coding-agents/comparisons/claude-code-vs-cursor-cli',
-    filename: 'coding-agents-comparison.html',
-    kind: 'coding-agents',
-  },
 ];
 
 const CORE_MODEL_FIELDS = [
@@ -83,25 +85,7 @@ const CORE_MODEL_FIELDS = [
   'mmmuPro',
 ];
 
-function detailedModelRecords(payload) {
-  const candidates = extractJsonArraysAfterMarker(payload, '"models":')
-    .map((records) => records.filter((record) => (
-      record
-      && typeof record === 'object'
-      && !Array.isArray(record)
-      && typeof record.id === 'string'
-      && typeof record.slug === 'string'
-      && typeof record.name === 'string'
-      && Object.hasOwn(record, 'intelligenceIndex')
-    )))
-    .sort((left, right) => right.length - left.length);
-  if ((candidates[0]?.length ?? 0) < 100) {
-    throw new Error('AA model leaderboard did not expose a complete detailed model array.');
-  }
-  return uniqueBy(candidates[0], (record) => record.id, 'AA model leaderboard');
-}
-
-function evaluationRecords(payload, evaluationId, modelById) {
+function evaluationRecords(payload, evaluationId, modelByName, modelBySlug) {
   // Artificial Analysis migrated its evaluation pages from `defaultData` to
   // `initialModels` in August 2026. AA-Briefcase additionally exposes the
   // complete public leaderboard under `models`, while `initialModels` is only
@@ -110,16 +94,38 @@ function evaluationRecords(payload, evaluationId, modelById) {
   const markers = evaluationId === 'aa-briefcase'
     ? ['"defaultData":', '"initialModels":', '"models":']
     : ['"defaultData":', '"initialModels":'];
+  const sourceScore = (record) => {
+    if (evaluationId === 'aa-briefcase') {
+      return record.elo ?? record.briefcaseElo ?? record.briefcaseBreakdown?.elo;
+    }
+    if (evaluationId === 'gdp-pdf') {
+      return record.gdpPdfAllPass ?? record.gdpPdfBreakdown?.allPass;
+    }
+    if (evaluationId === 'automationbench-aa') {
+      return record.automationBenchBreakdown?.strictScore;
+    }
+    if (evaluationId === 'harvey-lab-aa') {
+      return record.harveyLabCriteriaPass
+        ?? record.harveyLabBreakdown?.criteriaPass
+        ?? record.harveyLab;
+    }
+    return record.enterpriseOpsGym
+      ?? record.enterpriseOpsGymBreakdown?.summary?.successRate;
+  };
   const candidates = markers
     .flatMap((marker) => extractJsonArraysAfterMarker(payload, marker))
     .map((records) => records.map((record) => {
       if (!record || typeof record !== 'object' || Array.isArray(record)) return null;
-      const model = typeof record.id === 'string' ? modelById.get(record.id) : undefined;
+      if (!Number.isFinite(sourceScore(record))) return null;
+      const model = modelBySlug.get(record.slug) || modelByName.get(record.name);
+      if (!model) return null;
       return {
         ...model,
         ...record,
-        slug: record.slug ?? model?.slug,
-        name: record.name ?? model?.name,
+        sourceNativeId: record.id ?? null,
+        id: model.id,
+        slug: model.slug,
+        name: model.name,
         // AA-Briefcase's public leaderboard emits `elo`, while its smaller
         // chart subset emits `briefcaseElo`. Keep a stable source field for
         // the catalog without discarding the source-native value.
@@ -140,20 +146,39 @@ function evaluationRecords(payload, evaluationId, modelById) {
   return uniqueBy(candidates[0], (record) => record.id, `AA ${evaluationId}`);
 }
 
+function jsonObjectAt(payload, start) {
+  let depth = 0;
+  let inString = false;
+  let escaped = false;
+  for (let index = start; index < payload.length; index += 1) {
+    const character = payload[index];
+    if (inString) {
+      if (escaped) escaped = false;
+      else if (character === '\\') escaped = true;
+      else if (character === '"') inString = false;
+    } else if (character === '"') inString = true;
+    else if (character === '{') depth += 1;
+    else if (character === '}' && --depth === 0) {
+      return JSON.parse(payload.slice(start, index + 1));
+    }
+  }
+  throw new Error('AA Coding Agent row contains an unterminated JSON object.');
+}
+
 function codingAgentRecords(payload, sourceId) {
-  const candidates = extractJsonArraysAfterMarker(payload, '"benchmarkRows":')
-    .map((records) => records.filter((record) => (
-      record
-      && typeof record === 'object'
-      && !Array.isArray(record)
-      && typeof record.id === 'string'
+  // The current Flight payload streams row objects individually. Its
+  // benchmarkRows array contains React references rather than source rows.
+  const rows = [...payload.matchAll(/\{"id":"[^"]+","isDefault":/gu)]
+    .map((match) => jsonObjectAt(payload, match.index))
+    .filter((record) => (
+      typeof record.id === 'string'
       && typeof record.agentName === 'string'
       && typeof record.displayLabel === 'string'
       && Array.isArray(record.evals)
       && Number.isFinite(record.indexScore)
-    )))
-    .sort((left, right) => right.length - left.length);
-  if ((candidates[0]?.length ?? 0) < 5) {
+    ));
+  const candidates = [uniqueBy(rows, (record) => record.id, 'AA Coding Agent page')];
+  if ((candidates[0]?.length ?? 0) < 15) {
     throw new Error(`AA ${sourceId} page did not expose usable benchmarkRows.`);
   }
   return candidates[0];
@@ -173,6 +198,9 @@ function evaluationCoverage(recordsByEvaluation) {
       ?? record.briefcaseBreakdown?.elo
       ?? record.briefcase?.elo
       ?? record.briefcase_breakdown?.elo
+    ),
+    'gdp-pdf': (record) => (
+      record.gdpPdfAllPass ?? record.gdpPdfBreakdown?.allPass
     ),
     'automationbench-aa': (record) => (
       record.automationBenchBreakdown?.strictScore
@@ -225,20 +253,39 @@ async function main() {
   const pageById = new Map(fetchedPages.map((page) => [page.definition.id, page]));
   const models = detailedModelRecords(pageById.get('model-leaderboard').decoded.payload);
   const modelById = new Map(models.map((model) => [model.id, model]));
+  const modelByName = new Map(models.map((model) => [model.name, model]));
+  const modelBySlug = new Map(models.map((model) => [model.slug, model]));
   const evaluationRecordsById = Object.fromEntries(
     fetchedPages
       .filter((page) => page.definition.kind === 'evaluation')
       .map((page) => [
         page.definition.id,
-        evaluationRecords(page.decoded.payload, page.definition.id, modelById),
+        evaluationRecords(page.decoded.payload, page.definition.id, modelByName, modelBySlug),
       ]),
   );
 
-  const codingRowsByPage = fetchedPages
+  const currentCodingRows = fetchedPages
     .filter((page) => page.definition.kind === 'coding-agents')
-    .flatMap((page) => codingAgentRecords(page.decoded.payload, page.definition.id));
+    .flatMap((page) => codingAgentRecords(page.decoded.payload, page.definition.id))
+    .map((record) => ({
+      ...record,
+      sourceSnapshotDate: fetchedAt.slice(0, 10),
+      sourceStatus: 'current-page',
+    }));
+  const previousSnapshot = existsSync(PREVIOUS_SNAPSHOT_PATH)
+    ? JSON.parse(readFileSync(PREVIOUS_SNAPSHOT_PATH, 'utf8'))
+    : null;
+  const currentCodingLabels = new Set(currentCodingRows.map((record) => record.displayLabel));
+  const historicalCodingRows = (previousSnapshot?.codingAgentRecords || [])
+    .filter((record) => !currentCodingLabels.has(record.displayLabel))
+    .map((record) => ({
+      ...record,
+      sourceSnapshotDate: record.sourceSnapshotDate
+        || previousSnapshot.fetchedAt?.slice(0, 10),
+      sourceStatus: 'retained-historical-row',
+    }));
   const codingAgentRows = uniqueBy(
-    codingRowsByPage,
+    [...currentCodingRows, ...historicalCodingRows],
     (record) => record.id,
     'AA Coding Agent pages',
   ).sort((left, right) => (
@@ -262,7 +309,7 @@ async function main() {
     fetchedAt,
     source: {
       name: 'Artificial Analysis',
-      collectionMethod: 'Official public Next.js Flight payloads; no score inference or aggregation.',
+      collectionMethod: 'Official public Next.js Flight payloads; source slugs join model and evaluation tables. Coding Agent rows absent from the current top-20 page retain their prior dated snapshot.',
       pages: Object.fromEntries(fetchedPages.map((page) => [
         page.definition.id,
         {
@@ -281,6 +328,8 @@ async function main() {
     counts: {
       modelRecords: models.length,
       codingAgentRecords: codingAgentRows.length,
+      currentCodingAgentRecords: currentCodingRows.length,
+      retainedHistoricalCodingAgentRecords: historicalCodingRows.length,
       codingAgentHarnesses: new Set(codingAgentRows.map((record) => record.agentName)).size,
       evaluationRecords: Object.fromEntries(
         Object.entries(evaluationRecordsById)

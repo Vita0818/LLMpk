@@ -37,6 +37,10 @@ import {
   VERIFIED_RECOVERED_SOURCE_OBSERVATIONS,
 } from './recoveredSourceSeedCards';
 import {
+  VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_MODEL_CARDS,
+  VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_OBSERVATIONS,
+} from './replacementBenchmarkSeedCards';
+import {
   isCapabilityMetricCompatibleWithSourceLink,
   isHarnessOnlyCapabilityMetric,
   isPlainChatHarness,
@@ -616,7 +620,7 @@ function apiProfilePresets(input: {
           provider: viaOpenRouter(input.providerName || 'Unknown provider', input.upstreamApi || 'Unknown API'),
         };
     const sourceAvailabilityNote = plan.exactCardIds.length === 0
-      ? '该档位由 OpenRouter 官方模型目录的 reasoning.supported_efforts 确认；当前没有同档能力卡，只保留合法低档兜底或显示数据不足。'
+      ? '该档位由官方模型资料确认；当前没有同档能力卡，只保留合法低档兜底或显示数据不足。'
       : undefined;
     const note = [input.note, sourceAvailabilityNote]
       .filter((value): value is string => Boolean(value && value.trim()))
@@ -700,7 +704,196 @@ readonly BuiltInConfigurationPreset[] = [
         upstream: 'Anthropic API · claude-fable-5-1',
       },
     }),
-    note: 'AA 独立发布 Low、Medium、High、XHigh、Max 五档，并将每档标为 Default Fallback；保留该披露。当前 AA Coding Agent Index 没有 Fable 5.1 的 Claude Code 行，因此 Harness 必须为 ---。价格和速度采用 AA 的精确 effort 记录，不用 OpenRouter 默认 High 的路线级速度覆盖 Max 等档位。官方输入/输出价格为 $10/$50，缓存读取为 $0.25/M。',
+    note: 'AA 独立发布 Low、Medium、High、XHigh、Max 五档，并将每档标为 Default Fallback；保留该披露。普通 API 配置与 AA 新发布的 Claude Code 执行分开建卡。价格和速度采用 AA 的精确 effort 记录，不用 OpenRouter 默认 High 的路线级速度覆盖 Max 等档位。官方输入/输出价格为 $10/$50，缓存读取为 $0.25/M。',
+  }),
+];
+
+function directApiIdentity(
+  modelName: string,
+  profile: string,
+  providerName: string,
+  apiRoute: string,
+): BuiltInConfigurationIdentity {
+  return {
+    model: { name: modelName, profile },
+    harness: normalChat(apiRoute),
+    provider: { name: providerName, upstream: apiRoute },
+  };
+}
+
+const OCTOBER_2_MODEL_CONFIGURATION_PRESETS:
+readonly BuiltInConfigurationPreset[] = [
+  ...apiProfilePresets({
+    keyPrefix: 'gpt-6-1-sol',
+    productLineId: 'gpt_61_sol',
+    modelName: 'GPT-6.1 Sol',
+    profileKeys: ['low', 'medium', 'high', 'xhigh', 'max'],
+    origin: 'source-backed',
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+    identityForProfile: (profile) => directApiIdentity(
+      'GPT-6.1 Sol', profile, 'OpenAI', 'OpenAI Responses API · gpt-6.1-sol',
+    ),
+    note: '五档 effort 使用 AA 的独立记录；Pro 模式的价格与能力证据保持独立。',
+  }),
+  ...apiProfilePresets({
+    keyPrefix: 'claude-sonnet-5-5',
+    productLineId: 'claude_sonnet_55',
+    modelName: 'Claude Sonnet 5.5',
+    profileKeys: ['low', 'medium', 'high', 'xhigh', 'max'],
+    origin: 'source-backed',
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+    identityForProfile: (profile) => directApiIdentity(
+      'Claude Sonnet 5.5', profile, 'Anthropic', 'Anthropic API · claude-sonnet-5.5',
+    ),
+    note: 'AA 五档 effort 均披露 Default Fallback；保留该限制，普通 API 与 Claude Code 执行分开建卡。',
+  }),
+];
+
+const SEPTEMBER_25_MODEL_CONFIGURATION_PRESETS:
+readonly BuiltInConfigurationPreset[] = [
+  ...apiProfilePresets({
+    keyPrefix: 'gpt-6-astra',
+    productLineId: 'gpt_6_astra',
+    modelName: 'GPT-6 Astra',
+    profileKeys: ['low', 'medium', 'high', 'xhigh', 'max'],
+    origin: 'source-backed',
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+    identityForProfile: (profile) => directApiIdentity(
+      'GPT-6 Astra', profile, 'OpenAI', 'OpenAI Responses API · gpt-6-astra',
+    ),
+  }),
+  ...apiProfilePresets({
+    keyPrefix: 'gpt-6-sol',
+    productLineId: 'gpt_6_sol',
+    modelName: 'GPT-6 Sol',
+    profileKeys: ['none', 'low', 'medium', 'high', 'xhigh', 'max'],
+    origin: 'source-backed',
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+    identityForProfile: (profile) => directApiIdentity(
+      'GPT-6 Sol', profile, 'OpenAI', 'OpenAI Responses API · gpt-6-sol',
+    ),
+  }),
+  ...apiProfilePresets({
+    keyPrefix: 'gpt-6-luna',
+    productLineId: 'gpt_6_luna',
+    modelName: 'GPT-6 Luna',
+    profileKeys: ['none', 'low', 'medium', 'high', 'xhigh', 'max'],
+    origin: 'source-backed',
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+    identityForProfile: (profile) => directApiIdentity(
+      'GPT-6 Luna', profile, 'OpenAI', 'OpenAI Responses API · gpt-6-luna',
+    ),
+  }),
+  ...apiProfilePresets({
+    keyPrefix: 'claude-opus-5-5',
+    productLineId: 'claude_opus_55',
+    modelName: 'Claude Opus 5.5',
+    profileKeys: ['low', 'medium', 'high', 'xhigh', 'max'],
+    origin: 'source-backed',
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+    identityForProfile: (profile) => directApiIdentity(
+      'Claude Opus 5.5', profile, 'Anthropic', 'Anthropic API · claude-opus-5-5',
+    ),
+  }),
+  ...apiProfilePresets({
+    keyPrefix: 'grok-4-7',
+    productLineId: 'grok_47',
+    modelName: 'Grok 4.7',
+    profileKeys: ['low', 'medium', 'high', 'xhigh'],
+    origin: 'source-backed',
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+    identityForProfile: (profile) => directApiIdentity(
+      'Grok 4.7', profile, 'xAI', 'xAI API · grok-4.7',
+    ),
+  }),
+  ...apiProfilePresets({
+    keyPrefix: 'deepseek-v4-1-flash',
+    productLineId: 'deepseek_v41_flash',
+    modelName: 'DeepSeek V4.1 Flash',
+    profileKeys: ['none', 'max'],
+    origin: 'source-backed',
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+    identityForProfile: (profile) => directApiIdentity(
+      'DeepSeek V4.1 Flash', profile, 'DeepSeek', 'DeepSeek API · deepseek-flash',
+    ),
+  }),
+  ...apiProfilePresets({
+    keyPrefix: 'mimo-v2-6-pro',
+    productLineId: 'mimo_v26_pro',
+    modelName: 'MiMo-V2.6-Pro',
+    profileKeys: ['default'],
+    // AA no longer publishes speed for this unqualified/default profile.
+    // Claim the same published route's practical records explicitly so an
+    // automatically labelled Max duplicate cannot replace the reviewed API.
+    sharedExactCardIds: [
+      'card-openrouter-xiaomi-mimo-v2-6-pro',
+      'card-openrouter-standard-performance-xiaomi-mimo-v2-6-pro',
+    ],
+    origin: 'source-backed',
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+    identityForProfile: (profile) => directApiIdentity(
+      'MiMo-V2.6-Pro', profile, 'Xiaomi', 'Xiaomi MiMo API · mimo-v2.6-pro',
+    ),
+  }),
+  ...apiProfilePresets({
+    keyPrefix: 'mimo-v2-6-flash',
+    productLineId: 'mimo_v26_flash',
+    modelName: 'MiMo-V2.6-Flash',
+    profileKeys: ['default'],
+    sharedExactCardIds: ['card-openrouter-xiaomi-mimo-v2-6-flash'],
+    origin: 'source-backed',
+    lockExplicitSourceCards: true,
+    identityForProfile: (profile) => directApiIdentity(
+      'MiMo-V2.6-Flash', profile, 'Xiaomi', 'Xiaomi MiMo API · mimo-v2.6-flash',
+    ),
+    note: 'AA 已发布独立能力评测；价格和速度使用该精确记录，保留缺失领域。',
+  }),
+  ...apiProfilePresets({
+    keyPrefix: 'step-5-preview',
+    productLineId: 'step_5_preview',
+    modelName: 'Step 5 Preview',
+    profileKeys: ['high'],
+    origin: 'source-backed',
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+    identityForProfile: (profile) => directApiIdentity(
+      'Step 5 Preview', profile, 'StepFun', 'StepFun API · Step 5 Preview',
+    ),
+  }),
+  ...apiProfilePresets({
+    keyPrefix: 'qwen3-8-2-4t-a95b',
+    productLineId: 'qwen_38_24t_a95b',
+    modelName: 'Qwen3.8-2.4T-A95B',
+    profileKeys: ['xhigh'],
+    origin: 'source-backed',
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+    identityForProfile: (profile) => directApiIdentity(
+      'Qwen3.8-2.4T-A95B', profile, 'Alibaba', 'Alibaba Cloud Model Studio · qwen3.8-2.4t-a95b',
+    ),
+  }),
+  ...apiProfilePresets({
+    keyPrefix: 'qwen3-8-max-0902',
+    productLineId: 'qwen_38_max',
+    modelName: 'Qwen3.8-Max',
+    profileKeys: ['xhigh'],
+    sharedExactCardIds: ['card-openrouter-qwen-qwen3-8-max-0902'],
+    origin: 'source-backed',
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+    identityForProfile: (profile) => directApiIdentity(
+      'Qwen3.8-Max', profile, 'Alibaba', 'Alibaba Cloud Model Studio · qwen3.8-max-0902',
+    ),
+    note: '固定使用 0902 快照；未注明版本的 Qwen3.8 Max 行不与该配置合并。',
   }),
 ];
 
@@ -1064,7 +1257,6 @@ const DATA_MD_PROFILE_BINDINGS: Readonly<Record<string, string>> = {
  */
 const DATA_MD_EXACT_CARD_ADDITIONS: Readonly<Record<string, readonly string[]>> = {
   'builtin.data-md.claude-fable-5.max.vertex': [
-    'card-arena-claude-fable-5',
     'card-openrouter-anthropic-claude-fable-5',
   ],
   'builtin.data-md.kimi-k2-6.max': ['card-arena-kimi-k2-6'],
@@ -1680,6 +1872,117 @@ const CLAUDE_OPUS_5_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[]
  * declared Chat fallbacks in the stack.
  */
 const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
+  ...(['low', 'medium', 'high', 'xhigh', 'max'] as const).map((profile) => harnessPreset({
+    key: `harness.gpt-6-1-sol.${profile}.codex-cli`,
+    productLineId: 'gpt_61_sol',
+    modelName: 'GPT-6.1 Sol',
+    profile: ROUTE_EFFORT_LABELS[profile],
+    harness: 'Codex CLI',
+    providerName: 'OpenAI',
+    upstreamApi: 'OpenAI API',
+    exactHarnessCardIds: [`card-aa-coding-agent-codex-gpt-6-1-sol-${profile}`],
+    chatFallbackCardIds: [
+      profile === 'max' ? 'card-aa-gpt-6-1-sol' : `card-aa-gpt-6-1-sol-${profile}`,
+      ...(profile === 'max' ? ['card-arena-gpt-6-1-sol-max'] : []),
+    ],
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+  })),
+  ...(['low', 'medium', 'high', 'xhigh', 'max'] as const).map((profile) => harnessPreset({
+    key: `harness.claude-sonnet-5-5.${profile}.claude-code`,
+    productLineId: 'claude_sonnet_55',
+    modelName: 'Claude Sonnet 5.5',
+    profile: ROUTE_EFFORT_LABELS[profile],
+    harness: 'Claude Code',
+    providerName: 'Anthropic',
+    upstreamApi: 'Anthropic API',
+    exactHarnessCardIds: [`card-aa-coding-agent-claude-code-claude-sonnet-5-5-${profile}`],
+    chatFallbackCardIds: [
+      profile === 'max' ? 'card-aa-claude-sonnet-5-5' : `card-aa-claude-sonnet-5-5-${profile}`,
+    ],
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+    note: '普通模型能力回退保留 AA 的 Default Fallback 披露。',
+  })),
+  harnessPreset({
+    key: 'harness.gpt-6-astra.max.codex-cli',
+    productLineId: 'gpt_6_astra',
+    modelName: 'GPT-6 Astra',
+    profile: 'Max',
+    harness: 'Codex CLI',
+    providerName: 'OpenAI',
+    upstreamApi: 'OpenAI API',
+    exactHarnessCardIds: ['card-aa-coding-agent-codex-gpt-6-astra-max'],
+    chatFallbackCardIds: ['card-aa-gpt-6-astra', 'card-arena-gpt-6-astra-max'],
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+  }),
+  harnessPreset({
+    key: 'harness.gpt-6-sol.max.codex-cli',
+    productLineId: 'gpt_6_sol',
+    modelName: 'GPT-6 Sol',
+    profile: 'Max',
+    harness: 'Codex CLI',
+    providerName: 'OpenAI',
+    upstreamApi: 'OpenAI API',
+    exactHarnessCardIds: ['card-aa-coding-agent-codex-gpt-6-sol-max'],
+    chatFallbackCardIds: ['card-aa-gpt-6-sol', 'card-arena-gpt-6-sol-max'],
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+  }),
+  harnessPreset({
+    key: 'harness.gpt-6-luna.max.codex-cli',
+    productLineId: 'gpt_6_luna',
+    modelName: 'GPT-6 Luna',
+    profile: 'Max',
+    harness: 'Codex CLI',
+    providerName: 'OpenAI',
+    upstreamApi: 'OpenAI API',
+    exactHarnessCardIds: ['card-aa-coding-agent-codex-gpt-6-luna-max'],
+    chatFallbackCardIds: ['card-aa-gpt-6-luna', 'card-arena-gpt-6-luna-max'],
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+  }),
+  harnessPreset({
+    key: 'harness.claude-opus-5-5.max.claude-code',
+    productLineId: 'claude_opus_55',
+    modelName: 'Claude Opus 5.5',
+    profile: 'Max',
+    harness: 'Claude Code',
+    providerName: 'Anthropic',
+    upstreamApi: 'Anthropic API',
+    exactHarnessCardIds: ['card-aa-coding-agent-claude-code-claude-opus-5-5-max'],
+    chatFallbackCardIds: ['card-aa-claude-opus-5-5'],
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+  }),
+  harnessPreset({
+    key: 'harness.claude-fable-5-1.max.claude-code',
+    productLineId: 'claude_fable_51',
+    modelName: 'Claude Fable 5.1',
+    profile: 'Max',
+    harness: 'Claude Code',
+    providerName: 'Anthropic',
+    upstreamApi: 'Anthropic API',
+    exactHarnessCardIds: ['card-aa-coding-agent-claude-code-claude-fable-5-1-max'],
+    chatFallbackCardIds: ['card-aa-claude-fable-5-1', 'card-arena-claude-fable-5-1-max'],
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+    note: 'AA 的 Coding Agent 行披露 Default Fallback；保留该来源限制。',
+  }),
+  harnessPreset({
+    key: 'harness.grok-4-7.xhigh.grok-build',
+    productLineId: 'grok_47',
+    modelName: 'Grok 4.7',
+    profile: 'XHigh',
+    harness: 'Grok Build',
+    providerName: 'xAI',
+    upstreamApi: 'Grok Build managed route',
+    exactHarnessCardIds: ['card-aa-coding-agent-grok-build-grok-4-7-xhigh'],
+    chatFallbackCardIds: ['card-aa-grok-4-7', 'card-arena-grok-4-7-xhigh'],
+    lockExplicitSourceCards: true,
+    lockProviderNeutralPracticalCards: true,
+  }),
   harnessPreset({
     key: 'agent.arena.deepseek-v4-flash.max',
     productLineId: 'deepseek_v4_flash_0731',
@@ -1733,6 +2036,7 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
       'card-aa-minimax-m3',
       'card-arena-minimax-m3',
       'card-openrouter-minimax-minimax-m3',
+      'card-swe-rebench-v2-minimax-m3',
     ],
   }),
   arenaAgentModePreset({
@@ -1818,6 +2122,7 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
       'card-aa-gemini-3-5-flash',
       'card-arena-gemini-3-5-flash-high',
       'card-openrouter-google-gemini-3-5-flash',
+      'card-scale-enigmaeval-gemini-3-5-flash-high',
     ],
   }),
   arenaAgentModePreset({
@@ -2077,6 +2382,7 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
       'card-aa-gemini-3-1-pro-preview',
       'card-arena-gemini-3-1-pro-preview',
       'card-openrouter-google-gemini-3-1-pro-preview',
+      'card-scale-enigmaeval-gemini-3-1-pro-preview-high',
     ],
     sameHarnessFallbackLinks: [
       lowerAgentHarnessFallback(
@@ -2157,14 +2463,6 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
       'card-openrouter-anthropic-claude-opus-4-7',
     ],
     sameHarnessFallbackLinks: [
-      lowerProfileAgentHarnessFallback(
-        productionAgentModeCardId('card-arena-claude-opus-4-7-high'),
-        'High',
-        3,
-        'Max',
-        5,
-        'Claude Code',
-      ),
       lowerProfileHarnessFallback(
         'card-arena-claude-opus-4-7-high',
         'High',
@@ -2195,14 +2493,6 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
       'card-aa-claude-opus-4-6-adaptive',
     ],
     sameHarnessFallbackLinks: [
-      lowerProfileAgentHarnessFallback(
-        productionAgentModeCardId('card-arena-claude-opus-4-6'),
-        'High',
-        3,
-        'Max',
-        5,
-        'Claude Code',
-      ),
       lowerProfileHarnessFallback(
         'card-arena-claude-opus-4-6',
         'High',
@@ -2235,14 +2525,6 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
       reviewedFamilyCardId('sonnet46-aa-max'),
     ],
     sameHarnessFallbackLinks: [
-      lowerProfileAgentHarnessFallback(
-        productionAgentModeCardId('card-arena-claude-sonnet-4-6'),
-        'High',
-        3,
-        'Max',
-        5,
-        'Claude Code',
-      ),
       lowerProfileHarnessFallback(
         'card-arena-claude-sonnet-4-6',
         'High',
@@ -2291,11 +2573,6 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
         'Max',
         5,
       ),
-      lowerAgentHarnessFallback(
-        productionAgentModeCardId('card-arena-kimi-k2-6'),
-        'Max',
-        'Claude Code',
-      ),
     ],
     fallbackPolicyNote: 'AA 未给 Kimi K2.6 的 Claude Code 行单列 effort，因此只按默认档→Max 单向补齐，并保留原始来源标签。',
   }),
@@ -2325,6 +2602,22 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
         'card-arena-gpt-5-6-sol-xhigh',
         'XHigh',
         4,
+        'Max',
+        5,
+        'Codex CLI',
+      ),
+      lowerProfileHarnessFallback(
+        'card-scale-enigmaeval-gpt-5-6-sol-high',
+        'High',
+        3,
+        'Max',
+        5,
+        'Codex CLI',
+      ),
+      lowerProfileHarnessFallback(
+        'card-swe-rebench-v2-gpt-5-6-sol-medium',
+        'Medium',
+        2,
         'Max',
         5,
         'Codex CLI',
@@ -2394,6 +2687,14 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
         5,
         'Codex CLI',
       ),
+      lowerProfileHarnessFallback(
+        'card-swe-rebench-v2-gpt-5-6-luna-medium',
+        'Medium',
+        2,
+        'Max',
+        5,
+        'Codex CLI',
+      ),
     ],
     note: 'Arena Text 已发布 Luna XHigh 的六个文本赛道；按 XHigh→Max 的单向规则，只补充非 Harness 的文本能力，不覆盖 Codex CLI 专属评测。',
   }),
@@ -2434,13 +2735,7 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
       'card-arena-deepseek-v4-pro-high-preview',
       'card-openrouter-deepseek-deepseek-v4-pro',
     ],
-    sameHarnessFallbackLinks: [
-      lowerAgentHarnessFallback(
-        productionAgentModeCardId('card-arena-deepseek-v4-pro'),
-        'High',
-        'Claude Code',
-      ),
-    ],
+    note: 'Arena 已移除未注明版本的 DeepSeek V4 Pro Agent 行，不再将其作为此 Preview 执行的回退来源。',
   }),
   harnessPreset({
     key: 'harness.claude-opus-4-8.max.claude-code',
@@ -2455,6 +2750,14 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
       'card-aa-claude-opus-4-8',
     ],
     sameHarnessFallbackLinks: [
+      lowerProfileHarnessFallback(
+        'card-scale-enigmaeval-claude-opus-4-8-xhigh',
+        'XHigh',
+        4,
+        'Max',
+        5,
+        'Claude Code',
+      ),
       lowerProfileAgentHarnessFallback(
         productionAgentModeCardId('card-arena-claude-opus-4-8-high'),
         'High',
@@ -2495,6 +2798,14 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
     ],
     sameHarnessFallbackLinks: [
       lowerProfileHarnessFallback(
+        'card-swe-rebench-v2-claude-opus-5-high',
+        'High',
+        3,
+        'Max',
+        5,
+        'Claude Code',
+      ),
+      lowerProfileHarnessFallback(
         'card-arena-claude-opus-5-high',
         'High',
         3,
@@ -2515,10 +2826,33 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
     exactHarnessCardIds: ['card-aa-coding-agent-claude-code-claude-fable-5-max'],
     chatFallbackCardIds: [
       'card-aa-claude-fable-5',
-      'card-arena-claude-fable-5',
       'card-openrouter-anthropic-claude-fable-5',
     ],
     sameHarnessFallbackLinks: [
+      lowerProfileHarnessFallback(
+        'card-arena-claude-fable-5-high',
+        'High',
+        3,
+        'Max',
+        5,
+        'Claude Code',
+      ),
+      lowerProfileHarnessFallback(
+        'card-scale-enigmaeval-claude-fable-5-high',
+        'High',
+        3,
+        'Max',
+        5,
+        'Claude Code',
+      ),
+      lowerProfileHarnessFallback(
+        'card-swe-rebench-v2-claude-fable-5-high',
+        'High',
+        3,
+        'Max',
+        5,
+        'Claude Code',
+      ),
       lowerProfileAgentHarnessFallback(
         productionAgentModeCardId('card-arena-claude-fable-5-high'),
         'High',
@@ -2566,6 +2900,7 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
       'card-aa-grok-4-5',
       'card-arena-grok-4-5',
       'card-openrouter-x-ai-grok-4-5',
+      'card-swe-rebench-v2-grok-4-5-high',
     ],
     sameHarnessFallbackLinks: [
       lowerAgentHarnessFallback(
@@ -2696,7 +3031,18 @@ const SOURCE_LABELS: Record<SourceType, string> = {
   artificial_analysis: 'Artificial Analysis',
   arena: 'Arena',
   openrouter: 'OpenRouter',
+  scale_labs: 'Scale Labs',
+  terminal_bench: 'Terminal-Bench',
+  swe_rebench: 'SWE-rebench',
+  frontier_code: 'FrontierCode',
 };
+
+const REPLACEMENT_BENCHMARK_SOURCES: ReadonlySet<SourceType> = new Set([
+  'scale_labs',
+  'terminal_bench',
+  'swe_rebench',
+  'frontier_code',
+]);
 
 function parseVerifiedSourceCards(): SourceModelCard[] {
   let bundledCards: SourceModelCard[] = [];
@@ -2710,7 +3056,11 @@ function parseVerifiedSourceCards(): SourceModelCard[] {
         && typeof (value as SourceModelCard).exactSourceModelName === 'string'
         && ((value as SourceModelCard).source === 'artificial_analysis'
           || (value as SourceModelCard).source === 'arena'
-          || (value as SourceModelCard).source === 'openrouter')
+          || (value as SourceModelCard).source === 'openrouter'
+          || (value as SourceModelCard).source === 'scale_labs'
+          || (value as SourceModelCard).source === 'terminal_bench'
+          || (value as SourceModelCard).source === 'swe_rebench'
+          || (value as SourceModelCard).source === 'frontier_code')
       ));
     }
   } catch {
@@ -2722,6 +3072,7 @@ function parseVerifiedSourceCards(): SourceModelCard[] {
     ...VERIFIED_PRODUCTION_AGENT_MODE_SOURCE_MODEL_CARDS,
     ...VERIFIED_REVIEWED_FAMILY_SOURCE_MODEL_CARDS,
     ...VERIFIED_RECOVERED_SOURCE_MODEL_CARDS,
+    ...VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_MODEL_CARDS,
   ];
 }
 
@@ -2747,6 +3098,7 @@ function parseVerifiedSourceObservations(): SourceObservation[] {
     ...VERIFIED_PRODUCTION_AGENT_MODE_SOURCE_OBSERVATIONS,
     ...VERIFIED_REVIEWED_FAMILY_SOURCE_OBSERVATIONS,
     ...VERIFIED_RECOVERED_SOURCE_OBSERVATIONS,
+    ...VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_OBSERVATIONS,
   ];
 }
 
@@ -2816,7 +3168,6 @@ const PRACTICAL_METRIC_IDS = new Set([
 export const READER_APPROVED_SOURCE_CATALOG_PRODUCT_LINE_IDS = [
   'source-profile-grok-4-3-high',
   'source-profile-grok-build-0-1-0616',
-  'source-profile-north-mini-code',
 ] as const;
 
 const READER_APPROVED_SOURCE_CATALOG_PRODUCT_LINES = new Set<string>(
@@ -2854,6 +3205,16 @@ function sourceCatalogModelName(
 }
 
 function sourceCatalogHarness(cards: readonly SourceModelCard[]): BuiltInConfigurationIdentity['harness'] {
+  const declaredHarnesses = [...new Set(cards.flatMap((card) => {
+    const harness = card.metadataJson?.execution?.harness;
+    return typeof harness === 'string' && harness.trim() ? [harness.trim()] : [];
+  }))];
+  if (declaredHarnesses.length === 1) {
+    return {
+      name: declaredHarnesses[0],
+      environment: `${declaredHarnesses[0]} · published benchmark run`,
+    };
+  }
   if (cards.some(isOpenRouterStandardPerformanceCard)) {
     return {
       name: '---',
@@ -2877,6 +3238,14 @@ function sourceCatalogProfileLabel(
   scope: SourceCatalogCardScope,
   cards: readonly SourceModelCard[],
 ): string {
+  const declaredEfforts = [...new Set(cards.flatMap((card) => {
+    const effort = card.metadataJson?.execution?.effort;
+    return typeof effort === 'string' && effort.trim() ? [effort.trim()] : [];
+  }))];
+  if (declaredEfforts.length === 1) {
+    return ROUTE_EFFORT_LABELS[declaredEfforts[0].toLocaleLowerCase('en-US')]
+      || declaredEfforts[0];
+  }
   const canonicalKey = (scope.canonicalProfileKey || '')
     .toLocaleLowerCase('en-US');
   const text = [
@@ -3030,6 +3399,10 @@ function buildSourceCatalogConfigurationPresets(
   }
   const groups = new Map<string, { scope: SourceCatalogCardScope; cards: SourceModelCard[] }>();
   for (const card of allCards) {
+    // Direct benchmark rows enrich an existing, exact three-part
+    // configuration. They never manufacture a new reader configuration just
+    // because a benchmark published a model/harness row.
+    if (REPLACEMENT_BENCHMARK_SOURCES.has(card.source)) continue;
     if (alreadyDeclaredCardIds.has(card.id)) continue;
     const scope = sourceCatalogCardScope(card);
     if (!scope) continue;
@@ -3075,7 +3448,15 @@ function buildSourceCatalogConfigurationPresets(
         left.source.localeCompare(right.source, 'en-US')
         || left.id.localeCompare(right.id, 'en-US')
       ));
-      for (const source of ['artificial_analysis', 'arena', 'openrouter'] as const) {
+      for (const source of [
+        'artificial_analysis',
+        'arena',
+        'openrouter',
+        'scale_labs',
+        'terminal_bench',
+        'swe_rebench',
+        'frontier_code',
+      ] as const) {
         const sameSourceCards = sourceCards.filter((card) => card.source === source);
         if (sameSourceCards.length <= 1) continue;
         const companion = sameSourceCards.find(isOpenRouterStandardPerformanceCard);
@@ -3129,13 +3510,16 @@ function attachEquivalentCardsToHandAuthoredPresets(
     groups.set(groupKey, group);
   });
   const performanceCompanionsByBaseCardId = new Map<string, SourceModelCard[]>();
+  const benchmarkCompanionsByBaseCardId = new Map<string, SourceModelCard[]>();
   cards.forEach((card) => {
-    if (!isOpenRouterStandardPerformanceCard(card)) return;
     const companionForCardId = card.metadataJson?.sourceIdentity?.companionForCardId;
     if (typeof companionForCardId !== 'string') return;
-    const companions = performanceCompanionsByBaseCardId.get(companionForCardId) || [];
+    const target = isOpenRouterStandardPerformanceCard(card)
+      ? performanceCompanionsByBaseCardId
+      : benchmarkCompanionsByBaseCardId;
+    const companions = target.get(companionForCardId) || [];
     companions.push(card);
-    performanceCompanionsByBaseCardId.set(companionForCardId, companions);
+    target.set(companionForCardId, companions);
   });
 
   const directClaimCounts = new Map<string, number>();
@@ -3152,13 +3536,22 @@ function attachEquivalentCardsToHandAuthoredPresets(
 
   let attachedCardCount = 0;
   const augmented = presets.map((preset) => {
-    if (preset.lockExplicitSourceCards) return preset;
     const existingIds = new Set([
       ...(preset.sourceCardIds || []),
       ...(preset.sourceCardLinks || []).map((link) => link.cardId),
     ]);
     const additions = new Set<string>();
     (preset.sourceCardIds || []).forEach((cardId) => {
+      (benchmarkCompanionsByBaseCardId.get(cardId) || []).forEach((companion) => {
+        if (
+          existingIds.has(companion.id)
+          || companion.metadataJson?.scope?.productLineId !== preset.productLineId
+        ) return;
+        additions.add(companion.id);
+      });
+    });
+
+    if (!preset.lockExplicitSourceCards) (preset.sourceCardIds || []).forEach((cardId) => {
       const seed = cardsById.get(cardId);
       if (!seed) return;
       (performanceCompanionsByBaseCardId.get(cardId) || []).forEach((companion) => {
@@ -3319,6 +3712,8 @@ const BASE_HAND_AUTHORED_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPre
   ...DATA_MD_CONFIGURATION_PRESETS,
   ...MUSE_SPARK_1_2_CONFIGURATION_PRESETS,
   ...SEPTEMBER_2026_RELEASE_CONFIGURATION_PRESETS,
+  ...SEPTEMBER_25_MODEL_CONFIGURATION_PRESETS,
+  ...OCTOBER_2_MODEL_CONFIGURATION_PRESETS,
   ...AUGUST_2026_RELEASE_CONFIGURATION_PRESETS,
   ...ADDITIONAL_SOURCE_BACKED_CONFIGURATION_PRESETS,
   ...CLAUDE_OPUS_5_CONFIGURATION_PRESETS,
@@ -4165,6 +4560,11 @@ function buildModelGroupMetadata(
  * shipped configuration boxes are omitted.
  */
 const READER_FACING_PRESET_EXCLUSIONS = new Set<string>([
+  // AA's Claude Code row does not disclose whether it used the 0902 snapshot.
+  'builtin.harness.qwen3-8.max.claude-code',
+  // Arena's current Agent table no longer publishes these exact executions.
+  'builtin.agent.arena.gemini-3-5-flash.high',
+  'builtin.agent.arena.nemotron-3-ultra.high',
   'builtin.agent.arena.deepseek-v4-flash.max',
   'builtin.source-catalog.source-profile-granite-4-1-8b.granite-4-1-8b',
   'builtin.source-catalog.source-profile-granite-4-2-30b.granite-4-2-30b',
@@ -4176,7 +4576,12 @@ const READER_FACING_PRESET_EXCLUSIONS = new Set<string>([
 
 /** Reader-facing removals that apply to every route of the retired model line. */
 const READER_FACING_PRODUCT_LINE_EXCLUSIONS = new Set<string>([
+  // Google currently restricts access to invited Fairwind participants;
+  // AA marks its Antigravity CLI execution unavailable. Preserve raw evidence
+  // in the source pool until the public access route is published.
+  'gemini_4_argon',
   'qwen_37_max',
+  'qwen_38_max_preview',
   'source-profile-inkling-small',
   'source-profile-granite-4-2-3b',
   'source-profile-granite-4-2-8b',
@@ -4203,7 +4608,23 @@ const READER_FACING_PLAIN_API_PRODUCT_LINE_EXCLUSIONS = new Set<string>([
  * Missing domains remain missing and are shown as incomplete coverage.
  */
 const READER_APPROVED_SPARSE_PRODUCT_LINES = new Set<string>([
+  'gpt_61_sol',
+  'claude_sonnet_55',
   'hy4_preview',
+  'longcat_20',
+  'command_a_plus',
+  'claude_fable_51',
+  'gpt_6_astra',
+  'gpt_6_sol',
+  'gpt_6_luna',
+  'claude_opus_55',
+  'grok_47',
+  'deepseek_v41_flash',
+  'mimo_v26_pro',
+  'mimo_v26_flash',
+  'step_5_preview',
+  'qwen_38_24t_a95b',
+  'qwen_38_max',
 ]);
 
 /**
@@ -4465,4 +4886,4 @@ export const BUILT_IN_CONFIGURATION_PRESET_COUNT = BUILT_IN_CONFIGURATION_PRESET
  * additions visible during Vite hot updates as well as after a full reload.
  */
 export const BUILT_IN_CONFIGURATION_PRESET_INVENTORY_VERSION =
-  '2026-09-02-gemini-3-8-muse-1-3-v46';
+  '2026-10-02-model-refresh-v49';

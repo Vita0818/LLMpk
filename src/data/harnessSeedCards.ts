@@ -1,14 +1,15 @@
 import type { SourceModelCard, SourceObservation } from '../types/admin_mapping';
+import { OAGXM_SCOPE } from './oagxmScope';
 import {
   codingAgentRecords,
   fetchedAt as artificialAnalysisFetchedAt,
 } from './artificialAnalysisSourceSnapshot.json';
 
 const SOURCE_URL = 'https://artificialanalysis.ai/agents/coding-agents';
-const SOURCE_LEADERBOARD = 'Artificial Analysis Coding Agent Index v1.4';
+const SOURCE_LEADERBOARD = 'Artificial Analysis Coding Agent Index';
 const SNAPSHOT_DATE = artificialAnalysisFetchedAt.slice(0, 10) || '2026-07-27';
 const SCOPE_ID = 'oagxm-current-product-lines';
-const SCOPE_VERSION = 'oagxm-current-product-lines/v9-2026-09-02-releases';
+const SCOPE_VERSION = OAGXM_SCOPE.schemaVersion;
 
 interface HarnessCodingAgentRow {
   key: string;
@@ -34,6 +35,7 @@ interface HarnessCodingAgentRow {
   meanAgentWallTimeSec: number;
   meanSteps: number;
   harnessVersion: string;
+  snapshotDate?: string;
 }
 
 /**
@@ -348,6 +350,97 @@ interface StructuredHarnessBinding {
  * the checked-in official snapshot.
  */
 const STRUCTURED_HARNESS_BINDINGS: readonly StructuredHarnessBinding[] = [
+  ...(['low', 'medium', 'high', 'xhigh', 'max'] as const).map((profile): StructuredHarnessBinding => ({
+    key: `codex-gpt-6-1-sol-${profile}`,
+    expectedDisplayLabel: profile === 'max'
+      ? 'Codex - GPT-6.1 Sol (max)'
+      : `Codex - GPT-6.1 Sol (${profile}) ({'reasoning_effort': '${profile}'})`,
+    displayLabel: `Codex - GPT-6.1 Sol (${profile})`,
+    harness: 'Codex CLI',
+    productLineId: 'gpt_61_sol',
+    productLineName: 'GPT-6.1 Sol',
+    canonicalProfileKey: `gpt-6-1-sol-${profile}-codex`,
+    vendorId: 'openai',
+    vendorName: 'OpenAI',
+    tier: 'official',
+  })),
+  ...(['low', 'medium', 'high', 'xhigh', 'max'] as const).map((profile): StructuredHarnessBinding => ({
+    key: `claude-code-claude-sonnet-5-5-${profile}`,
+    expectedDisplayLabel: `Claude Code - Sonnet 5.5 (${profile})`,
+    harness: 'Claude Code',
+    productLineId: 'claude_sonnet_55',
+    productLineName: 'Claude Sonnet 5.5',
+    canonicalProfileKey: `claude-sonnet-5-5-${profile}-claude-code`,
+    vendorId: 'anthropic',
+    vendorName: 'Anthropic',
+    tier: 'official',
+  })),
+  {
+    key: 'codex-gpt-6-astra-max',
+    expectedDisplayLabel: 'Codex - GPT-6 Astra (max)',
+    harness: 'Codex CLI',
+    productLineId: 'gpt_6_astra',
+    productLineName: 'GPT-6 Astra',
+    canonicalProfileKey: 'gpt-6-astra-max-codex',
+    vendorId: 'openai',
+    vendorName: 'OpenAI',
+    tier: 'official',
+  },
+  {
+    key: 'codex-gpt-6-sol-max',
+    expectedDisplayLabel: 'Codex - GPT-6 Sol (max)',
+    harness: 'Codex CLI',
+    productLineId: 'gpt_6_sol',
+    productLineName: 'GPT-6 Sol',
+    canonicalProfileKey: 'gpt-6-sol-max-codex',
+    vendorId: 'openai',
+    vendorName: 'OpenAI',
+    tier: 'official',
+  },
+  {
+    key: 'codex-gpt-6-luna-max',
+    expectedDisplayLabel: "Codex - GPT-6 Luna (max) ({'reasoning_effort': 'max'})",
+    harness: 'Codex CLI',
+    productLineId: 'gpt_6_luna',
+    productLineName: 'GPT-6 Luna',
+    canonicalProfileKey: 'gpt-6-luna-max-codex',
+    vendorId: 'openai',
+    vendorName: 'OpenAI',
+    tier: 'official',
+  },
+  {
+    key: 'claude-code-claude-opus-5-5-max',
+    expectedDisplayLabel: 'Claude Code - Opus 5.5 (max)',
+    harness: 'Claude Code',
+    productLineId: 'claude_opus_55',
+    productLineName: 'Claude Opus 5.5',
+    canonicalProfileKey: 'claude-opus-5-5-max-claude-code',
+    vendorId: 'anthropic',
+    vendorName: 'Anthropic',
+    tier: 'official',
+  },
+  {
+    key: 'claude-code-claude-fable-5-1-max',
+    expectedDisplayLabel: 'Claude Code - Fable 5.1 (max) (with fallback)',
+    harness: 'Claude Code',
+    productLineId: 'claude_fable_51',
+    productLineName: 'Claude Fable 5.1',
+    canonicalProfileKey: 'claude-fable-5-1-max-claude-code',
+    vendorId: 'anthropic',
+    vendorName: 'Anthropic',
+    tier: 'official',
+  },
+  {
+    key: 'grok-build-grok-4-7-xhigh',
+    expectedDisplayLabel: 'Grok Build - Grok 4.7 (xhigh)',
+    harness: 'Grok Build',
+    productLineId: 'grok_47',
+    productLineName: 'Grok 4.7',
+    canonicalProfileKey: 'grok-4-7-xhigh-grok-build',
+    vendorId: 'xai',
+    vendorName: 'xAI',
+    tier: 'official',
+  },
   {
     key: 'antigravity-sdk-gemini-3-8-flash-high',
     expectedDisplayLabel: 'Antigravity SDK - Gemini 3.8 Flash (high)',
@@ -523,6 +616,7 @@ interface StructuredCodingAgentRecord {
   hostModelSlug?: string;
   displayLabel?: string;
   indexScore?: number;
+  sourceSnapshotDate?: string;
   evals?: Array<{
     datasetIndexName?: string;
     mean?: { reward?: number };
@@ -605,6 +699,7 @@ function projectStructuredHarnessRow(
     meanAgentWallTimeSec,
     meanSteps,
     harnessVersion: harnessVersionRange(record),
+    snapshotDate: record.sourceSnapshotDate,
   };
 }
 
@@ -658,6 +753,7 @@ function projectCurrentBaseHarnessRow(row: HarnessCodingAgentRow): HarnessCoding
     meanAgentWallTimeSec,
     meanSteps,
     harnessVersion: harnessVersionRange(record),
+    snapshotDate: record.sourceSnapshotDate,
   };
 }
 
@@ -686,7 +782,7 @@ export const VERIFIED_HARNESS_SOURCE_MODEL_CARDS: readonly SourceModelCard[] =
     id: `card-aa-coding-agent-${row.key}`,
     source: 'artificial_analysis',
     exactSourceModelName: row.sourceDisplayLabel || row.displayLabel,
-    latestSnapshotDate: SNAPSHOT_DATE,
+    latestSnapshotDate: row.snapshotDate || SNAPSHOT_DATE,
     metadataJson: {
       sourceUrl: SOURCE_URL,
       sourceLeaderboard: SOURCE_LEADERBOARD,
@@ -753,7 +849,7 @@ export const VERIFIED_HARNESS_SOURCE_OBSERVATIONS: readonly SourceObservation[] 
         metricId,
         rawValue,
         unit,
-        snapshotDate: SNAPSHOT_DATE,
+        snapshotDate: row.snapshotDate || SNAPSHOT_DATE,
         sourceUrl: SOURCE_URL,
         sourceLeaderboard: SOURCE_LEADERBOARD,
         metadataJson: {

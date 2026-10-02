@@ -1,4 +1,11 @@
-export type MetricSource = 'Artificial Analysis' | 'Arena.ai' | 'OpenRouter';
+export type MetricSource =
+  | 'Artificial Analysis'
+  | 'Arena.ai'
+  | 'OpenRouter'
+  | 'Scale Labs'
+  | 'Terminal-Bench'
+  | 'SWE-rebench'
+  | 'FrontierCode';
 
 export type MetricType = 
   | 'accuracy'                   // Pass@1, Accuracy (Logit transformed)

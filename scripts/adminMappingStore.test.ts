@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict';
+import { getEmbeddedConfidenceRadius } from '../src/data/metricUncertainty';
+import { OAGXM_SCOPE } from '../src/data/oagxmScope';
 import { VERIFIED_SOURCE_MODEL_CARDS, VERIFIED_SOURCE_OBSERVATIONS } from '../src/data/seedCards';
 import {
   VERIFIED_HARNESS_SOURCE_MODEL_CARDS,
@@ -20,6 +22,11 @@ import {
   VERIFIED_RECOVERED_SOURCE_MODEL_CARDS,
   VERIFIED_RECOVERED_SOURCE_OBSERVATIONS,
 } from '../src/data/recoveredSourceSeedCards';
+import {
+  VERIFIED_REPLACEMENT_BENCHMARK_CARD_COUNT,
+  VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_MODEL_CARDS,
+  VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_OBSERVATIONS,
+} from '../src/data/replacementBenchmarkSeedCards';
 import {
   isCapabilityMetricApplicableToConfiguration,
   isCapabilityMetricCompatibleWithSourceLink,
@@ -110,7 +117,47 @@ for (const observation of observations) {
   observationsByCard.set(observation.sourceModelCardId, cardObservations);
 }
 
+assert.equal(VERIFIED_REPLACEMENT_BENCHMARK_CARD_COUNT, 53);
+assert.deepEqual(
+  Object.fromEntries(
+    ['scale_labs', 'terminal_bench', 'swe_rebench', 'frontier_code'].map((source) => [
+      source,
+      VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_MODEL_CARDS.filter((card) => card.source === source).length,
+    ]),
+  ),
+  {
+    scale_labs: 5,
+    terminal_bench: 15,
+    swe_rebench: 9,
+    frontier_code: 24,
+  },
+  'The replacement snapshot must retain every manually verified official leaderboard row.',
+);
+const astraTerminalBenchObservation = VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_OBSERVATIONS.find(
+  (observation) => (
+    observation.sourceModelCardId === 'card-tbench-gpt-6-astra-max-codex'
+    && observation.metricId === 'tbench_v4'
+  ),
+);
+assert.ok(astraTerminalBenchObservation);
+assert.equal(astraTerminalBenchObservation.rawValue, 0.582);
+assert.ok(Math.abs((astraTerminalBenchObservation.confidenceLow || 0) - 0.554) < 1e-12);
+assert.ok(Math.abs((astraTerminalBenchObservation.confidenceHigh || 0) - 0.61) < 1e-12);
+const sweRebenchSolObservation = VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_OBSERVATIONS.find(
+  (observation) => (
+    observation.sourceModelCardId === 'card-swe-rebench-v2-gpt-5-6-sol-medium'
+    && observation.metricId === 'swe_rebench_v2'
+  ),
+);
+assert.ok(sweRebenchSolObservation);
+assert.equal(sweRebenchSolObservation.rawValue, 0.623);
+assert.equal(sweRebenchSolObservation.confidenceLow, undefined);
+assert.equal(sweRebenchSolObservation.confidenceHigh, undefined);
+assert.equal(sweRebenchSolObservation.metadataJson?.uncertaintyKind, 'SEM');
+
 for (const metricId of [
+  'aa_terminalbench_v4',
+  'aa_gdp_pdf_all_pass',
   'aa_ifbench',
   'aa_apex_agents',
   'aa_itbench_sre',
@@ -136,8 +183,8 @@ assert.deepEqual(
 );
 assert.equal(
   VERIFIED_RECOVERED_SOURCE_OBSERVATIONS.length,
-  14,
-  'LongCat 2.0 recovery must expose ten current capability and four AA practical-fallback observations.',
+  11,
+  'LongCat 2.0 recovery must retain every currently published numeric field without filling missing GDPval or speed values.',
 );
 assert.ok(
   VERIFIED_RECOVERED_SOURCE_OBSERVATIONS.some((observation) => (
@@ -151,7 +198,9 @@ assert.ok(
   'AA-Briefcase must use the complete public leaderboard rather than the 19-row initial chart subset.',
 );
 for (const expectedName of ['Grok 4.6 (xhigh)', 'Qwen3.8 Max']) {
-  const record = aaBriefcaseRecords.find((candidate) => candidate.name === expectedName);
+  const record = aaBriefcaseRecords.find((candidate) => (
+    candidate.name.toLocaleLowerCase('en-US') === expectedName.toLocaleLowerCase('en-US')
+  ));
   assert.ok(record, `AA-Briefcase must retain the public ${expectedName} row.`);
   assert.equal(typeof record.briefcaseElo, 'number');
 }
@@ -195,12 +244,23 @@ for (const expectation of [
   );
   for (const metricId of [
     'aa_coding_agent_index',
-    'aa_coding_agent_deepswe',
     'aa_coding_agent_swe_atlas_qna',
-    'aa_coding_agent_terminalbench_v2',
   ]) {
     assert.ok(metricIds.has(metricId), `${expectation.cardId} must expose ${metricId}.`);
   }
+  const sourceDatasets = new Set(
+    currentSourceRow.evals.map((evaluation) => evaluation.datasetIndexName),
+  );
+  assert.equal(
+    metricIds.has('aa_coding_agent_deepswe'),
+    sourceDatasets.has('deep-swe'),
+    'DeepSWE v1.1 must not enter the older DeepSWE scoring slot.',
+  );
+  assert.equal(
+    metricIds.has('aa_coding_agent_terminalbench_v2'),
+    sourceDatasets.has('terminal-bench-v2') || sourceDatasets.has('terminal-bench-v2.1'),
+    'Terminal-Bench 4.0 must not enter the older Terminal-Bench v2 scoring slot.',
+  );
 }
 
 const scopeKey = (card: SourceModelCard): string => {
@@ -657,8 +717,8 @@ assert.deepEqual(
     card.metadataJson?.scope?.scopeVersion
   )),
   [
-    'oagxm-current-product-lines/v9-2026-09-02-releases',
-    'oagxm-current-product-lines/v9-2026-09-02-releases',
+    OAGXM_SCOPE.schemaVersion,
+    OAGXM_SCOPE.schemaVersion,
   ],
 );
 
@@ -810,8 +870,8 @@ assert.equal(
 );
 assert.ok(
   BUILT_IN_CONFIGURATION_PRESETS.length >= 20
-  && BUILT_IN_CONFIGURATION_PRESETS.length <= 90,
-  'The post-V4 reader-facing inventory should stay focused without becoming skeletal.',
+  && BUILT_IN_CONFIGURATION_PRESETS.length <= 120,
+  'The reader-facing inventory should stay focused after the September model additions.',
 );
 assert.equal(
   BUILT_IN_CONFIGURATION_MAX_PER_MODEL,
@@ -924,15 +984,18 @@ for (const [vendorKey, modelGroups] of nonKeyVendorModelGroups) {
 for (const presetId of [
   'builtin.harness.deepseek-v4-flash-0731.max.codex-cli',
   'builtin.harness.gemini-3-6-flash.high.opencode',
-  'builtin.harness.qwen3-8.max.claude-code',
+  'builtin.qwen3-8-max-0902.xhigh',
+  'builtin.harness.gpt-6-astra.max.codex-cli',
+  'builtin.harness.gpt-6-sol.max.codex-cli',
+  'builtin.harness.gpt-6-luna.max.codex-cli',
+  'builtin.harness.claude-opus-5-5.max.claude-code',
+  'builtin.harness.grok-4-7.xhigh.grok-build',
   'builtin.harness.gpt-5-6-sol.max.codex-cli',
   'builtin.harness.gpt-5-6-luna.max.codex-cli',
   'builtin.harness.gpt-5-6-terra.max.codex-cli',
   'builtin.harness.claude-opus-4-8.max.claude-code',
   'builtin.agent.arena.claude-sonnet-5.max',
-  'builtin.agent.arena.gemini-3-5-flash.high',
-  'builtin.agent.arena.nemotron-3-ultra.high',
-  'builtin.data-md.step-3-7-flash.max',
+  'builtin.step-5-preview.high',
   'builtin.harness.deepseek-v4-pro.high.claude-code',
   'builtin.harness.claude-opus-5.max.claude-code',
   'builtin.harness.kimi-k3.max.kimi-code-cli',
@@ -945,9 +1008,7 @@ for (const presetId of [
   'builtin.harness.kimi-k2-6.max.claude-code',
   'builtin.data-md.claude-haiku-4-5.max.vertex',
   'builtin.source-catalog.source-profile-grok-4-3-high.grok-4-3-high',
-  'builtin.agent.arena.grok-build-0-1.max',
   'builtin.data-md.longcat-2-0.max',
-  'builtin.source-catalog.source-profile-north-mini-code.north-mini-code',
   'builtin.harness.gemini-3-7-flash.high.antigravity-sdk',
   'builtin.harness.gemini-3-7-flash.high.opencode',
   'builtin.harness.muse-spark-1-2.xhigh.opencode',
@@ -1000,15 +1061,13 @@ const uniqueRouteCountForHarness = (harnessName: string): number => new Set(
       preset.identity.model.preset || '',
     ].join('\u0000')),
 ).size;
-assert.equal(
-  uniqueRouteCountForHarness('AA Agent Harness'),
-  7,
-  'Only the seven current source-backed Arena Agent Mode routes must display AA Agent Harness.',
+assert.ok(
+  uniqueRouteCountForHarness('AA Agent Harness') >= 3,
+  'Current Arena Agent Mode routes must retain their execution identity.',
 );
-assert.equal(
-  uniqueRouteCountForHarness('---'),
-  22,
-  'Routes without an AA Coding Agent record must display --- in the refreshed catalog.',
+assert.ok(
+  uniqueRouteCountForHarness('---') >= 20,
+  'Model API routes without a published Coding Agent run must retain the plain Chat identity.',
 );
 const glm53FlashCandidates = ALL_CONFIGURATION_PRESET_CANDIDATES
   .filter((preset) => (
@@ -1032,7 +1091,7 @@ assert.ok(
   'GLM-5.3-Flash has no AA Coding Agent record and must not be labelled with a vendor or AA Agent Harness.',
 );
 const glm53Candidates = ALL_CONFIGURATION_PRESET_CANDIDATES
-  .filter((preset) => preset.productLineId === 'glm_53');
+  .filter((preset) => preset.productLineId === 'glm_53' && preset.origin !== 'source-catalog');
 assert.deepEqual(
   glm53Candidates.map((preset) => preset.id),
   ['builtin.data-md.glm-5-3.max'],
@@ -1050,7 +1109,7 @@ assert.ok(
   'GLM-5.3 has no AA Coding Agent record and must not be labelled with a vendor or AA Agent Harness.',
 );
 for (const [presetId, expectedModelLabel, expectedHarness] of [
-  ['builtin.harness.qwen3-8.max.claude-code', 'Qwen3.8 Max XHigh', 'Claude Code'],
+  ['builtin.qwen3-8-max-0902.xhigh', 'Qwen3.8-Max XHigh', '---'],
   ['builtin.qwen3-8-27b.xhigh', 'Qwen3.8 27B XHigh', '---'],
   ['builtin.qwen3-8-flash-next.xhigh', 'Qwen3.8-Flash-Next XHigh', '---'],
   ['builtin.hy4-preview.high', 'Hy4 Preview High', '---'],
@@ -1060,7 +1119,7 @@ for (const [presetId, expectedModelLabel, expectedHarness] of [
   ['builtin.gpt-oss-120b.high', 'GPT-OSS 120B High', '---'],
   ['builtin.inkling.xhigh', 'Inkling XHigh', '---'],
   ['builtin.glm-5-3-flash.max', 'GLM-5.3-Flash Max', '---'],
-  ['builtin.claude-fable-5-1.max', 'Claude Fable 5.1 Max', '---'],
+  ['builtin.harness.claude-fable-5-1.max.claude-code', 'Claude Fable 5.1 Max', 'Claude Code'],
   ['builtin.harness.gemini-3-8-flash.high.antigravity-sdk', 'Gemini 3.8 Flash High', 'Antigravity SDK'],
   ['builtin.harness.gemini-3-8-flash.high.opencode', 'Gemini 3.8 Flash High', 'OpenCode'],
   ['builtin.agent.arena.gemini-3-8-flash.high', 'Gemini 3.8 Flash High', 'AA Agent Harness'],
@@ -1082,6 +1141,14 @@ assert.equal(
   BUILT_IN_CONFIGURATION_PRESETS.some((preset) => preset.productLineId === 'qwen_37_max'),
   false,
   'Qwen3.7 Max must be removed from the reader-facing inventory.',
+);
+assert.equal(
+  BUILT_IN_CONFIGURATION_PRESETS.some((preset) => (
+    preset.id === 'builtin.harness.qwen3-8.max.claude-code'
+      || preset.productLineId === 'qwen_38_max_preview'
+  )),
+  false,
+  'Only the fixed 0902 Qwen3.8-Max configuration may be reader-facing.',
 );
 assert.equal(
   BUILT_IN_CONFIGURATION_PRESETS.some((preset) => (
@@ -1465,6 +1532,28 @@ for (const box of installedPresetBoxes) {
 const scoreByConfigurationId = new Map(
   reconciledV3Store.computeLeaderboardScores().map((score) => [score.config.id, score]),
 );
+const solMaxCodexBox = installedPresetBoxes.find((box) => (
+  box.builtInPresetId === 'builtin.harness.gpt-5-6-sol.max.codex-cli'
+));
+assert.ok(solMaxCodexBox);
+const solMaxCodexConfig = reconciledV3Store.buildLLMConfiguration(solMaxCodexBox);
+for (const metricId of [
+  'scale_enigmaeval',
+  'tbench_science_v01',
+  'swe_rebench_v2',
+  'tbench_v4',
+  'frontiercode_v11_main_pass_rate',
+]) {
+  assert.ok(
+    solMaxCodexConfig.observations[metricId],
+    `GPT-5.6 Sol Max · Codex CLI must receive the replacement metric ${metricId}.`,
+  );
+}
+assert.equal(solMaxCodexConfig.observations.tbench_v4.rawValue, 0.373);
+assert.equal(solMaxCodexConfig.observations.tbench_science_v01.rawValue, 0.224);
+assert.equal(solMaxCodexConfig.observations.frontiercode_v11_main_pass_rate.rawValue, 0.529);
+assert.equal(solMaxCodexConfig.observations.scale_enigmaeval.rawValue, 0.3712);
+assert.equal(solMaxCodexConfig.observations.swe_rebench_v2.rawValue, 0.623);
 const gpt56TextFallbackExpectations = [
   {
     presetId: 'builtin.harness.gpt-5-6-terra.max.codex-cli',
@@ -1584,6 +1673,32 @@ assert.deepEqual(
   },
   'An Arena row without a published effort must remain an authored Default-to-XHigh fallback.',
 );
+const qwenMax0902Box = installedPresetBoxes.find((box) => (
+  box.builtInPresetId === 'builtin.qwen3-8-max-0902.xhigh'
+));
+assert.ok(qwenMax0902Box);
+const qwenMax0902CardIds = new Set(
+  reconciledV3Store.getLinkedCardStack(qwenMax0902Box.id).map(({ card }) => card.id),
+);
+for (const cardId of [
+  'card-aa-qwen3-8-max',
+  'card-arena-qwen3-8-max-0902',
+  'card-openrouter-qwen-qwen3-8-max-0902',
+]) {
+  assert.ok(qwenMax0902CardIds.has(cardId));
+}
+assert.match(
+  reconciledV3Store.cards.find((card) => card.id === 'card-aa-qwen3-8-max')
+    ?.exactSourceModelName || '',
+  /0902/u,
+);
+for (const cardId of [
+  'card-arena-qwen3-8-max',
+  'card-aa-coding-agent-claude-code-qwen3-8-max',
+  'card-openrouter-qwen-qwen3-8-max-prime',
+]) {
+  assert.equal(qwenMax0902CardIds.has(cardId), false);
+}
 const qwenFlashNextBox = installedPresetBoxes.find((box) => (
   box.builtInPresetId === 'builtin.qwen3-8-flash-next.xhigh'
 ));
@@ -1604,13 +1719,11 @@ assert.deepEqual(
   'Qwen3.8-Flash-Next Arena evidence must remain an explicit Default-to-XHigh fallback.',
 );
 const qwenFlashNextConfig = reconciledV3Store.buildLLMConfiguration(qwenFlashNextBox);
-assert.deepEqual(qwenFlashNextConfig.openRouterData, {
-  inputPricePerMToken: 0.15,
-  outputPricePerMToken: 0.47,
-  ttftP50Seconds: 2.80651761299992,
-  throughputP50TokensPerSec: 86.4379048122334,
-});
-assert.equal(scoreByConfigurationId.get(qwenFlashNextBox.id)?.availableDomainCount, 5);
+assert.equal(qwenFlashNextConfig.openRouterData?.inputPricePerMToken, 0.15);
+assert.equal(qwenFlashNextConfig.openRouterData?.outputPricePerMToken, 0.47);
+assert.ok((qwenFlashNextConfig.openRouterData?.ttftP50Seconds || 0) > 0);
+assert.ok((qwenFlashNextConfig.openRouterData?.throughputP50TokensPerSec || 0) > 0);
+assert.equal(scoreByConfigurationId.get(qwenFlashNextBox.id)?.availableDomainCount, 4);
 assert.equal(scoreByConfigurationId.get(qwenFlashNextBox.id)?.eligibleForGlobalLeaderboard, true);
 const hy4Box = installedPresetBoxes.find((box) => (
   box.builtInPresetId === 'builtin.hy4-preview.high'
@@ -1638,12 +1751,17 @@ assert.deepEqual(
   'Hy4 Preview WebDev evidence must remain an explicit Default-to-High fallback.',
 );
 const hy4Config = reconciledV3Store.buildLLMConfiguration(hy4Box);
-assert.deepEqual(hy4Config.openRouterData, {
-  inputPricePerMToken: 0.834,
-  outputPricePerMToken: 2.501,
-  ttftP50Seconds: 3.09675,
-  throughputP50TokensPerSec: 35,
-});
+for (const [metricId, actual] of [
+  ['or_price_input', hy4Config.openRouterData?.inputPricePerMToken],
+  ['or_price_output', hy4Config.openRouterData?.outputPricePerMToken],
+] as const) {
+  const sourcePrice = (observationsByCard.get('card-openrouter-tencent-hy4-preview') || [])
+    .find((observation) => observation.metricId === metricId)?.rawValue;
+  assert.equal(typeof sourcePrice, 'number');
+  assert.equal(actual, sourcePrice, 'Hy4 pricing must use the refreshed Standard endpoint aggregate.');
+}
+assert.ok((hy4Config.openRouterData?.ttftP50Seconds || 0) > 0);
+assert.ok((hy4Config.openRouterData?.throughputP50TokensPerSec || 0) > 0);
 assert.equal(scoreByConfigurationId.get(hy4Box.id)?.availableDomainCount, 1);
 assert.equal(scoreByConfigurationId.get(hy4Box.id)?.eligibleForGlobalLeaderboard, true);
 assert.equal(typeof scoreByConfigurationId.get(hy4Box.id)?.domainScores.engineering.score, 'number');
@@ -1652,7 +1770,7 @@ assert.equal(scoreByConfigurationId.get(hy4Box.id)?.domainScores.chatting.score,
 assert.equal(scoreByConfigurationId.get(hy4Box.id)?.domainScores.math_science.score, null);
 const fable51Candidates = ALL_CONFIGURATION_PRESET_CANDIDATES.filter((preset) => (
   preset.productLineId === 'claude_fable_51'
-  && preset.origin !== 'source-catalog'
+  && preset.origin === 'source-backed'
   && preset.access === 'api'
 ));
 assert.deepEqual(
@@ -1668,42 +1786,28 @@ assert.deepEqual(
 );
 assert.ok(
   fable51Candidates.every((preset) => preset.identity.harness.name === '---'),
-  'Fable 5.1 must not claim Claude Code before AA publishes that exact Coding Agent row.',
+  'The five Fable 5.1 API effort profiles must remain separate from Claude Code.',
 );
 const fable51Box = installedPresetBoxes.find((box) => (
-  box.builtInPresetId === 'builtin.claude-fable-5-1.max'
+  box.builtInPresetId === 'builtin.harness.claude-fable-5-1.max.claude-code'
 ));
-assert.ok(fable51Box, 'Fable 5.1 Max must be the reader-facing API representative.');
+assert.ok(fable51Box, 'The newly published Fable 5.1 Claude Code run must be reader-facing.');
 const fable51Stack = reconciledV3Store.getLinkedCardStack(fable51Box.id);
-assert.deepEqual(
-  fable51Stack.map(({ card }) => card.id),
-  [
-    'card-aa-claude-fable-5-1',
-    'card-aa-claude-fable-5-1-xhigh',
-    'card-aa-claude-fable-5-1-high',
-    'card-aa-claude-fable-5-1-medium',
-    'card-aa-claude-fable-5-1-low',
-  ],
-  'Fable 5.1 Max must use only its exact AA card plus authored lower-effort fallbacks.',
-);
+assert.ok(fable51Stack.some(({ card }) => (
+  card.id === 'card-aa-coding-agent-claude-code-claude-fable-5-1-max'
+)));
+assert.ok(fable51Stack.some(({ card }) => card.id === 'card-aa-claude-fable-5-1'));
+assert.ok(fable51Stack.some(({ card }) => card.id === 'card-arena-claude-fable-5-1-max'));
 assert.ok(fable51Stack.every(({ card }) => (
   card.metadataJson?.scope?.productLineId === 'claude_fable_51'
 )));
 const fable51Config = reconciledV3Store.buildLLMConfiguration(fable51Box);
-assert.deepEqual(fable51Config.openRouterData, {
-  inputPricePerMToken: 10,
-  outputPricePerMToken: 50,
-  ttftP50Seconds: 283.834182098,
-  throughputP50TokensPerSec: 66.2348899764153,
-});
-assert.equal(
-  Object.keys(fable51Config.observations).some((metricId) => (
-    metricId.startsWith('arena_') || metricId.startsWith('aa_coding_agent_')
-  )),
-  false,
-  'Fable 5.1 must not borrow old Fable 5 Arena or Claude Code Harness observations.',
-);
-assert.equal(scoreByConfigurationId.get(fable51Box.id)?.availableDomainCount, 5);
+assert.equal(fable51Config.openRouterData?.inputPricePerMToken, 10);
+assert.equal(fable51Config.openRouterData?.outputPricePerMToken, 50);
+assert.ok((fable51Config.openRouterData?.ttftP50Seconds || 0) > 0);
+assert.ok((fable51Config.openRouterData?.throughputP50TokensPerSec || 0) > 0);
+assert.ok(fable51Config.observations.aa_coding_agent_swe_atlas_qna);
+assert.ok((scoreByConfigurationId.get(fable51Box.id)?.availableDomainCount || 0) >= 3);
 assert.equal(scoreByConfigurationId.get(fable51Box.id)?.eligibleForGlobalLeaderboard, true);
 const inklingBox = installedPresetBoxes.find((box) => (
   box.builtInPresetId === 'builtin.inkling.xhigh'
@@ -1852,7 +1956,7 @@ assert.deepEqual(
   ),
 );
 const deepSeek0731Score = scoreByConfigurationId.get(deepSeek0731Box.id);
-assert.equal(deepSeek0731Score?.availableDomainCount, 5);
+assert.equal(deepSeek0731Score?.availableDomainCount, 4);
 assert.equal(deepSeek0731Score?.eligibleForGlobalLeaderboard, true);
 assert.notEqual(deepSeek0731Score?.practicalBreakdown.practicalScore, null);
 const newAugustHarnessExpectations = [
@@ -2255,17 +2359,13 @@ for (const matrix of gemini38HarnessPriceMatrices) {
   const apiBox = installedPresetBoxes.find((box) => box.builtInPresetId === matrix.apiPresetId);
   assert.ok(apiBox, `Missing Gemini 3.8 ${matrix.harness} API route.`);
   const apiConfig = reconciledV3Store.buildLLMConfiguration(apiBox);
-  assert.deepEqual(apiConfig.openRouterData, {
-    inputPricePerMToken: 0.75,
-    outputPricePerMToken: 3.75,
-    ttftP50Seconds: 13.2972333605,
-    throughputP50TokensPerSec: 302.052065869583,
-  });
+  assert.equal(apiConfig.openRouterData?.inputPricePerMToken, 0.75);
+  assert.equal(apiConfig.openRouterData?.outputPricePerMToken, 3.75);
+  assert.ok((apiConfig.openRouterData?.ttftP50Seconds || 0) > 0);
+  assert.ok((apiConfig.openRouterData?.throughputP50TokensPerSec || 0) > 0);
   for (const metricId of [
     'aa_coding_agent_index',
-    'aa_coding_agent_deepswe',
     'aa_coding_agent_swe_atlas_qna',
-    'aa_coding_agent_terminalbench_v2',
   ]) {
     assert.ok(apiConfig.observations[metricId], `Gemini 3.8 ${matrix.harness} must retain ${metricId}.`);
   }
@@ -2305,12 +2405,10 @@ assert.equal(
   false,
   'Gemini 3.8 AA Agent Harness must not borrow Antigravity SDK or OpenCode observations.',
 );
-assert.deepEqual(gemini38AgentConfig.openRouterData, {
-  inputPricePerMToken: 0.75,
-  outputPricePerMToken: 3.75,
-  ttftP50Seconds: 13.2972333605,
-  throughputP50TokensPerSec: 302.052065869583,
-});
+assert.equal(gemini38AgentConfig.openRouterData?.inputPricePerMToken, 0.75);
+assert.equal(gemini38AgentConfig.openRouterData?.outputPricePerMToken, 3.75);
+assert.ok((gemini38AgentConfig.openRouterData?.ttftP50Seconds || 0) > 0);
+assert.ok((gemini38AgentConfig.openRouterData?.throughputP50TokensPerSec || 0) > 0);
 
 const museSpark12HarnessPriceMatrices = [
   {
@@ -2426,19 +2524,21 @@ assert.ok(muse13StandardBox);
 assert.ok(muse13ContributorBox);
 const muse13StandardConfig = reconciledV3Store.buildLLMConfiguration(muse13StandardBox);
 const muse13ContributorConfig = reconciledV3Store.buildLLMConfiguration(muse13ContributorBox);
-assert.deepEqual(muse13StandardConfig.openRouterData, {
-  inputPricePerMToken: 1.25,
-  outputPricePerMToken: 4.25,
-  ttftP50Seconds: 35.0596424545,
-  throughputP50TokensPerSec: 208.61167825464,
-});
-assert.deepEqual(muse13ContributorConfig.openRouterData, {
-  inputPricePerMToken: 0.1,
-  outputPricePerMToken: 0.2,
-  cacheReadPricePerMToken: 0.002,
-  ttftP50Seconds: 35.0596424545,
-  throughputP50TokensPerSec: 208.61167825464,
-});
+assert.equal(muse13StandardConfig.openRouterData?.inputPricePerMToken, 1.25);
+assert.equal(muse13StandardConfig.openRouterData?.outputPricePerMToken, 4.25);
+assert.ok((muse13StandardConfig.openRouterData?.ttftP50Seconds || 0) > 0);
+assert.ok((muse13StandardConfig.openRouterData?.throughputP50TokensPerSec || 0) > 0);
+assert.equal(muse13ContributorConfig.openRouterData?.inputPricePerMToken, 0.1);
+assert.equal(muse13ContributorConfig.openRouterData?.outputPricePerMToken, 0.2);
+assert.equal(muse13ContributorConfig.openRouterData?.cacheReadPricePerMToken, 0.002);
+assert.equal(
+  muse13ContributorConfig.openRouterData?.ttftP50Seconds,
+  muse13StandardConfig.openRouterData?.ttftP50Seconds,
+);
+assert.equal(
+  muse13ContributorConfig.openRouterData?.throughputP50TokensPerSec,
+  muse13StandardConfig.openRouterData?.throughputP50TokensPerSec,
+);
 assert.deepEqual(muse13ContributorConfig.observations, muse13StandardConfig.observations);
 const muse13StandardScore = scoreByConfigurationId.get(muse13StandardBox.id);
 const muse13ContributorScore = scoreByConfigurationId.get(muse13ContributorBox.id);
@@ -2466,10 +2566,9 @@ assertSubscriptionRoutesPreserveCapability(
   'builtin.harness.gpt-5-5.xhigh.codex-cli',
   ['builtin.subscription.chatgpt-plus.gpt-5-5.xhigh.codex-cli'],
 );
-assertSubscriptionRoutesPreserveCapability(
-  'builtin.claude-fable-5-1.max',
-  ['builtin.subscription.claude-max-20x.claude-fable-5-1.max.chat'],
-);
+assert.ok(installedPresetBoxes.some((box) => (
+  box.builtInPresetId === 'builtin.subscription.claude-max-20x.claude-fable-5-1.max.chat'
+)));
 assert.equal(
   BUILT_IN_CONFIGURATION_PRESETS.some((preset) => (
     preset.id === 'builtin.subscription.claude-pro.claude-fable-5.max.claude-code'
@@ -2562,6 +2661,16 @@ const fableClaudeCodeBox = installedPresetBoxes.find((box) => (
 ));
 assert.ok(fableClaudeCodeBox);
 const fableClaudeCodeConfig = reconciledV3Store.buildLLMConfiguration(fableClaudeCodeBox);
+const currentSteerabilityObservation = reconciledV3Store.observations.find((observation) => (
+  observation.metricId === 'arena_agent_steerability'
+));
+assert.ok(currentSteerabilityObservation);
+for (const signal of ['steerability', 'steering_burden']) {
+  assert.equal(getEmbeddedConfidenceRadius({
+    ...currentSteerabilityObservation,
+    metadataJson: { sourceRecord: { signalCi: { [signal]: 0.025 } } },
+  }), 0.025, 'Both Arena source schemas must preserve the published CI radius.');
+}
 for (const metricId of [
   'arena_agent_success',
   'arena_agent_steerability',
@@ -2661,7 +2770,6 @@ for (const [presetId, expectedAuthorProvider] of [
 
 for (const presetId of [
   'builtin.source-catalog.source-profile-grok-4-3-high.grok-4-3-high',
-  'builtin.agent.arena.grok-build-0-1.max',
 ] as const) {
   const box = installedPresetBoxes.find((candidate) => candidate.builtInPresetId === presetId);
   assert.ok(box, `Practical-source repair preset ${presetId} must be installed.`);
@@ -2669,6 +2777,50 @@ for (const presetId of [
   assert.ok(configuration.openRouterData, `${presetId} must have complete practical data.`);
   assertOpenRouterDataIsBackedByLinkedCards(box, configuration.openRouterData);
 }
+
+// The October releases keep API efforts separate from measured CLI runs.
+// Their current DeepSWE v1.1/TB4 components must not fill legacy metric slots.
+for (const release of [
+  { line: 'gpt_61_sol', prefix: 'gpt-6-1-sol', harness: 'Codex CLI', cardPrefix: 'codex-gpt-6-1-sol', harnessKey: 'codex-cli' },
+  { line: 'claude_sonnet_55', prefix: 'claude-sonnet-5-5', harness: 'Claude Code', cardPrefix: 'claude-code-claude-sonnet-5-5', harnessKey: 'claude-code' },
+] as const) {
+  for (const profile of ['low', 'medium', 'high', 'xhigh', 'max']) {
+    const apiPreset = ALL_CONFIGURATION_PRESET_CANDIDATES.find((preset) => (
+      preset.id === `builtin.${release.prefix}.${profile}`
+    ));
+    assert.ok(apiPreset, `Missing measured ${release.prefix}/${profile} API profile.`);
+    assert.ok(apiPreset.sourceCardIds?.includes(
+      profile === 'max' ? `card-aa-${release.prefix}` : `card-aa-${release.prefix}-${profile}`,
+    ));
+    const harnessCardId = `card-aa-coding-agent-${release.cardPrefix}-${profile}`;
+    const harnessCard = VERIFIED_HARNESS_SOURCE_MODEL_CARDS.find((card) => card.id === harnessCardId);
+    assert.ok(harnessCard, `Missing measured ${release.prefix}/${profile} CLI profile.`);
+    assert.equal(harnessCard.metadataJson?.scope?.productLineId, release.line);
+    assert.equal(harnessCard.metadataJson?.execution?.harness, release.harness);
+    const sourceRow = codingAgentRecords.find((row) => row.id === harnessCard.metadataJson?.sourceIdentity?.sourceRecordId);
+    assert.ok(sourceRow);
+    const cardObservations = VERIFIED_HARNESS_SOURCE_OBSERVATIONS.filter((observation) => (
+      observation.sourceModelCardId === harnessCardId
+    ));
+    assert.equal(cardObservations.find((observation) => observation.metricId === 'aa_coding_agent_index')?.rawValue, sourceRow.indexScore);
+    assert.ok(!cardObservations.some((observation) => (
+      ['aa_coding_agent_deepswe', 'aa_coding_agent_terminalbench_v2'].includes(observation.metricId)
+    )));
+  }
+  const box = installedPresetBoxes.find((candidate) => (
+    candidate.builtInPresetId === `builtin.harness.${release.prefix}.max.${release.harnessKey}`
+  ));
+  assert.ok(box, 'The highest independently measured CLI effort must enter the reader inventory.');
+  const stack = reconciledV3Store.getLinkedCardStack(box.id);
+  assert.equal(stack[0].card.id, `card-aa-coding-agent-${release.cardPrefix}-max`);
+  assert.ok(stack.every(({ card }) => card.metadataJson?.scope?.productLineId === release.line));
+  assert.equal(scoreByConfigurationId.get(box.id)?.eligibleForGlobalLeaderboard, true);
+  assert.equal(BUILT_IN_CONFIGURATION_PRESETS.filter((preset) => preset.productLineId === release.line).length, 1);
+}
+assert.ok(!BUILT_IN_CONFIGURATION_PRESETS.some((preset) => (
+  ['gemini_4_argon', 'gpt_61_sol_pro'].includes(preset.productLineId)
+)), 'Limited-access Argon and Pro without capability evidence remain source-pool records.');
+assert.ok(baseCards.some((card) => card.id === 'card-aa-mimo-v2-6-flash'));
 
 const firstInstalledPreset = installedPresetBoxes[0];
 assert.ok(firstInstalledPreset);

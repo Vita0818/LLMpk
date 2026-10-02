@@ -49,6 +49,10 @@ import {
   VERIFIED_RECOVERED_SOURCE_OBSERVATIONS,
 } from '../data/recoveredSourceSeedCards';
 import {
+  VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_MODEL_CARDS,
+  VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_OBSERVATIONS,
+} from '../data/replacementBenchmarkSeedCards';
+import {
   isCapabilityMetricCompatibleWithSourceLink,
   isHarnessOnlyCapabilityMetric,
   isPlainChatHarness,
@@ -176,7 +180,13 @@ function parseArray<T>(value: unknown): T[] {
 }
 
 function isKnownSource(source: unknown): source is SourceType {
-  return source === 'artificial_analysis' || source === 'arena' || source === 'openrouter';
+  return source === 'artificial_analysis'
+    || source === 'arena'
+    || source === 'openrouter'
+    || source === 'scale_labs'
+    || source === 'terminal_bench'
+    || source === 'swe_rebench'
+    || source === 'frontier_code';
 }
 
 /**
@@ -599,7 +609,24 @@ function belongsToExpectedHost(source: SourceType, value: unknown): boolean {
     if (source === 'arena') {
       return host === 'arena.ai' || host.endsWith('.arena.ai') || host === 'lmarena.ai' || host.endsWith('.lmarena.ai');
     }
-    return host === 'openrouter.ai' || host.endsWith('.openrouter.ai');
+    if (source === 'openrouter') {
+      return host === 'openrouter.ai' || host.endsWith('.openrouter.ai');
+    }
+    if (source === 'scale_labs') {
+      return host === 'scale.com' || host.endsWith('.scale.com');
+    }
+    if (source === 'terminal_bench') {
+      return host === 'tbench.ai'
+        || host.endsWith('.tbench.ai')
+        || host === 'terminal-bench-science.ai'
+        || host.endsWith('.terminal-bench-science.ai')
+        || host === 'harborframework.com'
+        || host.endsWith('.harborframework.com');
+    }
+    if (source === 'swe_rebench') {
+      return host === 'swe-rebench.com' || host.endsWith('.swe-rebench.com');
+    }
+    return host === 'cognition.com' || host.endsWith('.cognition.com');
   } catch {
     return false;
   }
@@ -638,7 +665,11 @@ function sourceMetricIsAllowed(source: SourceType, metricId: unknown): boolean {
   if (typeof metricId !== 'string') return false;
   if (source === 'artificial_analysis') return metricId.startsWith('aa_');
   if (source === 'arena') return metricId.startsWith('arena_');
-  return metricId.startsWith('or_');
+  if (source === 'openrouter') return metricId.startsWith('or_');
+  if (source === 'scale_labs') return metricId.startsWith('scale_');
+  if (source === 'terminal_bench') return metricId.startsWith('tbench_');
+  if (source === 'swe_rebench') return metricId.startsWith('swe_rebench_');
+  return metricId.startsWith('frontiercode_');
 }
 
 function hasVerifiedObservationProof(
@@ -1896,6 +1927,7 @@ export class AdminMappingStore {
       ...VERIFIED_PRODUCTION_AGENT_MODE_SOURCE_MODEL_CARDS,
       ...VERIFIED_REVIEWED_FAMILY_SOURCE_MODEL_CARDS,
       ...VERIFIED_RECOVERED_SOURCE_MODEL_CARDS,
+      ...VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_MODEL_CARDS,
     ];
     const rawObservations = [
       ...parseArray<SourceObservation>(VERIFIED_SOURCE_OBSERVATIONS),
@@ -1903,6 +1935,7 @@ export class AdminMappingStore {
       ...VERIFIED_PRODUCTION_AGENT_MODE_SOURCE_OBSERVATIONS,
       ...VERIFIED_REVIEWED_FAMILY_SOURCE_OBSERVATIONS,
       ...VERIFIED_RECOVERED_SOURCE_OBSERVATIONS,
+      ...VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_OBSERVATIONS,
     ];
     const sourceData = sanitizeSourceData(rawCards, rawObservations);
     this.catalogFingerprint = buildCatalogFingerprint(sourceData.cards, sourceData.observations);
@@ -2426,7 +2459,7 @@ export class AdminMappingStore {
     // a metric wins; lower cards can fill a missing metric but cannot silently
     // overwrite a card the operator intentionally placed above them.
     linkedStack
-      .filter(({ card }) => card.source === 'artificial_analysis' || card.source === 'arena')
+      .filter(({ card }) => card.source !== 'openrouter')
       .forEach(({ link, card }) => {
         const provenance = parseSourceLinkProvenance(link.provenance);
         if (!provenance) return;

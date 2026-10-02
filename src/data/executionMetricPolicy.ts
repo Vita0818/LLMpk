@@ -16,6 +16,9 @@ export const HARNESS_ONLY_CAPABILITY_METRIC_IDS: ReadonlySet<string> = new Set([
   'aa_coding_agent_deepswe',
   'aa_coding_agent_swe_atlas_qna',
   'aa_coding_agent_terminalbench_v2',
+  'tbench_science_v01',
+  'tbench_v4',
+  'frontiercode_v11_main_pass_rate',
   'arena_agent_success',
   'arena_agent_steerability',
   'arena_agent_praise',
@@ -28,6 +31,9 @@ const CODING_AGENT_METRIC_IDS: ReadonlySet<string> = new Set([
   'aa_coding_agent_deepswe',
   'aa_coding_agent_swe_atlas_qna',
   'aa_coding_agent_terminalbench_v2',
+  'tbench_science_v01',
+  'tbench_v4',
+  'frontiercode_v11_main_pass_rate',
 ]);
 
 const ARENA_AGENT_MODE_METRIC_IDS: ReadonlySet<string> = new Set([
@@ -47,6 +53,8 @@ const CODING_AGENT_HARNESS_NAMES: ReadonlySet<string> = new Set([
   'kimi code cli',
   'muse code',
   'opencode',
+  'mini-swe-agent',
+  'chisel',
 ]);
 
 function normalizedHarnessName(value: string | undefined): string {

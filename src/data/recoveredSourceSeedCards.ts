@@ -1,4 +1,5 @@
 import type { SourceModelCard, SourceObservation } from '../types/admin_mapping';
+import { OAGXM_SCOPE } from './oagxmScope';
 import {
   fetchedAt as artificialAnalysisFetchedAt,
   modelRecords as artificialAnalysisModelRecords,
@@ -10,12 +11,12 @@ import {
  * record. Recover that one record directly from the bundled snapshot instead
  * of copying values by hand or borrowing another LongCat model's scores.
  */
-const LONGCAT_20_SOURCE_RECORD_ID = '5c3bdc0d-abab-4526-8079-34de4089bb4a';
+const LONGCAT_20_SOURCE_RECORD_ID = 'longcat-2-0';
 const LONGCAT_20_CARD_ID = 'card-recovered-aa-longcat-2-0';
 const SNAPSHOT_DATE = artificialAnalysisFetchedAt.slice(0, 10);
 const LONGCAT_20_SCOPE = {
   scopeId: 'oagxm-current-product-lines',
-  scopeVersion: 'oagxm-current-product-lines/v9-2026-09-02-releases',
+  scopeVersion: OAGXM_SCOPE.schemaVersion,
   vendorId: 'meituan',
   vendorName: 'Meituan LongCat',
   productLineId: 'longcat_20',

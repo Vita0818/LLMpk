@@ -36,6 +36,7 @@ export async function fetchSource(
     accept = 'text/html,application/xhtml+xml,application/json',
     maxAttempts = 4,
     timeoutMilliseconds = 45_000,
+    headers = {},
   } = {},
 ) {
   let lastError = null;
@@ -48,6 +49,7 @@ export async function fetchSource(
         headers: {
           Accept: accept,
           'User-Agent': SOURCE_USER_AGENT,
+          ...headers,
         },
         redirect: 'follow',
         signal: controller.signal,

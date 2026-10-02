@@ -96,6 +96,7 @@ const agentDefinition = {
     {
       metricId: 'arena_agent_steerability',
       sourceSignal: 'steerability',
+      sourceSignalAliases: ['steering_burden'],
       sourceLeaderboard: 'Arena Agent — Steerability',
     },
     {
@@ -257,7 +258,11 @@ function createRatingRow(entry, definition, sourceOrder) {
 
 function createAgentRow(entry, metric, sourceOrder) {
   const exactSourceModelName = entry.model ?? entry.contenderName;
-  const rawValue = entry.signalScores?.[metric.sourceSignal];
+  // The September 30 payload renamed the field while the official table
+  // continues to display these values under Steerability.
+  const sourceSignal = [metric.sourceSignal, ...(metric.sourceSignalAliases ?? [])]
+    .find((signal) => Number.isFinite(entry.signalScores?.[signal]));
+  const rawValue = entry.signalScores?.[sourceSignal];
   if (typeof exactSourceModelName !== 'string' || !Number.isFinite(rawValue)) {
     fail(`${metric.metricId} source row ${sourceOrder + 1} has no real model name or source signal.`);
   }

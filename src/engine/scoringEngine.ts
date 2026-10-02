@@ -70,10 +70,11 @@ export const DOMAIN_DEFINITIONS: Record<DomainId, DomainDefinition> = {
   },
 };
 
-// 26 scored atomic metrics according to Data Source Registry v1.1 & Domain Weighting v2.1.
-// The AA Coding Agent Index remains source-visible but is not scored alongside
-// its DeepSWE, Terminal-Bench v2, and SWE-Atlas-QnA components, which prevents
-// the same evidence from being counted twice.
+// 26 scored atomic metrics according to Data Source Registry v1.2 & Domain Weighting v2.2.
+// The AA Coding Agent Index remains source-visible for audit but is not scored.
+// Superseded HLE, GPQA Diamond, SciCode, Terminal-Bench v2.1, and AA Coding
+// Agent Terminal-Bench v2 observations remain in raw source snapshots for
+// audit, but no longer participate in scoring.
 export const ALL_METRIC_DEFINITIONS: MetricDefinition[] = [
   // --- 1. Chatting (Arena Text 100%) ---
   {
@@ -125,30 +126,30 @@ export const ALL_METRIC_DEFINITIONS: MetricDefinition[] = [
     officialUrl: 'https://arena.ai/leaderboard/text/hard-prompts',
   },
 
-  // --- 2. Math & Science (AA 80%, Arena 20%) ---
+  // --- 2. Math & Science (fresh reasoning/science evals 60%, AA 20%, Arena 20%) ---
   {
-    id: 'aa_hle',
-    name: 'Humanity’s Last Exam',
-    source: 'Artificial Analysis',
+    id: 'scale_enigmaeval',
+    name: 'EnigmaEval',
+    source: 'Scale Labs',
     domain: 'math_science',
     metricType: 'accuracy',
     internalWeightInDomain: 0.30,
     higherIsBetter: true,
     unit: 'pass@1',
-    description: '人类最后一考：最前沿学术与跨学科高难度难题评测',
-    officialUrl: 'https://artificialanalysis.ai/evaluations/humanitys-last-exam',
+    description: '复杂、多模态 puzzle 中的数学、逻辑、语言与跨领域推理准确率。',
+    officialUrl: 'https://labs.scale.com/leaderboard/enigma_eval',
   },
   {
-    id: 'aa_gpqa_diamond',
-    name: 'GPQA Diamond',
-    source: 'Artificial Analysis',
+    id: 'tbench_science_v01',
+    name: 'Terminal-Bench-Science 0.1',
+    source: 'Terminal-Bench',
     domain: 'math_science',
     metricType: 'accuracy',
     internalWeightInDomain: 0.30,
     higherIsBetter: true,
-    unit: 'pass@1',
-    description: '研究生级科学问答 Diamond 高难度子集',
-    officialUrl: 'https://artificialanalysis.ai/evaluations/gpqa-diamond',
+    unit: 'Resolution Rate',
+    description: '在真实科学研究工作流中交付可复核分析、模拟、证明、代码与数据产物。',
+    officialUrl: 'https://www.terminal-bench-science.ai/',
   },
   {
     id: 'aa_critpt',
@@ -177,16 +178,16 @@ export const ALL_METRIC_DEFINITIONS: MetricDefinition[] = [
 
   // --- 3. Coding (high-coverage code reasoning and implementation) ---
   {
-    id: 'aa_scicode',
-    name: 'SciCode',
-    source: 'Artificial Analysis',
+    id: 'swe_rebench_v2',
+    name: 'SWE-rebench v2 · Current Window',
+    source: 'SWE-rebench',
     domain: 'coding',
     metricType: 'accuracy',
     internalWeightInDomain: 0.55,
     higherIsBetter: true,
-    unit: 'pass@1',
-    description: '科学计算代码编写与复杂算法实现',
-    officialUrl: 'https://artificialanalysis.ai/evaluations/scicode',
+    unit: 'Resolved Rate',
+    description: '在按时间滚动的新 GitHub issue/PR 任务中实现并验证真实代码修复。',
+    officialUrl: 'https://swe-rebench.com/',
   },
   {
     id: 'arena_text_coding',
@@ -202,12 +203,10 @@ export const ALL_METRIC_DEFINITIONS: MetricDefinition[] = [
   },
 
   // --- 4. Engineering (professional work + end-to-end engineering) ---
-  // Two broadly available professional/terminal benchmarks form 50% of the
-  // domain. The three exact coding-harness components jointly retain 40%, so a
-  // real production engineering configuration can independently clear the
-  // existing provisional threshold. Terminal-Bench has the higher observed
-  // cohort coverage and receives 30%; WebDev contributes a benchmark-level
-  // 10% without being mistaken for a user-selectable production harness.
+  // The v2.2 registry preserves every v2.1 weight slot: Terminal-Bench 4.0
+  // inherits 30% from v2.1, while FrontierCode 1.1 Main Pass Rate inherits one
+  // 13.33% coding-agent slot. WebDev remains a benchmark-level 10% signal and
+  // is not treated as a user-selectable production harness.
   {
     id: 'aa_gdpval_v2',
     name: 'GDPval-AA v2',
@@ -221,16 +220,16 @@ export const ALL_METRIC_DEFINITIONS: MetricDefinition[] = [
     officialUrl: 'https://artificialanalysis.ai/evaluations/gdpval-aa',
   },
   {
-    id: 'aa_terminalbench_v21',
-    name: 'Terminal-Bench v2.1',
-    source: 'Artificial Analysis',
+    id: 'tbench_v4',
+    name: 'Terminal-Bench 4.0',
+    source: 'Terminal-Bench',
     domain: 'engineering',
     metricType: 'accuracy',
     internalWeightInDomain: 0.30,
     higherIsBetter: true,
-    unit: 'pass@1',
-    description: '通过 Terminus 2 在终端环境完成软件工程、系统管理与数据处理任务。',
-    officialUrl: 'https://artificialanalysis.ai/evaluations/terminalbench-v2-1',
+    unit: 'Resolution Rate',
+    description: '在当前 4.0 任务与资源配置下完成终端工程、系统管理与数据处理任务。',
+    officialUrl: 'https://www.tbench.ai/',
   },
   {
     id: 'aa_coding_agent_deepswe',
@@ -257,16 +256,16 @@ export const ALL_METRIC_DEFINITIONS: MetricDefinition[] = [
     officialUrl: 'https://artificialanalysis.ai/agents/coding-agents',
   },
   {
-    id: 'aa_coding_agent_terminalbench_v2',
-    name: 'AA Coding Agent · Terminal-Bench v2',
-    source: 'Artificial Analysis',
+    id: 'frontiercode_v11_main_pass_rate',
+    name: 'FrontierCode 1.1 Main · Pass Rate',
+    source: 'FrontierCode',
     domain: 'engineering',
     metricType: 'accuracy',
     internalWeightInDomain: 2 / 15,
     higherIsBetter: true,
-    unit: 'pass@1',
-    description: '在来源明确的 coding harness 中完成真实终端工程任务。',
-    officialUrl: 'https://artificialanalysis.ai/agents/coding-agents',
+    unit: 'Pass Rate',
+    description: '在 Main 集上产出满足全部 blocker、达到代码库可合并标准的修改。',
+    officialUrl: 'https://cognition.com/frontiercode',
   },
   {
     id: 'arena_code_webdev',

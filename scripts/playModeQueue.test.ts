@@ -1,4 +1,5 @@
 import publicLeaderboardSnapshot from '../src/data/publicLeaderboardSnapshot.json';
+import { CURRENT_COHORT_SNAPSHOT } from '../src/data/cohortMetadata';
 import type {
   PublicLeaderboardScore,
   PublicLeaderboardSnapshot,
@@ -25,15 +26,15 @@ const assert = (condition: unknown, message: string) => {
   if (!condition) throw new Error(message);
 };
 
-assert(snapshot.scores.length === 85, 'Fixture should contain 85 route rows.');
-assert(queue.length === 58, `Expected 58 playback items, received ${queue.length}.`);
+assert(snapshot.scores.length === CURRENT_COHORT_SNAPSHOT.totalConfigs, 'Public snapshot must match the current cohort inventory.');
+assert(queue.length === 67, `Expected 67 playback items, received ${queue.length}.`);
 assert(
   new Set(queue.map(getPlayModeRouteGroupKey)).size === queue.length,
   'Playback queue must contain one representative per identical radar route group.',
 );
 assert(
-  snapshot.scores.length - queue.length === 27,
-  'Playback queue should collapse exactly 27 duplicate route rows.',
+  snapshot.scores.length - queue.length === 26,
+  'Playback queue should collapse exactly 26 duplicate route rows.',
 );
 assert(
   radarOverviewScores.length === queue.length,
@@ -77,7 +78,7 @@ const expectedRepresentatives = [
   'GPT-5.6 Terra Max | Codex CLI | ChatGPT Plus',
   'GPT-5.5 XHigh | Codex CLI | ChatGPT Plus',
   'Gemini 3.1 Pro High | Gemini CLI | Google AI Ultra 20×',
-  'Gemini 3.5 Flash High | AA Agent Harness | Google API',
+  'Gemini 3.5 Flash High | --- | Google API',
   'Gemini 3.5 Flash-Lite High | --- | Google AI Pro',
   'Gemini 3.6 Flash High | OpenCode | Google API',
   'Gemini 3.7 Flash High | Antigravity SDK | Google AI Ultra 20×',
@@ -88,14 +89,24 @@ const expectedRepresentatives = [
   'Grok 4.3 High | --- | xAI API',
   'Grok 4.5 High | Grok Build | xAI API',
   'Grok 4.6 XHigh | --- | SuperGrok',
-  'Grok Build 0.1 Max | AA Agent Harness | xAI API',
   'Muse Glimmer XHigh | --- | Meta API',
   'Muse Spark 1.2 XHigh | OpenCode | Meta API Contributor',
   'Muse Spark 1.2 XHigh | Muse Code | Meta API Contributor',
   'Muse Spark 1.3 XHigh | Muse Code | Meta API Contributor',
   'Qwen3.8-Flash-Next XHigh | --- | Alibaba API',
   'Qwen3.8 27B XHigh | --- | Alibaba API',
-  'Qwen3.8 Max XHigh | Claude Code | Alibaba API',
+  'Qwen3.8-Max XHigh | --- | Alibaba API',
+  'Qwen3.8-2.4T-A95B XHigh | --- | Alibaba API',
+  'GPT-6 Astra Max | Codex CLI | OpenAI API',
+  'GPT-6.1 Sol Max | Codex CLI | OpenAI API',
+  'Claude Sonnet 5.5 Max | Claude Code | Anthropic API',
+  'GPT-6 Sol Max | Codex CLI | OpenAI API',
+  'GPT-6 Luna Max | Codex CLI | OpenAI API',
+  'Claude Opus 5.5 Max | Claude Code | Anthropic API',
+  'Grok 4.7 XHigh | Grok Build | xAI API',
+  'DeepSeek V4.1 Flash Max | --- | DeepSeek API',
+  'MiMo-V2.6-Pro Default | --- | Xiaomi API',
+  'Step 5 Preview High | --- | StepFun API',
   'Hy4 Preview High | --- | Tencent API',
   'Command A+ Thinking | --- | Cohere API',
   'Nemotron 3.5 Lightning Thinking | --- | NVIDIA API',

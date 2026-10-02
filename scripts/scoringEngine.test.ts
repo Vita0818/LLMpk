@@ -103,7 +103,24 @@ nearlyEqual(metricDefinitionsById.get('aa_tau3_banking')?.internalWeightInDomain
 assert.equal(metricDefinitionsById.get('arena_code_webdev')?.domain, 'engineering');
 nearlyEqual(metricDefinitionsById.get('arena_code_webdev')?.internalWeightInDomain || 0, 0.10);
 nearlyEqual(metricDefinitionsById.get('aa_gdpval_v2')?.internalWeightInDomain || 0, 0.20);
-nearlyEqual(metricDefinitionsById.get('aa_terminalbench_v21')?.internalWeightInDomain || 0, 0.30);
+nearlyEqual(metricDefinitionsById.get('tbench_v4')?.internalWeightInDomain || 0, 0.30);
+nearlyEqual(metricDefinitionsById.get('frontiercode_v11_main_pass_rate')?.internalWeightInDomain || 0, 2 / 15);
+nearlyEqual(metricDefinitionsById.get('tbench_science_v01')?.internalWeightInDomain || 0, 0.30);
+nearlyEqual(metricDefinitionsById.get('scale_enigmaeval')?.internalWeightInDomain || 0, 0.30);
+nearlyEqual(metricDefinitionsById.get('swe_rebench_v2')?.internalWeightInDomain || 0, 0.55);
+for (const supersededMetricId of [
+  'aa_hle',
+  'aa_gpqa_diamond',
+  'aa_scicode',
+  'aa_terminalbench_v21',
+  'aa_coding_agent_terminalbench_v2',
+]) {
+  assert.equal(
+    metricDefinitionsById.has(supersededMetricId),
+    false,
+    `${supersededMetricId} must not remain in the active scoring registry.`,
+  );
+}
 
 // Scoring v1.2: a missing metric contributes neutral 50 while retaining its
 // configured weight. The observed 70% metric must not be inflated to 100%.

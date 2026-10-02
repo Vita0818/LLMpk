@@ -13,6 +13,24 @@ export interface DetailOnlyMetricDefinition {
  */
 export const DETAIL_ONLY_METRIC_DEFINITIONS: readonly DetailOnlyMetricDefinition[] = [
   {
+    id: 'aa_hle',
+    name: 'Humanity’s Last Exam',
+    unit: '%',
+    domain: 'math_science',
+  },
+  {
+    id: 'aa_terminalbench_v4',
+    name: 'AA Terminal-Bench 4.0',
+    unit: '%',
+    domain: 'engineering',
+  },
+  {
+    id: 'aa_gdp_pdf_all_pass',
+    name: 'GDP.pdf · All-pass',
+    unit: '%',
+    domain: 'engineering',
+  },
+  {
     id: 'aa_ifbench',
     name: 'IFBench',
     unit: '%',

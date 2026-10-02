@@ -214,9 +214,9 @@ const customTopFive = rankTopScoresByPreferences(
   representativePublicScores,
   DEFAULT_PREFERENCE_WEIGHTS,
 );
-assert.equal(representativePublicScores.length, 58);
-assert.equal(publicScores.length - representativePublicScores.length, 27);
-assert.equal(representativePublicRanking.length, 58);
+assert.equal(representativePublicScores.length, 67);
+assert.equal(publicScores.length - representativePublicScores.length, 26);
+assert.equal(representativePublicRanking.length, 67);
 assert.equal(customTopFive.length, CUSTOM_RANKING_RESULT_LIMIT);
 assert.ok(customTopFive.every((result) => representativeIds.has(result.item.config.id)));
 assert.ok(publicScores
@@ -230,13 +230,19 @@ const defaultPublicRanking = rankScoresByPreferences(
   DEFAULT_PREFERENCE_WEIGHTS,
 );
 defaultPublicRanking.forEach((result) => {
-  assert.notEqual(result.item.practicalBreakdown.practicalScore, null);
   assert.notEqual(result.personalizedScore, null);
+  if (result.item.practicalBreakdown.practicalScore === null) {
+    assert.ok(result.preferenceCoverage < 1);
+    return;
+  }
   assert.ok(Math.abs(
     result.personalizedScore! - result.item.practicalBreakdown.practicalScore!,
   ) < 1e-9);
 });
-const homepagePublicRanking = [...publicScores].sort((left, right) => {
+const practicalPublicScores = publicScores.filter(
+  (item) => item.practicalBreakdown.practicalScore !== null,
+);
+const homepagePublicRanking = [...practicalPublicScores].sort((left, right) => {
   const practicalDifference = right.practicalBreakdown.practicalScore!
     - left.practicalBreakdown.practicalScore!;
   if (Math.abs(practicalDifference) > Number.EPSILON) return practicalDifference;
@@ -245,7 +251,8 @@ const homepagePublicRanking = [...publicScores].sort((left, right) => {
     || left.config.name.localeCompare(right.config.name);
 });
 assert.deepEqual(
-  defaultPublicRanking.map((result) => result.item.config.id),
+  rankScoresByPreferences(practicalPublicScores, DEFAULT_PREFERENCE_WEIGHTS)
+    .map((result) => result.item.config.id),
   homepagePublicRanking.map((item) => item.config.id),
 );
 

@@ -36,23 +36,19 @@ export const SourceModelCardPool: React.FC<SourceModelCardPoolProps> = ({ cards 
   }, [cards, activeSource, searchTerm, linkFilter]);
 
   const sourceTabs = useMemo(() => {
-    return [
-      {
-        id: 'artificial_analysis' as SourceType,
-        label: 'Artificial Analysis',
-        count: cards.filter((c) => c.source === 'artificial_analysis').length,
-      },
-      {
-        id: 'arena' as SourceType,
-        label: 'Arena.ai',
-        count: cards.filter((c) => c.source === 'arena').length,
-      },
-      {
-        id: 'openrouter' as SourceType,
-        label: 'OpenRouter',
-        count: cards.filter((c) => c.source === 'openrouter').length,
-      },
+    const definitions: Array<{ id: SourceType; label: string }> = [
+      { id: 'artificial_analysis', label: 'Artificial Analysis' },
+      { id: 'arena', label: 'Arena.ai' },
+      { id: 'openrouter', label: 'OpenRouter' },
+      { id: 'scale_labs', label: 'Scale Labs' },
+      { id: 'terminal_bench', label: 'Terminal-Bench' },
+      { id: 'swe_rebench', label: 'SWE-rebench' },
+      { id: 'frontier_code', label: 'FrontierCode' },
     ];
+    return definitions.map((definition) => ({
+      ...definition,
+      count: cards.filter((card) => card.source === definition.id).length,
+    }));
   }, [cards]);
 
   return (
@@ -64,7 +60,7 @@ export const SourceModelCardPool: React.FC<SourceModelCardPoolProps> = ({ cards 
       </div>
 
       {/* Source Tabs */}
-      <div className="flex items-center gap-1.5 bg-slate-100/90 p-1.5 rounded-xl border border-slate-200/80 text-xs">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 bg-slate-100/90 p-1.5 rounded-xl border border-slate-200/80 text-xs">
         {sourceTabs.map((tab) => (
           <button
             key={tab.id}

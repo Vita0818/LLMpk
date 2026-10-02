@@ -170,7 +170,7 @@ function effectiveSourceForMetric(
   metricId: string,
 ): EffectiveSource | null {
   for (const { card, link } of store.getLinkedCardStack(boxId)) {
-    if (card.source !== 'artificial_analysis' && card.source !== 'arena') continue;
+    if (card.source === 'openrouter') continue;
     const observation = store.getCardObservations(card.id)
       .find((candidate) => candidate.metricId === metricId);
     if (!observation) continue;

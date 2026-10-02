@@ -57,8 +57,11 @@ function quantile(sortedValues, probability) {
 
 function parseUtcBucketTimestamp(value) {
   if (typeof value !== 'string') return null;
+  const normalizedValue = /^\d{4}-\d{2}-\d{2}$/u.test(value.trim())
+    ? value.trim() + ' 00:00:00'
+    : value.trim();
   const match = /^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2}):(\d{2})$/u.exec(
-    value.trim(),
+    normalizedValue,
   );
   if (!match) return null;
   const [, year, month, day, hour, minute, second] = match.map(Number);
@@ -133,7 +136,12 @@ export function summarizeOpenRouterHistoryWindow({
     ) {
       continue;
     }
-    const value = asPositiveFiniteNumber(row?.y?.[seriesKey]);
+    // The Standard-only history endpoint now returns bare endpoint UUID
+    // keys; older captures used "UUID::default". Both identify the same
+    // Standard series because the request itself sets variant=standard.
+    const value = asPositiveFiniteNumber(
+      row?.y?.[seriesKey] ?? row?.y?.[endpointId],
+    );
     if (value !== null) valuesByTimestamp.set(timestamp, value);
   }
 

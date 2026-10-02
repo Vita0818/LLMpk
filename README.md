@@ -32,4 +32,4 @@ local-only recording playback feature while publishing the same current data.
 
 The production site is expected at:
 
-<https://vita0818.github.io/LLM-pk/>
+<https://vita0818.github.io/LLMpk/>

@@ -3,10 +3,10 @@
  *
  * This is intentionally a small curated table, not a model-name matcher.
  * Every card ID is a stable record from the bundled three-source catalog.
- * Availability-only tiers were cross-checked against the official OpenRouter
- * `/api/v1/models` `reasoning.supported_efforts` field on 2026-09-03. A
- * profile can borrow only cards from a strictly lower numeric level; the
- * caller receives those cards in nearest-lower-first order.
+ * Availability-only tiers are checked against provider documentation and
+ * OpenRouter's official reasoning.supported_efforts records through
+ * 2026-10-02. A profile can borrow only cards from a strictly lower numeric
+ * level, returned in nearest-lower-first order.
  */
 
 export interface ApiProfileTierEvidence {
@@ -38,6 +38,114 @@ const tier = (
  * silently treated as a tier and therefore cannot create a fallback.
  */
 export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
+  {
+    productLineId: 'gpt_61_sol',
+    tiers: [
+      tier('low', 'Low', 1, ['card-aa-gpt-6-1-sol-low']),
+      tier('medium', 'Medium', 2, ['card-aa-gpt-6-1-sol-medium']),
+      tier('high', 'High', 3, ['card-aa-gpt-6-1-sol-high']),
+      tier('xhigh', 'XHigh', 4, ['card-aa-gpt-6-1-sol-xhigh']),
+      tier('max', 'Max', 5, ['card-aa-gpt-6-1-sol', 'card-arena-gpt-6-1-sol-max']),
+    ],
+  },
+  {
+    productLineId: 'claude_sonnet_55',
+    tiers: [
+      tier('low', 'Low', 1, ['card-aa-claude-sonnet-5-5-low']),
+      tier('medium', 'Medium', 2, ['card-aa-claude-sonnet-5-5-medium']),
+      tier('high', 'High', 3, ['card-aa-claude-sonnet-5-5-high']),
+      tier('xhigh', 'XHigh', 4, ['card-aa-claude-sonnet-5-5-xhigh']),
+      tier('max', 'Max', 5, ['card-aa-claude-sonnet-5-5']),
+    ],
+  },
+  {
+    productLineId: 'gemini_4_argon',
+    tiers: [
+      tier('high', 'High', 3, ['card-aa-gemini-4-argon', 'card-arena-gemini-4-argon-high']),
+    ],
+  },
+  {
+    productLineId: 'gpt_6_astra',
+    tiers: [
+      tier('low', 'Low', 1, ['card-aa-gpt-6-astra-low']),
+      tier('medium', 'Medium', 2, ['card-aa-gpt-6-astra-medium']),
+      tier('high', 'High', 3, ['card-aa-gpt-6-astra-high']),
+      tier('xhigh', 'XHigh', 4, ['card-aa-gpt-6-astra-xhigh']),
+      tier('max', 'Max', 5, ['card-aa-gpt-6-astra', 'card-arena-gpt-6-astra-max']),
+    ],
+  },
+  {
+    productLineId: 'gpt_6_sol',
+    tiers: [
+      tier('none', 'None', 0, ['card-aa-gpt-6-sol-non-reasoning']),
+      tier('low', 'Low', 1, ['card-aa-gpt-6-sol-low']),
+      tier('medium', 'Medium', 2, ['card-aa-gpt-6-sol-medium']),
+      tier('high', 'High', 3, ['card-aa-gpt-6-sol-high']),
+      tier('xhigh', 'XHigh', 4, ['card-aa-gpt-6-sol-xhigh']),
+      tier('max', 'Max', 5, ['card-aa-gpt-6-sol', 'card-arena-gpt-6-sol-max']),
+    ],
+  },
+  {
+    productLineId: 'gpt_6_luna',
+    tiers: [
+      tier('none', 'None', 0, ['card-aa-gpt-6-luna-non-reasoning']),
+      tier('low', 'Low', 1, ['card-aa-gpt-6-luna-low']),
+      tier('medium', 'Medium', 2, ['card-aa-gpt-6-luna-medium']),
+      tier('high', 'High', 3, ['card-aa-gpt-6-luna-high']),
+      tier('xhigh', 'XHigh', 4, ['card-aa-gpt-6-luna-xhigh']),
+      tier('max', 'Max', 5, ['card-aa-gpt-6-luna', 'card-arena-gpt-6-luna-max']),
+    ],
+  },
+  {
+    productLineId: 'claude_opus_55',
+    tiers: [
+      tier('low', 'Low', 1, ['card-aa-claude-opus-5-5-low']),
+      tier('medium', 'Medium', 2, ['card-aa-claude-opus-5-5-medium']),
+      tier('high', 'High', 3, ['card-aa-claude-opus-5-5-high']),
+      tier('xhigh', 'XHigh', 4, ['card-aa-claude-opus-5-5-xhigh']),
+      tier('max', 'Max', 5, ['card-aa-claude-opus-5-5']),
+    ],
+  },
+  {
+    productLineId: 'grok_47',
+    tiers: [
+      tier('low', 'Low', 1),
+      tier('medium', 'Medium', 2),
+      tier('high', 'High', 3, ['card-aa-grok-4-7-high']),
+      tier('xhigh', 'XHigh', 4, ['card-aa-grok-4-7', 'card-arena-grok-4-7-xhigh']),
+    ],
+  },
+  {
+    productLineId: 'deepseek_v41_flash',
+    tiers: [
+      tier('none', 'None', 0, ['card-aa-deepseek-v4-1-flash-non-reasoning']),
+      tier('max', 'Max', 5, ['card-aa-deepseek-v4-1-flash', 'card-arena-deepseek-v4-1-flash-max']),
+    ],
+  },
+  {
+    productLineId: 'mimo_v26_pro',
+    tiers: [
+      tier('default', 'Default', 0, ['card-aa-mimo-v2-6-pro', 'card-arena-mimo-v2-6-pro']),
+    ],
+  },
+  {
+    productLineId: 'mimo_v26_flash',
+    tiers: [
+      tier('default', 'Default', 0, ['card-aa-mimo-v2-6-flash']),
+    ],
+  },
+  {
+    productLineId: 'step_5_preview',
+    tiers: [
+      tier('high', 'High', 3, ['card-aa-step-5']),
+    ],
+  },
+  {
+    productLineId: 'qwen_38_24t_a95b',
+    tiers: [
+      tier('xhigh', 'XHigh', 4, ['card-aa-qwen3-8-2-4t-a95b']),
+    ],
+  },
   {
     productLineId: 'gpt_56_sol',
     tiers: [
@@ -94,7 +202,7 @@ export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
   {
     productLineId: 'deepseek_v4_flash',
     tiers: [
-      tier('none', 'None', 0, ['card-aa-deepseek-v4-flash-non-reasoning', 'card-arena-deepseek-v4-flash']),
+      tier('none', 'None', 0, ['card-aa-deepseek-v4-flash-0420-non-reasoning', 'card-arena-deepseek-v4-flash']),
       tier('high', 'High', 3, ['card-aa-deepseek-v4-flash-0420-high', 'card-arena-deepseek-v4-flash-high-preview']),
       // OpenRouter publishes XHigh availability, but no XHigh capability card.
       tier('xhigh', 'XHigh', 4),
@@ -153,7 +261,7 @@ export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
       tier('medium', 'Medium', 2, ['card-aa-claude-fable-5-1-medium']),
       tier('high', 'High', 3, ['card-aa-claude-fable-5-1-high']),
       tier('xhigh', 'XHigh', 4, ['card-aa-claude-fable-5-1-xhigh']),
-      tier('max', 'Max', 5, ['card-aa-claude-fable-5-1']),
+      tier('max', 'Max', 5, ['card-aa-claude-fable-5-1', 'card-arena-claude-fable-5-1-max']),
     ],
   },
   {
@@ -460,9 +568,8 @@ export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
   {
     productLineId: 'qwen_38_max',
     tiers: [
-      // OpenRouter publishes XHigh as Qwen3.8 Max's default reasoning effort;
-      // the AA Coding Agent row uses that model identity without restating it.
-      tier('xhigh', 'XHigh', 4, ['card-aa-qwen3-8-max']),
+      // Only the fixed 0902 rows belong to the canonical Qwen3.8-Max config.
+      tier('xhigh', 'XHigh', 4, ['card-aa-qwen3-8-max', 'card-arena-qwen3-8-max-0902']),
     ],
   },
   {

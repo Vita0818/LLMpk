@@ -5,6 +5,7 @@ import { ALL_METRIC_DEFINITIONS } from '../src/engine/scoringEngine';
 import {
   buildConfigurationMetricRows,
   CONFIGURATION_DETAIL_DOMAIN_ORDER,
+  formatConfigurationRawMetricValue,
 } from '../src/components/ConfigurationDetailContent';
 import type {
   PublicLeaderboardScore,
@@ -63,6 +64,14 @@ assert.equal(apiRows.at(-1)?.label, 'Output Price');
 const subscriptionRows = buildConfigurationMetricRows(subscriptionScore);
 assert.equal(subscriptionRows.at(-2)?.label, 'Monthly Price');
 assert.equal(subscriptionRows.at(-1)?.label, 'API Equivalent');
+
+for (const unit of ['Resolution Rate', 'Resolved Rate', 'Pass Rate']) {
+  assert.equal(
+    formatConfigurationRawMetricValue(0.373, unit),
+    '37.3%',
+    `${unit} must render as a percentage in configuration details.`,
+  );
+}
 
 console.log(
   `Configuration detail content contract passed (${apiRows.length} aligned rows).`

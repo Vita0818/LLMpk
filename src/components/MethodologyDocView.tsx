@@ -17,7 +17,7 @@ export const MethodologyDocView: React.FC = () => {
             LLMpk 评分系统 <span className="text-cyan-400">三份标准规范文档</span>
           </h1>
           <p className="text-xs text-slate-400 mt-1">
-            包含数据源与指标注册表 v1.1、领域归类与权重方案 v2.1、评分系统与实用分方法说明 v{SCORING_CONFIG.version}
+            包含数据源与指标注册表 v1.2、领域归类与权重方案 v2.2、评分系统与实用分方法说明 v{SCORING_CONFIG.version}
           </p>
         </div>
 
@@ -38,7 +38,7 @@ export const MethodologyDocView: React.FC = () => {
               activeDoc === 'weighting' ? 'bg-cyan-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            2. 领域权重 Weighting v2.1
+            2. 领域权重 Weighting v2.2
           </button>
 
           <button
@@ -47,7 +47,7 @@ export const MethodologyDocView: React.FC = () => {
               activeDoc === 'registry' ? 'bg-cyan-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            3. 数据源注册 Data Source v1.1
+            3. 数据源注册 Data Source v1.2
           </button>
         </div>
       </div>
@@ -143,22 +143,22 @@ export const MethodologyDocView: React.FC = () => {
               <span className="text-xs font-mono text-cyan-400 bg-cyan-950 px-2 py-0.5 rounded border border-cyan-800">
                 llm_pk_domain_classification_weighting_v2.md
               </span>
-              <h2 className="text-xl font-bold text-white mt-2">LLM PK 领域归类与权重方案 (Domain Classification v2.1)</h2>
+              <h2 className="text-xl font-bold text-white mt-2">LLM PK 领域归类与权重方案 (Domain Classification v2.2)</h2>
             </div>
 
             <div className="space-y-4 text-xs sm:text-sm">
               <p>六个能力领域在六维综合能力分中完全等权，各占 1/6 (16.67%)：</p>
               <ul className="list-disc pl-5 space-y-1">
                 <li><strong>Chatting (16.67%)</strong>: Arena Instruction (30%), Multi-Turn (30%), Creative (20%), Hard Prompts (20%)</li>
-                <li><strong>Math & Science (16.67%)</strong>: HLE (30%), GPQA Diamond (30%), CritPt (20%), Arena Math (20%)</li>
-                <li><strong>Coding (16.67%)</strong>: SciCode (55%), Arena Text Coding (45%)</li>
-                <li><strong>Engineering (16.67%)</strong>: GDPval-AA (20%), Terminal-Bench v2.1 (30%), DeepSWE / SWE-Atlas-QnA / Coding Agent Terminal-Bench v2 (各 13.33%), WebDev (10%)</li>
+                <li><strong>Math & Science (16.67%)</strong>: EnigmaEval (30%), Terminal-Bench-Science 0.1 (30%), CritPt (20%), Arena Math (20%)</li>
+                <li><strong>Coding (16.67%)</strong>: SWE-rebench v2 Current Window (55%), Arena Text Coding (45%)</li>
+                <li><strong>Engineering (16.67%)</strong>: GDPval-AA (20%), Terminal-Bench 4.0 (30%), DeepSWE / SWE-Atlas-QnA / FrontierCode 1.1 Main Pass Rate (各 13.33%), WebDev (10%)</li>
                 <li><strong>Agentic Work (16.67%)</strong>: τ³-Banking (40%), Confirmed Success (21%), Steerability (12%), Praise (6%), Bash Recovery (12%), Tool Hallucination (9%)</li>
                 <li><strong>Search & Knowledge (16.67%)</strong>: AA-Omniscience Accuracy (35%), Non-Hallucination (30%), AA-LCR (25%), Search Arena (10%)</li>
               </ul>
               <p>
-                权重参考当前内置配置的来源覆盖率：高覆盖指标承担较高权重，低覆盖指标保留为补充信号。
-                AA Coding Agent Index 综合分仅保留在来源卡片中，不与其三个组成项重复计分。
+                v2.2 只替换五个指标，每个新指标继承原指标的领域和权重；六领域结构、归一化、
+                缺失值与总分算法均未改变。AA Coding Agent Index 综合分仅保留在历史来源卡片中，不重复计分。
               </p>
             </div>
           </div>
@@ -168,17 +168,21 @@ export const MethodologyDocView: React.FC = () => {
           <div className="space-y-6">
             <div className="border-b border-slate-800 pb-4">
               <span className="text-xs font-mono text-cyan-400 bg-cyan-950 px-2 py-0.5 rounded border border-cyan-800">
-                llm_pk_data_source_registry_v1.1.md
+                llm_pk_data_source_registry_v1.md
               </span>
-              <h2 className="text-xl font-bold text-white mt-2">LLM PK 数据源与指标注册表 (Data Source Registry v1.1)</h2>
+              <h2 className="text-xl font-bold text-white mt-2">LLM PK 数据源与指标注册表 (Data Source Registry v1.2)</h2>
             </div>
 
             <div className="space-y-4 text-xs sm:text-sm">
-              <p>第一版固定三个数据来源：</p>
+              <p>当前注册表使用七类来源；新增评测直接读取发布方官网：</p>
               <ol className="list-decimal pl-5 space-y-2">
-                <li><strong>Artificial Analysis</strong>: 采集 10 项通用模型指标，以及 Coding Agent Index 综合分与 DeepSWE、SWE-Atlas-QnA、Terminal-Bench v2 三项 harness 明细，共 14 项。</li>
+                <li><strong>Artificial Analysis</strong>: 继续使用 GDPval-AA、τ³-Banking、CritPt、AA-LCR、AA-Omniscience 两项及两个仍有效的 Coding Agent 明细。</li>
                 <li><strong>Arena.ai</strong>: 采集 Text(6项), Code WebDev(1项), Search(1项), Agent(5项) 共13项连续 Score/点估计。</li>
                 <li><strong>OpenRouter API</strong>: 采集模型端点 Pricing (Input/Output/Cache) 与 Performance (TTFT, Throughput p50, Uptime)。仅用于实用分，不进入能力分。</li>
+                <li><strong>Scale Labs</strong>: 直接读取 EnigmaEval pass@1。</li>
+                <li><strong>Terminal-Bench</strong>: 直接读取 Terminal-Bench 4.0 与 Terminal-Bench-Science 0.1 Resolution Rate。</li>
+                <li><strong>SWE-rebench</strong>: 直接读取 v2 当前滚动时间窗的 Resolved Rate。</li>
+                <li><strong>FrontierCode</strong>: 直接读取 1.1 Main 的 Pass Rate。</li>
               </ol>
             </div>
           </div>

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "oagxm-current-product-lines/v9-2026-09-02-releases",
+  "schemaVersion": "oagxm-current-product-lines/v11-2026-10-02-releases",
   "scopeId": "oagxm-current-product-lines",
   "snapshotPolicy": "Keep every source-published execution profile for the listed product lines, including the Data.md model inventory. Never merge reasoning effort, harness, fast, pro, custom-tools, or serving-environment variants by name. Arena Search and Grounding suffixes are benchmark row labels, so their observations belong to the underlying model rather than a separate execution configuration; the original row identity remains in provenance. Exclude variable latest aliases and :free routes unless a reader-facing configuration explicitly names that free route as its price source; Thinking Machines Inkling is the approved current exception. A model mentioned only through a client or IDE environment is not automatically represented as that environment; it needs a source-published record for the exact profile.",
   "benchmarkBoundary": "General-purpose text or multimodal foundation models supported by the LLM capability registry. Historical Data.md entries are retained only when an exact record is published by Artificial Analysis, Arena, or OpenRouter. Dedicated image, video, speech, embedding, moderation, and safety-only APIs are outside the formal capability leaderboard unless a corresponding source benchmark is added.",
@@ -9,6 +9,11 @@
       "name": "OpenAI",
       "officialModelsUrl": "https://developers.openai.com/api/docs/guides/latest-model",
       "productLines": [
+        { "id": "gpt_61_sol_pro", "name": "GPT-6.1 Sol Pro", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bgpt[- ]6[._-]1[- ]sol[- ]pro\\b"] },
+        { "id": "gpt_61_sol", "name": "GPT-6.1 Sol", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bgpt[- ]6[._-]1[- ]sol\\b(?![- ]pro\\b)"] },
+        { "id": "gpt_6_astra", "name": "GPT-6 Astra", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bgpt[- ]6[- ]astra\\b"] },
+        { "id": "gpt_6_sol", "name": "GPT-6 Sol", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bgpt[- ]6[- ]sol\\b"] },
+        { "id": "gpt_6_luna", "name": "GPT-6 Luna", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bgpt[- ]6[- ]luna\\b"] },
         { "id": "gpt_56_luna", "name": "GPT-5.6 Luna", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bgpt[- ]5\\.6[- ]luna\\b"] },
         { "id": "gpt_56_sol", "name": "GPT-5.6 Sol", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bgpt[- ]5\\.6[- ]sol\\b"] },
         { "id": "gpt_56_terra", "name": "GPT-5.6 Terra", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bgpt[- ]5\\.6[- ]terra\\b"] },
@@ -23,13 +28,15 @@
       "officialModelsUrl": "https://platform.claude.com/docs/en/about-claude/models/overview",
       "productLines": [
         { "id": "claude_fable_51", "name": "Claude Fable 5.1", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ]fable[- ]5[._-]1\\b"] },
+        { "id": "claude_opus_55", "name": "Claude Opus 5.5", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ]opus[- ]5[._-]5\\b"] },
+        { "id": "claude_sonnet_55", "name": "Claude Sonnet 5.5", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ]sonnet[- ]5[._-]5\\b"] },
         { "id": "claude_fable_5", "name": "Claude Fable 5", "tier": "historical", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ]fable[- ]5\\b(?![._-]1\\b)"] },
-        { "id": "claude_opus_5", "name": "Claude Opus 5", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ]opus[- ]5\\b"] },
+        { "id": "claude_opus_5", "name": "Claude Opus 5", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ]opus[- ]5\\b(?![._-]5\\b)"] },
         { "id": "claude_opus_48", "name": "Claude Opus 4.8", "tier": "historical", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ]opus[- ]4[._-]8\\b"] },
         { "id": "claude_opus_47", "name": "Claude Opus 4.7", "tier": "historical", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ]opus[- ]4[._-]7\\b"] },
         { "id": "claude_opus_46", "name": "Claude Opus 4.6", "tier": "historical", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ]opus[- ]4[._-]6\\b"] },
         { "id": "claude_opus_45", "name": "Claude Opus 4.5", "tier": "historical", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ]opus[- ]4[._-]5\\b"] },
-        { "id": "claude_sonnet_5", "name": "Claude Sonnet 5", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ]sonnet[- ]5\\b"] },
+        { "id": "claude_sonnet_5", "name": "Claude Sonnet 5", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ]sonnet[- ]5\\b(?![._-]5\\b)"] },
         { "id": "claude_haiku_45", "name": "Claude Haiku 4.5", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ](?:haiku[- ]4[._-]5|4[._-]5[- ]haiku)\\b"] }
       ]
     },
@@ -38,6 +45,7 @@
       "name": "Google",
       "officialModelsUrl": "https://ai.google.dev/gemini-api/docs/models",
       "productLines": [
+        { "id": "gemini_4_argon", "name": "Gemini 4 Argon", "tier": "preview", "rankingClass": "formal_text_agent", "patterns": ["\\bgemini[- ]4[- ]argon\\b"] },
         { "id": "gemini_31_pro", "name": "Gemini 3.1 Pro", "tier": "preview", "rankingClass": "formal_text_agent", "patterns": ["\\bgemini[- ]3\\.1[- ]pro\\b"] },
         { "id": "gemini_38_flash", "name": "Gemini 3.8 Flash", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bgemini[- ]3[._-]8[- ]flash\\b"] },
         { "id": "gemini_37_flash", "name": "Gemini 3.7 Flash", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bgemini[- ]3[._-]7[- ]flash\\b"] },
@@ -55,6 +63,7 @@
       "name": "xAI",
       "officialModelsUrl": "https://docs.x.ai/developers/models",
       "productLines": [
+        { "id": "grok_47", "name": "Grok 4.7", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bgrok[- ]4[._-]7\\b"] },
         { "id": "grok_46", "name": "Grok 4.6", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bgrok[- ]4[._-]6\\b"] },
         { "id": "grok_45", "name": "Grok 4.5", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bgrok[- ]4\\.5\\b"] }
       ]
@@ -77,6 +86,7 @@
       "name": "DeepSeek",
       "officialModelsUrl": "https://api-docs.deepseek.com/quick_start/pricing",
       "productLines": [
+        { "id": "deepseek_v41_flash", "name": "DeepSeek V4.1 Flash", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[._-]1[- ]flash\\b"] },
         { "id": "deepseek_v4_flash_0731", "name": "DeepSeek-v4-Flash 0731", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[- ]flash[- ]0731\\b", "\\bdeepseek[- ]v?4[- ]flash.*\\b20260731\\b", "2083084415157022911", "date[- ]2026[- ]07[- ]31"] },
         { "id": "deepseek_v4_flash", "name": "DeepSeek-v4-Flash Preview", "tier": "preview", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[- ]flash\\b"] },
         { "id": "deepseek_v4_pro_0813", "name": "DeepSeek-v4-Pro 0813", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[- ]pro(?:[- ](?:max|high|low|xhigh|reasoning))*[- ](?:0813|20260813)\\b"] },
@@ -89,7 +99,7 @@
       "officialModelsUrl": "https://docs.z.ai/",
       "productLines": [
         { "id": "glm_53_flash", "name": "GLM-5.3-Flash", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bglm[- ]5[._-]3[- ]flash\\b"] },
-        { "id": "glm_53", "name": "GLM-5.3", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bglm[- ]5[._-]3\\b"] },
+        { "id": "glm_53", "name": "GLM-5.3", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bglm[- ]5[._-]3\\b(?![- ](?:prime|flashx)\\b)"] },
         { "id": "glm_52", "name": "GLM-5.2", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bglm[- ]5[._-]2\\b"] }
       ]
     },
@@ -140,9 +150,10 @@
       "name": "Alibaba / Qwen",
       "officialModelsUrl": "https://www.alibabacloud.com/help/en/model-studio/models",
       "productLines": [
+        { "id": "qwen_38_24t_a95b", "name": "Qwen3.8-2.4T-A95B", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bqwen[- ]?3[._-]8[- ]2[._-]4t[- ]a95b\\b"] },
         { "id": "qwen_38_flash_next", "name": "Qwen3.8-Flash-Next", "tier": "preview", "rankingClass": "formal_text_agent", "patterns": ["\\bqwen[- ]?3[._-]8[- ]flash[- ]next\\b"] },
         { "id": "qwen_38_max_preview", "name": "Qwen 3.8 Max Preview", "tier": "preview", "rankingClass": "formal_text_agent", "patterns": ["\\bqwen[- ]?3[._-]8[- ]max[- ]preview\\b"] },
-        { "id": "qwen_38_max", "name": "Qwen 3.8 Max", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bqwen[- ]?3[._-]8[- ]max\\b(?![- ]preview\\b)"] },
+        { "id": "qwen_38_max", "name": "Qwen3.8-Max", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bqwen[- ]?3[._-]8[- ]max(?:[- ]0902\\b|[ ]*\\(0902\\)|[- ]2026[- ]09[- ]02\\b)"] },
         { "id": "qwen_38_27b", "name": "Qwen 3.8 27B", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bqwen[- ]?3[._-]8[- ]27b\\b"] },
         { "id": "qwen_37_max", "name": "Qwen 3.7 Max", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bqwen[- ]?3[._-]7[- ]max\\b"], "allowPreviewSourceRecords": false },
         { "id": "qwen_37_plus", "name": "Qwen 3.7 Plus", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bqwen[- ]?3[._-]7[- ]plus\\b"] },
@@ -179,6 +190,8 @@
       "name": "Xiaomi",
       "officialModelsUrl": "https://platform.xiaomimimo.com/",
       "productLines": [
+        { "id": "mimo_v26_pro", "name": "MiMo-V2.6-Pro", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bmimo[- ]v?2[._-]6[- ]pro\\b"] },
+        { "id": "mimo_v26_flash", "name": "MiMo-V2.6-Flash", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bmimo[- ]v?2[._-]6[- ]flash\\b"] },
         { "id": "mimo_v25_pro", "name": "Mimo V2.5 Pro", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bmimo[- ]v?2[._-]5[- ]pro\\b"] }
       ]
     },
@@ -187,6 +200,7 @@
       "name": "StepFun",
       "officialModelsUrl": "https://platform.stepfun.com/docs/overview/models",
       "productLines": [
+        { "id": "step_5_preview", "name": "Step 5 Preview", "tier": "preview", "rankingClass": "formal_text_agent", "patterns": ["\\bstep[- ]5[- ]preview\\b"] },
         { "id": "step_37_flash", "name": "Step 3.7 Flash", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bstep[- ]3[._-]7[- ]flash\\b"] }
       ]
     },

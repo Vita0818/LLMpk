@@ -51,6 +51,8 @@ import {
 import { PLAY_MODE_ENABLED } from './config/featureFlags';
 
 type SortKey = 'rawCapabilityScore' | 'practicalScore' | DomainId;
+type MainTab = 'leaderboard' | 'pareto' | 'custom' | 'side_by_side' | 'overview';
+type ActiveTab = MainTab | 'detail';
 
 /** intro -> model loop -> radar overview -> outro weights -> outro credits. */
 type PlayModePhase =
@@ -65,6 +67,11 @@ const PLAY_MODE_HUD_UPDATE_INTERVAL_MS = 100;
 const PUBLIC_SCORES = (
   publicLeaderboardSnapshot as unknown as PublicLeaderboardSnapshot
 ).scores;
+
+const Pareto3DView = React.lazy(async () => {
+  const module = await import('./components/Pareto3DView');
+  return { default: module.Pareto3DView };
+});
 
 const getScoreDepthStyle = (score: number | null | undefined) => {
   if (score === null || score === undefined || isNaN(score)) {
@@ -85,8 +92,8 @@ const getScoreDepthStyle = (score: number | null | undefined) => {
  * - Header Pill Navbar: bg-neutral-100 rounded-[1.5rem] with bg-black active pill
  */
 export const VercelAestheticPreview: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'leaderboard' | 'custom' | 'side_by_side' | 'overview' | 'detail'>('leaderboard');
-  const [lastMainTab, setLastMainTab] = useState<'leaderboard' | 'custom' | 'side_by_side' | 'overview'>('leaderboard');
+  const [activeTab, setActiveTab] = useState<ActiveTab>('leaderboard');
+  const [lastMainTab, setLastMainTab] = useState<MainTab>('leaderboard');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedConfigId, setSelectedConfigId] = useState<string>('');
   const [filterCategory, setFilterCategory] = useState<'all' | 'reasoning' | 'top'>('all');
@@ -756,6 +763,20 @@ export const VercelAestheticPreview: React.FC = () => {
                 </button>
                 <button
                   onClick={() => {
+                    setActiveTab('pareto');
+                    setLastMainTab('pareto');
+                  }}
+                  className={`px-2.5 sm:px-3.5 py-1.5 rounded-full transition-all ${
+                    activeTab === 'pareto'
+                      ? 'bg-black text-white shadow-2xs'
+                      : 'text-neutral-600 hover:text-neutral-950'
+                  }`}
+                >
+                  <span className="sm:hidden">3D</span>
+                  <span className="hidden sm:inline">三维 Pareto</span>
+                </button>
+                <button
+                  onClick={() => {
                     setActiveTab('custom');
                     setLastMainTab('custom');
                   }}
@@ -824,7 +845,9 @@ export const VercelAestheticPreview: React.FC = () => {
               : 'play-mode-clean-stage mx-auto h-screen w-full max-w-[1500px] px-6 py-4'
             : PLAY_MODE_ENABLED && isPlayModeActive
               ? 'mx-auto w-full max-w-[1500px] px-4 pb-6 pt-36'
-              : 'mx-auto w-full max-w-[1500px] px-4 py-6'
+              : activeTab === 'pareto'
+                ? 'mx-auto w-full max-w-[1500px] px-4 pb-0 pt-2'
+                : 'mx-auto w-full max-w-[1500px] px-4 py-6'
         }
       >
         {/* VIEW 1: MODELS LEADERBOARD */}
@@ -967,7 +990,26 @@ export const VercelAestheticPreview: React.FC = () => {
           </div>
         )}
 
-        {/* VIEW 2: USER-WEIGHTED CUSTOM RANKING */}
+        {/* VIEW 2: INTERACTIVE THREE-DIMENSIONAL PARETO SPACE */}
+        {activeTab === 'pareto' && (
+          <React.Suspense
+            fallback={(
+              <div className="flex min-h-[560px] items-center justify-center font-brand-mono text-xs font-bold text-neutral-400">
+                正在加载三维坐标空间…
+              </div>
+            )}
+          >
+            <Pareto3DView
+              scoreItems={scores}
+              onSelectConfigForDetail={(item) => {
+                setSelectedConfigId(item.config.id);
+                setActiveTab('detail');
+              }}
+            />
+          </React.Suspense>
+        )}
+
+        {/* VIEW 3: USER-WEIGHTED CUSTOM RANKING */}
         {activeTab === 'custom' && (
           <CustomRankingView
             representativeScoreItems={representativeRouteScores}
@@ -978,7 +1020,7 @@ export const VercelAestheticPreview: React.FC = () => {
           />
         )}
 
-        {/* VIEW 3: RADAR OVERVIEW GALLERY (4 PER ROW) */}
+        {/* VIEW 4: RADAR OVERVIEW GALLERY (4 PER ROW) */}
         {activeTab === 'overview' && (
           <RadarOverviewGallery
             scoreItems={radarOverviewScores}
@@ -990,7 +1032,7 @@ export const VercelAestheticPreview: React.FC = () => {
           />
         )}
 
-        {/* VIEW 4: SIDE-BY-SIDE COMPARE */}
+        {/* VIEW 5: SIDE-BY-SIDE COMPARE */}
         {activeTab === 'side_by_side' && (
           <SideBySideCompareView
             scoreItems={scores}

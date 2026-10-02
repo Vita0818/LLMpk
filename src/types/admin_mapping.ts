@@ -1,4 +1,11 @@
-export type SourceType = 'artificial_analysis' | 'arena' | 'openrouter';
+export type SourceType =
+  | 'artificial_analysis'
+  | 'arena'
+  | 'openrouter'
+  | 'scale_labs'
+  | 'terminal_bench'
+  | 'swe_rebench'
+  | 'frontier_code';
 
 /**
  * How a shipped configuration is reached. API and explicit subscription

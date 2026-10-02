@@ -328,7 +328,15 @@ const metricCoverage = ALL_METRIC_DEFINITIONS.map((metric) => {
   || right.coverage - left.coverage
   || left.metricId.localeCompare(right.metricId)
 ));
-const sourceCardCoverageBySource = (['artificial_analysis', 'arena', 'openrouter'] as const)
+const sourceCardCoverageBySource = ([
+  'artificial_analysis',
+  'arena',
+  'openrouter',
+  'scale_labs',
+  'terminal_bench',
+  'swe_rebench',
+  'frontier_code',
+] as const)
   .reduce<Record<string, { cards: number; linkedCards: number; unmatchedCards: number }>>((result, source) => {
     const cards = store.cards.filter((card) => card.source === source);
     const linkedCards = cards.filter((card) => linkedSourceCardIds.has(card.id));

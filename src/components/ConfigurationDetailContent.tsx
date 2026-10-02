@@ -57,7 +57,13 @@ export const formatConfigurationRawMetricValue = (
 ) => {
   if (value === null || value === undefined || Number.isNaN(value)) return '--';
 
-  if (unit === '%' || unit === 'pass@1') {
+  if (
+    unit === '%'
+    || unit === 'pass@1'
+    || unit === 'Resolution Rate'
+    || unit === 'Resolved Rate'
+    || unit === 'Pass Rate'
+  ) {
     const percentage = value <= 1 && value > 0 ? value * 100 : value;
     return `${percentage.toFixed(1)}%`;
   }

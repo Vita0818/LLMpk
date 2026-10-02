@@ -341,7 +341,9 @@ function auditOagxmScope(scope, cards, observations, failures, warnings) {
       identity.exactSourceModelName,
       identity.sourceRecordId,
       identity.modelKey,
-      identity.modelUrl,
+      // Sol and Luna share a joint announcement URL; the URL contains Sol's
+      // name and must not override Luna's exact published row identity.
+      /gpt-6-sol-and-luna/iu.test(identity.modelUrl || '') ? null : identity.modelUrl,
     ]
       .filter(isNonEmptyString)
       .join('\n');
@@ -655,9 +657,9 @@ function auditArena(rawManifest, scope, cards, observations, failures, warnings)
       uniqueModelCount: selectedScopedSourceRows.size,
       databaseAvailableCount: databaseGroups.size,
       databaseAvailableRowCount: databaseRows.length,
-      // Preserve the full raw-source facts for traceability.  For example,
-      // the current WebDev snapshot has 124 extracted / 1 duplicate / 123
-      // unique rows even when only its OAGXM rows are admitted to this catalog.
+      // Preserve the full raw-source facts even when only OAGXM rows are
+      // admitted. Counts change as the publisher adds models; their integrity
+      // is checked against the retained rows and deduplication manifest above.
       sourceExtractedRowCount: rawMetric.rows.length,
       sourceDuplicateRowCount: calculatedDuplicateRowCount,
       sourceUniqueModelCount: sourceGroups.size,
@@ -684,15 +686,6 @@ function auditArena(rawManifest, scope, cards, observations, failures, warnings)
       scope: 'arena',
       issue: 'Total effective observations must equal the sum of the 13 per-metric unique available counts.',
       ...conservation,
-    });
-  }
-
-  const webdev = metrics.arena_code_webdev;
-  if (webdev?.sourceExtractedRowCount !== 124 || webdev?.sourceDuplicateRowCount !== 1 || webdev?.sourceUniqueModelCount !== 123) {
-    warnings.push({
-      scope: 'arena',
-      issue: 'WebDev source changes may be legitimate, but the recorded full-source snapshot does not have the expected 124 / 1 / 123 audit facts.',
-      actual: webdev,
     });
   }
 

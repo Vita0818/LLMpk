@@ -10,6 +10,7 @@ import { OAGXM_SCOPE, classifyOagxmModel } from '../src/data/oagxmScope';
  */
 const expectedProductLines: Array<[string, string]> = [
   ['DeepSeek-v4-Flash', 'deepseek_v4_flash'],
+  ['DeepSeek V4.1 Flash', 'deepseek_v41_flash'],
   ['DeepSeek-v4-Flash-0731', 'deepseek_v4_flash_0731'],
   ['DeepSeek-v4-Pro 0813', 'deepseek_v4_pro_0813'],
   ['deepseek/deepseek-v4-pro-20260813', 'deepseek_v4_pro_0813'],
@@ -29,7 +30,9 @@ const expectedProductLines: Array<[string, string]> = [
   ['MiniMax M3', 'minimax_m3'],
   ['Qwen3.8-Flash-Next', 'qwen_38_flash_next'],
   ['Qwen3.8-Max-Preview', 'qwen_38_max_preview'],
-  ['Qwen3.8 Max', 'qwen_38_max'],
+  ['Qwen3.8 Max (0902)', 'qwen_38_max'],
+  ['Qwen3.8-Max-0902', 'qwen_38_max'],
+  ['Qwen3.8-2.4T-A95B', 'qwen_38_24t_a95b'],
   ['Qwen3.8 27B', 'qwen_38_27b'],
   ['Qwen3.7-Max', 'qwen_37_max'],
   ['Qwen3.7-Plus', 'qwen_37_plus'],
@@ -37,7 +40,18 @@ const expectedProductLines: Array<[string, string]> = [
   ['LongCat 2.0', 'longcat_20'],
   ['KAT-Coder-Pro V2.5', 'kat_coder_pro_v25'],
   ['Mimo V2.5 Pro', 'mimo_v25_pro'],
+  ['MiMo-V2.6-Pro', 'mimo_v26_pro'],
+  ['MiMo-V2.6-Flash', 'mimo_v26_flash'],
+  ['Step 5 Preview', 'step_5_preview'],
   ['Step 3.7 Flash', 'step_37_flash'],
+  ['GPT-6 Astra', 'gpt_6_astra'],
+  ['GPT-6 Sol', 'gpt_6_sol'],
+  ['GPT-6.1 Sol', 'gpt_61_sol'],
+  ['openai/gpt-6.1-sol', 'gpt_61_sol'],
+  ['GPT-6.1 Sol (Max)', 'gpt_61_sol'],
+  ['GPT-6.1 Sol Pro', 'gpt_61_sol_pro'],
+  ['openai/gpt-6.1-sol-pro', 'gpt_61_sol_pro'],
+  ['GPT-6 Luna', 'gpt_6_luna'],
   ['GPT-5.6 Sol', 'gpt_56_sol'],
   ['GPT-5.6 Terra', 'gpt_56_terra'],
   ['GPT-5.6 Luna', 'gpt_56_luna'],
@@ -51,8 +65,12 @@ const expectedProductLines: Array<[string, string]> = [
   ['Claude Opus 4.6', 'claude_opus_46'],
   ['Claude Opus 4.5', 'claude_opus_45'],
   ['Claude Sonnet 5', 'claude_sonnet_5'],
+  ['Claude Sonnet 5.5', 'claude_sonnet_55'],
+  ['claude-sonnet-5-5-high', 'claude_sonnet_55'],
+  ['Gemini 4 Argon (High)', 'gemini_4_argon'],
   ['Claude Haiku 4.5', 'claude_haiku_45'],
   ['Claude Opus 5', 'claude_opus_5'],
+  ['Claude Opus 5.5', 'claude_opus_55'],
   ['Gemini 3.1 Pro', 'gemini_31_pro'],
   ['Gemini 3.1 Pro Preview', 'gemini_31_pro'],
   ['Gemini 3.8 Flash', 'gemini_38_flash'],
@@ -63,6 +81,7 @@ const expectedProductLines: Array<[string, string]> = [
   ['Gemini 3.1 Flash Lite', 'gemini_31_flash_lite'],
   ['Gemini 2.5 Flash Lite', 'gemini_25_flash_lite'],
   ['Grok 4.6', 'grok_46'],
+  ['Grok 4.7', 'grok_47'],
   ['Grok 4.5', 'grok_45'],
   ['Muse Glimmer 30B', 'muse_glimmer'],
   ['Muse Spark 1.3', 'muse_spark_13'],
@@ -90,12 +109,16 @@ for (const [sourceName, productLineId] of expectedProductLines) {
 }
 
 const configuredProductLines = OAGXM_SCOPE.vendors.flatMap((vendor) => vendor.productLines);
-assert.equal(configuredProductLines.length, 65, 'Curated inventory should include the newly requested source-backed model lines');
+assert.equal(configuredProductLines.length, 79, 'Curated inventory should include the October 2026 model lines');
 assert.equal(
   classifyOagxmModel('Claude Fable 5.1')?.productLineId,
   'claude_fable_51',
   'Fable 5.1 must never collapse into the historical Fable 5 product line.',
 );
+assert.equal(classifyOagxmModel('Qwen3.8 Max'), null);
+assert.equal(classifyOagxmModel('Qwen3.8 Max Prime'), null);
+assert.equal(classifyOagxmModel('GLM-5.3-Prime'), null);
+assert.equal(classifyOagxmModel('GLM-5.3-FlashX'), null);
 assert.ok(
   configuredProductLines.every((line) => line.rankingClass === 'formal_text_agent'),
   'Image/audio/safety-only product lines must not enter the Data.md capability scope',

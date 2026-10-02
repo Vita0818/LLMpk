@@ -21,12 +21,14 @@ export function getEmbeddedConfidenceRadius(
   ];
   if (!sourceSignal) return undefined;
 
-  const radius = observation.metadataJson?.sourceRecord?.signalCi?.[
-    sourceSignal
-  ];
-  return typeof radius === 'number'
-    && Number.isFinite(radius)
-    && radius > 0
-    ? radius
-    : undefined;
+  const signalCi = observation.metadataJson?.sourceRecord?.signalCi;
+  // The October payload also renamed the associated CI field. Keep both
+  // transport versions so a refreshed score retains its source uncertainty.
+  const signals = observation.metricId === 'arena_agent_steerability'
+    ? [sourceSignal, 'steering_burden']
+    : [sourceSignal];
+  return signals.map((signal) => signalCi?.[signal])
+    .find((radius): radius is number => (
+      typeof radius === 'number' && Number.isFinite(radius) && radius > 0
+    ));
 }

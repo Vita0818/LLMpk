@@ -180,15 +180,15 @@ function validateArtificialAnalysis(snapshot) {
   ]));
   check(
     'aa-core-coverage',
-    'High-coverage AA atomics were not truncated.',
+    'AA legacy atomics retain the published coverage expected after the September index update.',
     metricCoverage.hle >= 400
       && metricCoverage.gpqa >= 400
-      && metricCoverage.scicode >= 400,
+      && metricCoverage.scicode >= 150,
     {
       hle: metricCoverage.hle,
       gpqa: metricCoverage.gpqa,
       scicode: metricCoverage.scicode,
-      minimumEach: 400,
+      minimum: { hle: 400, gpqa: 400, scicode: 150 },
     },
   );
   check(
@@ -208,13 +208,14 @@ function validateArtificialAnalysis(snapshot) {
 
   const requiredEvaluationIds = [
     'aa-briefcase',
+    'gdp-pdf',
     'automationbench-aa',
     'harvey-lab-aa',
     'enterprise-ops-gym-aa',
   ];
   check(
     'aa-professional-evaluations',
-    'All four professional/engineering AA evaluation tables were captured.',
+    'All five professional, document, and engineering AA evaluation tables were captured.',
     requiredEvaluationIds.every((id) => (
       Array.isArray(evaluations[id])
       && evaluations[id].length >= 10
@@ -232,7 +233,34 @@ function validateArtificialAnalysis(snapshot) {
     },
   );
 
+  const modelsWithReleaseDate = models.filter((record) => (
+    typeof record.releaseDate === 'string'
+    && /^\d{4}-\d{2}-\d{2}$/u.test(record.releaseDate)
+    && Number.isFinite(Date.parse(record.releaseDate))
+  ));
+  check(
+    'aa-model-release-dates',
+    'AA model release identities retain dates used by configuration curation.',
+    modelsWithReleaseDate.length >= Math.ceil(models.length * 0.95),
+    { modelRecords: models.length, recordsWithReleaseDate: modelsWithReleaseDate.length },
+  );
+  const releaseProfiles = ['gpt-6-1-sol', 'claude-sonnet-5-5'].flatMap((slug) => (
+    ['', '-low', '-medium', '-high', '-xhigh'].map((suffix) => `${slug}${suffix}`)
+  ));
+  check(
+    'aa-october-effort-profiles',
+    'New Sol and Sonnet model records retain all five explicitly measured efforts.',
+    releaseProfiles.every((slug) => models.some((model) => (
+      model.slug === slug && modelsWithReleaseDate.includes(model)
+    ))),
+    { requiredSlugs: releaseProfiles },
+  );
+
   const targetModels = [
+    ['GPT-6.1 Sol', /GPT-6[.]1 Sol/iu],
+    ['Claude Sonnet 5.5', /Claude Sonnet 5[.]5/iu],
+    ['Gemini 4 Argon', /Gemini 4 Argon/iu],
+    ['MiMo-V2.6-Flash', /MiMo-V2[.]6-Flash/iu],
     ['Kimi K3', /Kimi K3/iu],
     ['GPT-5.4', /GPT-5[.]4/iu],
     ['Claude Sonnet 4.6', /Claude Sonnet 4[.]6/iu],
@@ -240,8 +268,18 @@ function validateArtificialAnalysis(snapshot) {
     ['Claude Fable 5.1', /Claude Fable 5[.]1/iu],
     ['Gemini 3.8 Flash', /Gemini 3[.]8 Flash/iu],
     ['Muse Spark 1.3', /Muse Spark 1[.]3/iu],
-    ['GLM-5.3-Flash', /GLM-5[.]3-Flash/iu],
+    ['GLM-5.3-Flash', /GLM[- ]5[.]3[- ]Flash/iu],
     ['Qwen3.8-Flash-Next', /Qwen3[.]8-Flash-Next/iu],
+    ['GPT-6 Astra', /GPT-6 Astra/iu],
+    ['GPT-6 Sol', /GPT-6 Sol/iu],
+    ['GPT-6 Luna', /GPT-6 Luna/iu],
+    ['Claude Opus 5.5', /Claude Opus 5[.]5/iu],
+    ['Grok 4.7', /Grok 4[.]7/iu],
+    ['DeepSeek V4.1 Flash', /DeepSeek V4[.]1 Flash/iu],
+    ['MiMo-V2.6-Pro', /MiMo-V2[.]6-Pro/iu],
+    ['Step 5 Preview', /Step 5 Preview/iu],
+    ['Qwen3.8 Max 0902', /Qwen3[.]8 Max [(]0902[)]/iu],
+    ['Qwen3.8 2.4T A95B', /Qwen3[.]8 2[.]4T A95B/iu],
   ];
   check(
     'aa-target-models',
@@ -256,6 +294,13 @@ function validateArtificialAnalysis(snapshot) {
   );
 
   const targetHarnessRows = [
+    ['Codex / GPT-6.1 Sol', /Codex - GPT-6[.]1 Sol [(]max[)]/iu],
+    ['Claude Code / Sonnet 5.5', /Claude Code - Sonnet 5[.]5 [(]max[)]/iu],
+    ['Codex / GPT-6 Astra', /Codex - GPT-6 Astra [(]max[)]/iu],
+    ['Codex / GPT-6 Sol', /Codex - GPT-6 Sol [(]max[)]/iu],
+    ['Codex / GPT-6 Luna', /Codex - GPT-6 Luna [(]max[)]/iu],
+    ['Claude Code / Opus 5.5', /Claude Code - Opus 5[.]5 [(]max[)]/iu],
+    ['Grok Build / Grok 4.7', /Grok Build - Grok 4[.]7 [(]xhigh[)]/iu],
     ['Kimi Code CLI / Kimi K3', /Kimi Code CLI - Kimi K3/iu],
     ['Codex / GPT-5.6 Sol', /Codex - GPT-5[.]6 Sol/iu],
     ['Claude Code / Sonnet 4.6', /Claude Code - Sonnet 4[.]6/iu],
@@ -282,8 +327,9 @@ function validateArtificialAnalysis(snapshot) {
   );
   check(
     'aa-coding-agent-integrity',
-    'AA Coding Agent rows have unique IDs, model+harness identity, and finite component scores.',
+    'Current and dated historical AA Coding Agent rows have unique identities and finite component scores.',
     codingRows.length >= 40
+      && snapshot?.counts?.currentCodingAgentRecords >= 15
       && uniqueValues(codingRows, (record) => record.id)
       && codingRows.every((record) => (
         typeof record?.agentName === 'string'
@@ -292,6 +338,7 @@ function validateArtificialAnalysis(snapshot) {
         && Number.isFinite(record?.indexScore)
         && Array.isArray(record?.evals)
         && record.evals.length >= 2
+        && /^\d{4}-\d{2}-\d{2}$/u.test(record.sourceSnapshotDate)
         && record.evals.every((evaluation) => (
           typeof evaluation?.datasetIndexName === 'string'
           && Number.isFinite(evaluation?.mean?.reward)
@@ -389,6 +436,21 @@ function validateArena(snapshot) {
     rowsAreValid,
     { rowCounts, minimumEach: 5 },
   );
+  const agentMetricIds = REQUIRED_ARENA_METRICS.filter((id) => id.startsWith('arena_agent_'));
+  const agentCohorts = agentMetricIds.map((id) => (
+    new Set((metrics[id]?.rows || []).map((row) => row.exactSourceModelName))
+  ));
+  const agentReferenceCohort = agentCohorts[0] || new Set();
+  check(
+    'arena-agent-cohort-consistency',
+    'All five Arena Agent signals describe the same current model cohort.',
+    agentReferenceCohort.size >= 40
+      && agentCohorts.every((cohort) => (
+        cohort.size === agentReferenceCohort.size
+        && [...cohort].every((name) => agentReferenceCohort.has(name))
+      )),
+    { modelCount: agentReferenceCohort.size, rowCounts: agentMetricIds.map((id) => rowCounts[id]) },
+  );
 
   const reference = referenceSnapshot(REFERENCE_PATHS.arena, PATHS.arena);
   if (reference?.metrics) {
@@ -398,7 +460,10 @@ function validateArena(snapshot) {
       const previous = Array.isArray(reference.metrics?.[metricId]?.rows)
         ? reference.metrics[metricId].rows.length
         : 0;
-      if (previous > 0 && current < previous * 0.8) {
+      // Arena Agent rotates its active cohort as one table: all five signals
+      // may shrink together while remaining complete and internally aligned.
+      const minimumRatio = metricId.startsWith('arena_agent_') ? 0.7 : 0.8;
+      if (previous > 0 && current < previous * minimumRatio) {
         regressions.push({ metricId, current, previous });
       }
     }

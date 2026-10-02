@@ -48,6 +48,22 @@ const AA_METRICS = [
 
 const AA_DETAIL_ONLY_METRICS = [
   {
+    id: 'aa_terminalbench_v4',
+    pageId: 'model-leaderboard',
+    field: (record) => record?.terminalBench40,
+    unit: 'ratio',
+    sourceLeaderboard: 'https://artificialanalysis.ai/evaluations/terminalbench-4-0',
+    sourceField: 'terminalBench40',
+  },
+  {
+    id: 'aa_gdp_pdf_all_pass',
+    pageId: 'gdp-pdf',
+    field: (record) => record?.gdpPdfAllPass ?? record?.gdpPdfBreakdown?.allPass,
+    unit: 'ratio',
+    sourceLeaderboard: 'https://artificialanalysis.ai/evaluations/gdp-pdf',
+    sourceField: 'gdpPdfAllPass | gdpPdfBreakdown.allPass',
+  },
+  {
     id: 'aa_ifbench',
     pageId: 'model-leaderboard',
     field: (record) => record?.ifbench,
@@ -399,7 +415,7 @@ function hasExpectedSourceVendor(scopeMatch, source, ...sourceIdentities) {
   google: [/^google(?: deepmind)?$/, /^google\//],
   cohere: [/^cohere(?: inc[.]?)?$/i, /^cohere\//i],
   thinking_machines: [/^thinking machines(?: lab)?$/i, /^thinkingmachines\//i],
-  xai: [/^xai$/, /^x-ai\//],
+  xai: [/^(?:xai|spacexai)$/, /^x-ai\//],
   meta: [/^meta$/, /^meta(?:-llama)?\//],
   deepseek: [/^deepseek(?: ai)?$/i, /^deepseek\//i],
   zai: [/^(?:z[.]?ai|zhipu(?: ai)?)$/i, /^(?:z-ai|zhipu)\//i],
@@ -1227,13 +1243,18 @@ async function buildVerifiedCatalog() {
     for (const [modelKey, row] of canonicalRows) {
       const cardId = `card-arena-${modelKey}`;
       const modelUrl = row.sourceRecord?.modelUrl;
+      // Arena links both GPT-6 Sol and Luna to one joint announcement.
+      // That URL cannot disambiguate the row's exact model identity.
+      const identityModelUrl = /gpt-6-sol-and-luna/iu.test(modelUrl || '')
+        ? null
+        : modelUrl;
       const scope = classifySourceModelScope(
         cardId,
         row.exactSourceModelName,
         row.sourceRecordId,
         row.modelId,
         row.sourceRecord?.modelKey,
-        modelUrl,
+        identityModelUrl,
       );
       if (!scope) continue;
       upsertCard({
