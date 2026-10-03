@@ -4,6 +4,7 @@ import type { DomainId } from '../types/llm_pk';
 import type { PublicLeaderboardScore } from '../types/publicLeaderboard';
 import {
   ConfigurationMetricList,
+  ConfigurationCoverageSummary,
   ConfigurationRadar,
   formatConfigurationScore,
   parseConfigurationName,
@@ -145,7 +146,8 @@ const ComparisonColumn = <T extends PublicLeaderboardScore,>({
       </div>
 
       <div className="pt-4">
-        <ConfigurationMetricList
+        <ConfigurationCoverageSummary scoreItem={item} />
+      <ConfigurationMetricList
           scoreItem={item}
           columns={1}
           hoveredDomain={hoveredDomain}

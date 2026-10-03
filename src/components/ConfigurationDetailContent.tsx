@@ -9,11 +9,11 @@ import { RadarChart } from './RadarChart';
 
 export const CONFIGURATION_DETAIL_DOMAIN_ORDER: readonly DomainId[] = [
   'chatting',
-  'math_science',
+  'reasoning',
   'coding',
-  'engineering',
-  'agentic_work',
-  'search_knowledge',
+  'frontend',
+  'agentic',
+  'documents',
 ];
 
 export interface ConfigurationMetricRow {
@@ -55,7 +55,7 @@ export const formatConfigurationRawMetricValue = (
   value: number | null | undefined,
   unit?: string
 ) => {
-  if (value === null || value === undefined || Number.isNaN(value)) return '--';
+  if (value === null || value === undefined || !Number.isFinite(value)) return '--';
 
   if (
     unit === '%'
@@ -68,7 +68,11 @@ export const formatConfigurationRawMetricValue = (
     return `${percentage.toFixed(1)}%`;
   }
 
-  if (unit === 'Score' || unit === 'Score Point' || unit === 'Elo') {
+  if (unit === 'Score Point') {
+    if (value !== 0 && Math.abs(value) < 0.0001) return value.toExponential(2);
+    return value.toLocaleString('en-US', { maximumFractionDigits: 4 });
+  }
+  if (unit === 'Score' || unit === 'Elo') {
     return Math.round(value).toLocaleString();
   }
 
@@ -107,7 +111,9 @@ export const buildConfigurationMetricRows = (
         value: formattedValue,
         color: domainDefinition.color,
         domainId,
-        title: `${metric.name} (${domainDefinition.nameEn}) - Raw Value: ${formattedValue}`,
+        title: `${metric.name} (${domainDefinition.nameEn}) · ${'internalWeightInDomain' in metric
+          ? `计分权重 ${(metric.internalWeightInDomain * 100).toFixed(0)}%`
+          : '仅展示，不计分'} · Raw Value: ${formattedValue}`,
       };
     });
   });
@@ -177,6 +183,23 @@ export const buildConfigurationMetricRows = (
   ];
 };
 
+export const ConfigurationCoverageSummary: React.FC<{ scoreItem: PublicLeaderboardScore }> = ({ scoreItem }) => (
+  <div className="space-y-2 text-xs text-neutral-600" data-coverage-summary>
+    <div className="font-semibold">
+      Coverage {(scoreItem.overallCoverage * 100).toFixed(0)}% · {scoreItem.availableDomainCount}/6 domains
+      {!scoreItem.eligibleForGlobalLeaderboard && <span className="ml-2 text-amber-800">证据不足，暂不综合排名</span>}
+    </div>
+    <div className="flex flex-wrap gap-x-4 gap-y-1 font-brand-mono">
+      {CONFIGURATION_DETAIL_DOMAIN_ORDER.map(id => (
+        <span key={id} style={{ color: DOMAIN_DEFINITIONS[id].color }}>
+          {DOMAIN_DEFINITIONS[id].nameEn} {(scoreItem.domainScores[id].coverage * 100).toFixed(0)}%
+        </span>
+      ))}
+    </div>
+    <p>每域至少 60%、六域均达标、总覆盖率至少 75% 才有综合分。缺测保留为 --。</p>
+  </div>
+);
+
 interface ConfigurationRadarProps {
   scoreItem: PublicLeaderboardScore;
   size: number;
@@ -206,11 +229,11 @@ export const ConfigurationRadar: React.FC<ConfigurationRadarProps> = ({
           fillColor: brandTheme.fillColor,
           scores: {
             chatting: scoreItem.domainScores.chatting.score,
-            math_science: scoreItem.domainScores.math_science.score,
+            reasoning: scoreItem.domainScores.reasoning.score,
             coding: scoreItem.domainScores.coding.score,
-            engineering: scoreItem.domainScores.engineering.score,
-            agentic_work: scoreItem.domainScores.agentic_work.score,
-            search_knowledge: scoreItem.domainScores.search_knowledge.score,
+            frontend: scoreItem.domainScores.frontend.score,
+            agentic: scoreItem.domainScores.agentic.score,
+            documents: scoreItem.domainScores.documents.score,
           },
         },
       ]}

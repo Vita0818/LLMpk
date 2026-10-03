@@ -54,22 +54,22 @@ export const PKComparisonView: React.FC<PKComparisonViewProps> = ({
       fillColor: brandTheme.fillColor,
       scores: {
         chatting: item.domainScores.chatting.score,
-        math_science: item.domainScores.math_science.score,
+        reasoning: item.domainScores.reasoning.score,
         coding: item.domainScores.coding.score,
-        engineering: item.domainScores.engineering.score,
-        agentic_work: item.domainScores.agentic_work.score,
-        search_knowledge: item.domainScores.search_knowledge.score,
+        frontend: item.domainScores.frontend.score,
+        agentic: item.domainScores.agentic.score,
+        documents: item.domainScores.documents.score,
       },
     };
   });
 
   const domainList: DomainId[] = [
     'chatting',
-    'math_science',
+    'reasoning',
     'coding',
-    'engineering',
-    'agentic_work',
-    'search_knowledge',
+    'frontend',
+    'agentic',
+    'documents',
   ];
 
   return (

@@ -98,32 +98,27 @@ DOMAIN_IDS.forEach((domainId) => {
 const metricDefinitionsById = new Map(
   ALL_METRIC_DEFINITIONS.map((definition) => [definition.id, definition]),
 );
-assert.equal(metricDefinitionsById.get('aa_tau3_banking')?.domain, 'agentic_work');
-nearlyEqual(metricDefinitionsById.get('aa_tau3_banking')?.internalWeightInDomain || 0, 0.40);
-assert.equal(metricDefinitionsById.get('arena_code_webdev')?.domain, 'engineering');
-nearlyEqual(metricDefinitionsById.get('arena_code_webdev')?.internalWeightInDomain || 0, 0.10);
-nearlyEqual(metricDefinitionsById.get('aa_gdpval_v2')?.internalWeightInDomain || 0, 0.20);
-nearlyEqual(metricDefinitionsById.get('tbench_v4')?.internalWeightInDomain || 0, 0.30);
-nearlyEqual(metricDefinitionsById.get('frontiercode_v11_main_pass_rate')?.internalWeightInDomain || 0, 2 / 15);
-nearlyEqual(metricDefinitionsById.get('tbench_science_v01')?.internalWeightInDomain || 0, 0.30);
-nearlyEqual(metricDefinitionsById.get('scale_enigmaeval')?.internalWeightInDomain || 0, 0.30);
-nearlyEqual(metricDefinitionsById.get('swe_rebench_v2')?.internalWeightInDomain || 0, 0.55);
-for (const supersededMetricId of [
-  'aa_hle',
-  'aa_gpqa_diamond',
-  'aa_scicode',
-  'aa_terminalbench_v21',
-  'aa_coding_agent_terminalbench_v2',
-]) {
-  assert.equal(
-    metricDefinitionsById.has(supersededMetricId),
-    false,
-    `${supersededMetricId} must not remain in the active scoring registry.`,
-  );
+assert.equal(ALL_METRIC_DEFINITIONS.length, 19);
+assert.deepEqual(ALL_METRIC_DEFINITIONS.filter(m => m.source === 'Artificial Analysis').map(m=>m.id).sort(),
+  ['aa_hle','aa_critpt','aa_terminalbench_v4','aa_gdp_pdf_all_pass'].sort());
+assert.deepEqual(DOMAIN_IDS.map(id => DOMAIN_DEFINITIONS[id].nameEn),
+  ['Chatting','Reasoning','Coding','Frontend','Agentic','Documents']);
+for (const [id, domain, weight] of [
+  ['aa_hle','reasoning',.3],['aa_critpt','reasoning',.25],['arena_search','reasoning',.2],
+  ['arena_code_webdev','frontend',.6],['designarena_frontend','frontend',.4],
+  ['frontiercode_v11_main_pass_rate','coding',.4],['aa_terminalbench_v4','agentic',.6],
+  ['aa_gdp_pdf_all_pass','documents',1],
+] as const) {
+  assert.equal(metricDefinitionsById.get(id)?.domain, domain);
+  nearlyEqual(metricDefinitionsById.get(id)!.internalWeightInDomain,weight);
 }
+for (const id of ['aa_gpqa_diamond','aa_scicode','aa_terminalbench_v21','aa_tau3_banking',
+  'aa_gdpval_v2','aa_coding_agent_deepswe','aa_coding_agent_swe_atlas_qna',
+  'aa_omniscience_accuracy','aa_omniscience_nonhallucination','aa_lcr','swe_rebench_v2',
+  'scale_enigmaeval','tbench_science_v01','tbench_v4']) assert.equal(metricDefinitionsById.has(id),false);
 
-// Scoring v1.2: a missing metric contributes neutral 50 while retaining its
-// configured weight. The observed 70% metric must not be inflated to 100%.
+// v3: retain configured weights for coverage, aggregate observed scores only.
+// Passing the domain gate does not bypass the six-domain total gate.
 const metrics = [metric('available_metric', 0.7), metric('missing_metric', 0.3)];
 const [partiallyObserved, fullyObserved] = processLLMpkBatchScoring([
   makeConfiguration('partially-observed', {
@@ -146,16 +141,15 @@ assert.equal(partialDomain.coverageStatus, 'official');
 assert.equal(partialDomain.score === null, false);
 assert.equal(availableDetail.normalizedScore === null, false);
 assert.equal(missingDetail.baseNormalizedScore, null);
-assert.equal(missingDetail.normalizedScore, 50);
+assert.equal(missingDetail.normalizedScore, null);
 assert.equal(missingDetail.rawValue, null);
-assert.equal(availableDetail.weightInDomain, 0.7);
-assert.equal(missingDetail.weightInDomain, 0.3);
+assert.equal(availableDetail.weightInDomain, 1);
+assert.equal(missingDetail.weightInDomain, 0);
 assert.equal(availableDetail.configuredWeightInDomain, 0.7);
 assert.equal(missingDetail.configuredWeightInDomain, 0.3);
 nearlyEqual(
   partialDomain.rawGeometricIndex!,
-  0.7 * Math.log(availableDetail.normalizedScore! / 50)
-    + 0.3 * Math.log(missingDetail.normalizedScore! / 50),
+  Math.log(availableDetail.normalizedScore! / 50),
 );
 
 // A domain with no observations is unavailable. It is shown as missing and
@@ -224,7 +218,7 @@ nearlyEqual(
 );
 assert.equal(sparseTopDetail.uncertaintyStatus, 'uncertainty_unknown');
 assert.equal(sparseMissingDetail.baseNormalizedScore, null);
-assert.equal(sparseMissingDetail.normalizedScore, 50);
+assert.equal(sparseMissingDetail.normalizedScore, null);
 
 // A narrow max-to-median spread relative to the reported 95% interval also
 // contracts the range. spread=.375, typical radius=1 and fullSignalRatio=2,
@@ -262,11 +256,11 @@ assert.equal(uncertainTopDetail.uncertaintyStatus, 'estimated');
 // displayed domain scores. It must not be normalized a second time.
 const sixDomains: DomainId[] = [
   'chatting',
-  'math_science',
+  'reasoning',
   'coding',
-  'engineering',
-  'agentic_work',
-  'search_knowledge',
+  'frontend',
+  'agentic',
+  'documents',
 ];
 const sixDomainMetrics = sixDomains.map((domain) => metric(`metric_${domain}`, 1, domain));
 const alphaObservations = Object.fromEntries(
@@ -300,8 +294,8 @@ assert.ok(alpha.rawCapabilityScore! < 100);
 assert.ok(beta.rawCapabilityScore! < 50);
 assert.equal(alpha.availableDomainCount, sixDomains.length);
 
-// Wholly missing domains are unavailable and excluded from the capability
-// mean. The remaining observed domains are reweighted equally.
+// Wholly missing domains keep real observed domain details, but suppress the
+// capability total and global rank.
 const fourAvailableDomains = sixDomains.slice(0, 4);
 const fourDomainMetrics = sixDomains.map((domain) => metric(`partial_metric_${domain}`, 1, domain));
 const partialObservations = Object.fromEntries(
@@ -321,24 +315,30 @@ const [fourDomainItem] = processLLMpkBatchScoring([
   makeConfiguration('four-domain-comparison', comparisonPartialObservations),
 ], fourDomainMetrics);
 assert.equal(fourDomainItem.availableDomainCount, 4);
-assert.equal(fourDomainItem.domainScores.agentic_work.score, null);
-assert.equal(fourDomainItem.domainScores.search_knowledge.score, null);
-assert.equal(fourDomainItem.domainScores.agentic_work.coverageStatus, 'no_observed_data');
-assert.equal(fourDomainItem.domainScores.search_knowledge.coverageStatus, 'no_observed_data');
-assert.equal(typeof fourDomainItem.rawCapabilityScore, 'number');
-const fourObservedScores = fourAvailableDomains.map(
-  (domain) => fourDomainItem.domainScores[domain].score,
-);
-assert.ok(fourObservedScores.every((score): score is number => score !== null));
-nearlyEqual(
-  fourDomainItem.rawCapabilityScore!,
-  Math.exp(fourObservedScores.reduce(
-    (sum, score) => sum + Math.log(score) / fourObservedScores.length,
-    0,
-  )),
-);
-assert.equal(fourDomainItem.coverageStatus, 'provisional');
-assert.equal(fourDomainItem.eligibleForGlobalLeaderboard, true);
+assert.equal(fourDomainItem.domainScores.agentic.score, null);
+assert.equal(fourDomainItem.domainScores.documents.score, null);
+assert.equal(fourDomainItem.domainScores.agentic.coverageStatus, 'no_observed_data');
+assert.equal(fourDomainItem.domainScores.documents.coverageStatus, 'no_observed_data');
+assert.equal(fourDomainItem.rawCapabilityScore, null);
+assert.equal(fourDomainItem.coverageStatus, 'insufficient');
+assert.equal(fourDomainItem.eligibleForGlobalLeaderboard, false);
+
+// Every domain can have 60% real evidence and still fail overall coverage.
+const thinMetrics = sixDomains.flatMap(d => [metric(`seen_${d}`, .6, d),metric(`absent_${d}`,.4,d)]);
+const thinObservations = Object.fromEntries(sixDomains.map(d=>[`seen_${d}`,observation(`seen_${d}`,100)]));
+const [thin] = processLLMpkBatchScoring([makeConfiguration('thin-all-six',thinObservations)],thinMetrics);
+assert.equal(thin.availableDomainCount,6);
+nearlyEqual(thin.overallCoverage,.6);
+assert.equal(thin.rawCapabilityScore,null);
+assert.equal(thin.eligibleForGlobalLeaderboard,false);
+// A 59.9% domain cannot receive a score despite exceptional observed results.
+const [belowGate] = processLLMpkBatchScoring([makeConfiguration('below-gate',{
+  high:observation('high',1000),
+})],[metric('high',.599),metric('missing',.401)]);
+assert.equal(belowGate.domainScores.chatting.score,null);
+assert.equal(belowGate.domainScores.chatting.rawGeometricIndex,null);
+assert.equal(belowGate.domainScores.chatting.coverageStatus,'provisional');
+assert.equal(belowGate.rawCapabilityScore,null);
 
 const duplicateAccessMetric = metric('duplicate_access_metric', 1);
 const capabilityReferenceHigh = makeConfiguration('reference-high', {
@@ -368,15 +368,15 @@ for (const baseline of baselineCapabilityScores) {
     (result) => result.config.id === baseline.config.id,
   );
   assert.ok(withSubscription);
-  nearlyEqual(withSubscription.rawCapabilityScore!, baseline.rawCapabilityScore!);
+  assert.deepEqual(withSubscription.domainScores, baseline.domainScores);
 }
 nearlyEqual(
   capabilityScoresWithSubscription.find(
     (result) => result.config.id === 'subscription-copy',
-  )!.rawCapabilityScore!,
+  )!.domainScores.chatting.score!,
   baselineCapabilityScores.find(
     (result) => result.config.id === 'reference-high',
-  )!.rawCapabilityScore!,
+  )!.domainScores.chatting.score!,
 );
 
 const apiCostConfiguration = makeConfiguration('api-cost-route', {});
@@ -513,4 +513,4 @@ assert.equal(
   null,
 );
 
-console.log('scoringEngine Scoring v1.2 + Practical Adjustment v1.4 policies: PASS');
+console.log('scoringEngine Scoring v3.0 + Practical Adjustment v1.4 policies: PASS');

@@ -23,6 +23,7 @@ const STAGED = {
   arena: path.join(RUN_DIRECTORY, 'arenaRawExtraction.json'),
   openRouterCatalog: path.join(RUN_DIRECTORY, 'openRouterCatalogSnapshot.json'),
   openRouterPerformance: path.join(RUN_DIRECTORY, 'openRouterPerformanceSnapshot.json'),
+  frontierCode: path.join(RUN_DIRECTORY, 'frontierCodeSourceSnapshot.json'),
   validation: path.join(RUN_DIRECTORY, 'sourceSnapshotValidationReport.json'),
 };
 const PUBLISHED = {
@@ -30,6 +31,7 @@ const PUBLISHED = {
   arena: path.join(ROOT, 'src', 'data', 'arenaRawExtraction.json'),
   openRouterCatalog: path.join(ROOT, 'src', 'data', 'openRouterCatalogSnapshot.json'),
   openRouterPerformance: path.join(ROOT, 'src', 'data', 'openRouterPerformanceSnapshot.json'),
+  frontierCode: path.join(ROOT, 'src', 'data', 'frontierCodeSourceSnapshot.json'),
   validation: path.join(ROOT, 'src', 'data', 'sourceSnapshotValidationReport.json'),
 };
 
@@ -82,11 +84,16 @@ async function main() {
     OPENROUTER_MODELS_SNAPSHOT_PATH: STAGED.openRouterCatalog,
     OPENROUTER_PERFORMANCE_OUTPUT: STAGED.openRouterPerformance,
   });
+  await run('FrontierCode', 'fetchFrontierCodeSnapshot.mjs', {
+    FRONTIERCODE_SNAPSHOT_OUTPUT: STAGED.frontierCode,
+    FRONTIERCODE_RAW_SNAPSHOT_DIR: path.join(RUN_DIRECTORY, 'raw', 'frontiercode'),
+  });
   await run('Cross-source validation', 'validateSourceSnapshots.mjs', {
     AA_SOURCE_SNAPSHOT_PATH: STAGED.artificialAnalysis,
     ARENA_RAW_EXTRACTION_PATH: STAGED.arena,
     OPENROUTER_CATALOG_SNAPSHOT_PATH: STAGED.openRouterCatalog,
     OPENROUTER_PERFORMANCE_SNAPSHOT_PATH: STAGED.openRouterPerformance,
+    FRONTIERCODE_SNAPSHOT_PATH: STAGED.frontierCode,
     SOURCE_SNAPSHOT_VALIDATION_OUTPUT: STAGED.validation,
     AA_REFERENCE_SNAPSHOT_PATH: PUBLISHED.artificialAnalysis,
     ARENA_REFERENCE_SNAPSHOT_PATH: PUBLISHED.arena,
@@ -110,4 +117,3 @@ async function main() {
 }
 
 await main();
-

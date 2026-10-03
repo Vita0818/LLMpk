@@ -1,5 +1,6 @@
 import type {
   DomainId,
+  CoverageStatus,
   OpenRouterCostSpeedData,
   PracticalScoreBreakdown,
   SubscriptionCostData,
@@ -40,13 +41,15 @@ export interface PublicLeaderboardConfiguration {
 
 export interface PublicLeaderboardScore {
   config: PublicLeaderboardConfiguration;
-  domainScores: Record<DomainId, { score: number | null }>;
+  domainScores: Record<DomainId, { score: number | null; coverage: number; coverageStatus: CoverageStatus }>;
+  overallCoverage: number;
+  availableDomainCount: number;
   rawCapabilityScore: number | null;
   practicalBreakdown: PracticalScoreBreakdown;
   eligibleForGlobalLeaderboard: boolean;
 }
 
 export interface PublicLeaderboardSnapshot {
-  schemaVersion: 1;
+  schemaVersion: 2;
   scores: PublicLeaderboardScore[];
 }

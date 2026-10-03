@@ -1,3 +1,5 @@
+> 历史版本，仅供复核。当前规范见 [llm_pk_data_source_registry_v3.md](llm_pk_data_source_registry_v3.md)。旧分数不能直接与 v3 比较。
+
 # LLM PK 数据源与指标注册表
 
 **版本：Data Source Registry v1.2**

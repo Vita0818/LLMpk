@@ -35,11 +35,11 @@ export const ModelDetailView: React.FC<ModelDetailViewProps> = ({
 
   const domainList: DomainId[] = [
     'chatting',
-    'math_science',
+    'reasoning',
     'coding',
-    'engineering',
-    'agentic_work',
-    'search_knowledge',
+    'frontend',
+    'agentic',
+    'documents',
   ];
 
   return (
@@ -135,11 +135,11 @@ export const ModelDetailView: React.FC<ModelDetailViewProps> = ({
                           fillColor: brandTheme.fillColor,
                           scores: {
                             chatting: selectedItem.domainScores.chatting.score,
-                            math_science: selectedItem.domainScores.math_science.score,
+                            reasoning: selectedItem.domainScores.reasoning.score,
                             coding: selectedItem.domainScores.coding.score,
-                            engineering: selectedItem.domainScores.engineering.score,
-                            agentic_work: selectedItem.domainScores.agentic_work.score,
-                            search_knowledge: selectedItem.domainScores.search_knowledge.score,
+                            frontend: selectedItem.domainScores.frontend.score,
+                            agentic: selectedItem.domainScores.agentic.score,
+                            documents: selectedItem.domainScores.documents.score,
                           },
                         },
                       ]}
@@ -278,11 +278,11 @@ export const ModelDetailView: React.FC<ModelDetailViewProps> = ({
                           fillColor: brandTheme.fillColor,
                           scores: {
                             chatting: item.domainScores.chatting.score,
-                            math_science: item.domainScores.math_science.score,
+                            reasoning: item.domainScores.reasoning.score,
                             coding: item.domainScores.coding.score,
-                            engineering: item.domainScores.engineering.score,
-                            agentic_work: item.domainScores.agentic_work.score,
-                            search_knowledge: item.domainScores.search_knowledge.score,
+                            frontend: item.domainScores.frontend.score,
+                            agentic: item.domainScores.agentic.score,
+                            documents: item.domainScores.documents.score,
                           },
                         },
                       ]}

@@ -1,0 +1,1015 @@
+{
+  "schemaVersion": "frontiercode-source-snapshot/v1",
+  "fetchedAt": "2026-10-02T16:15:16.979Z",
+  "revision": "1.1",
+  "dataset": "main",
+  "taskCount": 100,
+  "source": {
+    "url": "https://cognition.com/data/frontiercode-leaderboard/data.json",
+    "leaderboardUrl": "https://cognition.com/frontiercode",
+    "sha256": "e609a8f3c134b3747ed323f72475bcc7d3012588a880f598123e03cea738b54e",
+    "rawSnapshotFile": ".cache/frontiercode/20261002T161516Z.json"
+  },
+  "rows": [
+    {
+      "name": "SWE-2",
+      "harness": "devin",
+      "effort": "medium",
+      "passRate": 0.4833,
+      "mergeabilityScore": 0.4309,
+      "flaggedRate": 0
+    },
+    {
+      "name": "SWE-2",
+      "harness": "devin",
+      "effort": "high",
+      "passRate": 0.5235,
+      "mergeabilityScore": 0.472,
+      "flaggedRate": 0
+    },
+    {
+      "name": "SWE-2",
+      "harness": "devin",
+      "effort": "max",
+      "passRate": 0.5547,
+      "mergeabilityScore": 0.5,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Claude Opus 5.5",
+      "harness": "claude-code",
+      "effort": "low",
+      "passRate": 0.5175,
+      "mergeabilityScore": 0.473,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Claude Opus 5.5",
+      "harness": "claude-code",
+      "effort": "medium",
+      "passRate": 0.596,
+      "mergeabilityScore": 0.5464,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Claude Opus 5.5",
+      "harness": "claude-code",
+      "effort": "high",
+      "passRate": 0.589,
+      "mergeabilityScore": 0.5399,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Claude Opus 5.5",
+      "harness": "claude-code",
+      "effort": "xhigh",
+      "passRate": 0.568,
+      "mergeabilityScore": 0.5142,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Claude Opus 5.5",
+      "harness": "claude-code",
+      "effort": "max",
+      "passRate": 0.6,
+      "mergeabilityScore": 0.5443,
+      "flaggedRate": 0.008
+    },
+    {
+      "name": "Claude Sonnet 5.5",
+      "harness": "claude-code",
+      "effort": "low",
+      "passRate": 0.328,
+      "mergeabilityScore": 0.2933,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Claude Sonnet 5.5",
+      "harness": "claude-code",
+      "effort": "medium",
+      "passRate": 0.406,
+      "mergeabilityScore": 0.3648,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Claude Sonnet 5.5",
+      "harness": "claude-code",
+      "effort": "high",
+      "passRate": 0.5435,
+      "mergeabilityScore": 0.4938,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Claude Sonnet 5.5",
+      "harness": "claude-code",
+      "effort": "xhigh",
+      "passRate": 0.572,
+      "mergeabilityScore": 0.5209,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Claude Sonnet 5.5",
+      "harness": "claude-code",
+      "effort": "max",
+      "passRate": 0.5115,
+      "mergeabilityScore": 0.4621,
+      "flaggedRate": 0.0465
+    },
+    {
+      "name": "GPT-6 Sol",
+      "harness": "codex",
+      "effort": "low",
+      "passRate": 0.416,
+      "mergeabilityScore": 0.3728,
+      "flaggedRate": 0.002
+    },
+    {
+      "name": "GPT-6 Sol",
+      "harness": "codex",
+      "effort": "medium",
+      "passRate": 0.508,
+      "mergeabilityScore": 0.4592,
+      "flaggedRate": 0
+    },
+    {
+      "name": "GPT-6 Sol",
+      "harness": "codex",
+      "effort": "high",
+      "passRate": 0.528,
+      "mergeabilityScore": 0.477,
+      "flaggedRate": 0
+    },
+    {
+      "name": "GPT-6 Sol",
+      "harness": "codex",
+      "effort": "xhigh",
+      "passRate": 0.5353,
+      "mergeabilityScore": 0.4845,
+      "flaggedRate": 0.002
+    },
+    {
+      "name": "GPT-6 Sol",
+      "harness": "codex",
+      "effort": "max",
+      "passRate": 0.543,
+      "mergeabilityScore": 0.4927,
+      "flaggedRate": 0
+    },
+    {
+      "name": "GPT-6.1 Sol",
+      "harness": "codex",
+      "effort": "low",
+      "passRate": 0.5065,
+      "mergeabilityScore": 0.4546,
+      "flaggedRate": 0.002
+    },
+    {
+      "name": "GPT-6.1 Sol",
+      "harness": "codex",
+      "effort": "medium",
+      "passRate": 0.558,
+      "mergeabilityScore": 0.5023,
+      "flaggedRate": 0.004
+    },
+    {
+      "name": "GPT-6.1 Sol",
+      "harness": "codex",
+      "effort": "high",
+      "passRate": 0.532,
+      "mergeabilityScore": 0.4798,
+      "flaggedRate": 0
+    },
+    {
+      "name": "GPT-6.1 Sol",
+      "harness": "codex",
+      "effort": "xhigh",
+      "passRate": 0.5465,
+      "mergeabilityScore": 0.4929,
+      "flaggedRate": 0.006
+    },
+    {
+      "name": "GPT-6.1 Sol",
+      "harness": "codex",
+      "effort": "max",
+      "passRate": 0.528,
+      "mergeabilityScore": 0.4757,
+      "flaggedRate": 0.002
+    },
+    {
+      "name": "GPT-6 Luna",
+      "harness": "codex",
+      "effort": "low",
+      "passRate": 0.292,
+      "mergeabilityScore": 0.2566,
+      "flaggedRate": 0
+    },
+    {
+      "name": "GPT-6 Luna",
+      "harness": "codex",
+      "effort": "medium",
+      "passRate": 0.4,
+      "mergeabilityScore": 0.3553,
+      "flaggedRate": 0
+    },
+    {
+      "name": "GPT-6 Luna",
+      "harness": "codex",
+      "effort": "high",
+      "passRate": 0.4193,
+      "mergeabilityScore": 0.3726,
+      "flaggedRate": 0.002
+    },
+    {
+      "name": "GPT-6 Luna",
+      "harness": "codex",
+      "effort": "xhigh",
+      "passRate": 0.418,
+      "mergeabilityScore": 0.371,
+      "flaggedRate": 0
+    },
+    {
+      "name": "GPT-6 Luna",
+      "harness": "codex",
+      "effort": "max",
+      "passRate": 0.478,
+      "mergeabilityScore": 0.4242,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Claude Fable 5",
+      "harness": "claude-code",
+      "effort": "low",
+      "passRate": 0.5282,
+      "mergeabilityScore": 0.4801,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Claude Fable 5",
+      "harness": "claude-code",
+      "effort": "medium",
+      "passRate": 0.546,
+      "mergeabilityScore": 0.4982,
+      "flaggedRate": 0.003
+    },
+    {
+      "name": "Claude Fable 5",
+      "harness": "claude-code",
+      "effort": "high",
+      "passRate": 0.5766,
+      "mergeabilityScore": 0.5273,
+      "flaggedRate": 0.002
+    },
+    {
+      "name": "Claude Fable 5",
+      "harness": "claude-code",
+      "effort": "xhigh",
+      "passRate": 0.5885,
+      "mergeabilityScore": 0.5348,
+      "flaggedRate": 0.003
+    },
+    {
+      "name": "Claude Fable 5",
+      "harness": "claude-code",
+      "effort": "max",
+      "passRate": 0.5689,
+      "mergeabilityScore": 0.5157,
+      "flaggedRate": 0.002
+    },
+    {
+      "name": "Claude Fable 5.1",
+      "harness": "claude-code",
+      "effort": "low",
+      "passRate": 0.5441,
+      "mergeabilityScore": 0.4982,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Claude Fable 5.1",
+      "harness": "claude-code",
+      "effort": "medium",
+      "passRate": 0.5545,
+      "mergeabilityScore": 0.5091,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Claude Fable 5.1",
+      "harness": "claude-code",
+      "effort": "high",
+      "passRate": 0.5512,
+      "mergeabilityScore": 0.5034,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Claude Fable 5.1",
+      "harness": "claude-code",
+      "effort": "xhigh",
+      "passRate": 0.5369,
+      "mergeabilityScore": 0.4873,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Claude Fable 5.1",
+      "harness": "claude-code",
+      "effort": "max",
+      "passRate": 0.5559,
+      "mergeabilityScore": 0.5028,
+      "flaggedRate": 0
+    },
+    {
+      "name": "GPT-5.6 Sol",
+      "harness": "codex",
+      "effort": "low",
+      "passRate": 0.3974,
+      "mergeabilityScore": 0.3544,
+      "flaggedRate": 0.001
+    },
+    {
+      "name": "GPT-5.6 Sol",
+      "harness": "codex",
+      "effort": "medium",
+      "passRate": 0.4453,
+      "mergeabilityScore": 0.3993,
+      "flaggedRate": 0.002
+    },
+    {
+      "name": "GPT-5.6 Sol",
+      "harness": "codex",
+      "effort": "high",
+      "passRate": 0.5028,
+      "mergeabilityScore": 0.4506,
+      "flaggedRate": 0.0013
+    },
+    {
+      "name": "GPT-5.6 Sol",
+      "harness": "codex",
+      "effort": "xhigh",
+      "passRate": 0.5211,
+      "mergeabilityScore": 0.4684,
+      "flaggedRate": 0.001
+    },
+    {
+      "name": "GPT-5.6 Sol",
+      "harness": "codex",
+      "effort": "max",
+      "passRate": 0.5291,
+      "mergeabilityScore": 0.4749,
+      "flaggedRate": 0
+    },
+    {
+      "name": "GPT-6 Astra",
+      "harness": "codex",
+      "effort": "low",
+      "passRate": 0.5,
+      "mergeabilityScore": 0.4527,
+      "flaggedRate": 0
+    },
+    {
+      "name": "GPT-6 Astra",
+      "harness": "codex",
+      "effort": "medium",
+      "passRate": 0.536,
+      "mergeabilityScore": 0.4883,
+      "flaggedRate": 0
+    },
+    {
+      "name": "GPT-6 Astra",
+      "harness": "codex",
+      "effort": "high",
+      "passRate": 0.562,
+      "mergeabilityScore": 0.5094,
+      "flaggedRate": 0
+    },
+    {
+      "name": "GPT-6 Astra",
+      "harness": "codex",
+      "effort": "xhigh",
+      "passRate": 0.5575,
+      "mergeabilityScore": 0.5062,
+      "flaggedRate": 0
+    },
+    {
+      "name": "GPT-6 Astra",
+      "harness": "codex",
+      "effort": "max",
+      "passRate": 0.5875,
+      "mergeabilityScore": 0.5326,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Claude Opus 4.8",
+      "harness": "claude-code",
+      "effort": "low",
+      "passRate": 0.3923,
+      "mergeabilityScore": 0.3514,
+      "flaggedRate": 0.001
+    },
+    {
+      "name": "Claude Opus 4.8",
+      "harness": "claude-code",
+      "effort": "medium",
+      "passRate": 0.4493,
+      "mergeabilityScore": 0.4046,
+      "flaggedRate": 0.005
+    },
+    {
+      "name": "Claude Opus 4.8",
+      "harness": "claude-code",
+      "effort": "high",
+      "passRate": 0.4565,
+      "mergeabilityScore": 0.4102,
+      "flaggedRate": 0.008
+    },
+    {
+      "name": "Claude Opus 4.8",
+      "harness": "claude-code",
+      "effort": "xhigh",
+      "passRate": 0.5027,
+      "mergeabilityScore": 0.4549,
+      "flaggedRate": 0.005
+    },
+    {
+      "name": "Claude Opus 4.8",
+      "harness": "claude-code",
+      "effort": "max",
+      "passRate": 0.5165,
+      "mergeabilityScore": 0.465,
+      "flaggedRate": 0.006
+    },
+    {
+      "name": "GPT-5.5",
+      "harness": "codex",
+      "effort": "low",
+      "passRate": 0.3439,
+      "mergeabilityScore": 0.3055,
+      "flaggedRate": 0
+    },
+    {
+      "name": "GPT-5.5",
+      "harness": "codex",
+      "effort": "medium",
+      "passRate": 0.4108,
+      "mergeabilityScore": 0.366,
+      "flaggedRate": 0
+    },
+    {
+      "name": "GPT-5.5",
+      "harness": "codex",
+      "effort": "high",
+      "passRate": 0.4571,
+      "mergeabilityScore": 0.4056,
+      "flaggedRate": 0.003
+    },
+    {
+      "name": "GPT-5.5",
+      "harness": "codex",
+      "effort": "xhigh",
+      "passRate": 0.4824,
+      "mergeabilityScore": 0.4296,
+      "flaggedRate": 0.004
+    },
+    {
+      "name": "Grok 4.5",
+      "harness": "grok-build",
+      "effort": "low",
+      "passRate": 0.42,
+      "mergeabilityScore": 0.3786,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Grok 4.5",
+      "harness": "grok-build",
+      "effort": "medium",
+      "passRate": 0.4655,
+      "mergeabilityScore": 0.4193,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Grok 4.5",
+      "harness": "grok-build",
+      "effort": "high",
+      "passRate": 0.472,
+      "mergeabilityScore": 0.4244,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Grok 4.6",
+      "harness": "grok-build",
+      "effort": "low",
+      "passRate": 0.4455,
+      "mergeabilityScore": 0.4011,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Grok 4.6",
+      "harness": "grok-build",
+      "effort": "medium",
+      "passRate": 0.512,
+      "mergeabilityScore": 0.4606,
+      "flaggedRate": 0.006
+    },
+    {
+      "name": "Grok 4.6",
+      "harness": "grok-build",
+      "effort": "high",
+      "passRate": 0.5315,
+      "mergeabilityScore": 0.4801,
+      "flaggedRate": 0.007
+    },
+    {
+      "name": "Grok 4.7",
+      "harness": "grok-build",
+      "effort": "high",
+      "passRate": 0.531,
+      "mergeabilityScore": 0.4759,
+      "flaggedRate": 0.013
+    },
+    {
+      "name": "Grok 4.7",
+      "harness": "grok-build",
+      "effort": "xhigh",
+      "passRate": 0.509,
+      "mergeabilityScore": 0.4559,
+      "flaggedRate": 0.008
+    },
+    {
+      "name": "Claude Sonnet 5",
+      "harness": "claude-code",
+      "effort": "low",
+      "passRate": 0.32,
+      "mergeabilityScore": 0.2871,
+      "flaggedRate": 0.001
+    },
+    {
+      "name": "Claude Sonnet 5",
+      "harness": "claude-code",
+      "effort": "medium",
+      "passRate": 0.3907,
+      "mergeabilityScore": 0.352,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Claude Sonnet 5",
+      "harness": "claude-code",
+      "effort": "high",
+      "passRate": 0.4366,
+      "mergeabilityScore": 0.3935,
+      "flaggedRate": 0.002
+    },
+    {
+      "name": "Claude Sonnet 5",
+      "harness": "claude-code",
+      "effort": "xhigh",
+      "passRate": 0.4759,
+      "mergeabilityScore": 0.4273,
+      "flaggedRate": 0.005
+    },
+    {
+      "name": "Claude Sonnet 5",
+      "harness": "claude-code",
+      "effort": "max",
+      "passRate": 0.4719,
+      "mergeabilityScore": 0.4236,
+      "flaggedRate": 0.003
+    },
+    {
+      "name": "GPT-5.6 Terra",
+      "harness": "codex",
+      "effort": "low",
+      "passRate": 0.2721,
+      "mergeabilityScore": 0.2411,
+      "flaggedRate": 0
+    },
+    {
+      "name": "GPT-5.6 Terra",
+      "harness": "codex",
+      "effort": "medium",
+      "passRate": 0.3815,
+      "mergeabilityScore": 0.3388,
+      "flaggedRate": 0.001
+    },
+    {
+      "name": "GPT-5.6 Terra",
+      "harness": "codex",
+      "effort": "high",
+      "passRate": 0.4134,
+      "mergeabilityScore": 0.3689,
+      "flaggedRate": 0
+    },
+    {
+      "name": "GPT-5.6 Terra",
+      "harness": "codex",
+      "effort": "xhigh",
+      "passRate": 0.4351,
+      "mergeabilityScore": 0.3875,
+      "flaggedRate": 0.001
+    },
+    {
+      "name": "GPT-5.6 Terra",
+      "harness": "codex",
+      "effort": "max",
+      "passRate": 0.4632,
+      "mergeabilityScore": 0.4131,
+      "flaggedRate": 0.001
+    },
+    {
+      "name": "GPT-5.6 Luna",
+      "harness": "codex",
+      "effort": "low",
+      "passRate": 0.1733,
+      "mergeabilityScore": 0.1538,
+      "flaggedRate": 0
+    },
+    {
+      "name": "GPT-5.6 Luna",
+      "harness": "codex",
+      "effort": "medium",
+      "passRate": 0.2909,
+      "mergeabilityScore": 0.2574,
+      "flaggedRate": 0
+    },
+    {
+      "name": "GPT-5.6 Luna",
+      "harness": "codex",
+      "effort": "high",
+      "passRate": 0.4049,
+      "mergeabilityScore": 0.3589,
+      "flaggedRate": 0
+    },
+    {
+      "name": "GPT-5.6 Luna",
+      "harness": "codex",
+      "effort": "xhigh",
+      "passRate": 0.438,
+      "mergeabilityScore": 0.3891,
+      "flaggedRate": 0
+    },
+    {
+      "name": "GPT-5.6 Luna",
+      "harness": "codex",
+      "effort": "max",
+      "passRate": 0.4474,
+      "mergeabilityScore": 0.3981,
+      "flaggedRate": 0.001
+    },
+    {
+      "name": "SWE-1.7",
+      "harness": "chisel",
+      "effort": "none",
+      "passRate": 0.474,
+      "mergeabilityScore": 0.4199,
+      "flaggedRate": 0.012
+    },
+    {
+      "name": "Claude Opus 4.7",
+      "harness": "claude-code",
+      "effort": "low",
+      "passRate": 0.3094,
+      "mergeabilityScore": 0.2761,
+      "flaggedRate": 0.001
+    },
+    {
+      "name": "Claude Opus 4.7",
+      "harness": "claude-code",
+      "effort": "medium",
+      "passRate": 0.3223,
+      "mergeabilityScore": 0.2891,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Claude Opus 4.7",
+      "harness": "claude-code",
+      "effort": "high",
+      "passRate": 0.3924,
+      "mergeabilityScore": 0.3517,
+      "flaggedRate": 0.001
+    },
+    {
+      "name": "Claude Opus 4.7",
+      "harness": "claude-code",
+      "effort": "xhigh",
+      "passRate": 0.3867,
+      "mergeabilityScore": 0.3491,
+      "flaggedRate": 0.004
+    },
+    {
+      "name": "Claude Opus 4.7",
+      "harness": "claude-code",
+      "effort": "max",
+      "passRate": 0.4283,
+      "mergeabilityScore": 0.3854,
+      "flaggedRate": 0.001
+    },
+    {
+      "name": "Kimi K2.7",
+      "harness": "mini-swe-agent",
+      "effort": "none",
+      "passRate": 0.336,
+      "mergeabilityScore": 0.3006,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Composer 2.5",
+      "harness": "cursor-cli",
+      "effort": "none",
+      "passRate": 0.2934,
+      "mergeabilityScore": 0.2564,
+      "flaggedRate": 0.024
+    },
+    {
+      "name": "GLM 5.2",
+      "harness": "mini-swe-agent",
+      "effort": "none",
+      "passRate": 0.274,
+      "mergeabilityScore": 0.245,
+      "flaggedRate": 0
+    },
+    {
+      "name": "DeepSeek V4 Pro",
+      "harness": "mini-swe-agent",
+      "effort": "none",
+      "passRate": 0.2,
+      "mergeabilityScore": 0.1764,
+      "flaggedRate": 0.01
+    },
+    {
+      "name": "MiniMax M3",
+      "harness": "mini-swe-agent",
+      "effort": "none",
+      "passRate": 0.1664,
+      "mergeabilityScore": 0.147,
+      "flaggedRate": 0.015
+    },
+    {
+      "name": "Inkling",
+      "harness": "mini-swe-agent",
+      "effort": "0.99",
+      "passRate": 0.159,
+      "mergeabilityScore": 0.14,
+      "flaggedRate": 0.076
+    },
+    {
+      "name": "Qwen 3.7 Plus",
+      "harness": "mini-swe-agent",
+      "effort": "none",
+      "passRate": 0.1146,
+      "mergeabilityScore": 0.102,
+      "flaggedRate": 0.009
+    },
+    {
+      "name": "Claude Opus 5",
+      "harness": "claude-code",
+      "effort": "low",
+      "passRate": 0.4663,
+      "mergeabilityScore": 0.4195,
+      "flaggedRate": 0.0021
+    },
+    {
+      "name": "Claude Opus 5",
+      "harness": "claude-code",
+      "effort": "medium",
+      "passRate": 0.5885,
+      "mergeabilityScore": 0.5338,
+      "flaggedRate": 0.006
+    },
+    {
+      "name": "Claude Opus 5",
+      "harness": "claude-code",
+      "effort": "high",
+      "passRate": 0.5293,
+      "mergeabilityScore": 0.4799,
+      "flaggedRate": 0.002
+    },
+    {
+      "name": "Claude Opus 5",
+      "harness": "claude-code",
+      "effort": "xhigh",
+      "passRate": 0.484,
+      "mergeabilityScore": 0.4365,
+      "flaggedRate": 0.0144
+    },
+    {
+      "name": "Claude Opus 5",
+      "harness": "claude-code",
+      "effort": "max",
+      "passRate": 0.5333,
+      "mergeabilityScore": 0.4804,
+      "flaggedRate": 0.0101
+    },
+    {
+      "name": "SWE-1.6",
+      "harness": "chisel",
+      "effort": "none",
+      "passRate": 0.1045,
+      "mergeabilityScore": 0.0939,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Kimi K3",
+      "harness": "mini-swe-agent",
+      "effort": "none",
+      "passRate": 0.4891,
+      "mergeabilityScore": 0.4417,
+      "flaggedRate": 0.0021
+    },
+    {
+      "name": "Gemini 3.6 Flash",
+      "harness": "chisel",
+      "effort": "low",
+      "passRate": 0.2565,
+      "mergeabilityScore": 0.2282,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Gemini 3.6 Flash",
+      "harness": "chisel",
+      "effort": "medium",
+      "passRate": 0.389,
+      "mergeabilityScore": 0.3437,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Gemini 3.6 Flash",
+      "harness": "chisel",
+      "effort": "high",
+      "passRate": 0.382,
+      "mergeabilityScore": 0.3369,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Gemini 3.7 Flash",
+      "harness": "chisel",
+      "effort": "low",
+      "passRate": 0.415,
+      "mergeabilityScore": 0.3691,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Gemini 3.7 Flash",
+      "harness": "chisel",
+      "effort": "medium",
+      "passRate": 0.489,
+      "mergeabilityScore": 0.4359,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Gemini 3.7 Flash",
+      "harness": "chisel",
+      "effort": "high",
+      "passRate": 0.473,
+      "mergeabilityScore": 0.4223,
+      "flaggedRate": 0
+    },
+    {
+      "name": "GPT-5.4-mini",
+      "harness": "codex",
+      "effort": "low",
+      "passRate": 0.106,
+      "mergeabilityScore": 0.0925,
+      "flaggedRate": 0
+    },
+    {
+      "name": "GPT-5.4-mini",
+      "harness": "codex",
+      "effort": "medium",
+      "passRate": 0.2373,
+      "mergeabilityScore": 0.2078,
+      "flaggedRate": 0
+    },
+    {
+      "name": "GPT-5.4-mini",
+      "harness": "codex",
+      "effort": "high",
+      "passRate": 0.263,
+      "mergeabilityScore": 0.2308,
+      "flaggedRate": 0.001
+    },
+    {
+      "name": "GPT-5.4-mini",
+      "harness": "codex",
+      "effort": "xhigh",
+      "passRate": 0.308,
+      "mergeabilityScore": 0.2704,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Claude Opus 4.6",
+      "harness": "claude-code",
+      "effort": "low",
+      "passRate": 0.2054,
+      "mergeabilityScore": 0.1831,
+      "flaggedRate": 0.003
+    },
+    {
+      "name": "Claude Opus 4.6",
+      "harness": "claude-code",
+      "effort": "medium",
+      "passRate": 0.265,
+      "mergeabilityScore": 0.2367,
+      "flaggedRate": 0.001
+    },
+    {
+      "name": "Claude Opus 4.6",
+      "harness": "claude-code",
+      "effort": "high",
+      "passRate": 0.297,
+      "mergeabilityScore": 0.2664,
+      "flaggedRate": 0.001
+    },
+    {
+      "name": "Claude Sonnet 4.6",
+      "harness": "claude-code",
+      "effort": "low",
+      "passRate": 0.1691,
+      "mergeabilityScore": 0.1503,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Claude Sonnet 4.6",
+      "harness": "claude-code",
+      "effort": "medium",
+      "passRate": 0.239,
+      "mergeabilityScore": 0.211,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Claude Sonnet 4.6",
+      "harness": "claude-code",
+      "effort": "high",
+      "passRate": 0.265,
+      "mergeabilityScore": 0.2347,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Claude Sonnet 4.6",
+      "harness": "claude-code",
+      "effort": "max",
+      "passRate": 0.275,
+      "mergeabilityScore": 0.2431,
+      "flaggedRate": 0.002
+    },
+    {
+      "name": "DeepSeek V4 Flash 0731",
+      "harness": "chisel",
+      "effort": "high",
+      "passRate": 0.2108,
+      "mergeabilityScore": 0.188,
+      "flaggedRate": 0.2547
+    },
+    {
+      "name": "Mistral 3.5 Medium",
+      "harness": "chisel",
+      "effort": "none",
+      "passRate": 0.09,
+      "mergeabilityScore": 0.08,
+      "flaggedRate": 0.006
+    },
+    {
+      "name": "DeepSeek V4 Pro 0813",
+      "harness": "chisel",
+      "effort": "high",
+      "passRate": 0.318,
+      "mergeabilityScore": 0.2855,
+      "flaggedRate": 0.106
+    },
+    {
+      "name": "GLM 5.3",
+      "harness": "chisel",
+      "effort": "max",
+      "passRate": 0.447,
+      "mergeabilityScore": 0.4014,
+      "flaggedRate": 0
+    },
+    {
+      "name": "GLM 5.3 Flash",
+      "harness": "chisel",
+      "effort": "max",
+      "passRate": 0.3567,
+      "mergeabilityScore": 0.3183,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Nemotron 3 Ultra",
+      "harness": "chisel",
+      "effort": "none",
+      "passRate": 0.154,
+      "mergeabilityScore": 0.1361,
+      "flaggedRate": 0.002
+    },
+    {
+      "name": "Gemini 3.8 Flash",
+      "harness": "chisel",
+      "effort": "medium",
+      "passRate": 0.4673,
+      "mergeabilityScore": 0.4119,
+      "flaggedRate": 0
+    },
+    {
+      "name": "Gemini 3.8 Flash",
+      "harness": "chisel",
+      "effort": "high",
+      "passRate": 0.428,
+      "mergeabilityScore": 0.3796,
+      "flaggedRate": 0
+    }
+  ]
+}

@@ -71,7 +71,7 @@ const ARENA_AGENT_METRIC_IDS = AGENTIC_METRIC_IDS.filter(
   (metricId) => metricId.startsWith('arena_agent_'),
 );
 const AGENTIC_DEFINITIONS = ALL_METRIC_DEFINITIONS.filter(
-  (definition) => definition.domain === 'agentic_work',
+  (definition) => definition.domain === 'agentic',
 );
 const DEFINITIONS_BY_ID = new Map(
   AGENTIC_DEFINITIONS.map((definition) => [definition.id, definition]),
@@ -146,7 +146,7 @@ function alternativeAgenticScores(
   return new Map(
     processLLMpkBatchScoring(configs, definitions).map((score) => [
       score.config.id,
-      score.domainScores.agentic_work.score,
+      score.domainScores.agentic.score,
     ]),
   );
 }
@@ -200,7 +200,7 @@ const rows = installedBoxes.map((box) => {
   const preset = presetById.get(box.builtInPresetId!);
   const config = configById.get(box.id)!;
   const score = scoreByConfigId.get(box.id)!;
-  const domain = score.domainScores.agentic_work;
+  const domain = score.domainScores.agentic;
   const sources = Object.fromEntries(
     AGENTIC_METRIC_IDS.map((metricId) => {
       const effective = effectiveSourceForMetric(

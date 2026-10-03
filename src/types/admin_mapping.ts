@@ -5,7 +5,8 @@ export type SourceType =
   | 'scale_labs'
   | 'terminal_bench'
   | 'swe_rebench'
-  | 'frontier_code';
+  | 'frontier_code'
+  | 'design_arena';
 
 /**
  * How a shipped configuration is reached. API and explicit subscription

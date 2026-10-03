@@ -49,7 +49,7 @@ const allowedSubscriptionKeys = new Set([
 ]);
 
 if (
-  publicSnapshot.schemaVersion !== 1
+  publicSnapshot.schemaVersion !== 2
   || !Array.isArray(publicSnapshot.scores)
   || publicSnapshot.scores.length === 0
 ) {

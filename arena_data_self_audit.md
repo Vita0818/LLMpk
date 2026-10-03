@@ -2,7 +2,7 @@
 
 - Audit status: **VALIDATED**
 - Audit status validates provenance, score integrity, and Arena reconciliation; it is not by itself a claim that every upstream source was fetched live in this run.
-- Audit time: 2026-10-02T08:20:28.688Z
+- Audit time: 2026-10-03T06:06:36.540Z
 - Raw extraction: `src/data/arenaRawExtraction.json` (arena-raw-extraction/v1)
 - Catalog: `src/data/seedCards.ts`
 - Scope: `oagxm-current-product-lines` (oagxm-current-product-lines/v11-2026-10-02-releases)

@@ -129,12 +129,12 @@ const noObservedDomains = scores.flatMap((score) => (
 const tolerance = 1e-10;
 const invariants = {
   missingMetricDetails: missingDetails.length,
-  missingMetricsNotNeutral50: missingDetails.filter(
-    (detail) => Math.abs((detail.normalizedScore ?? Number.NaN) - 50) > tolerance,
+  missingMetricsWithNumericScores: missingDetails.filter(
+    (detail) => detail.normalizedScore !== null,
   ).length,
-  missingMetricsWithTransferredWeight: missingDetails.filter(
+  missingMetricsWithAggregationWeight: missingDetails.filter(
     (detail) => (
-      Math.abs(detail.weightInDomain - detail.configuredWeightInDomain) > tolerance
+      Math.abs(detail.weightInDomain) > tolerance
     ),
   ).length,
   noObservedDomains: noObservedDomains.length,

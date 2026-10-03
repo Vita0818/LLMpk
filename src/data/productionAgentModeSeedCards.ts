@@ -19,6 +19,13 @@ const ARENA_AGENT_METRIC_IDS = new Set([
 ]);
 
 const REVIEWED_ARENA_AGENT_BASE_CARD_IDS = [
+  'card-arena-claude-fable-5-1-max',
+  'card-arena-claude-opus-5-5-high',
+  'card-arena-gpt-6-astra-max',
+  'card-arena-gpt-6-luna-max',
+  'card-arena-grok-4-7-xhigh',
+  'card-arena-deepseek-v4-1-flash-max',
+  'card-arena-hy4-preview',
   // Arena's current Agent leaderboard publishes the 0731 release as this
   // dated High-effort identity. The undated Flash card now has Text rows only.
   'card-arena-deepseek-v4-flash-high-20260731',

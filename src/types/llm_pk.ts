@@ -5,22 +5,23 @@ export type MetricSource =
   | 'Scale Labs'
   | 'Terminal-Bench'
   | 'SWE-rebench'
-  | 'FrontierCode';
+  | 'FrontierCode'
+  | 'DesignArena';
 
-export type MetricType = 
+export type MetricType =
   | 'accuracy'                   // Pass@1, Accuracy (Logit transformed)
   | 'error_rate'                 // Raw bad-event rate; invert to 1-p, then Logit
   | 'continuous_relative'        // Bradley-Terry, Elo, Net percentage improvement
   | 'positive_higher_better'     // Throughput (log transformed)
   | 'positive_lower_better';     // Latency, Price (negative log transformed)
 
-export type DomainId = 
-  | 'chatting' 
-  | 'math_science' 
+export type DomainId =
+  | 'chatting'
+  | 'reasoning'
   | 'coding'
-  | 'engineering'
-  | 'agentic_work' 
-  | 'search_knowledge';
+  | 'frontend'
+  | 'agentic'
+  | 'documents';
 
 /** Coverage is a data-quality state that remains separate from the score. */
 export type CoverageStatus =
@@ -40,7 +41,7 @@ export interface DomainDefinition {
   id: DomainId;
   name: string;
   nameEn: string;
-  weight: number; // Equal before renormalizing over available domains in v1.2
+  weight: number; // Six equal domains; no total without all six coverage gates.
   color: string;
   description: string;
 }
@@ -104,7 +105,7 @@ export interface LLMConfiguration {
    * receives scores, but must not double-weight the calibration cohort.
    */
   capabilityReferenceIncluded?: boolean;
-  
+
   // 1. Identity
   identity: {
     modelName: string;
@@ -112,7 +113,7 @@ export interface LLMConfiguration {
     reasoningEffort: 'None' | 'Low' | 'Medium' | 'High' | 'X-High' | 'Deep Think';
     contextWindowTokens: number;
   };
-  
+
   // 2. Execution
   execution: {
     harness: string; // e.g. Codex CLI, Claude Code, Antigravity Agent, OpenCode, LeChat
@@ -142,7 +143,7 @@ export interface LLMConfiguration {
 
   // Atomic Observations map: metricId -> MetricObservation
   observations: Record<string, MetricObservation>;
-  
+
   // Custom badges
   tags?: string[];
 }
@@ -156,10 +157,10 @@ export interface AtomicScoreDetail {
   transformedValue: number | null;
   /** Max=100 / median=50 score before reliability shrinkage; null when missing. */
   baseNormalizedScore: number | null;
-  /** Effective score after reliability shrinkage; missing observations equal 50. */
+  /** Effective score after reliability shrinkage; null for missing evidence. */
   normalizedScore: number | null;
   configuredWeightInDomain: number;
-  /** Scoring v1.2 retains the configured weight even when the observation is missing. */
+  /** Observed-only weight; zero when missing, while configured weight is retained for coverage. */
   weightInDomain: number;
   observedConfigCount: number;
   eligibleConfigCount: number;
@@ -176,7 +177,7 @@ export interface DomainScoreDetail {
   domainId: DomainId;
   domainName: string;
   rawGeometricIndex: number | null;
-  /** Null when the entire domain has zero real observations. */
+  /** Null below the domain's minimum weighted coverage. */
   score: number | null;
   coverage: number; // 0.0 to 1.0
   coverageStatus: CoverageStatus;
@@ -202,14 +203,13 @@ export interface ProcessedConfigurationScore {
   config: LLMConfiguration;
   domainScores: Record<DomainId, DomainScoreDetail>;
   /**
-   * Legacy property name retained for API compatibility. Scoring v1.2 fills
-   * partially missing metrics with neutral 50 inside a domain, but excludes a
-   * wholly unobserved domain from the final geometric mean.
+   * Six-domain geometric mean, available only after every domain and overall
+   * coverage gate passes. Missing evidence is never filled with a score.
    */
   rawCapabilityScore: number | null;
   practicalBreakdown: PracticalScoreBreakdown;
   overallCoverage: number;
-  /** Number of domains with at least one real observation (0–6). */
+  /** Number of domains passing the weighted coverage gate (0–6). */
   availableDomainCount: number;
   coverageStatus: CoverageStatus;
   /** Whether a capability score exists and can receive a rank. */

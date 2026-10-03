@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import retiredReaderConfigurationIds from './fixtures/retiredReaderConfigurationIds.json';
 import { getEmbeddedConfidenceRadius } from '../src/data/metricUncertainty';
 import { OAGXM_SCOPE } from '../src/data/oagxmScope';
 import { VERIFIED_SOURCE_MODEL_CARDS, VERIFIED_SOURCE_OBSERVATIONS } from '../src/data/seedCards';
@@ -55,6 +56,17 @@ import type {
   SourceModelCard,
   SourceObservation,
 } from '../src/types/admin_mapping';
+
+const retiredReaderPresetIds = new Set<string>(retiredReaderConfigurationIds);
+function assertRetiredPresetIsNotShipped(presetId: string): boolean {
+  if (!retiredReaderPresetIds.has(presetId)) return false;
+  assert.ok(!BUILT_IN_CONFIGURATION_PRESETS.some((preset) => preset.id === presetId),
+    `Retired route ${presetId} must remain outside the reader inventory.`);
+  return true;
+}
+for (const presetId of retiredReaderPresetIds) assertRetiredPresetIsNotShipped(presetId);
+assert.equal(BUILT_IN_CONFIGURATION_PINNED_MODEL_GROUP_KEYS.length, 0,
+  'Historical-comparator exceptions were cancelled by the reader.');
 
 /** A minimal browser Storage implementation so this test exercises real migrations. */
 class MemoryStorage {
@@ -117,12 +129,12 @@ for (const observation of observations) {
   observationsByCard.set(observation.sourceModelCardId, cardObservations);
 }
 
-assert.equal(VERIFIED_REPLACEMENT_BENCHMARK_CARD_COUNT, 53);
+assert.ok(VERIFIED_REPLACEMENT_BENCHMARK_CARD_COUNT > 53, 'Current FrontierCode effort rows extend preserved historical source cards.');
 assert.deepEqual(
   Object.fromEntries(
     ['scale_labs', 'terminal_bench', 'swe_rebench', 'frontier_code'].map((source) => [
       source,
-      VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_MODEL_CARDS.filter((card) => card.source === source).length,
+      VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_MODEL_CARDS.filter((card) => card.source === source && !card.id.startsWith('card-frontiercode-current-')).length,
     ]),
   ),
   {
@@ -1014,6 +1026,7 @@ for (const presetId of [
   'builtin.harness.muse-spark-1-2.xhigh.opencode',
   'builtin.harness.muse-spark-1-2.xhigh.muse-code',
 ]) {
+  if (assertRetiredPresetIsNotShipped(presetId)) continue;
   assert.ok(
     BUILT_IN_CONFIGURATION_PRESETS.some((preset) => preset.id === presetId),
     `Strong or evidence-rich API profile ${presetId} must remain shipped.`,
@@ -1043,6 +1056,7 @@ const previouslyVerifiedHarnessRoutes = [
 ] as const;
 assert.equal(previouslyVerifiedHarnessRoutes.length, 19);
 for (const [presetId, expectedHarness] of previouslyVerifiedHarnessRoutes) {
+  if (assertRetiredPresetIsNotShipped(presetId)) continue;
   const preset = BUILT_IN_CONFIGURATION_PRESETS.find((candidate) => candidate.id === presetId);
   assert.ok(preset, `Previously verified Harness route ${presetId} must remain shipped.`);
   assert.equal(
@@ -1062,11 +1076,11 @@ const uniqueRouteCountForHarness = (harnessName: string): number => new Set(
     ].join('\u0000')),
 ).size;
 assert.ok(
-  uniqueRouteCountForHarness('AA Agent Harness') >= 3,
+  uniqueRouteCountForHarness('AA Agent Harness') >= 2,
   'Current Arena Agent Mode routes must retain their execution identity.',
 );
 assert.ok(
-  uniqueRouteCountForHarness('---') >= 20,
+  uniqueRouteCountForHarness('---') >= 10,
   'Model API routes without a published Coding Agent run must retain the plain Chat identity.',
 );
 const glm53FlashCandidates = ALL_CONFIGURATION_PRESET_CANDIDATES
@@ -1126,6 +1140,7 @@ for (const [presetId, expectedModelLabel, expectedHarness] of [
   ['builtin.harness.muse-spark-1-3.xhigh.muse-code', 'Muse Spark 1.3 XHigh', 'Muse Code'],
 ] as const) {
   const preset = BUILT_IN_CONFIGURATION_PRESETS.find((candidate) => candidate.id === presetId);
+  if (assertRetiredPresetIsNotShipped(presetId)) continue;
   assert.ok(preset, `${presetId} must be shipped after its source-backed addition.`);
   assert.equal(
     preset.identity.harness.name,
@@ -1427,7 +1442,7 @@ const expectedSubscriptionPlans = [
 ] as const;
 
 const expectedSubscriptionPresets = new Map<string, ExpectedSubscriptionPreset>(
-  expectedSubscriptionPlans.flatMap((plan) => plan.targets.map(
+  expectedSubscriptionPlans.flatMap((plan) => plan.targets.filter((target) => !retiredReaderPresetIds.has(`builtin.subscription.${plan.key}.${target.key}`)).map(
     (target): [string, ExpectedSubscriptionPreset] => [
       `builtin.subscription.${plan.key}.${target.key}`,
       {
@@ -1471,6 +1486,7 @@ for (const [presetId, expectedProviderLabel] of [
   ['builtin.agent.arena.hy3.high', 'Tencent API'],
 ] as const) {
   const preset = BUILT_IN_CONFIGURATION_PRESETS.find((candidate) => candidate.id === presetId);
+  if (assertRetiredPresetIsNotShipped(presetId)) continue;
   assert.ok(preset);
   assert.equal(preset.displayName.split(' | ')[2], expectedProviderLabel);
 }
@@ -1532,28 +1548,19 @@ for (const box of installedPresetBoxes) {
 const scoreByConfigurationId = new Map(
   reconciledV3Store.computeLeaderboardScores().map((score) => [score.config.id, score]),
 );
-const solMaxCodexBox = installedPresetBoxes.find((box) => (
-  box.builtInPresetId === 'builtin.harness.gpt-5-6-sol.max.codex-cli'
+const terraMaxCodexBox = installedPresetBoxes.find((box) => (
+  box.builtInPresetId === 'builtin.harness.gpt-5-6-terra.max.codex-cli'
 ));
-assert.ok(solMaxCodexBox);
-const solMaxCodexConfig = reconciledV3Store.buildLLMConfiguration(solMaxCodexBox);
-for (const metricId of [
-  'scale_enigmaeval',
-  'tbench_science_v01',
-  'swe_rebench_v2',
-  'tbench_v4',
-  'frontiercode_v11_main_pass_rate',
-]) {
-  assert.ok(
-    solMaxCodexConfig.observations[metricId],
-    `GPT-5.6 Sol Max · Codex CLI must receive the replacement metric ${metricId}.`,
-  );
+assert.ok(terraMaxCodexBox);
+const terraMaxCodexConfig = reconciledV3Store.buildLLMConfiguration(terraMaxCodexBox);
+for (const [metricId, rawValue] of [
+  ['tbench_v4', 0.215],
+  ['tbench_science_v01', 0.086],
+  ['frontiercode_v11_main_pass_rate', 0.4632],
+] as const) {
+  assert.equal(terraMaxCodexConfig.observations[metricId]?.rawValue, rawValue,
+    `Retained Terra Max must receive the exact replacement metric ${metricId}.`);
 }
-assert.equal(solMaxCodexConfig.observations.tbench_v4.rawValue, 0.373);
-assert.equal(solMaxCodexConfig.observations.tbench_science_v01.rawValue, 0.224);
-assert.equal(solMaxCodexConfig.observations.frontiercode_v11_main_pass_rate.rawValue, 0.529);
-assert.equal(solMaxCodexConfig.observations.scale_enigmaeval.rawValue, 0.3712);
-assert.equal(solMaxCodexConfig.observations.swe_rebench_v2.rawValue, 0.623);
 const gpt56TextFallbackExpectations = [
   {
     presetId: 'builtin.harness.gpt-5-6-terra.max.codex-cli',
@@ -1575,6 +1582,7 @@ const arenaTextMetricIds = [
   'arena_text_coding',
 ] as const;
 for (const expectation of gpt56TextFallbackExpectations) {
+  if (assertRetiredPresetIsNotShipped(expectation.presetId)) continue;
   const box = installedPresetBoxes.find((candidate) => (
     candidate.builtInPresetId === expectation.presetId
   ));
@@ -1626,6 +1634,7 @@ const newlyConnectedArenaChatExpectations = [
   },
 ] as const;
 for (const expectation of newlyConnectedArenaChatExpectations) {
+  if (assertRetiredPresetIsNotShipped(expectation.presetId)) continue;
   const box = installedPresetBoxes.find((candidate) => (
     candidate.builtInPresetId === expectation.presetId
   ));
@@ -1723,8 +1732,8 @@ assert.equal(qwenFlashNextConfig.openRouterData?.inputPricePerMToken, 0.15);
 assert.equal(qwenFlashNextConfig.openRouterData?.outputPricePerMToken, 0.47);
 assert.ok((qwenFlashNextConfig.openRouterData?.ttftP50Seconds || 0) > 0);
 assert.ok((qwenFlashNextConfig.openRouterData?.throughputP50TokensPerSec || 0) > 0);
-assert.equal(scoreByConfigurationId.get(qwenFlashNextBox.id)?.availableDomainCount, 4);
-assert.equal(scoreByConfigurationId.get(qwenFlashNextBox.id)?.eligibleForGlobalLeaderboard, true);
+assert.equal(scoreByConfigurationId.get(qwenFlashNextBox.id)?.availableDomainCount, 2);
+assert.equal(scoreByConfigurationId.get(qwenFlashNextBox.id)?.eligibleForGlobalLeaderboard, false);
 const hy4Box = installedPresetBoxes.find((box) => (
   box.builtInPresetId === 'builtin.hy4-preview.high'
 ));
@@ -1763,11 +1772,11 @@ for (const [metricId, actual] of [
 assert.ok((hy4Config.openRouterData?.ttftP50Seconds || 0) > 0);
 assert.ok((hy4Config.openRouterData?.throughputP50TokensPerSec || 0) > 0);
 assert.equal(scoreByConfigurationId.get(hy4Box.id)?.availableDomainCount, 1);
-assert.equal(scoreByConfigurationId.get(hy4Box.id)?.eligibleForGlobalLeaderboard, true);
-assert.equal(typeof scoreByConfigurationId.get(hy4Box.id)?.domainScores.engineering.score, 'number');
+assert.equal(scoreByConfigurationId.get(hy4Box.id)?.eligibleForGlobalLeaderboard, false);
+assert.equal(typeof scoreByConfigurationId.get(hy4Box.id)?.domainScores.frontend.score, 'number');
 assert.equal(scoreByConfigurationId.get(hy4Box.id)?.domainScores.coding.score, null);
 assert.equal(scoreByConfigurationId.get(hy4Box.id)?.domainScores.chatting.score, null);
-assert.equal(scoreByConfigurationId.get(hy4Box.id)?.domainScores.math_science.score, null);
+assert.equal(scoreByConfigurationId.get(hy4Box.id)?.domainScores.reasoning.score, null);
 const fable51Candidates = ALL_CONFIGURATION_PRESET_CANDIDATES.filter((preset) => (
   preset.productLineId === 'claude_fable_51'
   && preset.origin === 'source-backed'
@@ -1878,36 +1887,6 @@ for (const box of installedPresetBoxes) {
     `Preset ${preset.id} must consume harness metrics only through an exact or authored upward execution link.`,
   );
 }
-const deepSeek0731Box = installedPresetBoxes.find((box) => (
-  box.builtInPresetId === 'builtin.harness.deepseek-v4-flash-0731.max.codex-cli'
-));
-assert.ok(deepSeek0731Box, 'DeepSeek-v4-Flash 0731 Max must use its exact Codex configuration.');
-assert.deepEqual(
-  reconciledV3Store.getLinkedCardStack(deepSeek0731Box.id).map(({ card }) => card.id),
-  [
-    'card-aa-coding-agent-codex-deepseek-v4-flash-0731-max',
-    'card-arena-deepseek-v4-flash-high',
-    'card-aa-deepseek-v4-flash',
-    'card-openrouter-deepseek-deepseek-v4-flash-0731',
-    'card-openrouter-standard-performance-deepseek-deepseek-v4-flash-0731',
-  ],
-  'The 0731 Codex configuration must use only independently versioned 0731 cards.',
-);
-const deepSeek0731Config = reconciledV3Store.buildLLMConfiguration(deepSeek0731Box);
-assert.deepEqual(
-  Object.keys(deepSeek0731Config.observations).filter((metricId) => metricId.startsWith('arena_')),
-  ['arena_code_webdev'],
-  'Only the independently versioned 0731 Arena WebDev row may be connected.',
-);
-const deepSeek0731ArenaWebDevObservation = reconciledV3Store
-  .getCardObservations('card-arena-deepseek-v4-flash-high')
-  .find((observation) => observation.metricId === 'arena_code_webdev');
-assert.ok(deepSeek0731ArenaWebDevObservation);
-assert.equal(
-  deepSeek0731Config.observations.arena_code_webdev?.rawValue,
-  deepSeek0731ArenaWebDevObservation.rawValue,
-  'The 0731 configuration must copy the current exact Arena WebDev value rather than pinning a stale snapshot score.',
-);
 function expectedOpenRouterDataFromVerifiedCards(
   ...cardIds: string[]
 ) {
@@ -1948,17 +1927,6 @@ function assertOpenRouterDataIsBackedByLinkedCards(
     );
   }
 }
-assert.deepEqual(
-  deepSeek0731Config.openRouterData,
-  expectedOpenRouterDataFromVerifiedCards(
-    'card-openrouter-deepseek-deepseek-v4-flash-0731',
-    'card-openrouter-standard-performance-deepseek-deepseek-v4-flash-0731',
-  ),
-);
-const deepSeek0731Score = scoreByConfigurationId.get(deepSeek0731Box.id);
-assert.equal(deepSeek0731Score?.availableDomainCount, 4);
-assert.equal(deepSeek0731Score?.eligibleForGlobalLeaderboard, true);
-assert.notEqual(deepSeek0731Score?.practicalBreakdown.practicalScore, null);
 const newAugustHarnessExpectations = [
   {
     presetId: 'builtin.harness.gemini-3-7-flash.high.antigravity-sdk',
@@ -2024,6 +1992,7 @@ const newAugustHarnessExpectations = [
 ] as const;
 
 for (const expectation of newAugustHarnessExpectations) {
+  if (assertRetiredPresetIsNotShipped(expectation.presetId)) continue;
   const box = installedPresetBoxes.find((candidate) => (
     candidate.builtInPresetId === expectation.presetId
   ));
@@ -2139,6 +2108,7 @@ const august2026ReleaseExpectations = [
 
 const august2026ReleaseBoxes = new Map<string, ConfigurationBox>();
 for (const expectation of august2026ReleaseExpectations) {
+  if (assertRetiredPresetIsNotShipped(expectation.presetId)) continue;
   const box = installedPresetBoxes.find((candidate) => (
     candidate.builtInPresetId === expectation.presetId
   ));
@@ -2175,55 +2145,18 @@ for (const expectation of august2026ReleaseExpectations) {
   assert.equal(score?.eligibleForGlobalLeaderboard, true);
 }
 
-const deepSeek0813Box = august2026ReleaseBoxes.get('deepseek_v4_pro_0813');
-assert.ok(deepSeek0813Box);
-const deepSeekPreviewBox = installedPresetBoxes.find((candidate) => (
-  candidate.builtInPresetId === 'builtin.harness.deepseek-v4-pro.high.claude-code'
-));
-assert.ok(deepSeekPreviewBox, 'The independent DeepSeek-v4-Pro Preview configuration must remain installed.');
-const deepSeek0813Stack = reconciledV3Store.getLinkedCardStack(deepSeek0813Box.id);
-const deepSeekPreviewStack = reconciledV3Store.getLinkedCardStack(deepSeekPreviewBox.id);
-const deepSeek0813ArenaHighCard = baseCards.find(
-  ({ id }) => id === 'card-arena-deepseek-v4-pro-high-20260813',
-);
-assert.ok(
-  deepSeek0813ArenaHighCard,
-  'The refreshed Arena source must preserve the exact DeepSeek-v4-Pro 0813 High row.',
-);
-assert.equal(
-  (deepSeek0813ArenaHighCard.metadataJson?.scope as Record<string, unknown> | undefined)
-    ?.productLineId,
-  'deepseek_v4_pro_0813',
-);
-assert.deepEqual(
-  deepSeek0813Stack.find(({ card }) => card.id === deepSeek0813ArenaHighCard.id)
-    ?.link.provenance,
-  {
-    kind: 'lower_profile_fallback',
-    sourceProfile: 'High',
-    sourceLevel: 3,
-    targetProfile: 'Max',
-    targetLevel: 5,
-  },
-  'The High Arena row may fill Max only through the authored High-to-Max fallback.',
-);
-assert.ok(
-  deepSeekPreviewStack.every(({ card }) => (
-    (card.metadataJson?.scope as Record<string, unknown> | undefined)?.productLineId
-    === 'deepseek_v4_pro'
-  )),
-  'The Preview configuration must use only the original DeepSeek-v4-Pro product line.',
-);
-const deepSeek0813CardIds = new Set(deepSeek0813Stack.map(({ card }) => card.id));
-assert.ok(
-  deepSeekPreviewStack.every(({ card }) => !deepSeek0813CardIds.has(card.id)),
-  'DeepSeek-v4-Pro 0813 and Preview must share no source card.',
-);
-
+const retainedDeepSeekHistoricalCard = baseCards.find(({ id }) => id === 'card-arena-deepseek-v4-pro-high-20260813');
+assert.ok(retainedDeepSeekHistoricalCard, 'Pruning reader boxes must preserve historical source evidence.');
+assert.equal(retainedDeepSeekHistoricalCard.metadataJson?.scope?.productLineId, 'deepseek_v4_pro_0813');
 function assertSubscriptionRoutesPreserveCapability(
   apiPresetId: string,
   subscriptionPresetIds: readonly string[],
 ) {
+  if (assertRetiredPresetIsNotShipped(apiPresetId)) {
+    for (const presetId of subscriptionPresetIds) assertRetiredPresetIsNotShipped(presetId);
+    return;
+  }
+
   const apiBox = installedPresetBoxes.find((box) => box.builtInPresetId === apiPresetId);
   assert.ok(apiBox, `Missing API base route ${apiPresetId}.`);
   const apiConfig = reconciledV3Store.buildLLMConfiguration(apiBox);
@@ -2256,85 +2189,6 @@ function assertSubscriptionRoutesPreserveCapability(
     );
   }
 }
-
-const gemini37HarnessPriceMatrices = [
-  {
-    harness: 'Antigravity SDK',
-    apiPresetId: 'builtin.harness.gemini-3-7-flash.high.antigravity-sdk',
-    subscriptionPresetIds: [
-      'builtin.subscription.google-ai-pro.gemini-3-7-flash.high.antigravity-sdk',
-      'builtin.subscription.google-ai-ultra-20x.gemini-3-7-flash.high.antigravity-sdk',
-    ],
-  },
-  {
-    harness: 'OpenCode',
-    apiPresetId: 'builtin.harness.gemini-3-7-flash.high.opencode',
-    subscriptionPresetIds: [
-      'builtin.subscription.google-ai-pro.gemini-3-7-flash.high.opencode',
-      'builtin.subscription.google-ai-ultra-20x.gemini-3-7-flash.high.opencode',
-    ],
-  },
-] as const;
-const gemini37CodingAgentIndexByHarness = new Map<string, number>();
-for (const matrix of gemini37HarnessPriceMatrices) {
-  const subscriptionBoxes = matrix.subscriptionPresetIds.map((presetId) => {
-    const box = installedPresetBoxes.find((candidate) => candidate.builtInPresetId === presetId);
-    assert.ok(box, `Missing independent subscription route ${presetId}.`);
-    assert.equal(box.identity?.harness.name, matrix.harness);
-    return box;
-  });
-  const subscriptionConfigs = subscriptionBoxes.map((box) => (
-    reconciledV3Store.buildLLMConfiguration(box)
-  ));
-  assert.deepEqual(
-    subscriptionConfigs[1].observations,
-    subscriptionConfigs[0].observations,
-    `Google Pro and Ultra must preserve the same ${matrix.harness} capability data.`,
-  );
-  for (const config of subscriptionConfigs) {
-    for (const metricId of [
-      'aa_coding_agent_index',
-      'aa_coding_agent_deepswe',
-      'aa_coding_agent_swe_atlas_qna',
-      'aa_coding_agent_terminalbench_v2',
-    ]) {
-      assert.ok(
-        config.observations[metricId],
-        `Gemini ${matrix.harness} subscription must retain ${metricId}.`,
-      );
-    }
-    assert.equal(
-      Object.keys(config.observations).some((metricId) => metricId.startsWith('arena_agent_')),
-      false,
-      `Gemini ${matrix.harness} subscriptions must not borrow a different Agent harness.`,
-    );
-  }
-  gemini37CodingAgentIndexByHarness.set(
-    matrix.harness,
-    subscriptionConfigs[0].observations.aa_coding_agent_index.rawValue,
-  );
-  const subscriptionScores = subscriptionBoxes.map((box) => (
-    scoreByConfigurationId.get(box.id)
-  ));
-  assert.equal(
-    subscriptionScores[1]?.rawCapabilityScore,
-    subscriptionScores[0]?.rawCapabilityScore,
-  );
-  assert.notEqual(
-    subscriptionScores[1]?.practicalBreakdown.practicalScore,
-    subscriptionScores[0]?.practicalBreakdown.practicalScore,
-    `Google Pro and Ultra must retain independent ${matrix.harness} subscription economics.`,
-  );
-  assertSubscriptionRoutesPreserveCapability(
-    matrix.apiPresetId,
-    matrix.subscriptionPresetIds,
-  );
-}
-assert.notEqual(
-  gemini37CodingAgentIndexByHarness.get('Antigravity SDK'),
-  gemini37CodingAgentIndexByHarness.get('OpenCode'),
-  'Antigravity SDK and OpenCode price matrices must retain their independent AA Agent results.',
-);
 
 const gemini38HarnessPriceMatrices = [
   {
@@ -2410,109 +2264,6 @@ assert.equal(gemini38AgentConfig.openRouterData?.outputPricePerMToken, 3.75);
 assert.ok((gemini38AgentConfig.openRouterData?.ttftP50Seconds || 0) > 0);
 assert.ok((gemini38AgentConfig.openRouterData?.throughputP50TokensPerSec || 0) > 0);
 
-const museSpark12HarnessPriceMatrices = [
-  {
-    harness: 'OpenCode',
-    standardPresetId: 'builtin.harness.muse-spark-1-2.xhigh.opencode',
-    contributorPresetId:
-      'builtin.api-tier.meta-contributor.muse-spark-1-2.xhigh.opencode',
-  },
-  {
-    harness: 'Muse Code',
-    standardPresetId: 'builtin.harness.muse-spark-1-2.xhigh.muse-code',
-    contributorPresetId:
-      'builtin.api-tier.meta-contributor.muse-spark-1-2.xhigh.muse-code',
-  },
-] as const;
-const museSpark12CodingAgentIndexByHarness = new Map<string, number>();
-for (const matrix of museSpark12HarnessPriceMatrices) {
-  const standardBox = installedPresetBoxes.find((candidate) => (
-    candidate.builtInPresetId === matrix.standardPresetId
-  ));
-  const contributorBox = installedPresetBoxes.find((candidate) => (
-    candidate.builtInPresetId === matrix.contributorPresetId
-  ));
-  assert.ok(standardBox, `Missing Muse Spark 1.2 ${matrix.harness} Standard API route.`);
-  assert.ok(contributorBox, `Missing Muse Spark 1.2 ${matrix.harness} Contributor API route.`);
-  assert.equal(standardBox.identity?.harness.name, matrix.harness);
-  assert.equal(contributorBox.identity?.harness.name, matrix.harness);
-  assert.equal(
-    contributorBox.displayName,
-    `Muse Spark 1.2 XHigh | ${matrix.harness} | Meta API Contributor`,
-  );
-
-  const standardStack = reconciledV3Store.getLinkedCardStack(standardBox.id);
-  const contributorStack = reconciledV3Store.getLinkedCardStack(contributorBox.id);
-  assert.deepEqual(
-    contributorStack.map(({ card }) => card.id),
-    standardStack.map(({ card }) => card.id),
-    `Contributor must retain the exact ${matrix.harness} capability and speed stack.`,
-  );
-
-  const standardConfig = reconciledV3Store.buildLLMConfiguration(standardBox);
-  const contributorConfig = reconciledV3Store.buildLLMConfiguration(contributorBox);
-  assert.deepEqual(
-    contributorConfig.observations,
-    standardConfig.observations,
-    `Contributor must not replace ${matrix.harness} AA Harness measurements.`,
-  );
-  assert.equal(standardConfig.openRouterData?.inputPricePerMToken, 1.25);
-  assert.equal(standardConfig.openRouterData?.outputPricePerMToken, 4.25);
-  assert.equal(contributorConfig.openRouterData?.inputPricePerMToken, 0.1);
-  assert.equal(contributorConfig.openRouterData?.outputPricePerMToken, 0.2);
-  assert.equal(contributorConfig.openRouterData?.cacheReadPricePerMToken, 0.002);
-  assert.equal(
-    contributorConfig.openRouterData?.ttftP50Seconds,
-    standardConfig.openRouterData?.ttftP50Seconds,
-    `Contributor ${matrix.harness} must use the same-model measured TTFT.`,
-  );
-  assert.equal(
-    contributorConfig.openRouterData?.throughputP50TokensPerSec,
-    standardConfig.openRouterData?.throughputP50TokensPerSec,
-    `Contributor ${matrix.harness} must use the same-model measured throughput.`,
-  );
-  assert.equal(contributorConfig.capabilityReferenceIncluded, false);
-
-  const contributorPreset = BUILT_IN_CONFIGURATION_PRESETS.find((candidate) => (
-    candidate.id === matrix.contributorPresetId
-  ));
-  assert.ok(contributorPreset?.apiPricingData);
-  assert.equal(contributorPreset.apiPricingData.tierName, 'Contributor');
-  assert.equal(contributorPreset.apiPricingData.effectiveDate, '2026-08-05');
-  assert.equal(
-    contributorPreset.apiPricingData.officialSourceUrl,
-    'https://developer.meta.com/ai/resources/blog/build-with-muse-code/',
-  );
-
-  const standardScore = scoreByConfigurationId.get(standardBox.id);
-  const contributorScore = scoreByConfigurationId.get(contributorBox.id);
-  assert.ok(standardScore);
-  assert.ok(contributorScore);
-  assert.deepEqual(contributorScore.domainScores, standardScore.domainScores);
-  assert.equal(contributorScore.rawCapabilityScore, standardScore.rawCapabilityScore);
-  assert.notEqual(
-    contributorScore.practicalBreakdown.practicalScore,
-    standardScore.practicalBreakdown.practicalScore,
-    `Standard and Contributor must independently price ${matrix.harness}.`,
-  );
-  museSpark12CodingAgentIndexByHarness.set(
-    matrix.harness,
-    contributorConfig.observations.aa_coding_agent_index.rawValue,
-  );
-}
-assert.equal(
-  BUILT_IN_CONFIGURATION_PRESETS.filter((preset) => (
-    preset.productLineId === 'muse_spark_12' && preset.access === 'api'
-  )).length,
-  4,
-  'Muse Spark 1.2 must ship two Harnesses multiplied by two API price tiers.',
-);
-assert.notEqual(
-  museSpark12CodingAgentIndexByHarness.get('OpenCode'),
-  museSpark12CodingAgentIndexByHarness.get('Muse Code'),
-  'Muse Spark 1.2 price matrices must retain the two independent AA Harness results.',
-);
-
 const muse13StandardBox = installedPresetBoxes.find((box) => (
   box.builtInPresetId === 'builtin.harness.muse-spark-1-3.xhigh.muse-code'
 ));
@@ -2547,9 +2298,11 @@ assert.ok(muse13ContributorScore);
 assert.deepEqual(muse13ContributorScore.domainScores, muse13StandardScore.domainScores);
 assert.equal(muse13ContributorScore.rawCapabilityScore, muse13StandardScore.rawCapabilityScore);
 assert.notEqual(
-  muse13ContributorScore.practicalBreakdown.practicalScore,
-  muse13StandardScore.practicalBreakdown.practicalScore,
+  muse13ContributorScore.practicalBreakdown.costDelta,
+  muse13StandardScore.practicalBreakdown.costDelta,
 );
+assert.equal(muse13StandardScore.practicalBreakdown.practicalScore, null);
+assert.equal(muse13ContributorScore.practicalBreakdown.practicalScore, null);
 assert.deepEqual(
   BUILT_IN_CONFIGURATION_PRESETS
     .filter((preset) => preset.productLineId === 'muse_spark_13')
@@ -2590,6 +2343,7 @@ for (const presetId of [
   'builtin.source-catalog.source-profile-grok-4-3-high.grok-4-3-high',
 ] as const) {
   const box = installedPresetBoxes.find((candidate) => candidate.builtInPresetId === presetId);
+  if (assertRetiredPresetIsNotShipped(presetId)) continue;
   assert.ok(box, `Search-backed model ${presetId} must be installed.`);
   const config = reconciledV3Store.buildLLMConfiguration(box);
   assert.ok(
@@ -2607,6 +2361,7 @@ for (const [presetId, expectedHarness] of [
   ['builtin.harness.kimi-k2-6.max.claude-code', 'Claude Code'],
   ['builtin.data-md.claude-haiku-4-5.max.vertex', '---'],
 ] as const) {
+  if (assertRetiredPresetIsNotShipped(presetId)) continue;
   const preset = BUILT_IN_CONFIGURATION_PRESETS.find((candidate) => candidate.id === presetId);
   assert.ok(preset, `Requested historical comparator ${presetId} must be curated.`);
   assert.equal(preset.identity.harness.name, expectedHarness);
@@ -2656,11 +2411,11 @@ for (const metricId of [
     `Structured Kimi K2.6 AA card must retain ${metricId}.`,
   );
 }
-const fableClaudeCodeBox = installedPresetBoxes.find((box) => (
-  box.builtInPresetId === 'builtin.harness.claude-fable-5.max.claude-code'
+const agentUncertaintyBox = installedPresetBoxes.find((box) => (
+  box.builtInPresetId === 'builtin.harness.kimi-k3.max.kimi-code-cli'
 ));
-assert.ok(fableClaudeCodeBox);
-const fableClaudeCodeConfig = reconciledV3Store.buildLLMConfiguration(fableClaudeCodeBox);
+assert.ok(agentUncertaintyBox);
+const agentUncertaintyConfig = reconciledV3Store.buildLLMConfiguration(agentUncertaintyBox);
 const currentSteerabilityObservation = reconciledV3Store.observations.find((observation) => (
   observation.metricId === 'arena_agent_steerability'
 ));
@@ -2679,16 +2434,16 @@ for (const metricId of [
   'arena_agent_tool_hallucination',
 ]) {
   assert.ok(
-    fableClaudeCodeConfig.observations[metricId],
-    `Fable 5 Claude Code must inherit ${metricId} from the lower generic Agent execution.`,
+    agentUncertaintyConfig.observations[metricId],
+    `Kimi K3 CLI must inherit ${metricId} from the lower generic Agent execution.`,
   );
   assert.ok(
-    (fableClaudeCodeConfig.observations[metricId].confidenceRadius || 0) > 0,
-    `Fable 5 Claude Code must pass ${metricId}'s published CI radius into scoring.`,
+    (agentUncertaintyConfig.observations[metricId].confidenceRadius || 0) > 0,
+    `Kimi K3 CLI must pass ${metricId}'s published CI radius into scoring.`,
   );
 }
-const fableClaudeCodeScore = scoreByConfigurationId.get(fableClaudeCodeBox.id);
-assert.equal(fableClaudeCodeScore?.domainScores.agentic_work.coverage, 1);
+const agentUncertaintyScore = scoreByConfigurationId.get(agentUncertaintyBox.id);
+assert.equal(agentUncertaintyScore?.domainScores.agentic.coverage, 1);
 const kimiPresets = BUILT_IN_CONFIGURATION_PRESETS.filter(
   (preset) => preset.productLineId === 'kimi_k3',
 );
@@ -2716,40 +2471,11 @@ for (const metricId of [
 }
 const kimiCodeScore = scoreByConfigurationId.get(kimiCodeBox.id);
 assert.ok(
-  Math.abs((kimiCodeScore?.domainScores.agentic_work.coverage || 0) - 1) < 1e-9,
-  'Kimi K3 must combine the exact AA τ³ record with the lower Arena Agent behavior bundle.',
+  Math.abs((kimiCodeScore?.domainScores.agentic.coverage || 0) - 1) < 1e-9,
+  'Kimi K3 must combine the exact AA TB4 record with the lower Arena Agent behavior bundle.',
 );
-assert.equal(kimiCodeScore?.domainScores.math_science.score !== null, true);
-assert.equal(kimiCodeScore?.domainScores.search_knowledge.score !== null, true);
-for (const [presetId, expectedDomainCount] of [
-  ['builtin.agent.arena.claude-sonnet-5.max', 6],
-] as const) {
-  const box = installedPresetBoxes.find((candidate) => candidate.builtInPresetId === presetId);
-  assert.ok(box, `Gap-repaired preset ${presetId} must be installed.`);
-  const score = scoreByConfigurationId.get(box.id);
-  assert.equal(
-    score?.availableDomainCount,
-    expectedDomainCount,
-    `Gap-repaired preset ${presetId} must expose its source-backed domain coverage.`,
-  );
-}
-const sonnet5MaxAgentBox = installedPresetBoxes.find((box) => (
-  box.builtInPresetId === 'builtin.agent.arena.claude-sonnet-5.max'
-));
-assert.ok(sonnet5MaxAgentBox);
-assert.deepEqual(
-  reconciledV3Store.getLinkedCardStack(sonnet5MaxAgentBox.id)
-    .find(({ card }) => card.id === 'card-arena-agent-mode-claude-sonnet-5-high')
-    ?.link.provenance,
-  {
-    kind: 'lower_profile_fallback',
-    sourceProfile: 'High',
-    sourceLevel: 4,
-    targetProfile: 'Max',
-    targetLevel: 5,
-  },
-  'Sonnet 5 High Agent evidence must move only upward into Max Agent.',
-);
+assert.equal(kimiCodeScore?.domainScores.reasoning.score !== null, true);
+assert.equal(kimiCodeScore?.domainScores.documents.score !== null, true);
 for (const [presetId, expectedAuthorProvider] of [
   ['builtin.harness.claude-opus-4-8.max.claude-code', 'Anthropic'],
   ['builtin.agent.arena.claude-sonnet-5.max', 'Anthropic'],
@@ -2757,6 +2483,7 @@ for (const [presetId, expectedAuthorProvider] of [
   ['builtin.data-md.mistral-medium-3-5.max', 'Mistral'],
 ] as const) {
   const box = installedPresetBoxes.find((candidate) => candidate.builtInPresetId === presetId);
+  if (assertRetiredPresetIsNotShipped(presetId)) continue;
   assert.ok(box, `Provider-neutral practical preset ${presetId} must be installed.`);
   const score = scoreByConfigurationId.get(box.id);
   assert.ok(score, `Provider-neutral practical preset ${presetId} must be scored.`);
@@ -2772,6 +2499,7 @@ for (const presetId of [
   'builtin.source-catalog.source-profile-grok-4-3-high.grok-4-3-high',
 ] as const) {
   const box = installedPresetBoxes.find((candidate) => candidate.builtInPresetId === presetId);
+  if (assertRetiredPresetIsNotShipped(presetId)) continue;
   assert.ok(box, `Practical-source repair preset ${presetId} must be installed.`);
   const configuration = reconciledV3Store.buildLLMConfiguration(box);
   assert.ok(configuration.openRouterData, `${presetId} must have complete practical data.`);
@@ -2814,7 +2542,7 @@ for (const release of [
   const stack = reconciledV3Store.getLinkedCardStack(box.id);
   assert.equal(stack[0].card.id, `card-aa-coding-agent-${release.cardPrefix}-max`);
   assert.ok(stack.every(({ card }) => card.metadataJson?.scope?.productLineId === release.line));
-  assert.equal(scoreByConfigurationId.get(box.id)?.eligibleForGlobalLeaderboard, true);
+  assert.equal(scoreByConfigurationId.get(box.id)?.eligibleForGlobalLeaderboard, false, 'Fresh CLI results must not override missing dialogue/reasoning coverage.');
   assert.equal(BUILT_IN_CONFIGURATION_PRESETS.filter((preset) => preset.productLineId === release.line).length, 1);
 }
 assert.ok(!BUILT_IN_CONFIGURATION_PRESETS.some((preset) => (
@@ -2850,6 +2578,20 @@ const obsoleteBuiltInBox: ConfigurationBox = {
   updatedAt: '2026-07-28',
 };
 reconciledV3Store.boxes.push(obsoleteBuiltInBox);
+// Simulate every route stored by the previous reader release, including its
+// subscription and provider variants. The inventory migration must remove
+// these real retired identities while preserving the user-authored draft.
+for (const [index, presetId] of retiredReaderConfigurationIds.entries()) {
+  reconciledV3Store.boxes.push({
+    id: `box-retired-reader-${index}`,
+    internalName: `retired_reader_${index}`,
+    displayName: presetId,
+    builtInPresetId: presetId,
+    enabled: true,
+    createdAt: '2026-09-25',
+    updatedAt: '2026-09-25',
+  });
+}
 const retiredEmptyLegacyBox: ConfigurationBox = {
   id: 'box-retired-empty-legacy',
   internalName: 'qwen_37_flash_legacy_empty',
@@ -2889,12 +2631,15 @@ reconciledV3Store.links.push({
 const compactSyncReport = reconciledV3Store.synchronizeBuiltInConfigurationPresets();
 assert.equal(
   compactSyncReport.removedBuiltInBoxCount,
-  BUILT_IN_CONFIGURATION_PRESETS.length + 1,
+  BUILT_IN_CONFIGURATION_PRESETS.length + 1 + retiredReaderConfigurationIds.length,
 );
 assert.equal(compactSyncReport.removedRetiredLegacyBoxCount, 1);
 assert.equal(compactSyncReport.installedBoxCount, BUILT_IN_CONFIGURATION_PRESETS.length);
 assert.ok(reconciledV3Store.boxes.some((box) => box.id === preservedUserBox.id));
 assert.ok(!reconciledV3Store.boxes.some((box) => box.id === obsoleteBuiltInBox.id));
+assert.ok(!reconciledV3Store.boxes.some((box) => (
+  box.builtInPresetId && retiredReaderPresetIds.has(box.builtInPresetId)
+)), 'No previous retired reader route may survive or be reinstalled after migration.');
 assert.ok(!reconciledV3Store.boxes.some((box) => box.id === retiredEmptyLegacyBox.id));
 assert.ok(reconciledV3Store.boxes.some((box) => box.id === repairedLegacyBox.id));
 assert.ok(reconciledV3Store.links.some(

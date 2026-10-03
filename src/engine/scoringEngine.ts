@@ -16,393 +16,113 @@ import {
   isCapabilityMetricApplicableToConfiguration,
 } from '../data/executionMetricPolicy';
 
-// Six capability domains. Scoring v1.2 keeps each observed domain equally
-// weighted. A wholly unobserved domain is unavailable and is excluded from the
-// final geometric mean rather than being replaced by a synthetic score.
+// Version 3 uses six equal domains. Coverage gates apply before scoring.
 export const DOMAIN_DEFINITIONS: Record<DomainId, DomainDefinition> = {
-  chatting: {
-    id: 'chatting',
-    name: 'Chatting 闲聊与指令对话',
-    nameEn: 'Chatting & Dialogue',
-    weight: 1 / 6,
-    color: '#3B82F6', // Blue
-    description: '衡量自然语言交互、多轮对话保持、指令遵循与创意表达能力。',
-  },
-  math_science: {
-    id: 'math_science',
-    name: 'Math & Science 数学与科学',
-    nameEn: 'Math & Science Reasoning',
-    weight: 1 / 6,
-    color: '#8B5CF6', // Purple
-    description: '衡量高难度学术推理、研究生级科学问答、数学推导与批判性思维。',
-  },
-  coding: {
-    id: 'coding',
-    name: 'Coding 编程能力',
-    nameEn: 'Coding',
-    weight: 1 / 6,
-    color: '#047857', // Emerald
-    description: '衡量代码生成、算法实现、科学计算与文本式编程解题能力。',
-  },
-  engineering: {
-    id: 'engineering',
-    name: 'Engineering 工程与专业工作',
-    nameEn: 'Engineering',
-    weight: 1 / 6,
-    color: '#B45309', // Amber
-    description: '衡量端到端软件工程、终端任务、专业工作交付与代码库执行能力。',
-  },
-  agentic_work: {
-    id: 'agentic_work',
-    name: 'Agentic Work 智能体工作',
-    nameEn: 'Agentic Work',
-    weight: 1 / 6,
-    color: '#1D4ED8', // Blue
-    description: '衡量生产 Agent 的多步任务成功、工具控制、错误恢复与用户干预修正能力。',
-  },
-  search_knowledge: {
-    id: 'search_knowledge',
-    name: 'Search & Knowledge 搜索与知识',
-    nameEn: 'Search & Knowledge',
-    weight: 1 / 6,
-    color: '#06B6D4', // Cyan
-    description: '衡量开放域事实知识准确性、外部联网搜索整合与长文本阅读检索。',
-  },
+  chatting: { id: "chatting", name: "Chatting", nameEn: "Chatting", weight: 1 / 6, color: "#3B82F6", description: "对话、指令遵循、多轮交流与创意表达。" },
+  reasoning: { id: "reasoning", name: "Reasoning", nameEn: "Reasoning", weight: 1 / 6, color: "#8B5CF6", description: "高难度推理、科学知识、数学与检索整合。" },
+  coding: { id: "coding", name: "Coding", nameEn: "Coding", weight: 1 / 6, color: "#047857", description: "编程解题与代码库修改的可合并质量。" },
+  frontend: { id: "frontend", name: "Frontend", nameEn: "Frontend", weight: 1 / 6, color: "#B45309", description: "Web 应用、界面设计与前端交付体验。" },
+  agentic: { id: "agentic", name: "Agentic", nameEn: "Agentic", weight: 1 / 6, color: "#1D4ED8", description: "终端任务、工具使用、恢复与生产 Agent 行为。" },
+  documents: { id: "documents", name: "Documents", nameEn: "Documents", weight: 1 / 6, color: "#06B6D4", description: "基于专业文档完成有可验证交付要求的工作。" },
 };
 
-// 26 scored atomic metrics according to Data Source Registry v1.2 & Domain Weighting v2.2.
-// The AA Coding Agent Index remains source-visible for audit but is not scored.
-// Superseded HLE, GPQA Diamond, SciCode, Terminal-Bench v2.1, and AA Coding
-// Agent Terminal-Bench v2 observations remain in raw source snapshots for
-// audit, but no longer participate in scoring.
+// AA capability evidence is restricted to HLE, CritPt, TB4 and GDP.pdf.
+// Retired metrics remain in source snapshots and the detail-only registry.
 export const ALL_METRIC_DEFINITIONS: MetricDefinition[] = [
-  // --- 1. Chatting (Arena Text 100%) ---
   {
-    id: 'arena_text_instruction',
-    name: 'Instruction Following',
-    source: 'Arena.ai',
-    domain: 'chatting',
-    metricType: 'continuous_relative',
-    internalWeightInDomain: 0.30,
-    higherIsBetter: true,
-    unit: 'Score',
-    description: 'Arena Text 类别：指令遵循能力 Bradley–Terry 点估计',
-    officialUrl: 'https://arena.ai/leaderboard/text/instruction-following',
+    id: "arena_text_instruction", name: "Instruction Following", source: "Arena.ai", domain: "chatting",
+    metricType: "continuous_relative", internalWeightInDomain: 0.3, higherIsBetter: true,
+    unit: "Score", description: "指令遵循", officialUrl: "https://arena.ai/leaderboard/text/instruction-following",
   },
   {
-    id: 'arena_text_multiturn',
-    name: 'Multi-Turn',
-    source: 'Arena.ai',
-    domain: 'chatting',
-    metricType: 'continuous_relative',
-    internalWeightInDomain: 0.30,
-    higherIsBetter: true,
-    unit: 'Score',
-    description: 'Arena Text 类别：多轮对话上下文保持',
-    officialUrl: 'https://arena.ai/leaderboard/text/multi-turn',
+    id: "arena_text_multiturn", name: "Multi-Turn", source: "Arena.ai", domain: "chatting",
+    metricType: "continuous_relative", internalWeightInDomain: 0.3, higherIsBetter: true,
+    unit: "Score", description: "多轮对话", officialUrl: "https://arena.ai/leaderboard/text/multi-turn",
   },
   {
-    id: 'arena_text_creative',
-    name: 'Creative Writing',
-    source: 'Arena.ai',
-    domain: 'chatting',
-    metricType: 'continuous_relative',
-    internalWeightInDomain: 0.20,
-    higherIsBetter: true,
-    unit: 'Score',
-    description: 'Arena Text 类别：创意写作与文风控制',
-    officialUrl: 'https://arena.ai/leaderboard/text/creative-writing',
+    id: "arena_text_creative", name: "Creative Writing", source: "Arena.ai", domain: "chatting",
+    metricType: "continuous_relative", internalWeightInDomain: 0.2, higherIsBetter: true,
+    unit: "Score", description: "创意写作", officialUrl: "https://arena.ai/leaderboard/text/creative-writing",
   },
   {
-    id: 'arena_text_hard',
-    name: 'Hard Prompts',
-    source: 'Arena.ai',
-    domain: 'chatting',
-    metricType: 'continuous_relative',
-    internalWeightInDomain: 0.20,
-    higherIsBetter: true,
-    unit: 'Score',
-    description: 'Arena Text 类别：高难度复杂 Prompt 综合表现',
-    officialUrl: 'https://arena.ai/leaderboard/text/hard-prompts',
-  },
-
-  // --- 2. Math & Science (fresh reasoning/science evals 60%, AA 20%, Arena 20%) ---
-  {
-    id: 'scale_enigmaeval',
-    name: 'EnigmaEval',
-    source: 'Scale Labs',
-    domain: 'math_science',
-    metricType: 'accuracy',
-    internalWeightInDomain: 0.30,
-    higherIsBetter: true,
-    unit: 'pass@1',
-    description: '复杂、多模态 puzzle 中的数学、逻辑、语言与跨领域推理准确率。',
-    officialUrl: 'https://labs.scale.com/leaderboard/enigma_eval',
+    id: "arena_text_hard", name: "Hard Prompts", source: "Arena.ai", domain: "chatting",
+    metricType: "continuous_relative", internalWeightInDomain: 0.2, higherIsBetter: true,
+    unit: "Score", description: "复杂指令", officialUrl: "https://arena.ai/leaderboard/text/hard-prompts",
   },
   {
-    id: 'tbench_science_v01',
-    name: 'Terminal-Bench-Science 0.1',
-    source: 'Terminal-Bench',
-    domain: 'math_science',
-    metricType: 'accuracy',
-    internalWeightInDomain: 0.30,
-    higherIsBetter: true,
-    unit: 'Resolution Rate',
-    description: '在真实科学研究工作流中交付可复核分析、模拟、证明、代码与数据产物。',
-    officialUrl: 'https://www.terminal-bench-science.ai/',
+    id: "aa_hle", name: "Humanity’s Last Exam", source: "Artificial Analysis", domain: "reasoning",
+    metricType: "accuracy", internalWeightInDomain: 0.3, higherIsBetter: true,
+    unit: "pass@1", description: "AA 独立测量的高难度跨学科推理。", officialUrl: "https://artificialanalysis.ai/evaluations/humanitys-last-exam",
   },
   {
-    id: 'aa_critpt',
-    name: 'CritPt',
-    source: 'Artificial Analysis',
-    domain: 'math_science',
-    metricType: 'accuracy',
-    internalWeightInDomain: 0.20,
-    higherIsBetter: true,
-    unit: 'pass@1',
-    description: '高难度专业物理与理论科学推理评测',
-    officialUrl: 'https://artificialanalysis.ai/evaluations/critpt',
+    id: "aa_critpt", name: "CritPt", source: "Artificial Analysis", domain: "reasoning",
+    metricType: "accuracy", internalWeightInDomain: 0.25, higherIsBetter: true,
+    unit: "pass@1", description: "专业物理与理论科学推理。", officialUrl: "https://artificialanalysis.ai/evaluations/critpt",
   },
   {
-    id: 'arena_text_math',
-    name: 'Arena Math',
-    source: 'Arena.ai',
-    domain: 'math_science',
-    metricType: 'continuous_relative',
-    internalWeightInDomain: 0.20,
-    higherIsBetter: true,
-    unit: 'Score',
-    description: 'Arena Text 类别：真实用户数学任务表现',
-    officialUrl: 'https://arena.ai/leaderboard/text/math',
-  },
-
-  // --- 3. Coding (high-coverage code reasoning and implementation) ---
-  {
-    id: 'swe_rebench_v2',
-    name: 'SWE-rebench v2 · Current Window',
-    source: 'SWE-rebench',
-    domain: 'coding',
-    metricType: 'accuracy',
-    internalWeightInDomain: 0.55,
-    higherIsBetter: true,
-    unit: 'Resolved Rate',
-    description: '在按时间滚动的新 GitHub issue/PR 任务中实现并验证真实代码修复。',
-    officialUrl: 'https://swe-rebench.com/',
+    id: "arena_text_math", name: "Arena Math", source: "Arena.ai", domain: "reasoning",
+    metricType: "continuous_relative", internalWeightInDomain: 0.25, higherIsBetter: true,
+    unit: "Score", description: "真实用户数学任务。", officialUrl: "https://arena.ai/leaderboard/text/math",
   },
   {
-    id: 'arena_text_coding',
-    name: 'Arena Text Coding',
-    source: 'Arena.ai',
-    domain: 'coding',
-    metricType: 'continuous_relative',
-    internalWeightInDomain: 0.45,
-    higherIsBetter: true,
-    unit: 'Score',
-    description: 'Arena Text 类别：文本式编程问答与代码解题',
-    officialUrl: 'https://arena.ai/leaderboard/text/coding',
-  },
-
-  // --- 4. Engineering (professional work + end-to-end engineering) ---
-  // The v2.2 registry preserves every v2.1 weight slot: Terminal-Bench 4.0
-  // inherits 30% from v2.1, while FrontierCode 1.1 Main Pass Rate inherits one
-  // 13.33% coding-agent slot. WebDev remains a benchmark-level 10% signal and
-  // is not treated as a user-selectable production harness.
-  {
-    id: 'aa_gdpval_v2',
-    name: 'GDPval-AA v2',
-    source: 'Artificial Analysis',
-    domain: 'engineering',
-    metricType: 'continuous_relative',
-    internalWeightInDomain: 0.20,
-    higherIsBetter: true,
-    unit: 'Elo',
-    description: 'GDPval-AA v2 复杂经济与专业岗位真实工作评测',
-    officialUrl: 'https://artificialanalysis.ai/evaluations/gdpval-aa',
+    id: "arena_search", name: "Search Arena", source: "Arena.ai", domain: "reasoning",
+    metricType: "continuous_relative", internalWeightInDomain: 0.2, higherIsBetter: true,
+    unit: "Score", description: "检索、知识与 Grounding 的用户评价。", officialUrl: "https://arena.ai/leaderboard/search",
   },
   {
-    id: 'tbench_v4',
-    name: 'Terminal-Bench 4.0',
-    source: 'Terminal-Bench',
-    domain: 'engineering',
-    metricType: 'accuracy',
-    internalWeightInDomain: 0.30,
-    higherIsBetter: true,
-    unit: 'Resolution Rate',
-    description: '在当前 4.0 任务与资源配置下完成终端工程、系统管理与数据处理任务。',
-    officialUrl: 'https://www.tbench.ai/',
+    id: "arena_text_coding", name: "Arena Coding", source: "Arena.ai", domain: "coding",
+    metricType: "continuous_relative", internalWeightInDomain: 0.6, higherIsBetter: true,
+    unit: "Score", description: "文本式编程与代码解题。", officialUrl: "https://arena.ai/leaderboard/text/coding",
   },
   {
-    id: 'aa_coding_agent_deepswe',
-    name: 'AA Coding Agent · DeepSWE',
-    source: 'Artificial Analysis',
-    domain: 'engineering',
-    metricType: 'accuracy',
-    internalWeightInDomain: 2 / 15,
-    higherIsBetter: true,
-    unit: 'pass@1',
-    description: '在来源明确的 coding harness 中完成端到端软件工程任务。',
-    officialUrl: 'https://artificialanalysis.ai/agents/coding-agents',
+    id: "frontiercode_v11_main_pass_rate", name: "FrontierCode 1.1 Main · Pass Rate", source: "FrontierCode", domain: "coding",
+    metricType: "accuracy", internalWeightInDomain: 0.4, higherIsBetter: true,
+    unit: "Pass Rate", description: "官方当前 1.1 Main 记录；保留实际 effort 与 harness，衡量全部 blocker 通过率。", officialUrl: "https://cognition.com/frontiercode",
   },
   {
-    id: 'aa_coding_agent_swe_atlas_qna',
-    name: 'AA Coding Agent · SWE-Atlas-QnA',
-    source: 'Artificial Analysis',
-    domain: 'engineering',
-    metricType: 'accuracy',
-    internalWeightInDomain: 2 / 15,
-    higherIsBetter: true,
-    unit: 'pass@1',
-    description: '在来源明确的 coding harness 中完成大型代码库理解与问答任务。',
-    officialUrl: 'https://artificialanalysis.ai/agents/coding-agents',
+    id: "arena_code_webdev", name: "Arena WebDev", source: "Arena.ai", domain: "frontend",
+    metricType: "continuous_relative", internalWeightInDomain: 0.6, higherIsBetter: true,
+    unit: "Score", description: "端到端 Web 构建与 UI 体验。", officialUrl: "https://arena.ai/leaderboard/code/webdev",
   },
   {
-    id: 'frontiercode_v11_main_pass_rate',
-    name: 'FrontierCode 1.1 Main · Pass Rate',
-    source: 'FrontierCode',
-    domain: 'engineering',
-    metricType: 'accuracy',
-    internalWeightInDomain: 2 / 15,
-    higherIsBetter: true,
-    unit: 'Pass Rate',
-    description: '在 Main 集上产出满足全部 blocker、达到代码库可合并标准的修改。',
-    officialUrl: 'https://cognition.com/frontiercode',
+    id: "designarena_frontend", name: "DesignArena Frontend", source: "DesignArena", domain: "frontend",
+    metricType: "continuous_relative", internalWeightInDomain: 0.4, higherIsBetter: true,
+    unit: "Elo", description: "官方 Overall Frontend Elo；API 未取得时保持缺测。", officialUrl: "https://www.designarena.ai/leaderboard/code",
   },
   {
-    id: 'arena_code_webdev',
-    name: 'Code Arena WebDev Overall',
-    source: 'Arena.ai',
-    domain: 'engineering',
-    metricType: 'continuous_relative',
-    internalWeightInDomain: 0.10,
-    higherIsBetter: true,
-    unit: 'Score',
-    description: 'Code Arena WebDev：端到端 Web 应用构建与 UI 生成体验',
-    officialUrl: 'https://arena.ai/leaderboard/code/webdev',
-  },
-
-  // --- 5. Agentic Work (multi-step tool use + production-agent behavior) ---
-  {
-    id: 'aa_tau3_banking',
-    name: 'τ³-Banking',
-    source: 'Artificial Analysis',
-    domain: 'agentic_work',
-    metricType: 'accuracy',
-    internalWeightInDomain: 0.40,
-    higherIsBetter: true,
-    unit: 'pass@1',
-    description: 'τ³-Banking 银行业务中的多轮任务执行与 API 工具调用能力',
-    officialUrl: 'https://artificialanalysis.ai/evaluations/tau3-banking',
+    id: "aa_terminalbench_v4", name: "AA Terminal-Bench 4.0", source: "Artificial Analysis", domain: "agentic",
+    metricType: "accuracy", internalWeightInDomain: 0.6, higherIsBetter: true,
+    unit: "pass@1", description: "66 项终端任务，mini-swe-agent，每任务三次；模型级评测，不冒充生产 CLI。", officialUrl: "https://artificialanalysis.ai/evaluations/terminalbench-4-0",
   },
   {
-    id: 'arena_agent_success',
-    name: 'Confirmed Success',
-    source: 'Arena.ai',
-    domain: 'agentic_work',
-    metricType: 'continuous_relative',
-    internalWeightInDomain: 0.21,
-    higherIsBetter: true,
-    unit: 'Score Point',
-    description: 'Agent Arena：Confirmed Success 真实 Agent 任务确认成功率改善',
-    officialUrl: 'https://arena.ai/leaderboard/agent',
+    id: "arena_agent_success", name: "Confirmed Success", source: "Arena.ai", domain: "agentic",
+    metricType: "continuous_relative", internalWeightInDomain: 0.14, higherIsBetter: true,
+    unit: "Score Point", description: "生产 Agent 的确认成功效果量。", officialUrl: "https://arena.ai/leaderboard/agent",
   },
   {
-    id: 'arena_agent_steerability',
-    name: 'Steerability',
-    source: 'Arena.ai',
-    domain: 'agentic_work',
-    metricType: 'continuous_relative',
-    internalWeightInDomain: 0.12,
-    higherIsBetter: true,
-    unit: 'Score Point',
-    description: 'Agent Arena：Steerability 用户干预方向修正能力',
-    officialUrl: 'https://arena.ai/leaderboard/agent',
+    id: "arena_agent_steerability", name: "Steerability", source: "Arena.ai", domain: "agentic",
+    metricType: "continuous_relative", internalWeightInDomain: 0.08, higherIsBetter: true,
+    unit: "Score Point", description: "来源正向 steering_burden/steerability 效果量。", officialUrl: "https://arena.ai/leaderboard/agent",
   },
   {
-    id: 'arena_agent_praise',
-    name: 'Praise vs Complaint',
-    source: 'Arena.ai',
-    domain: 'agentic_work',
-    metricType: 'continuous_relative',
-    internalWeightInDomain: 0.06,
-    higherIsBetter: true,
-    unit: 'Score Point',
-    description: 'Agent Arena：Praise vs Complaint 用户好评/投诉净差',
-    officialUrl: 'https://arena.ai/leaderboard/agent',
+    id: "arena_agent_praise", name: "Praise vs Complaint", source: "Arena.ai", domain: "agentic",
+    metricType: "continuous_relative", internalWeightInDomain: 0.04, higherIsBetter: true,
+    unit: "Score Point", description: "用户好评与投诉净差。", officialUrl: "https://arena.ai/leaderboard/agent",
   },
   {
-    id: 'arena_agent_bash_recovery',
-    name: 'Bash Recovery',
-    source: 'Arena.ai',
-    domain: 'agentic_work',
-    metricType: 'continuous_relative',
-    internalWeightInDomain: 0.12,
-    higherIsBetter: true,
-    unit: 'Score Point',
-    description: 'Agent Arena：终端报错后的自我纠错修复能力',
-    officialUrl: 'https://arena.ai/leaderboard/agent',
+    id: "arena_agent_bash_recovery", name: "Bash Recovery", source: "Arena.ai", domain: "agentic",
+    metricType: "continuous_relative", internalWeightInDomain: 0.08, higherIsBetter: true,
+    unit: "Score Point", description: "终端报错后的恢复。", officialUrl: "https://arena.ai/leaderboard/agent",
   },
   {
-    id: 'arena_agent_tool_hallucination',
-    name: 'Tool Hallucination',
-    source: 'Arena.ai',
-    domain: 'agentic_work',
-    metricType: 'continuous_relative',
-    internalWeightInDomain: 0.09,
-    higherIsBetter: true,
-    unit: 'Score Point',
-    description: 'Agent Arena：工具幻觉抑制效果',
-    officialUrl: 'https://arena.ai/leaderboard/agent',
-  },
-
-  // --- 6. Search & Knowledge (high-coverage knowledge core) ---
-  {
-    id: 'aa_omniscience_accuracy',
-    name: 'AA-Omniscience Accuracy',
-    source: 'Artificial Analysis',
-    domain: 'search_knowledge',
-    metricType: 'accuracy',
-    internalWeightInDomain: 0.35,
-    higherIsBetter: true,
-    unit: 'Accuracy',
-    description: 'AA-Omniscience 开放域知识准确率分项',
-    officialUrl: 'https://artificialanalysis.ai/evaluations/omniscience',
+    id: "arena_agent_tool_hallucination", name: "Tool Hallucination", source: "Arena.ai", domain: "agentic",
+    metricType: "continuous_relative", internalWeightInDomain: 0.06, higherIsBetter: true,
+    unit: "Score Point", description: "工具幻觉抑制效果量。", officialUrl: "https://arena.ai/leaderboard/agent",
   },
   {
-    id: 'aa_omniscience_nonhallucination',
-    name: 'AA-Omniscience Non-Hallucination',
-    source: 'Artificial Analysis',
-    domain: 'search_knowledge',
-    // The source field is already the positive non-hallucination ratio.
-    metricType: 'accuracy',
-    internalWeightInDomain: 0.30,
-    higherIsBetter: true,
-    unit: '1 - Hallucination Rate',
-    description: 'AA-Omniscience 开放域事实回答的非幻觉正向比例',
-    officialUrl: 'https://artificialanalysis.ai/evaluations/omniscience',
-  },
-  {
-    id: 'aa_lcr',
-    name: 'AA-LCR',
-    source: 'Artificial Analysis',
-    domain: 'search_knowledge',
-    metricType: 'accuracy',
-    internalWeightInDomain: 0.25,
-    higherIsBetter: true,
-    unit: 'pass@1',
-    description: 'AA Long Context Reasoning 超长文本理解与精确定位推理',
-    officialUrl: 'https://artificialanalysis.ai/evaluations/artificial-analysis-long-context-reasoning',
-  },
-  {
-    id: 'arena_search',
-    name: 'Search Arena',
-    source: 'Arena.ai',
-    domain: 'search_knowledge',
-    metricType: 'continuous_relative',
-    internalWeightInDomain: 0.10,
-    higherIsBetter: true,
-    unit: 'Score',
-    description: 'Search Arena 真实网络搜索与 Grounding 效果量',
-    officialUrl: 'https://arena.ai/leaderboard/search',
+    id: "aa_gdp_pdf_all_pass", name: "GDP.pdf · All-pass", source: "Artificial Analysis", domain: "documents",
+    metricType: "accuracy", internalWeightInDomain: 1.0, higherIsBetter: true,
+    unit: "pass@1", description: "专业 PDF 文档任务的全部交付要求通过率。", officialUrl: "https://artificialanalysis.ai/evaluations/gdp-pdf",
   },
 ];
 
@@ -694,7 +414,7 @@ export function calculateUtilityRatio(r: number): number {
   return r - 1;
 }
 
-/** Main LLMpk Scoring Pipeline Processor — Scoring v1.2. */
+/** Main LLMpk Scoring Pipeline Processor — Scoring v3.0. */
 export function processLLMpkBatchScoring(
   configs: LLMConfiguration[],
   customMetrics: MetricDefinition[] = ALL_METRIC_DEFINITIONS
@@ -703,14 +423,14 @@ export function processLLMpkBatchScoring(
 
   // Step A: transform each observed metric, calculate its base relative score,
   // estimate metric-level reliability, and shrink every observed score toward
-  // neutral 50. Missing observations enter aggregation at exactly 50.
+  // neutral 50. Missing observations are never assigned an atomic score.
   const atomicScoreMap: Record<
     string,
     Record<string, {
       raw: number | null;
       y: number | null;
       baseS: number | null;
-      s: number;
+      s: number | null;
       uncertaintyRadius: number | null;
     }>
   > = {};
@@ -784,16 +504,15 @@ export function processLLMpkBatchScoring(
           raw: null,
           y: null,
           baseS: null,
-          s: 50,
+          s: null,
           uncertaintyRadius: null,
         };
       }
     });
   });
 
-  // Step B: aggregate each domain with the full configured weight vector.
-  // Missing metrics contribute ln(50 / 50) = 0; their weights are retained
-  // and must never be redistributed to observed metrics.
+  // Step B: aggregate observed metrics only. Keep the full configured weight
+  // vector in the coverage denominator and gate the domain before publishing.
   const domainIds = DOMAIN_IDS;
 
   const configDomainQMap: Record<string, Record<DomainId, number | null>> = {};
@@ -804,35 +523,35 @@ export function processLLMpkBatchScoring(
   configs.forEach((c) => {
     configDomainQMap[c.id] = {
       chatting: null,
-      math_science: null,
+      reasoning: null,
       coding: null,
-      engineering: null,
-      agentic_work: null,
-      search_knowledge: null,
+      frontend: null,
+      agentic: null,
+      documents: null,
     };
     configDomainCoverageMap[c.id] = {
       chatting: 0,
-      math_science: 0,
+      reasoning: 0,
       coding: 0,
-      engineering: 0,
-      agentic_work: 0,
-      search_knowledge: 0,
+      frontend: 0,
+      agentic: 0,
+      documents: 0,
     };
     configDomainCoverageStatusMap[c.id] = {
       chatting: 'no_observed_data',
-      math_science: 'no_observed_data',
+      reasoning: 'no_observed_data',
       coding: 'no_observed_data',
-      engineering: 'no_observed_data',
-      agentic_work: 'no_observed_data',
-      search_knowledge: 'no_observed_data',
+      frontend: 'no_observed_data',
+      agentic: 'no_observed_data',
+      documents: 'no_observed_data',
     };
     configDomainDetailsMap[c.id] = {
       chatting: [],
-      math_science: [],
+      reasoning: [],
       coding: [],
-      engineering: [],
-      agentic_work: [],
-      search_knowledge: [],
+      frontend: [],
+      agentic: [],
+      documents: [],
     };
   });
 
@@ -855,9 +574,12 @@ export function processLLMpkBatchScoring(
         const reliability = metricReliabilityMap[mDef.id];
         const isMissing = scoreData.raw === null;
         const configuredWeightInDomain = mDef.internalWeightInDomain / (totalWeight || 1);
-        weightedLogScoreSum += configuredWeightInDomain * Math.log(
-          Math.max(Number.EPSILON, scoreData.s) / 50
-        );
+        const weightInDomain = isMissing ? 0 : mDef.internalWeightInDomain / availableWeight;
+        if (scoreData.s !== null) {
+          weightedLogScoreSum += weightInDomain * Math.log(
+            Math.max(Number.EPSILON, scoreData.s) / 50
+          );
+        }
 
         return {
           metricId: mDef.id,
@@ -869,7 +591,7 @@ export function processLLMpkBatchScoring(
           baseNormalizedScore: scoreData.baseS,
           normalizedScore: scoreData.s,
           configuredWeightInDomain,
-          weightInDomain: configuredWeightInDomain,
+          weightInDomain,
           observedConfigCount: reliability.observedConfigCount,
           eligibleConfigCount: reliability.eligibleConfigCount,
           referenceConfigCount: reliability.referenceConfigCount,
@@ -882,27 +604,26 @@ export function processLLMpkBatchScoring(
         };
       });
 
-      configDomainQMap[c.id][dId] = totalWeight > 0
+      configDomainQMap[c.id][dId] = coverage + Number.EPSILON >= SCORING_CONFIG.coverage.officialMinimum
         ? weightedLogScoreSum
-        : 0;
+        : null;
       configDomainCoverageMap[c.id][dId] = coverage;
       configDomainCoverageStatusMap[c.id][dId] = getCoverageStatus(coverage);
       configDomainDetailsMap[c.id][dId] = details;
     });
   });
 
-  // Step C: calibrate every domain using configs with at least one real
-  // observation. A zero-observation domain stays unavailable and does not
-  // influence either the calibration parameters or the final capability mean.
+  // Step C: only domains passing the weighted coverage gate calibrate or
+  // receive scores. Low-coverage observations remain visible in the details.
   const finalDomainScoresMap: Record<string, Record<DomainId, number | null>> = {};
   configs.forEach((c) => {
     finalDomainScoresMap[c.id] = {
       chatting: null,
-      math_science: null,
+      reasoning: null,
       coding: null,
-      engineering: null,
-      agentic_work: null,
-      search_knowledge: null,
+      frontend: null,
+      agentic: null,
+      documents: null,
     };
   });
 
@@ -926,9 +647,8 @@ export function processLLMpkBatchScoring(
     });
   });
 
-  // Step D: directly take the equal-weight geometric mean of the observed
-  // domain scores. A wholly unobserved domain is excluded instead of receiving
-  // a synthetic 50. There is deliberately no second cohort normalization.
+  // Step D: all six domains and overall coverage must qualify. Directly
+  // combine their equal-weight geometric mean without another normalization.
   const capabilityScoreMap: Record<string, number | null> = {};
   const availableDomainCountMap: Record<string, number> = {};
   configs.forEach((c) => {
@@ -943,7 +663,14 @@ export function processLLMpkBatchScoring(
       (sum, { dId }) => sum + DOMAIN_DEFINITIONS[dId].weight,
       0,
     );
-    capabilityScoreMap[c.id] = availableDomains.length === 0 || availableWeight <= 0
+    const totalCoverage = domainIds.reduce((sum, dId) => (
+      sum + DOMAIN_DEFINITIONS[dId].weight * configDomainCoverageMap[c.id][dId]
+    ), 0);
+    capabilityScoreMap[c.id] = (
+      availableDomains.length < SCORING_CONFIG.capabilityAggregate.minimumAvailableDomains
+      || totalCoverage + Number.EPSILON < SCORING_CONFIG.coverage.overallMinimum
+      || availableWeight <= 0
+    )
       ? null
       : availableDomains.some(({ score }) => score <= 0)
       ? 0
@@ -1035,6 +762,7 @@ export function processLLMpkBatchScoring(
         insufficientCoverage: (
           coverageStatus === 'insufficient'
           || coverageStatus === 'no_observed_data'
+          || coverageStatus === 'provisional'
         ),
         metricDetails: configDomainDetailsMap[c.id][dId],
       };
@@ -1053,11 +781,11 @@ export function processLLMpkBatchScoring(
         : overallCoverage <= Number.EPSILON
           ? 'no_observed_data'
           : 'provisional';
-    // Coverage quality remains visible, but Scoring v1.2 does not remove a
-    // configuration from the ranking merely because observations are sparse.
+    // Sparse records remain inspectable, but cannot receive a total or rank.
     const eligibleForGlobalLeaderboard = (
       rawCapabilityScore !== null
       && availableDomainCount >= SCORING_CONFIG.capabilityAggregate.minimumAvailableDomains
+      && overallCoverage + Number.EPSILON >= SCORING_CONFIG.coverage.overallMinimum
     );
 
     // Speed adjustment

@@ -1,3 +1,5 @@
+import { VERIFIED_DESIGN_ARENA_SOURCE_MODEL_CARDS, VERIFIED_DESIGN_ARENA_SOURCE_OBSERVATIONS } from './designArenaSeedCards';
+import { DETAIL_ONLY_METRIC_DEFINITIONS } from './detailMetricDefinitions';
 import type {
   ConfigurationAccess,
   ConfigurationIdentity,
@@ -7,6 +9,7 @@ import type {
   SourceType,
 } from '../types/admin_mapping';
 import type { SubscriptionCostData } from '../types/llm_pk';
+import { RETIRED_READER_MODEL_GROUP_KEYS, READER_CURRENT_MODEL_GROUP_KEYS } from './readerModelRetirementPolicy';
 import { ALL_METRIC_DEFINITIONS } from '../engine/scoringEngine';
 import { SCORING_CONFIG } from '../engine/scoringConfig';
 import {
@@ -1900,6 +1903,10 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
     chatFallbackCardIds: [
       profile === 'max' ? 'card-aa-claude-sonnet-5-5' : `card-aa-claude-sonnet-5-5-${profile}`,
     ],
+    sameHarnessFallbackLinks: profile === 'max' ? [
+      lowerProfileHarnessFallback('card-arena-claude-sonnet-5-5-xhigh', 'XHigh', 4, 'Max', 5, 'Claude Code'),
+      lowerProfileHarnessFallback('card-arena-claude-sonnet-5-5-high', 'High', 3, 'Max', 5, 'Claude Code'),
+    ] : undefined,
     lockExplicitSourceCards: true,
     lockProviderNeutralPracticalCards: true,
     note: '普通模型能力回退保留 AA 的 Default Fallback 披露。',
@@ -1912,8 +1919,9 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
     harness: 'Codex CLI',
     providerName: 'OpenAI',
     upstreamApi: 'OpenAI API',
-    exactHarnessCardIds: ['card-aa-coding-agent-codex-gpt-6-astra-max'],
+    exactHarnessCardIds: ['card-aa-coding-agent-codex-gpt-6-astra-max', 'card-tbench-gpt-6-astra-max-codex'],
     chatFallbackCardIds: ['card-aa-gpt-6-astra', 'card-arena-gpt-6-astra-max'],
+    sameHarnessFallbackLinks: [lowerAgentHarnessFallback(productionAgentModeCardId('card-arena-gpt-6-astra-max'), 'Max', 'Codex CLI')],
     lockExplicitSourceCards: true,
     lockProviderNeutralPracticalCards: true,
   }),
@@ -1940,6 +1948,7 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
     upstreamApi: 'OpenAI API',
     exactHarnessCardIds: ['card-aa-coding-agent-codex-gpt-6-luna-max'],
     chatFallbackCardIds: ['card-aa-gpt-6-luna', 'card-arena-gpt-6-luna-max'],
+    sameHarnessFallbackLinks: [lowerAgentHarnessFallback(productionAgentModeCardId('card-arena-gpt-6-luna-max'), 'Max', 'Codex CLI')],
     lockExplicitSourceCards: true,
     lockProviderNeutralPracticalCards: true,
   }),
@@ -1952,7 +1961,11 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
     providerName: 'Anthropic',
     upstreamApi: 'Anthropic API',
     exactHarnessCardIds: ['card-aa-coding-agent-claude-code-claude-opus-5-5-max'],
-    chatFallbackCardIds: ['card-aa-claude-opus-5-5'],
+    chatFallbackCardIds: ['card-aa-claude-opus-5-5', 'card-arena-claude-opus-5-5-max'],
+    sameHarnessFallbackLinks: [
+      lowerProfileHarnessFallback('card-arena-claude-opus-5-5-high', 'High', 3, 'Max', 5, 'Claude Code'),
+      lowerProfileAgentHarnessFallback(productionAgentModeCardId('card-arena-claude-opus-5-5-high'), 'High', 3, 'Max', 5, 'Claude Code'),
+    ],
     lockExplicitSourceCards: true,
     lockProviderNeutralPracticalCards: true,
   }),
@@ -1964,8 +1977,9 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
     harness: 'Claude Code',
     providerName: 'Anthropic',
     upstreamApi: 'Anthropic API',
-    exactHarnessCardIds: ['card-aa-coding-agent-claude-code-claude-fable-5-1-max'],
+    exactHarnessCardIds: ['card-aa-coding-agent-claude-code-claude-fable-5-1-max', 'card-tbench-claude-fable-5-1-max-claude-code'],
     chatFallbackCardIds: ['card-aa-claude-fable-5-1', 'card-arena-claude-fable-5-1-max'],
+    sameHarnessFallbackLinks: [lowerAgentHarnessFallback(productionAgentModeCardId('card-arena-claude-fable-5-1-max'), 'Max', 'Claude Code')],
     lockExplicitSourceCards: true,
     lockProviderNeutralPracticalCards: true,
     note: 'AA 的 Coding Agent 行披露 Default Fallback；保留该来源限制。',
@@ -1980,6 +1994,7 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
     upstreamApi: 'Grok Build managed route',
     exactHarnessCardIds: ['card-aa-coding-agent-grok-build-grok-4-7-xhigh'],
     chatFallbackCardIds: ['card-aa-grok-4-7', 'card-arena-grok-4-7-xhigh'],
+    sameHarnessFallbackLinks: [lowerAgentHarnessFallback(productionAgentModeCardId('card-arena-grok-4-7-xhigh'), 'XHigh', 'Grok Build')],
     lockExplicitSourceCards: true,
     lockProviderNeutralPracticalCards: true,
   }),
@@ -3035,6 +3050,7 @@ const SOURCE_LABELS: Record<SourceType, string> = {
   terminal_bench: 'Terminal-Bench',
   swe_rebench: 'SWE-rebench',
   frontier_code: 'FrontierCode',
+  design_arena: 'DesignArena',
 };
 
 const REPLACEMENT_BENCHMARK_SOURCES: ReadonlySet<SourceType> = new Set([
@@ -3073,6 +3089,7 @@ function parseVerifiedSourceCards(): SourceModelCard[] {
     ...VERIFIED_REVIEWED_FAMILY_SOURCE_MODEL_CARDS,
     ...VERIFIED_RECOVERED_SOURCE_MODEL_CARDS,
     ...VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_MODEL_CARDS,
+    ...VERIFIED_DESIGN_ARENA_SOURCE_MODEL_CARDS,
   ];
 }
 
@@ -3099,6 +3116,7 @@ function parseVerifiedSourceObservations(): SourceObservation[] {
     ...VERIFIED_REVIEWED_FAMILY_SOURCE_OBSERVATIONS,
     ...VERIFIED_RECOVERED_SOURCE_OBSERVATIONS,
     ...VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_OBSERVATIONS,
+    ...VERIFIED_DESIGN_ARENA_SOURCE_OBSERVATIONS,
   ];
 }
 
@@ -3166,7 +3184,6 @@ const PRACTICAL_METRIC_IDS = new Set([
  * silently promoting every otherwise sparse source-catalog record.
  */
 export const READER_APPROVED_SOURCE_CATALOG_PRODUCT_LINE_IDS = [
-  'source-profile-grok-4-3-high',
   'source-profile-grok-build-0-1-0616',
 ] as const;
 
@@ -4130,6 +4147,7 @@ interface PresetCoverageProfile {
 }
 
 const SCORING_METRIC_IDS = new Set(ALL_METRIC_DEFINITIONS.map((definition) => definition.id));
+const DISPLAY_METRIC_IDS = new Set(DETAIL_ONLY_METRIC_DEFINITIONS.map((definition) => definition.id));
 
 function presetCardIds(preset: BuiltInConfigurationPreset): string[] {
   return uniqueCardIds(
@@ -4203,6 +4221,7 @@ export function buildPresetCoverageProfiles(
         effectiveMetricValues.has(observation.metricId)
         || (
           !SCORING_METRIC_IDS.has(observation.metricId)
+          && !DISPLAY_METRIC_IDS.has(observation.metricId)
           && !PRACTICAL_METRIC_IDS.has(observation.metricId)
         )
       ) return;
@@ -4320,22 +4339,10 @@ function presetHarnessGroupKey(preset: BuiltInConfigurationPreset): string {
 export const BUILT_IN_CONFIGURATION_RELEASE_CUTOFF = '2026-04-24';
 
 /**
- * Explicit user-requested historical comparators. Their real release dates
- * remain in curation metadata; this list is the only exception to the default
- * DeepSeek V4 cutoff and therefore stays small, named, and auditable.
+ * The October 2 inventory revision cancels historical-comparator exceptions.
+ * Keep the public export for audit/import compatibility, with no pinned rows.
  */
-export const BUILT_IN_CONFIGURATION_PINNED_MODEL_GROUP_KEYS = [
-  'gemini_31_pro',
-  'gpt_55',
-  'gpt_oss_120b',
-  'gpt_oss_20b',
-  'source-model:gpt-5.4',
-  'claude_opus_47',
-  'claude_opus_46',
-  'source-model:claude sonnet 4.6',
-  'kimi_k26',
-  'claude_haiku_45',
-] as const;
+export const BUILT_IN_CONFIGURATION_PINNED_MODEL_GROUP_KEYS: readonly string[] = [];
 
 const PINNED_MODEL_GROUP_KEYS = new Set<string>(
   BUILT_IN_CONFIGURATION_PINNED_MODEL_GROUP_KEYS,
@@ -4603,8 +4610,8 @@ const READER_FACING_PLAIN_API_PRODUCT_LINE_EXCLUSIONS = new Set<string>([
 ]);
 
 /**
- * Reader-approved new releases that may enter with the scoring engine's
- * one-domain minimum while independent general benchmarks are still pending.
+ * Reviewed releases remain inspectable with sparse evidence. Catalog
+ * admission is distinct from v3's six-domain scoring requirement.
  * Missing domains remain missing and are shown as incomplete coverage.
  */
 const READER_APPROVED_SPARSE_PRODUCT_LINES = new Set<string>([
@@ -4628,19 +4635,11 @@ const READER_APPROVED_SPARSE_PRODUCT_LINES = new Set<string>([
 ]);
 
 /**
- * The source sites expose hundreds of low-value execution variants. The
- * reader-facing catalog keeps only score-ready configurations, with one
- * strongest usable profile per independently measured Harness plus explicitly
- * requested subscription access routes. Models
- * released before the DeepSeek V4 cutoff are excluded. Key vendors may keep
- * several current model lines; every other vendor keeps only its newest
- * score-ready model. General source-catalog entries need five available
- * domains plus either direct Chatting evidence, compatible production-harness
- * evidence, or an explicit reader approval. This prevents a domain-only
- * reclassification such as τ³-Banking moving to Agentic Work from silently
- * expanding the catalog. The user's Data.md priority models may remain at the
- * scoring engine's four-domain floor. Source cards remain in the admin pool
- * even when their sparse configuration is not promoted to the ranking.
+ * The reader inventory is explicitly reviewed after successor pruning. Keep
+ * its strongest source-backed profiles and distinct access/execution routes.
+ * Sparse configurations remain inspectable; only the engine's coverage gates
+ * determine whether a total or rank exists. Scoring changes never promote an
+ * unreviewed product line from the raw source pool.
  */
 function curateReaderFacingPresets(
   candidates: readonly BuiltInConfigurationPreset[],
@@ -4652,6 +4651,8 @@ function curateReaderFacingPresets(
   const cardsById = new Map(parseVerifiedSourceCards().map((card) => [card.id, card]));
   const groups = new Map<string, BuiltInConfigurationPreset[]>();
   candidates.forEach((preset) => {
+    if (RETIRED_READER_MODEL_GROUP_KEYS.has(presetModelGroupKey(preset))) return;
+    if (!READER_CURRENT_MODEL_GROUP_KEYS.has(presetModelGroupKey(preset))) return;
     if (READER_FACING_PRESET_EXCLUSIONS.has(preset.id)) return;
     if (READER_FACING_PRODUCT_LINE_EXCLUSIONS.has(preset.productLineId)) return;
     if (
@@ -4661,7 +4662,7 @@ function curateReaderFacingPresets(
     ) return;
     const coverage = coverageByPreset.get(preset.id);
     const minimumDomains = READER_APPROVED_SPARSE_PRODUCT_LINES.has(preset.productLineId)
-      ? SCORING_CONFIG.capabilityAggregate.minimumAvailableDomains
+      ? SCORING_CONFIG.readerCuration.minimumAvailableDomains
       : preset.origin === 'source-catalog'
         ? 5
         : SCORING_CONFIG.readerCuration.minimumAvailableDomains;
@@ -4743,10 +4744,10 @@ function curateReaderFacingPresets(
         const coverage = score(preset);
         if (coverage.compatibleHarnessMetricCount <= 0) return false;
         return preset.identity.harness.name === 'AA Agent Harness'
-          ? coverage.availableDomainIds.includes('agentic_work')
+          ? coverage.availableDomainIds.includes('agentic')
           : (
-            coverage.availableDomainIds.includes('engineering')
-            || coverage.availableDomainIds.includes('agentic_work')
+            coverage.availableDomainIds.includes('coding')
+            || coverage.availableDomainIds.includes('agentic')
           );
       })
       .sort((left, right) => (
@@ -4833,11 +4834,27 @@ function curateReaderFacingPresets(
   return { presets, rows };
 }
 
+function attachDesignArenaEvidence(preset: BuiltInConfigurationPreset): BuiltInConfigurationPreset {
+  const linkedIds = new Set(presetCardIds(preset));
+  const matches = VERIFIED_DESIGN_ARENA_SOURCE_MODEL_CARDS.filter(card => (
+    card.metadataJson?.scope?.productLineId === preset.productLineId
+    && linkedIds.has(card.metadataJson?.sourceIdentity?.baseOpenRouterCardId)
+  ));
+  if (matches.length === 0) return preset;
+  const targetLevel = presetProfileStrength(preset.identity.model.profile);
+  return { ...preset, sourceCardLinks: [
+    ...(preset.sourceCardLinks || []),
+    ...matches.map(card => targetLevel > 0
+      ? lowerProfileFallback(card.id, 'Default (source effort undisclosed)', 0, preset.identity.model.profile, targetLevel)
+      : { cardId: card.id, provenance: { kind: 'exact' as const } }),
+  ] };
+}
+
 export const ALL_CONFIGURATION_PRESET_CANDIDATES: readonly BuiltInConfigurationPreset[] = [
   ...PROVIDER_NEUTRAL_PRACTICAL_AUGMENTATION.presets,
   ...API_PRICING_VARIANT_PRESETS,
   ...SUBSCRIPTION_CONFIGURATION_PRESETS,
-];
+].map(attachDesignArenaEvidence);
 
 const READER_FACING_CONFIGURATION_CURATION =
   curateReaderFacingPresets(ALL_CONFIGURATION_PRESET_CANDIDATES);
@@ -4886,4 +4903,4 @@ export const BUILT_IN_CONFIGURATION_PRESET_COUNT = BUILT_IN_CONFIGURATION_PRESET
  * additions visible during Vite hot updates as well as after a full reload.
  */
 export const BUILT_IN_CONFIGURATION_PRESET_INVENTORY_VERSION =
-  '2026-10-02-model-refresh-v49';
+  '2026-10-02-successor-inventory-v50';

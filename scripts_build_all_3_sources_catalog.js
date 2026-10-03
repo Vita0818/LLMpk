@@ -46,7 +46,7 @@ const AA_METRICS = [
   { id: 'aa_omniscience_nonhallucination', field: (model) => model.omniscienceNonHallucination, sourceLeaderboard: 'https://artificialanalysis.ai/evaluations/omniscience', sourceField: 'omniscienceNonHallucination' },
 ];
 
-const AA_DETAIL_ONLY_METRICS = [
+const AA_EXTENDED_METRICS = [
   {
     id: 'aa_terminalbench_v4',
     pageId: 'model-leaderboard',
@@ -203,7 +203,7 @@ function loadArtificialAnalysisSourceSnapshot() {
     ...snapshot.evaluationRecords,
   };
   for (const metric of [
-    ...AA_DETAIL_ONLY_METRICS,
+    ...AA_EXTENDED_METRICS,
     ...AA_PRACTICAL_FALLBACK_METRICS,
   ]) {
     const records = pageRecords[metric.pageId];
@@ -1149,9 +1149,10 @@ async function buildVerifiedCatalog() {
           sourceRecordId: model.id,
           sourceField: metric.sourceField,
           scope,
+          metadataJson: { scoringRole: ['aa_hle', 'aa_critpt'].includes(metric.id) ? 'capability' : 'detail-only' },
         });
       }
-      for (const metric of AA_DETAIL_ONLY_METRICS) {
+      for (const metric of AA_EXTENDED_METRICS) {
         const sourceRecord = artificialAnalysisSourceSnapshot.recordsByPageAndModelId
           .get(metric.pageId)
           ?.get(model.id);
@@ -1169,7 +1170,7 @@ async function buildVerifiedCatalog() {
           metadataJson: {
             sourceSnapshot: path.relative(ROOT, ARTIFICIAL_ANALYSIS_SOURCE_SNAPSHOT_PATH),
             sourcePageId: metric.pageId,
-            scoringRole: 'detail-only',
+            scoringRole: ['aa_terminalbench_v4', 'aa_gdp_pdf_all_pass'].includes(metric.id) ? 'capability' : 'detail-only',
           },
         });
       }

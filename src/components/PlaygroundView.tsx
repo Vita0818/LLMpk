@@ -11,11 +11,11 @@ import {
 export const PlaygroundView: React.FC = () => {
   const [customWeights, setCustomWeights] = useState<Record<DomainId, number>>({
     chatting: 1 / 6,
-    math_science: 1 / 6,
+    reasoning: 1 / 6,
     coding: 1 / 6,
-    engineering: 1 / 6,
-    agentic_work: 1 / 6,
-    search_knowledge: 1 / 6,
+    frontend: 1 / 6,
+    agentic: 1 / 6,
+    documents: 1 / 6,
   });
 
   // This view deliberately uses the same verified source-card records as the
@@ -27,11 +27,11 @@ export const PlaygroundView: React.FC = () => {
   const resetWeights = () => {
     setCustomWeights({
       chatting: 1 / 6,
-      math_science: 1 / 6,
+      reasoning: 1 / 6,
       coding: 1 / 6,
-      engineering: 1 / 6,
-      agentic_work: 1 / 6,
-      search_knowledge: 1 / 6,
+      frontend: 1 / 6,
+      agentic: 1 / 6,
+      documents: 1 / 6,
     });
   };
 

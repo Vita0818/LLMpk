@@ -47,21 +47,15 @@ const requireScore = (name: string) => {
   return score;
 };
 
-const solPlusSubscription = requireScore(
+for (const name of [
   'GPT-5.6 Sol Max | Codex CLI | ChatGPT Plus',
-);
-const solProSubscription = requireScore(
   'GPT-5.6 Sol Max | Codex CLI | ChatGPT Pro 20×',
-);
-assert.equal(solPlusSubscription.config.subscriptionData?.apiEquivalentCostUSD, 100);
-assert.equal(solProSubscription.config.subscriptionData?.apiEquivalentCostUSD, 2000);
-assert.ok(
-  Math.abs(
-    solPlusSubscription.practicalBreakdown.effectiveScenarioCostUSD!
-      - solProSubscription.practicalBreakdown.effectiveScenarioCostUSD! * 2,
-  ) < 1e-12,
-  'At the published monthly prices, Plus must have twice the effective scenario cost of Pro 20×.',
-);
+  'GPT-5.6 Luna Max | Codex CLI | OpenAI API',
+  'GPT-5.6 Luna Max | Codex CLI | ChatGPT Plus',
+]) assert.equal(scoresByName.has(name),false,'Retired access variants must not be reinstalled by pricing policy.');
+assert.equal(getOpenRouterPromotionalPricing('gpt_6_luna'),undefined,
+  'A successor must not inherit its predecessor’s promotional pricing.');
+assert.ok(requireScore('GPT-6 Luna Max | Codex CLI | OpenAI API').config.openRouterData);
 
 const terraApi = requireScore('GPT-5.6 Terra Max | Codex CLI | OpenAI API');
 const terraSubscription = requireScore(
@@ -81,24 +75,6 @@ assert.equal(
   1 / 2,
 );
 
-const lunaApi = requireScore('GPT-5.6 Luna Max | Codex CLI | OpenAI API');
-const lunaSubscription = requireScore(
-  'GPT-5.6 Luna Max | Codex CLI | ChatGPT Plus',
-);
-assert.equal(lunaApi.config.openRouterData?.inputPricePerMToken, 0.1);
-assert.equal(lunaApi.config.openRouterData?.outputPricePerMToken, 0.6);
-assert.equal(lunaApi.practicalBreakdown.effectiveScenarioCostUSD, 0.25);
-assert.equal(
-  lunaSubscription.config.subscriptionData?.apiEquivalentCostUSD,
-  100,
-);
-assert.equal(lunaSubscription.config.openRouterData?.inputPricePerMToken, 0.1);
-assert.equal(lunaSubscription.config.openRouterData?.outputPricePerMToken, 0.6);
-assert.equal(
-  lunaSubscription.practicalBreakdown.effectiveScenarioCostUSD,
-  1 / 20,
-);
-
 console.log(
-  'OpenRouter Terra/Luna promotional pricing and ChatGPT subscription value: PASS',
+  'Current Terra pricing, retired-route removal, and successor promotion boundary: PASS',
 );

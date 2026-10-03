@@ -62,11 +62,11 @@ export const ConfigurationDetailModal: React.FC<ConfigurationDetailModalProps> =
   // Radar Series setup
   const radarScoresMap: Record<DomainId, number | null> = {
     chatting: domainScores.chatting.score,
-    math_science: domainScores.math_science.score,
+    reasoning: domainScores.reasoning.score,
     coding: domainScores.coding.score,
-    engineering: domainScores.engineering.score,
-    agentic_work: domainScores.agentic_work.score,
-    search_knowledge: domainScores.search_knowledge.score,
+    frontend: domainScores.frontend.score,
+    agentic: domainScores.agentic.score,
+    documents: domainScores.documents.score,
   };
 
   const brandTheme = getProviderBrandTheme(config.provider);
@@ -82,11 +82,11 @@ export const ConfigurationDetailModal: React.FC<ConfigurationDetailModalProps> =
 
   const domainList: DomainId[] = [
     'chatting',
-    'math_science',
+    'reasoning',
     'coding',
-    'engineering',
-    'agentic_work',
-    'search_knowledge',
+    'frontend',
+    'agentic',
+    'documents',
   ];
 
   return (

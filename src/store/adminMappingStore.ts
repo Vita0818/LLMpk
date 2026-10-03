@@ -32,6 +32,7 @@ import {
   processLLMpkBatchScoring,
 } from '../engine/scoringEngine';
 import { VERIFIED_SOURCE_MODEL_CARDS, VERIFIED_SOURCE_OBSERVATIONS } from '../data/seedCards';
+import { VERIFIED_DESIGN_ARENA_SOURCE_MODEL_CARDS, VERIFIED_DESIGN_ARENA_SOURCE_OBSERVATIONS } from '../data/designArenaSeedCards';
 import {
   VERIFIED_HARNESS_SOURCE_MODEL_CARDS,
   VERIFIED_HARNESS_SOURCE_OBSERVATIONS,
@@ -186,7 +187,8 @@ function isKnownSource(source: unknown): source is SourceType {
     || source === 'scale_labs'
     || source === 'terminal_bench'
     || source === 'swe_rebench'
-    || source === 'frontier_code';
+    || source === 'frontier_code'
+    || source === 'design_arena';
 }
 
 /**
@@ -626,6 +628,7 @@ function belongsToExpectedHost(source: SourceType, value: unknown): boolean {
     if (source === 'swe_rebench') {
       return host === 'swe-rebench.com' || host.endsWith('.swe-rebench.com');
     }
+    if (source === 'design_arena') return host === 'designarena.ai' || host.endsWith('.designarena.ai');
     return host === 'cognition.com' || host.endsWith('.cognition.com');
   } catch {
     return false;
@@ -669,6 +672,7 @@ function sourceMetricIsAllowed(source: SourceType, metricId: unknown): boolean {
   if (source === 'scale_labs') return metricId.startsWith('scale_');
   if (source === 'terminal_bench') return metricId.startsWith('tbench_');
   if (source === 'swe_rebench') return metricId.startsWith('swe_rebench_');
+  if (source === 'design_arena') return metricId === 'designarena_frontend';
   return metricId.startsWith('frontiercode_');
 }
 
@@ -1928,6 +1932,7 @@ export class AdminMappingStore {
       ...VERIFIED_REVIEWED_FAMILY_SOURCE_MODEL_CARDS,
       ...VERIFIED_RECOVERED_SOURCE_MODEL_CARDS,
       ...VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_MODEL_CARDS,
+      ...VERIFIED_DESIGN_ARENA_SOURCE_MODEL_CARDS,
     ];
     const rawObservations = [
       ...parseArray<SourceObservation>(VERIFIED_SOURCE_OBSERVATIONS),
@@ -1936,6 +1941,7 @@ export class AdminMappingStore {
       ...VERIFIED_REVIEWED_FAMILY_SOURCE_OBSERVATIONS,
       ...VERIFIED_RECOVERED_SOURCE_OBSERVATIONS,
       ...VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_OBSERVATIONS,
+      ...VERIFIED_DESIGN_ARENA_SOURCE_OBSERVATIONS,
     ];
     const sourceData = sanitizeSourceData(rawCards, rawObservations);
     this.catalogFingerprint = buildCatalogFingerprint(sourceData.cards, sourceData.observations);

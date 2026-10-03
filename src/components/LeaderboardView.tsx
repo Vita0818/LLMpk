@@ -147,10 +147,10 @@ export const LeaderboardView: React.FC<LeaderboardViewProps> = ({
                   Chatting
                 </th>
                 <th 
-                  onClick={() => handleSort('math_science')}
+                  onClick={() => handleSort('reasoning')}
                   className="px-4 py-3.5 cursor-pointer text-center font-semibold hover:text-slate-900 transition-colors"
                 >
-                  Math & Sci
+                  Reasoning
                 </th>
                 <th 
                   onClick={() => handleSort('coding')}
@@ -159,22 +159,22 @@ export const LeaderboardView: React.FC<LeaderboardViewProps> = ({
                   Coding
                 </th>
                 <th 
-                  onClick={() => handleSort('engineering')}
+                  onClick={() => handleSort('frontend')}
                   className="px-4 py-3.5 cursor-pointer text-center font-semibold hover:text-slate-900 transition-colors"
                 >
-                  Engineering
+                  Frontend
                 </th>
                 <th 
-                  onClick={() => handleSort('agentic_work')}
+                  onClick={() => handleSort('agentic')}
                   className="px-4 py-3.5 cursor-pointer text-center font-semibold hover:text-slate-900 transition-colors"
                 >
-                  Agent
+                  Agentic
                 </th>
                 <th 
-                  onClick={() => handleSort('search_knowledge')}
+                  onClick={() => handleSort('documents')}
                   className="px-4 py-3.5 cursor-pointer text-center font-semibold hover:text-slate-900 transition-colors"
                 >
-                  Search
+                  Documents
                 </th>
 
                 <th className="px-4 py-3.5"></th>
@@ -241,19 +241,19 @@ export const LeaderboardView: React.FC<LeaderboardViewProps> = ({
                       {formatScore(item.domainScores.chatting.score)}
                     </td>
                     <td className="px-4 py-3.5 text-center font-mono font-medium text-slate-700">
-                      {formatScore(item.domainScores.math_science.score)}
+                      {formatScore(item.domainScores.reasoning.score)}
                     </td>
                     <td className="px-4 py-3.5 text-center font-mono font-medium text-slate-700">
                       {formatScore(item.domainScores.coding.score)}
                     </td>
                     <td className="px-4 py-3.5 text-center font-mono font-medium text-slate-700">
-                      {formatScore(item.domainScores.engineering.score)}
+                      {formatScore(item.domainScores.frontend.score)}
                     </td>
                     <td className="px-4 py-3.5 text-center font-mono font-medium text-slate-700">
-                      {formatScore(item.domainScores.agentic_work.score)}
+                      {formatScore(item.domainScores.agentic.score)}
                     </td>
                     <td className="px-4 py-3.5 text-center font-mono font-medium text-slate-700">
-                      {formatScore(item.domainScores.search_knowledge.score)}
+                      {formatScore(item.domainScores.documents.score)}
                     </td>
 
                     {/* Detail Arrow */}

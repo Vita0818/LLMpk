@@ -27,14 +27,16 @@ const assert = (condition: unknown, message: string) => {
 };
 
 assert(snapshot.scores.length === CURRENT_COHORT_SNAPSHOT.totalConfigs, 'Public snapshot must match the current cohort inventory.');
-assert(queue.length === 67, `Expected 67 playback items, received ${queue.length}.`);
+assert(queue.length > 5, `Expected multiple covered playback items, received ${queue.length}.`);
+assert(queue.every(s=>s.eligibleForGlobalLeaderboard),
+  "Playback must not give ordinal ranks to data-insufficient configurations.");
 assert(
   new Set(queue.map(getPlayModeRouteGroupKey)).size === queue.length,
   'Playback queue must contain one representative per identical radar route group.',
 );
 assert(
-  snapshot.scores.length - queue.length === 26,
-  'Playback queue should collapse exactly 26 duplicate route rows.',
+  snapshot.scores.filter(s=>s.eligibleForGlobalLeaderboard).length - queue.length === 4,
+  'Covered playback should collapse four equivalent Google subscription routes.',
 );
 assert(
   radarOverviewScores.length === queue.length,
@@ -49,7 +51,7 @@ assert(
   'Radar overview must not introduce configurations omitted by playback.',
 );
 
-snapshot.scores.forEach((candidate) => {
+snapshot.scores.filter(s=>s.eligibleForGlobalLeaderboard).forEach((candidate) => {
   const representative = queue.find(
     (item) => getPlayModeRouteGroupKey(item) === getPlayModeRouteGroupKey(candidate),
   );
@@ -65,54 +67,16 @@ snapshot.scores.forEach((candidate) => {
 });
 
 const expectedRepresentatives = [
-  'DeepSeek-v4-Flash 0731 Max | Codex CLI | DeepSeek API',
-  'DeepSeek-v4-Pro 0813 Max | --- | DeepSeek API',
-  'Claude Fable 5 Max | Claude Code | Claude Max 20×',
-  'Claude Fable 5.1 Max | --- | Claude Max 20×',
-  'Claude Haiku 4.5 Max | --- | Claude Pro',
-  'Claude Opus 5 Max | Claude Code | Claude Max 20×',
-  'Claude Sonnet 4.6 Max | Claude Code | Claude Pro',
-  'Claude Sonnet 5 Max | AA Agent Harness | Claude Pro',
-  'GPT-5.6 Luna Max | Codex CLI | ChatGPT Plus',
-  'GPT-5.6 Sol Max | Codex CLI | ChatGPT Pro 20×',
-  'GPT-5.6 Terra Max | Codex CLI | ChatGPT Plus',
-  'GPT-5.5 XHigh | Codex CLI | ChatGPT Plus',
-  'Gemini 3.1 Pro High | Gemini CLI | Google AI Ultra 20×',
-  'Gemini 3.5 Flash High | --- | Google API',
-  'Gemini 3.5 Flash-Lite High | --- | Google AI Pro',
-  'Gemini 3.6 Flash High | OpenCode | Google API',
-  'Gemini 3.7 Flash High | Antigravity SDK | Google AI Ultra 20×',
-  'Gemini 3.7 Flash High | OpenCode | Google AI Ultra 20×',
-  'Gemini 3.8 Flash High | AA Agent Harness | Google API',
-  'Gemini 3.8 Flash High | Antigravity SDK | Google AI Ultra 20×',
-  'Gemini 3.8 Flash High | OpenCode | Google AI Ultra 20×',
-  'Grok 4.3 High | --- | xAI API',
-  'Grok 4.5 High | Grok Build | xAI API',
-  'Grok 4.6 XHigh | --- | SuperGrok',
-  'Muse Glimmer XHigh | --- | Meta API',
-  'Muse Spark 1.2 XHigh | OpenCode | Meta API Contributor',
-  'Muse Spark 1.2 XHigh | Muse Code | Meta API Contributor',
-  'Muse Spark 1.3 XHigh | Muse Code | Meta API Contributor',
-  'Qwen3.8-Flash-Next XHigh | --- | Alibaba API',
-  'Qwen3.8 27B XHigh | --- | Alibaba API',
-  'Qwen3.8-Max XHigh | --- | Alibaba API',
-  'Qwen3.8-2.4T-A95B XHigh | --- | Alibaba API',
-  'GPT-6 Astra Max | Codex CLI | OpenAI API',
-  'GPT-6.1 Sol Max | Codex CLI | OpenAI API',
-  'Claude Sonnet 5.5 Max | Claude Code | Anthropic API',
-  'GPT-6 Sol Max | Codex CLI | OpenAI API',
-  'GPT-6 Luna Max | Codex CLI | OpenAI API',
-  'Claude Opus 5.5 Max | Claude Code | Anthropic API',
-  'Grok 4.7 XHigh | Grok Build | xAI API',
-  'DeepSeek V4.1 Flash Max | --- | DeepSeek API',
-  'MiMo-V2.6-Pro Default | --- | Xiaomi API',
-  'Step 5 Preview High | --- | StepFun API',
-  'Hy4 Preview High | --- | Tencent API',
-  'Command A+ Thinking | --- | Cohere API',
-  'Nemotron 3.5 Lightning Thinking | --- | NVIDIA API',
-  'GPT-OSS 20B High | --- | OpenAI API',
-  'GPT-OSS 120B High | --- | OpenAI API',
-  'Inkling XHigh | --- | Thinking Machines API',
+  "Kimi K3 Max | Kimi Code CLI | Moonshot AI API",
+  "Claude Fable 5.1 Max | Claude Code | Anthropic API",
+  "Claude Opus 5.5 Max | Claude Code | Anthropic API",
+  "Claude Fable 5.1 Max | --- | Claude Max 20×",
+  "GPT-6 Astra Max | Codex CLI | OpenAI API",
+  "GPT-6 Luna Max | Codex CLI | OpenAI API",
+  "MiMo-V2.6-Pro Default | --- | Xiaomi API",
+  "GLM-5.3 Max | --- | Z.ai API",
+  "MiniMax M3 Max | AA Agent Harness | MiniMax API",
+  "Gemini 3.8 Flash High | AA Agent Harness | Google API"
 ];
 
 const queueNames = new Set(queue.map((item) => item.config.name));

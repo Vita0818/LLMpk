@@ -3,11 +3,11 @@ import type { PublicLeaderboardScore } from '../types/publicLeaderboard';
 
 export const PLAY_MODE_DOMAIN_ORDER: readonly DomainId[] = [
   'chatting',
-  'math_science',
+  'reasoning',
   'coding',
-  'engineering',
-  'agentic_work',
-  'search_knowledge',
+  'frontend',
+  'agentic',
+  'documents',
 ];
 
 const parseDisplayIdentity = (name: string) => {
@@ -70,7 +70,7 @@ const compareRawCapabilityRoute = (
  * - The route with the highest practical score represents each collapsed group.
  * - The returned queue is ranked from highest to lowest practical score.
  */
-export const buildPlayModeQueue = <T extends PublicLeaderboardScore>(
+export const buildRepresentativeConfigurationQueue = <T extends PublicLeaderboardScore>(
   scores: readonly T[],
 ): T[] => {
   const groupedRoutes = new Map<string, T[]>();
@@ -89,6 +89,11 @@ export const buildPlayModeQueue = <T extends PublicLeaderboardScore>(
     .map((group) => [...group].sort(compareRepresentativeRoute)[0])
     .sort(compareRepresentativeRoute);
 };
+
+/** Ordinal playback ranks are reserved for configurations passing all coverage gates. */
+export const buildPlayModeQueue = <T extends PublicLeaderboardScore>(scores: readonly T[]): T[] => (
+  buildRepresentativeConfigurationQueue(scores.filter(item => item.eligibleForGlobalLeaderboard))
+);
 
 /**
  * Gives the representative playback routes their radar-overview order without

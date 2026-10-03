@@ -26,11 +26,11 @@ interface RadarChartProps {
 
 const DOMAIN_ORDER: DomainId[] = [
   'chatting',
-  'math_science',
+  'reasoning',
   'coding',
-  'engineering',
-  'agentic_work',
-  'search_knowledge',
+  'frontend',
+  'agentic',
+  'documents',
 ];
 
 export const getRadarDomainLines = (nameEn: string): string[] => {

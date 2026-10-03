@@ -5,7 +5,7 @@ import type { CoverageStatus, DomainId } from '../types/llm_pk';
  * and released with a new version instead of being embedded in aggregation code.
  */
 export const SCORING_CONFIG = {
-  version: '1.2',
+  version: '3.0',
   practicalAdjustment: {
     version: '1.4',
     speed: {
@@ -31,14 +31,15 @@ export const SCORING_CONFIG = {
     discriminationTolerance: 1e-7,
   },
   coverage: {
-    /** Scoring v1.1 publishes a domain as official at or above 60% coverage. */
+    /** A domain needs at least 60% real weighted evidence to receive a score. */
     officialMinimum: 0.60,
-    /** Any non-zero lower coverage remains rankable but provisional. */
+    /** Lower positive coverage is visible for diagnosis but never scored. */
     provisionalMinimum: 0,
+    overallMinimum: 0.75,
   },
   capabilityAggregate: {
-    /** Only observed domains participate; at least one is required for a score. */
-    minimumAvailableDomains: 1,
+    /** All six domains must pass their coverage gate before a total exists. */
+    minimumAvailableDomains: 6,
   },
   readerCuration: {
     /**
@@ -46,17 +47,17 @@ export const SCORING_CONFIG = {
      * reader-facing preset set while scoring coverage and ranking eligibility
      * remain separate concerns.
      */
-    minimumAvailableDomains: 4,
+    minimumAvailableDomains: 1,
   },
 } as const;
 
 export const DOMAIN_IDS: readonly DomainId[] = [
   'chatting',
-  'math_science',
+  'reasoning',
   'coding',
-  'engineering',
-  'agentic_work',
-  'search_knowledge',
+  'frontend',
+  'agentic',
+  'documents',
 ];
 
 export const COVERAGE_STATUS_LABELS: Record<CoverageStatus, string> = {

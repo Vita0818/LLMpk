@@ -1,5 +1,6 @@
 import type { SourceModelCard, SourceObservation, SourceType } from '../types/admin_mapping';
 import { OAGXM_SCOPE } from './oagxmScope';
+import frontierSnapshot from './frontierCodeSourceSnapshot.json';
 
 const CURRENT_SCOPE_ID = 'oagxm-current-product-lines';
 const CURRENT_SCOPE_VERSION = OAGXM_SCOPE.schemaVersion;
@@ -49,6 +50,11 @@ const PRODUCTS = {
     vendorId: 'openai', vendorName: 'OpenAI', productLineId: 'gpt_6_astra',
     productLineName: 'GPT-6 Astra', tier: 'official',
   },
+  gpt61Sol: { vendorId: 'openai', vendorName: 'OpenAI', productLineId: 'gpt_61_sol', productLineName: 'GPT-6.1 Sol', tier: 'official' },
+  gpt6Luna: { vendorId: 'openai', vendorName: 'OpenAI', productLineId: 'gpt_6_luna', productLineName: 'GPT-6 Luna', tier: 'official' },
+  opus55: { vendorId: 'anthropic', vendorName: 'Anthropic', productLineId: 'claude_opus_55', productLineName: 'Claude Opus 5.5', tier: 'official' },
+  sonnet55: { vendorId: 'anthropic', vendorName: 'Anthropic', productLineId: 'claude_sonnet_55', productLineName: 'Claude Sonnet 5.5', tier: 'official' },
+  grok47: { vendorId: 'xai', vendorName: 'xAI', productLineId: 'grok_47', productLineName: 'Grok 4.7', tier: 'official' },
   gpt56Sol: {
     vendorId: 'openai', vendorName: 'OpenAI', productLineId: 'gpt_56_sol',
     productLineName: 'GPT-5.6 Sol', tier: 'official',
@@ -290,7 +296,34 @@ const frontierCode = (
   }],
 });
 
+const CURRENT_FRONTIER_MODELS: Record<string, { scope: ProductScopeSpec; slug: string; sourceHarness: string; harness: string; companionPrefix: string }> = {
+  'GPT-6.1 Sol': {scope:PRODUCTS.gpt61Sol,slug:'gpt-6-1-sol',sourceHarness:'codex',harness:'Codex CLI',companionPrefix:'card-aa-coding-agent-codex-gpt-6-1-sol-'},
+  'GPT-6 Astra': {scope:PRODUCTS.gpt6Astra,slug:'gpt-6-astra',sourceHarness:'codex',harness:'Codex CLI',companionPrefix:'card-aa-coding-agent-codex-gpt-6-astra-'},
+  'GPT-6 Luna': {scope:PRODUCTS.gpt6Luna,slug:'gpt-6-luna',sourceHarness:'codex',harness:'Codex CLI',companionPrefix:'card-aa-coding-agent-codex-gpt-6-luna-'},
+  'GPT-5.6 Terra': {scope:PRODUCTS.gpt56Terra,slug:'gpt-5-6-terra',sourceHarness:'codex',harness:'Codex CLI',companionPrefix:'card-aa-coding-agent-codex-gpt-5-6-terra-'},
+  'Claude Fable 5.1': {scope:PRODUCTS.fable51,slug:'claude-fable-5-1',sourceHarness:'claude-code',harness:'Claude Code',companionPrefix:'card-aa-coding-agent-claude-code-claude-fable-5-1-'},
+  'Claude Opus 5.5': {scope:PRODUCTS.opus55,slug:'claude-opus-5-5',sourceHarness:'claude-code',harness:'Claude Code',companionPrefix:'card-aa-coding-agent-claude-code-claude-opus-5-5-'},
+  'Claude Sonnet 5.5': {scope:PRODUCTS.sonnet55,slug:'claude-sonnet-5-5',sourceHarness:'claude-code',harness:'Claude Code',companionPrefix:'card-aa-coding-agent-claude-code-claude-sonnet-5-5-'},
+  'Grok 4.7': {scope:PRODUCTS.grok47,slug:'grok-4-7',sourceHarness:'grok-build',harness:'Grok Build',companionPrefix:'card-aa-coding-agent-grok-build-grok-4-7-'},
+};
+const currentFrontierSpecs: BenchmarkCardSpec[] = frontierSnapshot.rows.flatMap((row) => {
+  const model = CURRENT_FRONTIER_MODELS[row.name];
+  if (!model || model.sourceHarness !== row.harness || !['low','medium','high','xhigh','max'].includes(row.effort)) return [];
+  return [{
+    id:`card-frontiercode-current-${model.slug}-${row.effort}`,source:'frontier_code',
+    exactSourceModelName:`${row.name} (${row.effort}) · ${model.harness}`,
+    snapshotDate:frontierSnapshot.fetchedAt.slice(0,10),scope:model.scope,
+    canonicalProfileKey:`${model.slug}-${row.effort}-${row.harness}`,
+    sourceRecordId:`v1_1:${row.name}:${row.effort}:main`,harness:model.harness,effort:row.effort,
+    companionForCardId:model.companionPrefix+row.effort,
+    observations:[{metricId:'frontiercode_v11_main_pass_rate',rawValue:row.passRate,unit:'Pass Rate',
+      sourceUrl:frontierSnapshot.source.url,sourceLeaderboard:'FrontierCode 1.1 Main',
+      sourceField:`v1_1.data[${row.name}][${row.effort}].main.correct`,taskCount:frontierSnapshot.taskCount}],
+  }];
+});
+
 const CARD_SPECS: readonly BenchmarkCardSpec[] = [
+  ...currentFrontierSpecs,
   enigma('claude-fable-5-high', 'Claude Fable 5 (high)', PRODUCTS.fable5, 'claude-fable-5-high', 0.3928, 0.0280),
   enigma('gpt-5-6-sol-high', 'GPT-5.6 Sol (high)', PRODUCTS.gpt56Sol, 'gpt-5-6-sol-high', 0.3712, 0.0280, 'card-aa-gpt-5-6-sol-high'),
   enigma('gemini-3-1-pro-preview-high', 'Gemini 3.1 Pro Preview (high)', PRODUCTS.gemini31Pro, 'gemini-3-1-pro-preview-high', 0.3678, 0.0271, 'card-openrouter-google-gemini-3-1-pro-preview'),

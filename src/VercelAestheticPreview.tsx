@@ -24,6 +24,7 @@ import { CustomRankingView } from './components/CustomRankingView';
 import { RadarOverviewGallery } from './components/RadarOverviewGallery';
 import {
   ConfigurationMetricList,
+  ConfigurationCoverageSummary,
   ConfigurationRadar,
   parseConfigurationName,
 } from './components/ConfigurationDetailContent';
@@ -36,6 +37,7 @@ import { PlayModeHud } from './components/PlayModeHud';
 import { AnimatedScore } from './components/AnimatedScore';
 import {
   buildPlayModeQueue,
+  buildRepresentativeConfigurationQueue,
   sortRadarOverviewScores,
 } from './utils/playModeQueue';
 import {
@@ -194,10 +196,13 @@ export const VercelAestheticPreview: React.FC = () => {
   // Equivalent API and subscription routes share one radar slot, represented
   // by the route with the highest practical score.
   const representativeRouteScores = useMemo(
-    () => buildPlayModeQueue(scores),
+    () => buildRepresentativeConfigurationQueue(scores),
     [scores],
   );
-  const playModeQueue = PLAY_MODE_ENABLED ? representativeRouteScores : [];
+  const playModeQueue = useMemo(
+    () => PLAY_MODE_ENABLED ? buildPlayModeQueue(scores) : [],
+    [scores],
+  );
   const radarOverviewScores = useMemo(
     () => sortRadarOverviewScores(representativeRouteScores),
     [representativeRouteScores],
@@ -601,11 +606,11 @@ export const VercelAestheticPreview: React.FC = () => {
 
   const domainList: DomainId[] = [
     'chatting',
-    'math_science',
+    'reasoning',
     'coding',
-    'engineering',
-    'agentic_work',
-    'search_knowledge',
+    'frontend',
+    'agentic',
+    'documents',
   ];
 
   const formatScore = (s: number | null) => (s === null ? '--' : s.toFixed(1));
@@ -853,8 +858,9 @@ export const VercelAestheticPreview: React.FC = () => {
         {/* VIEW 1: MODELS LEADERBOARD */}
         {activeTab === 'leaderboard' && (
           <div className="space-y-6">
+            <p className="text-xs text-neutral-500">Scoring v3 · 六域等权 · 每域覆盖 ≥60%、六域均达标、总覆盖 ≥75%。缺测配置保留详情，暂不综合排名。</p>
             {/* High-Density Authentic Table */}
-            <div className="w-full overflow-hidden rounded-xl border border-neutral-200 bg-white">
+            <div className="w-full overflow-x-auto rounded-xl border border-neutral-200 bg-white">
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
                   <tr className="text-neutral-600 font-brand-mono text-[10px] sm:text-[11px] border-b border-neutral-200 bg-neutral-50/70 uppercase tracking-wider">
@@ -868,19 +874,19 @@ export const VercelAestheticPreview: React.FC = () => {
                       {renderSortLabel('Chatting', 'chatting')}
                     </th>
                     <th className="hidden md:table-cell px-3.5 py-3.5 text-center font-bold text-amber-900">
-                      {renderSortLabel('Math & Sci', 'math_science')}
+                      {renderSortLabel('Reasoning', 'reasoning')}
                     </th>
                     <th className="hidden md:table-cell px-3.5 py-3.5 text-center font-bold text-emerald-900">
                       {renderSortLabel('Coding', 'coding')}
                     </th>
                     <th className="hidden md:table-cell px-3.5 py-3.5 text-center font-bold text-amber-900">
-                      {renderSortLabel('Engineering', 'engineering')}
+                      {renderSortLabel('Frontend', 'frontend')}
                     </th>
                     <th className="hidden md:table-cell px-3.5 py-3.5 text-center font-bold text-blue-900">
-                      {renderSortLabel('Agentic', 'agentic_work')}
+                      {renderSortLabel('Agentic', 'agentic')}
                     </th>
                     <th className="hidden md:table-cell px-3.5 py-3.5 text-center font-bold text-cyan-900">
-                      {renderSortLabel('Search', 'search_knowledge')}
+                      {renderSortLabel('Documents', 'documents')}
                     </th>
                   </tr>
                 </thead>
@@ -930,6 +936,9 @@ export const VercelAestheticPreview: React.FC = () => {
                               <span className="truncate">{parsed.harness}</span>
                               <span className="text-neutral-300 font-normal shrink-0">|</span>
                               <span className="truncate">{parsed.provider}</span>
+                            </div>
+                            <div className="text-[10px] font-medium text-neutral-500" title="六域均达标且总覆盖率至少 75% 才综合排名">
+                              Coverage {(item.overallCoverage * 100).toFixed(0)}% · {item.availableDomainCount}/6
                             </div>
                             {/* Mobile: 2 Separate Stacked Lines for Harness & Provider (Total 3 Lines) */}
                             <div className="sm:hidden space-y-0.5 text-xs">
@@ -1187,6 +1196,7 @@ export const VercelAestheticPreview: React.FC = () => {
               <div className={`lg:col-span-5 pl-0 lg:pl-2 mt-4 lg:-mt-4 ${
                 PLAY_MODE_ENABLED && isPlayModeActive ? 'play-mode-metrics-enter' : ''
               }`}>
+                <ConfigurationCoverageSummary scoreItem={selectedScoreItem} />
                 <ConfigurationMetricList
                   scoreItem={selectedScoreItem}
                   columns={2}

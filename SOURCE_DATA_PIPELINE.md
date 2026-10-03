@@ -1,3 +1,30 @@
+> Current scoring policy: [Registry v3](llm_pk_data_source_registry_v3.md), [Weights v3](llm_pk_domain_classification_weighting_v3.md), [Scoring v3](llm_pk_scoring_methodology_v3.md). Earlier source captures below remain historical provenance.
+
+## October 3 scoring migration
+
+The reader inventory is successor-pruned to 30 families / 40 configurations,
+with all historical comparator pins removed. Raw historical source cards stay
+available; local synchronization removes retired built-in boxes and preserves
+user drafts. Inventory membership is reviewed separately from scoring, so
+changing weights cannot silently expand the default model pool.
+
+The new domains are Chatting, Reasoning, Coding, Frontend, Agentic and Documents.
+AA capability scoring uses only HLE, CritPt, TB4 and GDP.pdf; legacy evaluation
+records are detail-only. Each domain needs 60% real weighted coverage, all six
+must qualify, and overall coverage must reach 75%. Missing scores are null.
+
+The full staged refresh now includes FrontierCode before cross-source validation.
+`npm run refresh:frontiercode` also captures the official current 1.1 Main JSON,
+including exact efforts/harnesses, source hash and raw snapshot path. Current
+Cognition rows supersede rounded September static evidence when exact identities
+match. Other versions and environments do not borrow these rows.
+
+`npm run refresh:design-arena` continues to require DESIGNARENA_API_KEY.
+The committed pending snapshot contains no rows. Once an approved key is
+configured, the validated API result connects through unique OpenRouter IDs;
+undisclosed source effort remains an explicit Default-to-higher fallback.
+The reserved 40% Frontend slot remains missing until real data arrives.
+
 # Source data refresh pipeline
 
 The source refresh is intentionally separate from configuration matching,

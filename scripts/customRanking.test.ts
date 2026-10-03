@@ -52,11 +52,11 @@ const makeScore = (
     },
     domainScores: {
       chatting: { score: 50 },
-      math_science: { score: 50 },
+      reasoning: { score: 50 },
       coding: { score: coding },
-      engineering: { score: 50 },
-      agentic_work: { score: 50 },
-      search_knowledge: { score: 50 },
+      frontend: { score: 50 },
+      agentic: { score: 50 },
+      documents: { score: 50 },
     },
     rawCapabilityScore,
     practicalBreakdown: {
@@ -77,11 +77,11 @@ const makeScore = (
 
 const emptyWeights = (): PreferenceWeights => ({
   chatting: 0,
-  math_science: 0,
+  reasoning: 0,
   coding: 0,
-  engineering: 0,
-  agentic_work: 0,
-  search_knowledge: 0,
+  frontend: 0,
+  agentic: 0,
+  documents: 0,
   intelligence: 0,
   speed: 0,
   cost: 0,
@@ -176,6 +176,11 @@ assert.deepEqual(
   { score: null, coverage: 0 },
 );
 
+assert.equal(calculatePersonalizedScore(missingCoding,DEFAULT_PREFERENCE_WEIGHTS).score,null,
+  'A missing selected domain must not disappear from an all-round comparison.');
+assert.notEqual(calculatePersonalizedScore(missingCoding,onlyCapability('chatting')).score,null,
+  'An explicit covered-domain comparison can still use a partial model.');
+
 const balancedScore = calculatePersonalizedScore(codingLeader, DEFAULT_PREFERENCE_WEIGHTS);
 assert.equal(balancedScore.coverage, 1);
 assert.ok(balancedScore.score !== null && balancedScore.score > 0);
@@ -214,9 +219,10 @@ const customTopFive = rankTopScoresByPreferences(
   representativePublicScores,
   DEFAULT_PREFERENCE_WEIGHTS,
 );
-assert.equal(representativePublicScores.length, 67);
-assert.equal(publicScores.length - representativePublicScores.length, 26);
-assert.equal(representativePublicRanking.length, 67);
+assert.ok(representativePublicScores.length > CUSTOM_RANKING_RESULT_LIMIT);
+assert.ok(representativePublicScores.every(s=>s.eligibleForGlobalLeaderboard));
+assert.ok(publicScores.some(s=>!s.eligibleForGlobalLeaderboard));
+assert.equal(representativePublicRanking.length,representativePublicScores.length);
 assert.equal(customTopFive.length, CUSTOM_RANKING_RESULT_LIMIT);
 assert.ok(customTopFive.every((result) => representativeIds.has(result.item.config.id)));
 assert.ok(publicScores
@@ -230,11 +236,11 @@ const defaultPublicRanking = rankScoresByPreferences(
   DEFAULT_PREFERENCE_WEIGHTS,
 );
 defaultPublicRanking.forEach((result) => {
-  assert.notEqual(result.personalizedScore, null);
-  if (result.item.practicalBreakdown.practicalScore === null) {
-    assert.ok(result.preferenceCoverage < 1);
+  if (!result.item.eligibleForGlobalLeaderboard) {
+    assert.equal(result.personalizedScore,null,'Default custom ranking must preserve coverage gates.');
     return;
   }
+  assert.notEqual(result.personalizedScore, null);
   assert.ok(Math.abs(
     result.personalizedScore! - result.item.practicalBreakdown.practicalScore!,
   ) < 1e-9);

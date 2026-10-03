@@ -97,11 +97,11 @@ const RadarOverviewGalleryComponent = forwardRef<
                     fillColor: brandTheme.fillColor,
                     scores: {
                       chatting: item.domainScores?.chatting?.score ?? null,
-                      math_science: item.domainScores?.math_science?.score ?? null,
+                      reasoning: item.domainScores?.reasoning?.score ?? null,
                       coding: item.domainScores?.coding?.score ?? null,
-                      engineering: item.domainScores?.engineering?.score ?? null,
-                      agentic_work: item.domainScores?.agentic_work?.score ?? null,
-                      search_knowledge: item.domainScores?.search_knowledge?.score ?? null,
+                      frontend: item.domainScores?.frontend?.score ?? null,
+                      agentic: item.domainScores?.agentic?.score ?? null,
+                      documents: item.domainScores?.documents?.score ?? null,
                     },
                   },
                 ]}

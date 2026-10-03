@@ -36,6 +36,7 @@ const sourceLabels: Record<SourceType, string> = {
   terminal_bench: 'Terminal-Bench',
   swe_rebench: 'SWE-rebench',
   frontier_code: 'FrontierCode',
+  design_arena: 'DesignArena',
 };
 
 export const ConfigurationBoxCard: React.FC<ConfigurationBoxCardProps> = React.memo(({

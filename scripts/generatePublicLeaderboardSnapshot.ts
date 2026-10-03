@@ -11,11 +11,11 @@ import type {
 
 const DOMAIN_IDS: readonly DomainId[] = [
   'chatting',
-  'math_science',
+  'reasoning',
   'coding',
-  'engineering',
-  'agentic_work',
-  'search_knowledge',
+  'frontend',
+  'agentic',
+  'documents',
 ];
 
 const PUBLIC_METRIC_IDS = new Set([
@@ -58,7 +58,9 @@ const scores: PublicLeaderboardScore[] = adminMappingStore
     const domainScores = Object.fromEntries(
       DOMAIN_IDS.map((domainId) => [
         domainId,
-        { score: score.domainScores[domainId].score },
+        { score: score.domainScores[domainId].score,
+          coverage: score.domainScores[domainId].coverage,
+          coverageStatus: score.domainScores[domainId].coverageStatus },
       ]),
     ) as PublicLeaderboardScore['domainScores'];
 
@@ -94,6 +96,8 @@ const scores: PublicLeaderboardScore[] = adminMappingStore
         ...(subscriptionData ? { subscriptionData } : {}),
       },
       domainScores,
+      overallCoverage: score.overallCoverage,
+      availableDomainCount: score.availableDomainCount,
       rawCapabilityScore: score.rawCapabilityScore,
       practicalBreakdown: score.practicalBreakdown,
       eligibleForGlobalLeaderboard: score.eligibleForGlobalLeaderboard,
@@ -101,7 +105,7 @@ const scores: PublicLeaderboardScore[] = adminMappingStore
   });
 
 const snapshot: PublicLeaderboardSnapshot = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   scores,
 };
 

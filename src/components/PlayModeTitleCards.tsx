@@ -85,7 +85,7 @@ export const PlayModeIntroCard: React.FC<PlayModeIntroCardProps> = ({
       {showSources && (
         <div className="mt-16">
           <SourceLine
-            items={['Artificial Analysis', 'Arena.ai', 'OpenRouter', 'Scale Labs', 'Terminal-Bench', 'SWE-rebench', 'FrontierCode']}
+            items={['Artificial Analysis', 'Arena.ai', 'FrontierCode', 'OpenRouter']}
             delayMs={560}
           />
         </div>

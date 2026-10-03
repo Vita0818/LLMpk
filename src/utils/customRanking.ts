@@ -73,11 +73,11 @@ export const OVERALL_PREFERENCE_BASELINE_WEIGHTS: Record<OverallPreferenceDimens
 
 export const DEFAULT_PREFERENCE_WEIGHTS: PreferenceWeights = {
   chatting: 50,
-  math_science: 50,
+  reasoning: 50,
   coding: 50,
-  engineering: 50,
-  agentic_work: 50,
-  search_knowledge: 50,
+  frontend: 50,
+  agentic: 50,
+  documents: 50,
   ...OVERALL_PREFERENCE_BASELINE_WEIGHTS,
 };
 
@@ -193,6 +193,15 @@ export const calculatePersonalizedScore = (
   const intelligenceCoverage = selectedCapabilityWeight > 0
     ? availableCapabilityWeight / selectedCapabilityWeight
     : 0;
+  // Missing selected domains must not disappear and boost a specialist into
+  // an apparent all-round leader. Users can explicitly select a smaller set.
+  if (weights.intelligence > 0 && selectedCapabilityWeight > 0 && intelligenceCoverage + Number.EPSILON < 1) {
+    return { score: null, coverage: intelligenceCoverage };
+  }
+  const allDomainsSelected = CAPABILITY_PREFERENCE_DIMENSIONS.every(d => weights[d.id] > 0);
+  if (weights.intelligence > 0 && allDomainsSelected && !item.eligibleForGlobalLeaderboard) {
+    return { score: null, coverage: intelligenceCoverage };
+  }
 
   const selectedOverallFactor = OVERALL_PREFERENCE_DIMENSIONS.reduce(
     (sum, dimension) => sum

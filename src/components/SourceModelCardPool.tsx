@@ -44,6 +44,7 @@ export const SourceModelCardPool: React.FC<SourceModelCardPoolProps> = ({ cards 
       { id: 'terminal_bench', label: 'Terminal-Bench' },
       { id: 'swe_rebench', label: 'SWE-rebench' },
       { id: 'frontier_code', label: 'FrontierCode' },
+      { id: 'design_arena', label: 'DesignArena' },
     ];
     return definitions.map((definition) => ({
       ...definition,

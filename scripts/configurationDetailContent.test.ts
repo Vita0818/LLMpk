@@ -72,6 +72,10 @@ for (const unit of ['Resolution Rate', 'Resolved Rate', 'Pass Rate']) {
     `${unit} must render as a percentage in configuration details.`,
   );
 }
+assert.equal(formatConfigurationRawMetricValue(0.0252, 'Score Point'), '0.0252',
+  'Small real Agent effects must not be displayed as a zero result.');
+assert.equal(formatConfigurationRawMetricValue(0, 'Score Point'), '0');
+assert.equal(formatConfigurationRawMetricValue(Infinity, 'Score Point'), '--');
 
 console.log(
   `Configuration detail content contract passed (${apiRows.length} aligned rows).`

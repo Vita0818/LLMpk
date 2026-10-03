@@ -27,6 +27,8 @@ const PATHS = {
     process.env.OPENROUTER_PERFORMANCE_SNAPSHOT_PATH
       ?? path.join(ROOT, 'src', 'data', 'openRouterPerformanceSnapshot.json'),
   ),
+  frontierCode: path.resolve(process.env.FRONTIERCODE_SNAPSHOT_PATH
+    ?? path.join(ROOT, 'src', 'data', 'frontierCodeSourceSnapshot.json')),
 };
 const OUTPUT_PATH = path.resolve(
   process.env.SOURCE_SNAPSHOT_VALIDATION_OUTPUT
@@ -763,6 +765,20 @@ function validateOpenRouterPerformance(snapshot) {
 }
 
 let report;
+function validateFrontierCode(snapshot) {
+  const rows = Array.isArray(snapshot?.rows) ? snapshot.rows : [];
+  check('frontiercode-identity', 'FrontierCode uses the official current 1.1 Main source and a recent capture.',
+    snapshot?.schemaVersion === 'frontiercode-source-snapshot/v1'
+    && snapshot.revision === '1.1' && snapshot.dataset === 'main' && snapshot.taskCount === 100
+    && snapshot.source?.url === 'https://cognition.com/data/frontiercode-leaderboard/data.json'
+    && /^[a-f0-9]{64}$/u.test(snapshot.source?.sha256 || '') && freshEnough(snapshot.fetchedAt));
+  check('frontiercode-records', 'FrontierCode rows retain unique model/effort/harness identities and valid raw rates.',
+    rows.length >= 30 && uniqueValues(rows,r=>`${r.name}:${r.harness}:${r.effort}`)
+    && rows.every(r=>typeof r.name === 'string' && r.name.length > 0 && typeof r.harness === 'string'
+      && typeof r.effort === 'string' && [r.passRate,r.mergeabilityScore,r.flaggedRate]
+        .every(v=>Number.isFinite(v) && v>=0 && v<=1)), {rows:rows.length});
+  return {models:new Set(rows.map(r=>r.name)).size,rows:rows.length};
+}
 try {
   const snapshots = {
     artificialAnalysis: readJson(PATHS.artificialAnalysis, 'Artificial Analysis snapshot'),
@@ -772,12 +788,14 @@ try {
       PATHS.openRouterPerformance,
       'OpenRouter performance snapshot',
     ),
+    frontierCode: readJson(PATHS.frontierCode, 'FrontierCode snapshot'),
   };
   const coverage = {
     artificialAnalysis: validateArtificialAnalysis(snapshots.artificialAnalysis),
     arena: validateArena(snapshots.arena),
     openRouterCatalog: validateOpenRouterCatalog(snapshots.openRouterCatalog),
     openRouterPerformance: validateOpenRouterPerformance(snapshots.openRouterPerformance),
+    frontierCode: validateFrontierCode(snapshots.frontierCode),
   };
   const failedChecks = checks.filter((item) => !item.passed);
   report = {

@@ -34,11 +34,11 @@ const score = (
   },
   domainScores: {
     chatting: { score: intelligence },
-    math_science: { score: intelligence },
+    reasoning: { score: intelligence },
     coding: { score: intelligence },
-    engineering: { score: intelligence },
-    agentic_work: { score: intelligence },
-    search_knowledge: { score: intelligence },
+    frontend: { score: intelligence },
+    agentic: { score: intelligence },
+    documents: { score: intelligence },
   },
   rawCapabilityScore: intelligence,
   practicalBreakdown: {
