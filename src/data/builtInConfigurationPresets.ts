@@ -4011,10 +4011,10 @@ const SUBSCRIPTION_CONFIGURATION_TARGETS:
   },
   {
     key: 'claude-fable-5-1.max.chat',
-    basePresetId: 'builtin.claude-fable-5-1.max',
+    basePresetId: 'builtin.harness.claude-fable-5-1.max.claude-code',
     plans: [CLAUDE_MAX_20X_PLAN],
     usableQuotaFraction: 0.5,
-    note: 'Fable 5.1 在 Claude Pro 上从一开始即按量付费，不建立 Pro 订阅额度配置；Max 计划内最多使用每周总额度的 50%。当前没有 AA Claude Code Harness 记录，因此第二项保持 ---。',
+    note: 'Fable 5.1 在 Claude Pro 上按量付费，不建立 Pro 订阅额度配置；Max 计划内最多使用每周总额度的 50%。订阅沿用当前已独立测量的 Claude Code 配置。旧内置 ID 保留用于存储迁移。',
   },
   {
     key: 'claude-opus-5.max.claude-code',

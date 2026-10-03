@@ -24,7 +24,6 @@ import { CustomRankingView } from './components/CustomRankingView';
 import { RadarOverviewGallery } from './components/RadarOverviewGallery';
 import {
   ConfigurationMetricList,
-  ConfigurationCoverageSummary,
   ConfigurationRadar,
   parseConfigurationName,
 } from './components/ConfigurationDetailContent';
@@ -69,6 +68,7 @@ const PLAY_MODE_HUD_UPDATE_INTERVAL_MS = 100;
 const PUBLIC_SCORES = (
   publicLeaderboardSnapshot as unknown as PublicLeaderboardSnapshot
 ).scores;
+const READER_SCORES = buildRepresentativeConfigurationQueue(PUBLIC_SCORES);
 
 const Pareto3DView = React.lazy(async () => {
   const module = await import('./components/Pareto3DView');
@@ -103,11 +103,11 @@ export const VercelAestheticPreview: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [hoveredDomain, setHoveredDomain] = useState<DomainId | null>(null);
   const [comparisonSelectedIds, setComparisonSelectedIds] = useState<string[]>(() =>
-    PUBLIC_SCORES.filter((item) => item.eligibleForGlobalLeaderboard !== false)
+    READER_SCORES.filter((item) => item.eligibleForGlobalLeaderboard !== false)
       .slice(0, 3)
       .map((item) => item.config.id)
   );
-  const scores: PublicLeaderboardScore[] = PUBLIC_SCORES;
+  const scores: PublicLeaderboardScore[] = READER_SCORES;
 
   // Play Mode: rank one representative configuration per distinct radar route.
   const [isPlayModeActive, setIsPlayModeActive] = useState(false);
@@ -848,8 +848,10 @@ export const VercelAestheticPreview: React.FC = () => {
             ? playModePhase === 'radar_overview'
               ? 'play-mode-clean-stage mx-auto min-h-screen w-full max-w-[1500px] px-6 py-4'
               : 'play-mode-clean-stage mx-auto h-screen w-full max-w-[1500px] px-6 py-4'
-            : PLAY_MODE_ENABLED && isPlayModeActive
-              ? 'mx-auto w-full max-w-[1500px] px-4 pb-6 pt-36'
+            : activeTab === 'detail'
+              ? `configuration-detail-main mx-auto w-full max-w-[1500px] px-4 ${PLAY_MODE_ENABLED && isPlayModeActive ? 'configuration-detail-main--play' : ''}`
+              : PLAY_MODE_ENABLED && isPlayModeActive
+                ? 'mx-auto w-full max-w-[1500px] px-4 pb-6 pt-36'
               : activeTab === 'pareto'
                 ? 'mx-auto w-full max-w-[1500px] px-4 pb-0 pt-2'
                 : 'mx-auto w-full max-w-[1500px] px-4 py-6'
@@ -858,7 +860,6 @@ export const VercelAestheticPreview: React.FC = () => {
         {/* VIEW 1: MODELS LEADERBOARD */}
         {activeTab === 'leaderboard' && (
           <div className="space-y-6">
-            <p className="text-xs text-neutral-500">Scoring v3 · 六域等权 · 每域覆盖 ≥60%、六域均达标、总覆盖 ≥75%。缺测配置保留详情，暂不综合排名。</p>
             {/* High-Density Authentic Table */}
             <div className="w-full overflow-x-auto rounded-xl border border-neutral-200 bg-white">
               <table className="w-full text-left border-collapse text-xs">
@@ -905,6 +906,7 @@ export const VercelAestheticPreview: React.FC = () => {
                       <tr
                         key={item.config.id}
                         onClick={() => {
+                          setHoveredDomain(null);
                           setSelectedConfigId(item.config.id);
                           setActiveTab('detail');
                         }}
@@ -936,9 +938,6 @@ export const VercelAestheticPreview: React.FC = () => {
                               <span className="truncate">{parsed.harness}</span>
                               <span className="text-neutral-300 font-normal shrink-0">|</span>
                               <span className="truncate">{parsed.provider}</span>
-                            </div>
-                            <div className="text-[10px] font-medium text-neutral-500" title="六域均达标且总覆盖率至少 75% 才综合排名">
-                              Coverage {(item.overallCoverage * 100).toFixed(0)}% · {item.availableDomainCount}/6
                             </div>
                             {/* Mobile: 2 Separate Stacked Lines for Harness & Provider (Total 3 Lines) */}
                             <div className="sm:hidden space-y-0.5 text-xs">
@@ -1011,6 +1010,7 @@ export const VercelAestheticPreview: React.FC = () => {
             <Pareto3DView
               scoreItems={scores}
               onSelectConfigForDetail={(item) => {
+                setHoveredDomain(null);
                 setSelectedConfigId(item.config.id);
                 setActiveTab('detail');
               }}
@@ -1023,6 +1023,7 @@ export const VercelAestheticPreview: React.FC = () => {
           <CustomRankingView
             representativeScoreItems={representativeRouteScores}
             onSelectConfigForDetail={(item) => {
+              setHoveredDomain(null);
               setSelectedConfigId(item.config.id);
               setActiveTab('detail');
             }}
@@ -1034,6 +1035,7 @@ export const VercelAestheticPreview: React.FC = () => {
           <RadarOverviewGallery
             scoreItems={radarOverviewScores}
             onSelectConfigForDetail={(item) => {
+              setHoveredDomain(null);
               setSelectedConfigId(item.config.id);
               setActiveTab('detail');
             }}
@@ -1048,6 +1050,7 @@ export const VercelAestheticPreview: React.FC = () => {
             selectedIds={comparisonSelectedIds}
             onSelectedIdsChange={setComparisonSelectedIds}
             onSelectConfigForDetail={(item) => {
+              setHoveredDomain(null);
               setSelectedConfigId(item.config.id);
               setActiveTab('detail');
             }}
@@ -1078,11 +1081,11 @@ export const VercelAestheticPreview: React.FC = () => {
         {activeTab === 'detail' && selectedScoreItem && (!PLAY_MODE_ENABLED || !isPlayModeActive || playModePhase === 'model') && (
           <div
             key={selectedScoreItem.config.id}
-            className={`space-y-4 ${
+            className={`configuration-detail-shell ${
               PLAY_MODE_ENABLED && isPlayModeActive ? 'play-mode-scene-enter' : ''
             }`}
           >
-            {PLAY_MODE_ENABLED && isPlayModeActive && currentPlayModeRank !== null && (
+            {PLAY_MODE_ENABLED && isPlayModeActive && isPlayModeCleanView && currentPlayModeRank !== null && (
               <div className="play-mode-rank-enter flex items-center justify-between font-brand-mono">
                 <div className="select-none text-4xl font-black tracking-tight text-neutral-950">
                   LLMpk
@@ -1099,35 +1102,26 @@ export const VercelAestheticPreview: React.FC = () => {
             )}
 
             {/* Header Area directly on background WITHOUT grey bottom border */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-1 font-brand-mono">
-              <div className={`space-y-0.5 sm:space-y-1 ${
+            <div className="configuration-detail-header flex items-start justify-between font-brand-mono">
+              <div className={`configuration-detail-identity min-w-0 space-y-0.5 ${
                 PLAY_MODE_ENABLED && isPlayModeActive ? 'play-mode-title-enter' : ''
               }`}>
                 {/* Line 1: Model Name */}
-                <h2 className="text-3xl sm:text-4xl font-black text-neutral-950 tracking-tight leading-tight">
+                <h2 className="configuration-detail-title font-black text-neutral-950 tracking-tight leading-tight">
                   {selectedParsedName.model}
                 </h2>
 
                 {/* Desktop: Harness | Provider on single line */}
-                <div className="hidden sm:flex items-center gap-1.5 font-bold text-neutral-950 text-3xl sm:text-4xl tracking-tight">
+                <div className="configuration-detail-route hidden sm:flex items-center gap-1.5 font-bold text-neutral-600">
                   <span>{selectedParsedName.harness}</span>
                   <span className="text-neutral-300 font-normal">|</span>
                   <span>{selectedParsedName.provider}</span>
                 </div>
 
-                {/* Mobile: 2 Separate Stacked Lines for Harness & Provider (Total 3 Lines) */}
-                <div className="sm:hidden space-y-0.5 font-brand-mono">
-                  <div className="text-base font-bold text-neutral-800">
-                    {selectedParsedName.harness}
-                  </div>
-                  <div className="text-base font-semibold text-neutral-500">
-                    {selectedParsedName.provider}
-                  </div>
-                </div>
               </div>
 
               {/* Scores directly on background - Enlarged Font Sizes */}
-              {PLAY_MODE_ENABLED && isPlayModeActive ? (
+              {PLAY_MODE_ENABLED && isPlayModeActive && isPlayModeCleanView ? (
                 <div className="play-mode-scores-enter shrink-0 translate-y-3 font-brand-mono">
                   <div className="flex items-baseline gap-2 whitespace-nowrap">
                     <span className="text-5xl font-black text-neutral-950 sm:text-6xl">
@@ -1152,23 +1146,23 @@ export const VercelAestheticPreview: React.FC = () => {
                   </div>
                 </div>
               ) : (
-                <div className="flex shrink-0 flex-wrap items-center gap-5 font-brand-mono sm:gap-7">
+                <div className="configuration-detail-scores flex shrink-0 items-center gap-5 font-brand-mono">
                   <div>
-                    <div className="text-neutral-500 text-xs uppercase font-bold tracking-wider">Practical Score</div>
+                    <div className="text-neutral-500 text-xs uppercase font-bold tracking-wider">Practical</div>
                     <div className="mt-0.5 text-4xl font-black text-purple-950 sm:text-5xl">
                       {formatScore(selectedScoreItem.practicalBreakdown.practicalScore)}
                     </div>
                   </div>
                   <div className="hidden h-10 w-px bg-neutral-200 sm:block" />
                   <div>
-                    <div className="text-neutral-500 text-xs uppercase font-bold tracking-wider">Intelligence Index</div>
+                    <div className="text-neutral-500 text-xs uppercase font-bold tracking-wider">Intelligence</div>
                     <div className="mt-0.5 text-3xl font-black text-neutral-950 sm:text-4xl">
                       {formatScore(selectedScoreItem.rawCapabilityScore)}
                     </div>
                   </div>
                   <div className="hidden h-10 w-px bg-neutral-200 sm:block" />
                   <div>
-                    <div className="text-neutral-500 text-xs uppercase font-bold tracking-wider">Practical Delta</div>
+                    <div className="text-neutral-500 text-xs uppercase font-bold tracking-wider">Delta</div>
                     <div className={`mt-0.5 text-3xl font-black sm:text-4xl ${
                       practicalAdjustmentTextClass(selectedPracticalAdjustment)
                     }`}>
@@ -1180,12 +1174,13 @@ export const VercelAestheticPreview: React.FC = () => {
             </div>
 
             {/* Radar Display & Domain Progress Bars directly on background */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-2">
+            <div className="configuration-detail-panels grid min-h-0 flex-1">
               {/* Radar Chart comfortably centered */}
-              <div className="lg:col-span-7 flex justify-center items-center -ml-4 py-0">
+              <div className="configuration-detail-radar min-h-0">
                 <ConfigurationRadar
                   scoreItem={selectedScoreItem}
                   size={680}
+                  fitHeight
                   hoveredDomain={hoveredDomain}
                   onHoverDomain={setHoveredDomain}
                   animate={PLAY_MODE_ENABLED && isPlayModeActive}
@@ -1193,10 +1188,9 @@ export const VercelAestheticPreview: React.FC = () => {
               </div>
 
               {/* Atomic & Practical Metrics List - Stacked cleanly on mobile, side-by-side on desktop */}
-              <div className={`lg:col-span-5 pl-0 lg:pl-2 mt-4 lg:-mt-4 ${
+              <div className={`configuration-detail-metrics min-w-0 self-center ${
                 PLAY_MODE_ENABLED && isPlayModeActive ? 'play-mode-metrics-enter' : ''
               }`}>
-                <ConfigurationCoverageSummary scoreItem={selectedScoreItem} />
                 <ConfigurationMetricList
                   scoreItem={selectedScoreItem}
                   columns={2}

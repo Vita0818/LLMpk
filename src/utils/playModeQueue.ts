@@ -51,6 +51,30 @@ const compareRepresentativeRoute = (
   || left.config.name.localeCompare(right.config.name)
 );
 
+const subscriptionTier = (item: PublicLeaderboardScore) => {
+  const plan = item.config.subscriptionData?.planName ?? '';
+  return /\bultra\b|\bmax\b|\bheavy\b/iu.test(plan) ? 3
+    : /\bpro\b/iu.test(plan) ? 2
+      : /\bplus\b/iu.test(plan) ? 1 : 0;
+};
+
+/** Reader policy: equivalent access routes prefer the highest subscription. */
+const compareAccessRepresentative = (left: PublicLeaderboardScore, right: PublicLeaderboardScore) => {
+  const leftPlan = left.config.subscriptionData;
+  const rightPlan = right.config.subscriptionData;
+  if (Boolean(leftPlan) !== Boolean(rightPlan)) return rightPlan ? 1 : -1;
+  if (leftPlan && rightPlan) {
+    const tierDifference = subscriptionTier(right) - subscriptionTier(left)
+      || rightPlan.monthlyPriceUSD - leftPlan.monthlyPriceUSD
+      || rightPlan.apiEquivalentCostUSD * rightPlan.usableQuotaFraction
+        - leftPlan.apiEquivalentCostUSD * leftPlan.usableQuotaFraction;
+    if (tierDifference) return tierDifference;
+  }
+  return nullableScore(right.practicalBreakdown.practicalScore) - nullableScore(left.practicalBreakdown.practicalScore)
+    || nullableScore(right.practicalBreakdown.costDelta) - nullableScore(left.practicalBreakdown.costDelta)
+    || compareRepresentativeRoute(left, right);
+};
+
 const compareRawCapabilityRoute = (
   left: PublicLeaderboardScore,
   right: PublicLeaderboardScore,
@@ -67,7 +91,8 @@ const compareRawCapabilityRoute = (
  *
  * - Every distinct model + harness + radar profile remains represented.
  * - API/subscription routes with the same radar profile are collapsed.
- * - The route with the highest practical score represents each collapsed group.
+ * - The highest subscription tier represents equivalent access routes.
+ * - API-only groups use practical score/cost when selecting a representative.
  * - The returned queue is ranked from highest to lowest practical score.
  */
 export const buildRepresentativeConfigurationQueue = <T extends PublicLeaderboardScore>(
@@ -86,7 +111,7 @@ export const buildRepresentativeConfigurationQueue = <T extends PublicLeaderboar
   });
 
   return Array.from(groupedRoutes.values())
-    .map((group) => [...group].sort(compareRepresentativeRoute)[0])
+    .map((group) => [...group].sort(compareAccessRepresentative)[0])
     .sort(compareRepresentativeRoute);
 };
 

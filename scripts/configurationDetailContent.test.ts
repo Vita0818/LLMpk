@@ -1,6 +1,5 @@
 import assert from 'node:assert/strict';
 import publicLeaderboardSnapshot from '../src/data/publicLeaderboardSnapshot.json';
-import { DETAIL_ONLY_METRIC_DEFINITIONS } from '../src/data/detailMetricDefinitions';
 import { ALL_METRIC_DEFINITIONS } from '../src/engine/scoringEngine';
 import {
   buildConfigurationMetricRows,
@@ -28,9 +27,6 @@ const expectedBenchmarkIds = CONFIGURATION_DETAIL_DOMAIN_ORDER.flatMap((domainId
   ...ALL_METRIC_DEFINITIONS.filter((metric) => metric.domain === domainId).map(
     (metric) => metric.id
   ),
-  ...DETAIL_ONLY_METRIC_DEFINITIONS.filter(
-    (metric) => metric.domain === domainId
-  ).map((metric) => metric.id),
 ]);
 const expectedTrailingIds = [
   'speed_throughput',
@@ -45,7 +41,6 @@ const assertSharedDetailContract = (score: PublicLeaderboardScore) => {
   assert.equal(
     rows.length,
     ALL_METRIC_DEFINITIONS.length +
-      DETAIL_ONLY_METRIC_DEFINITIONS.length +
       expectedTrailingIds.length
   );
   assert.deepEqual(

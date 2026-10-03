@@ -1335,7 +1335,7 @@ const claudeMaxTargets: readonly ExpectedSubscriptionTarget[] = [
   },
   {
     key: 'claude-fable-5-1.max.chat',
-    basePresetId: 'builtin.claude-fable-5-1.max',
+    basePresetId: 'builtin.harness.claude-fable-5-1.max.claude-code',
     usableQuotaFraction: 0.5,
   },
   {

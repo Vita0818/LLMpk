@@ -36,6 +36,9 @@ The production site is expected at:
 ## Current scoring policy
 
 The reviewed successor-pruned inventory contains 30 model families / 40 configurations.
+The reader view folds equivalent model/harness/radar access routes, preferring
+the highest subscription tier. Its table and all selectors share the same 32
+visible configurations; the complete scoring inventory stays available internally.
 Scoring v3 requires every domain to reach 60% weighted observed evidence and
 at least 75% overall coverage before assigning a total or rank. Missing
 observations are null; insufficient configurations remain inspectable.

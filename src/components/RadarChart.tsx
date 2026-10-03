@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { DomainId } from '../types/llm_pk';
 import { DOMAIN_DEFINITIONS } from '../engine/scoringEngine';
 
@@ -22,6 +22,7 @@ interface RadarChartProps {
   onHoverDomain?: (domain: DomainId | null) => void;
   showDomainNames?: boolean;
   animateSeries?: boolean;
+  fitHeight?: boolean;
 }
 
 const DOMAIN_ORDER: DomainId[] = [
@@ -54,7 +55,24 @@ export const RadarChart: React.FC<RadarChartProps> = ({
   onHoverDomain,
   showDomainNames = true,
   animateSeries = false,
+  fitHeight = false,
 }) => {
+  const frameRef = useRef<HTMLDivElement>(null);
+  const [frameSize, setFrameSize] = useState({ width: size, height: size });
+  useLayoutEffect(() => {
+    const frame = frameRef.current;
+    if (!fitHeight || !frame) return;
+    const measure = () => {
+      const { width, height } = frame.getBoundingClientRect();
+      if (width <= 0 || height <= 0) return;
+      setFrameSize(previous => previous.width === width && previous.height === height
+        ? previous : { width, height });
+    };
+    const observer = new ResizeObserver(measure);
+    observer.observe(frame);
+    measure();
+    return () => observer.disconnect();
+  }, [fitHeight]);
   const [internalHoveredDomain, setInternalHoveredDomain] = useState<DomainId | null>(null);
   const hoveredDomain = controlledHoveredDomain !== undefined ? controlledHoveredDomain : internalHoveredDomain;
 
@@ -65,8 +83,20 @@ export const RadarChart: React.FC<RadarChartProps> = ({
     }
   };
 
-  const center = size / 2;
-  const radius = (size / 2) * 0.78;
+  const width = fitHeight ? frameSize.width : size;
+  const height = fitHeight ? frameSize.height : size;
+  const centerX = width / 2;
+  const centerY = height / 2;
+  const displaySize = Math.min(width, height);
+  const detailScoreFontSize = fitHeight ? Math.max(16, Math.min(26, Math.round(displaySize / 26)))
+    : Math.max(14, Math.round(size / 26));
+  const detailLabelFontSize = fitHeight ? Math.max(11, Math.round(detailScoreFontSize * 0.62))
+    : Math.max(9, Math.round(detailScoreFontSize * 0.62));
+  const radius = fitHeight ? Math.max(18, Math.min(
+    displaySize * 0.39,
+    (centerX - detailLabelFontSize * 6.5) / Math.cos(Math.PI / 6) - 14,
+    centerY - 14 - detailLabelFontSize * 1.35 * 1.35 - detailLabelFontSize / 2,
+  )) : (size / 2) * 0.78;
 
   const getAngle = (index: number) => {
     return (index * 2 * Math.PI) / 6 - Math.PI / 2;
@@ -75,8 +105,8 @@ export const RadarChart: React.FC<RadarChartProps> = ({
   const getPointCoordinates = (value: number, index: number) => {
     const angle = getAngle(index);
     const r = (Math.max(0, Math.min(100, value)) / 100) * radius;
-    const x = center + r * Math.cos(angle);
-    const y = center + r * Math.sin(angle);
+    const x = centerX + r * Math.cos(angle);
+    const y = centerY + r * Math.sin(angle);
     return { x, y };
   };
 
@@ -86,8 +116,8 @@ export const RadarChart: React.FC<RadarChartProps> = ({
     const angle = getAngle(index);
     const markerRadius = radius + 6;
     return {
-      x: center + markerRadius * Math.cos(angle),
-      y: center + markerRadius * Math.sin(angle),
+      x: centerX + markerRadius * Math.cos(angle),
+      y: centerY + markerRadius * Math.sin(angle),
     };
   };
 
@@ -98,9 +128,9 @@ export const RadarChart: React.FC<RadarChartProps> = ({
   const rings = [20, 40, 60, 80, 100];
 
   return (
-    <div className="flex flex-col items-center justify-center w-full">
-      <div className="relative w-full max-w-[680px] aspect-square flex items-center justify-center" style={{ maxWidth: size }}>
-        <svg viewBox={`0 0 ${size} ${size}`} className="w-full h-full overflow-visible">
+    <div className={`flex flex-col items-center justify-center w-full ${fitHeight ? 'h-full' : ''}`}>
+      <div ref={frameRef} className={fitHeight ? 'relative w-full h-full' : 'relative w-full max-w-[680px] aspect-square flex items-center justify-center'} style={fitHeight ? undefined : { maxWidth: size }}>
+        <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full overflow-visible">
           {/* Background Grid Rings */}
           {rings.map((ringValue) => {
             const points = DOMAIN_ORDER.map((_, idx) => {
@@ -123,15 +153,15 @@ export const RadarChart: React.FC<RadarChartProps> = ({
           {/* Spokes */}
           {DOMAIN_ORDER.map((dId, idx) => {
             const angle = getAngle(idx);
-            const x2 = center + radius * Math.cos(angle);
-            const y2 = center + radius * Math.sin(angle);
+            const x2 = centerX + radius * Math.cos(angle);
+            const y2 = centerY + radius * Math.sin(angle);
             const isHovered = hoveredDomain === dId;
 
             return (
               <line
                 key={`spoke-${dId}`}
-                x1={center}
-                y1={center}
+                x1={centerX}
+                y1={centerY}
                 x2={x2}
                 y2={y2}
                 stroke="#E2E8F0"
@@ -260,15 +290,15 @@ export const RadarChart: React.FC<RadarChartProps> = ({
               extraRadius = 28;
             }
 
-            const labelRadius = radius + extraRadius;
-            const lx = center + labelRadius * Math.cos(angle);
-            const ly = center + labelRadius * Math.sin(angle);
+            const labelRadius = radius + (fitHeight ? 14 : extraRadius);
+            const lx = centerX + labelRadius * Math.cos(angle);
+            const ly = centerY + labelRadius * Math.sin(angle);
 
             // ISOLATED OVERVIEW MODE (showDomainNames === false): Pure Vertex Numeric Scores
             if (!showDomainNames) {
               const overviewRadius = radius + 15;
-              const olx = center + overviewRadius * Math.cos(angle);
-              const oly = center + overviewRadius * Math.sin(angle);
+              const olx = centerX + overviewRadius * Math.cos(angle);
+              const oly = centerY + overviewRadius * Math.sin(angle);
 
               let oAnchor: 'start' | 'middle' | 'end' = 'middle';
               if (Math.abs(angle - (-Math.PI / 2)) < 0.1 || Math.abs(angle - (Math.PI / 2)) < 0.1) {
@@ -308,8 +338,8 @@ export const RadarChart: React.FC<RadarChartProps> = ({
             }
 
             // ORIGINAL DETAIL MODE (showDomainNames === true): 100% Untouched
-            const scoreFontSize = Math.max(14, Math.round(size / 26));
-            const labelFontSize = Math.max(9, Math.round(scoreFontSize * 0.62));
+            const scoreFontSize = detailScoreFontSize;
+            const labelFontSize = detailLabelFontSize;
             const lineGap = labelFontSize * 1.35;
 
             const domainLines = getRadarDomainLines(def.nameEn);
@@ -324,12 +354,12 @@ export const RadarChart: React.FC<RadarChartProps> = ({
               lineYOffset = (lineIdx: number) => ly + lineGap * (0.35 + lineIdx * 0.95);
             } else if (idx === 3) {
               // Bottom vertex: Score at top (ly + 4), Domain Name below (ly + 22)
-              scoreY = ly + lineGap * 0.25;
+              scoreY = ly + lineGap * (fitHeight ? -0.25 : 0.25);
               lineYOffset = (lineIdx: number) => ly + lineGap * (1.35 + lineIdx * 0.95);
             } else if (idx === 5) {
               // Top-Left vertex cleanly spaced
               scoreY = ly - lineGap * 0.9;
-              lineYOffset = (lineIdx: number) => ly + lineGap * (0.2 + lineIdx * 0.95);
+              lineYOffset = (lineIdx: number) => ly + lineGap * ((fitHeight ? 0.45 : 0.2) + lineIdx * 0.95);
             }
 
             return (

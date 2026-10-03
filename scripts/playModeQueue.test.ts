@@ -5,6 +5,7 @@ import type {
   PublicLeaderboardSnapshot,
 } from '../src/types/publicLeaderboard';
 import {
+  buildRepresentativeConfigurationQueue,
   buildPlayModeQueue,
   getPlayModeRouteGroupKey,
   sortRadarOverviewScores,
@@ -35,8 +36,8 @@ assert(
   'Playback queue must contain one representative per identical radar route group.',
 );
 assert(
-  snapshot.scores.filter(s=>s.eligibleForGlobalLeaderboard).length - queue.length === 4,
-  'Covered playback should collapse four equivalent Google subscription routes.',
+  snapshot.scores.filter(s=>s.eligibleForGlobalLeaderboard).length - queue.length === 5,
+  'Covered playback should collapse equivalent Google and Fable access routes.',
 );
 assert(
   radarOverviewScores.length === queue.length,
@@ -60,17 +61,44 @@ snapshot.scores.filter(s=>s.eligibleForGlobalLeaderboard).forEach((candidate) =>
   const representativeScore = representative?.practicalBreakdown.practicalScore
     ?? Number.NEGATIVE_INFINITY;
 
-  assert(
-    representativeScore >= candidateScore,
-    `Route group did not retain its highest practical score: ${candidate.config.name}`,
-  );
+  const subscriptionRoutes = snapshot.scores.filter(item => (
+    getPlayModeRouteGroupKey(item) === getPlayModeRouteGroupKey(candidate)
+    && item.config.subscriptionData
+  ));
+  if (subscriptionRoutes.length > 0) {
+    assert(Boolean(representative?.config.subscriptionData), 'Equivalent subscriptions must supersede the API route.');
+    assert(representative!.config.subscriptionData!.monthlyPriceUSD === Math.max(
+      ...subscriptionRoutes.map(item => item.config.subscriptionData!.monthlyPriceUSD),
+    ), 'The highest subscription plan must represent the route.');
+  } else {
+    assert(representativeScore >= candidateScore, `API-only group lost its practical representative: ${candidate.config.name}`);
+  }
 });
+
+// Plan selection is deliberate even when a cheaper API/plan has a higher P.
+const base = snapshot.scores.find(item => item.eligibleForGlobalLeaderboard && !item.config.subscriptionData)!;
+const accessVariant = (id: string, plan: string | null, price: number, practicalScore: number): PublicLeaderboardScore => ({
+  ...base,
+  config: { ...base.config, id, name: `${base.config.name.split('|').slice(0,2).join('|')}| ${plan || 'API'}`,
+    subscriptionData: plan ? {planName:plan,monthlyPriceUSD:price,apiEquivalentCostUSD:price*10,usableQuotaFraction:1} : undefined },
+  practicalBreakdown:{...base.practicalBreakdown,practicalScore},
+});
+const equivalentRoutes = [
+  accessVariant('api','',0,110),
+  accessVariant('plus','ChatGPT Plus',20,115),
+  accessVariant('pro','ChatGPT Pro 20×',200,90),
+];
+assert(buildRepresentativeConfigurationQueue(equivalentRoutes)[0].config.id === 'pro',
+  'The highest subscription must win instead of choosing the largest practical score.');
+const insufficientRoutes = equivalentRoutes.map(item => ({...item, eligibleForGlobalLeaderboard:false,rawCapabilityScore:null,
+  practicalBreakdown:{...item.practicalBreakdown,practicalScore:null}}));
+assert(buildRepresentativeConfigurationQueue(insufficientRoutes)[0].config.id === 'pro',
+  'Missing total scores must not defeat highest-plan selection.');
 
 const expectedRepresentatives = [
   "Kimi K3 Max | Kimi Code CLI | Moonshot AI API",
-  "Claude Fable 5.1 Max | Claude Code | Anthropic API",
   "Claude Opus 5.5 Max | Claude Code | Anthropic API",
-  "Claude Fable 5.1 Max | --- | Claude Max 20×",
+  "Claude Fable 5.1 Max | Claude Code | Claude Max 20×",
   "GPT-6 Astra Max | Codex CLI | OpenAI API",
   "GPT-6 Luna Max | Codex CLI | OpenAI API",
   "MiMo-V2.6-Pro Default | --- | Xiaomi API",

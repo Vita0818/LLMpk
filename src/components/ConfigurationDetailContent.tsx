@@ -1,5 +1,4 @@
 import React from 'react';
-import { DETAIL_ONLY_METRIC_DEFINITIONS } from '../data/detailMetricDefinitions';
 import { getCompactMetricName } from '../data/compactMetricNames';
 import { ALL_METRIC_DEFINITIONS, DOMAIN_DEFINITIONS } from '../engine/scoringEngine';
 import type { DomainId } from '../types/llm_pk';
@@ -97,11 +96,7 @@ export const buildConfigurationMetricRows = (
     const scoredMetrics = ALL_METRIC_DEFINITIONS.filter(
       (metric) => metric.domain === domainId
     );
-    const detailOnlyMetrics = DETAIL_ONLY_METRIC_DEFINITIONS.filter(
-      (metric) => metric.domain === domainId
-    );
-
-    return [...scoredMetrics, ...detailOnlyMetrics].map((metric) => {
+    return scoredMetrics.map((metric) => {
       const rawValue = scoreItem.config.observations[metric.id]?.rawValue;
       const formattedValue = formatConfigurationRawMetricValue(rawValue, metric.unit);
 
@@ -183,23 +178,6 @@ export const buildConfigurationMetricRows = (
   ];
 };
 
-export const ConfigurationCoverageSummary: React.FC<{ scoreItem: PublicLeaderboardScore }> = ({ scoreItem }) => (
-  <div className="space-y-2 text-xs text-neutral-600" data-coverage-summary>
-    <div className="font-semibold">
-      Coverage {(scoreItem.overallCoverage * 100).toFixed(0)}% · {scoreItem.availableDomainCount}/6 domains
-      {!scoreItem.eligibleForGlobalLeaderboard && <span className="ml-2 text-amber-800">证据不足，暂不综合排名</span>}
-    </div>
-    <div className="flex flex-wrap gap-x-4 gap-y-1 font-brand-mono">
-      {CONFIGURATION_DETAIL_DOMAIN_ORDER.map(id => (
-        <span key={id} style={{ color: DOMAIN_DEFINITIONS[id].color }}>
-          {DOMAIN_DEFINITIONS[id].nameEn} {(scoreItem.domainScores[id].coverage * 100).toFixed(0)}%
-        </span>
-      ))}
-    </div>
-    <p>每域至少 60%、六域均达标、总覆盖率至少 75% 才有综合分。缺测保留为 --。</p>
-  </div>
-);
-
 interface ConfigurationRadarProps {
   scoreItem: PublicLeaderboardScore;
   size: number;
@@ -207,6 +185,7 @@ interface ConfigurationRadarProps {
   onHoverDomain?: (domain: DomainId | null) => void;
   showDomainNames?: boolean;
   animate?: boolean;
+  fitHeight?: boolean;
 }
 
 export const ConfigurationRadar: React.FC<ConfigurationRadarProps> = ({
@@ -216,6 +195,7 @@ export const ConfigurationRadar: React.FC<ConfigurationRadarProps> = ({
   onHoverDomain,
   showDomainNames = true,
   animate = false,
+  fitHeight = false,
 }) => {
   const brandTheme = getProviderBrandTheme(scoreItem.config.provider);
 
@@ -243,6 +223,7 @@ export const ConfigurationRadar: React.FC<ConfigurationRadarProps> = ({
       onHoverDomain={onHoverDomain}
       showDomainNames={showDomainNames}
       animateSeries={animate}
+      fitHeight={fitHeight}
     />
   );
 };
@@ -265,7 +246,7 @@ export const ConfigurationMetricList: React.FC<ConfigurationMetricListProps> = (
 
   return (
     <div
-      className={`grid gap-x-6 gap-y-1.5 font-brand-mono text-xs sm:text-sm ${
+      className={`configuration-metric-list grid gap-x-6 gap-y-1.5 font-brand-mono text-xs sm:text-sm ${
         columns === 2 ? 'grid-cols-2' : 'grid-cols-1'
       }`}
     >
@@ -276,7 +257,7 @@ export const ConfigurationMetricList: React.FC<ConfigurationMetricListProps> = (
         return (
           <div
             key={row.id}
-            className={`flex min-h-7 min-w-0 items-center justify-between gap-2 rounded px-1.5 py-1 transition-all duration-200 ${
+            className={`configuration-metric-row flex min-h-7 min-w-0 items-center justify-between gap-2 rounded px-1.5 py-1 transition-all duration-200 ${
               row.domainId !== null ? 'cursor-pointer' : ''
             } ${isDimmed ? 'opacity-25 hover:opacity-100' : 'opacity-100'}`}
             onMouseEnter={() => {
