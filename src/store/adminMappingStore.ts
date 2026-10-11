@@ -32,6 +32,7 @@ import {
   processLLMpkBatchScoring,
 } from '../engine/scoringEngine';
 import { VERIFIED_SOURCE_MODEL_CARDS, VERIFIED_SOURCE_OBSERVATIONS } from '../data/seedCards';
+import { getSubscriptionPricingEvidence } from '../data/subscriptionPricing';
 import { VERIFIED_DESIGN_ARENA_SOURCE_MODEL_CARDS, VERIFIED_DESIGN_ARENA_SOURCE_OBSERVATIONS } from '../data/designArenaSeedCards';
 import {
   VERIFIED_HARNESS_SOURCE_MODEL_CARDS,
@@ -971,6 +972,10 @@ function sanitizeSubscriptionCostData(value: unknown): SubscriptionCostData | un
     monthlyPriceUSD,
     apiEquivalentCostUSD,
     usableQuotaFraction,
+    ...(typeof value.pricingEvidenceId === 'string'
+      && getSubscriptionPricingEvidence(value.pricingEvidenceId)
+      ? { pricingEvidenceId: value.pricingEvidenceId }
+      : {}),
   };
 }
 

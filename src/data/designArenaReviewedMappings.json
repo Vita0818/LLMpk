@@ -1,0 +1,627 @@
+{
+  "schemaVersion": "design-arena-reviewed-mappings/v1",
+  "reviewedAt": "2026-10-11",
+  "policy": "Source identity and target preset links are authored explicitly. Refreshing scores does not infer new model, effort, harness, or reader inventory links.",
+  "entries": [
+    {
+      "cardId": "card-designarena-glm-53-default",
+      "productLineId": "glm_53",
+      "baseOpenRouterCardId": "card-openrouter-z-ai-glm-5-3",
+      "openRouterModelId": "z-ai/glm-5.3",
+      "canonicalModelVersion": "z-ai/glm-5.3-20260816",
+      "source": {
+        "arena": "models",
+        "category": "codecategories",
+        "modelPermaslug": "z-ai/glm-5.3-20260816",
+        "displayName": "GLM-5.3"
+      },
+      "sourceProfile": {
+        "label": "Default",
+        "level": 0,
+        "disclosed": false
+      },
+      "reviewedReason": "Exact dated model version and source display identity checked; effort is undisclosed and stays Default. Frontend measures the benchmark-internal build environment.",
+      "targets": [
+        {
+          "presetId": "builtin.data-md.glm-5-3.max",
+          "modelName": "GLM-5.3",
+          "profile": "Max",
+          "harness": "---",
+          "provenance": {
+            "kind": "lower_profile_fallback",
+            "sourceProfile": "Default (source effort undisclosed)",
+            "sourceLevel": 0,
+            "targetProfile": "Max",
+            "targetLevel": 6
+          }
+        }
+      ]
+    },
+    {
+      "cardId": "card-designarena-minimax-m3-default",
+      "productLineId": "minimax_m3",
+      "baseOpenRouterCardId": "card-openrouter-minimax-minimax-m3",
+      "openRouterModelId": "minimax/minimax-m3",
+      "canonicalModelVersion": "minimax/minimax-m3-20260531",
+      "source": {
+        "arena": "models",
+        "category": "codecategories",
+        "modelPermaslug": "minimax/minimax-m3-20260531",
+        "displayName": "MiniMax M3"
+      },
+      "sourceProfile": {
+        "label": "Default",
+        "level": 0,
+        "disclosed": false
+      },
+      "reviewedReason": "Exact dated model version and source display identity checked; effort is undisclosed and stays Default. Frontend measures the benchmark-internal build environment.",
+      "targets": [
+        {
+          "presetId": "builtin.agent.arena.minimax-m3.max",
+          "modelName": "MiniMax M3",
+          "profile": "Max",
+          "harness": "AA Agent Harness",
+          "provenance": {
+            "kind": "lower_profile_fallback",
+            "sourceProfile": "Default (source effort undisclosed)",
+            "sourceLevel": 0,
+            "targetProfile": "Max",
+            "targetLevel": 6
+          }
+        }
+      ]
+    },
+    {
+      "cardId": "card-designarena-qwen-37-plus-default",
+      "productLineId": "qwen_37_plus",
+      "baseOpenRouterCardId": "card-openrouter-qwen-qwen3-7-plus",
+      "openRouterModelId": "qwen/qwen3.7-plus",
+      "canonicalModelVersion": "qwen/qwen3.7-plus-20260602",
+      "source": {
+        "arena": "models",
+        "category": "codecategories",
+        "modelPermaslug": "qwen/qwen3.7-plus-20260602",
+        "displayName": "Qwen3.7 Plus"
+      },
+      "sourceProfile": {
+        "label": "Default",
+        "level": 0,
+        "disclosed": false
+      },
+      "reviewedReason": "Exact dated model version and source display identity checked; effort is undisclosed and stays Default. Frontend measures the benchmark-internal build environment.",
+      "targets": [
+        {
+          "presetId": "builtin.harness.qwen-3-7-plus.max.claude-code",
+          "modelName": "Qwen3.7 Plus",
+          "profile": "Max",
+          "harness": "Claude Code",
+          "provenance": {
+            "kind": "lower_profile_fallback",
+            "sourceProfile": "Default (source effort undisclosed)",
+            "sourceLevel": 0,
+            "targetProfile": "Max",
+            "targetLevel": 6
+          }
+        }
+      ]
+    },
+    {
+      "cardId": "card-designarena-claude-fable-51-default",
+      "productLineId": "claude_fable_51",
+      "baseOpenRouterCardId": "card-openrouter-anthropic-claude-fable-5-1",
+      "openRouterModelId": "anthropic/claude-fable-5.1",
+      "canonicalModelVersion": "anthropic/claude-fable-5.1-20260831",
+      "source": {
+        "arena": "models",
+        "category": "codecategories",
+        "modelPermaslug": "anthropic/claude-fable-5.1-20260831",
+        "displayName": "Claude Fable 5.1"
+      },
+      "sourceProfile": {
+        "label": "Default",
+        "level": 0,
+        "disclosed": false
+      },
+      "reviewedReason": "Exact dated model version and source display identity checked; effort is undisclosed and stays Default. Frontend measures the benchmark-internal build environment.",
+      "targets": [
+        {
+          "presetId": "builtin.harness.claude-fable-5-1.max.claude-code",
+          "modelName": "Claude Fable 5.1",
+          "profile": "Max",
+          "harness": "Claude Code",
+          "provenance": {
+            "kind": "lower_profile_fallback",
+            "sourceProfile": "Default (source effort undisclosed)",
+            "sourceLevel": 0,
+            "targetProfile": "Max",
+            "targetLevel": 6
+          }
+        },
+        {
+          "presetId": "builtin.subscription.claude-max-20x.claude-fable-5-1.max.chat",
+          "modelName": "Claude Fable 5.1",
+          "profile": "Max",
+          "harness": "Claude Code",
+          "provenance": {
+            "kind": "lower_profile_fallback",
+            "sourceProfile": "Default (source effort undisclosed)",
+            "sourceLevel": 0,
+            "targetProfile": "Max",
+            "targetLevel": 6
+          }
+        }
+      ]
+    },
+    {
+      "cardId": "card-designarena-claude-opus-55-default",
+      "productLineId": "claude_opus_55",
+      "baseOpenRouterCardId": "card-openrouter-anthropic-claude-opus-5-5",
+      "openRouterModelId": "anthropic/claude-opus-5.5",
+      "canonicalModelVersion": "anthropic/claude-opus-5.5-20260921",
+      "source": {
+        "arena": "models",
+        "category": "codecategories",
+        "modelPermaslug": "anthropic/claude-opus-5.5-20260921",
+        "displayName": "Claude Opus 5.5"
+      },
+      "sourceProfile": {
+        "label": "Default",
+        "level": 0,
+        "disclosed": false
+      },
+      "reviewedReason": "Exact dated model version and source display identity checked; effort is undisclosed and stays Default. Frontend measures the benchmark-internal build environment. 2026-10-11: the explicitly listed subscription variants retain the identical reviewed model, effort and production harness; only access pricing changes.",
+      "targets": [
+        {
+          "presetId": "builtin.harness.claude-opus-5-5.max.claude-code",
+          "modelName": "Claude Opus 5.5",
+          "profile": "Max",
+          "harness": "Claude Code",
+          "provenance": {
+            "kind": "lower_profile_fallback",
+            "sourceProfile": "Default (source effort undisclosed)",
+            "sourceLevel": 0,
+            "targetProfile": "Max",
+            "targetLevel": 6
+          }
+        },
+        {
+          "presetId": "builtin.subscription.claude-pro.claude-opus-5-5.max.claude-code",
+          "modelName": "Claude Opus 5.5",
+          "profile": "Max",
+          "harness": "Claude Code",
+          "provenance": {
+            "kind": "lower_profile_fallback",
+            "sourceProfile": "Default (source effort undisclosed)",
+            "sourceLevel": 0,
+            "targetProfile": "Max",
+            "targetLevel": 6
+          }
+        },
+        {
+          "presetId": "builtin.subscription.claude-max-20x.claude-opus-5-5.max.claude-code",
+          "modelName": "Claude Opus 5.5",
+          "profile": "Max",
+          "harness": "Claude Code",
+          "provenance": {
+            "kind": "lower_profile_fallback",
+            "sourceProfile": "Default (source effort undisclosed)",
+            "sourceLevel": 0,
+            "targetProfile": "Max",
+            "targetLevel": 6
+          }
+        }
+      ]
+    },
+    {
+      "cardId": "card-designarena-grok-47-default",
+      "productLineId": "grok_47",
+      "baseOpenRouterCardId": "card-openrouter-x-ai-grok-4-7",
+      "openRouterModelId": "x-ai/grok-4.7",
+      "canonicalModelVersion": "x-ai/grok-4.7-20260916",
+      "source": {
+        "arena": "models",
+        "category": "codecategories",
+        "modelPermaslug": "x-ai/grok-4.7-20260916",
+        "displayName": "Grok 4.7"
+      },
+      "sourceProfile": {
+        "label": "Default",
+        "level": 0,
+        "disclosed": false
+      },
+      "reviewedReason": "Exact dated model version and source display identity checked; effort is undisclosed and stays Default. Frontend measures the benchmark-internal build environment.",
+      "targets": [
+        {
+          "presetId": "builtin.harness.grok-4-7.xhigh.grok-build",
+          "modelName": "Grok 4.7",
+          "profile": "XHigh",
+          "harness": "Grok Build",
+          "provenance": {
+            "kind": "lower_profile_fallback",
+            "sourceProfile": "Default (source effort undisclosed)",
+            "sourceLevel": 0,
+            "targetProfile": "XHigh",
+            "targetLevel": 5
+          }
+        }
+      ]
+    },
+    {
+      "cardId": "card-designarena-mimo-v26-pro-default",
+      "productLineId": "mimo_v26_pro",
+      "baseOpenRouterCardId": "card-openrouter-xiaomi-mimo-v2-6-pro",
+      "openRouterModelId": "xiaomi/mimo-v2.6-pro",
+      "canonicalModelVersion": "xiaomi/mimo-v2.6-pro-20260921",
+      "source": {
+        "arena": "models",
+        "category": "codecategories",
+        "modelPermaslug": "xiaomi/mimo-v2.6-pro-20260921",
+        "displayName": "MiMo-V2.6-Pro"
+      },
+      "sourceProfile": {
+        "label": "Default",
+        "level": 0,
+        "disclosed": false
+      },
+      "reviewedReason": "Exact dated model version and source display identity checked; effort is undisclosed and stays Default. Frontend measures the benchmark-internal build environment.",
+      "targets": [
+        {
+          "presetId": "builtin.mimo-v2-6-pro.default",
+          "modelName": "MiMo-V2.6-Pro",
+          "profile": "Default",
+          "harness": "---",
+          "provenance": {
+            "kind": "exact"
+          }
+        }
+      ]
+    },
+    {
+      "cardId": "card-designarena-glm-53-flash-default",
+      "productLineId": "glm_53_flash",
+      "baseOpenRouterCardId": "card-openrouter-z-ai-glm-5-3-flash",
+      "openRouterModelId": "z-ai/glm-5.3-flash",
+      "canonicalModelVersion": "z-ai/glm-5.3-flash-20260826",
+      "source": {
+        "arena": "models",
+        "category": "codecategories",
+        "modelPermaslug": "z-ai/glm-5.3-flash-20260826",
+        "displayName": "GLM-5.3-Flash"
+      },
+      "sourceProfile": {
+        "label": "Default",
+        "level": 0,
+        "disclosed": false
+      },
+      "reviewedReason": "Exact dated model version and source display identity checked; effort is undisclosed and stays Default. Frontend measures the benchmark-internal build environment.",
+      "targets": [
+        {
+          "presetId": "builtin.glm-5-3-flash.max",
+          "modelName": "GLM-5.3-Flash",
+          "profile": "Max",
+          "harness": "---",
+          "provenance": {
+            "kind": "lower_profile_fallback",
+            "sourceProfile": "Default (source effort undisclosed)",
+            "sourceLevel": 0,
+            "targetProfile": "Max",
+            "targetLevel": 6
+          }
+        }
+      ]
+    },
+    {
+      "cardId": "card-designarena-inkling-default",
+      "productLineId": "inkling",
+      "baseOpenRouterCardId": "card-openrouter-thinkingmachines-inkling",
+      "openRouterModelId": "thinkingmachines/inkling",
+      "canonicalModelVersion": "thinkingmachines/inkling-20260715",
+      "source": {
+        "arena": "models",
+        "category": "codecategories",
+        "modelPermaslug": "thinkingmachines/inkling-20260715",
+        "displayName": "Inkling"
+      },
+      "sourceProfile": {
+        "label": "Default",
+        "level": 0,
+        "disclosed": false
+      },
+      "reviewedReason": "Exact dated model version and source display identity checked; effort is undisclosed and stays Default. Frontend measures the benchmark-internal build environment.",
+      "targets": [
+        {
+          "presetId": "builtin.inkling.xhigh",
+          "modelName": "Inkling",
+          "profile": "XHigh",
+          "harness": "---",
+          "provenance": {
+            "kind": "lower_profile_fallback",
+            "sourceProfile": "Default (source effort undisclosed)",
+            "sourceLevel": 0,
+            "targetProfile": "XHigh",
+            "targetLevel": 5
+          }
+        }
+      ]
+    },
+    {
+      "cardId": "card-designarena-gemini-38-flash-default",
+      "productLineId": "gemini_38_flash",
+      "baseOpenRouterCardId": "card-openrouter-google-gemini-3-8-flash",
+      "openRouterModelId": "google/gemini-3.8-flash",
+      "canonicalModelVersion": "google/gemini-3.8-flash-20260902",
+      "source": {
+        "arena": "models",
+        "category": "codecategories",
+        "modelPermaslug": "google/gemini-3.8-flash-20260902",
+        "displayName": "Gemini 3.8 Flash"
+      },
+      "sourceProfile": {
+        "label": "Default",
+        "level": 0,
+        "disclosed": false
+      },
+      "reviewedReason": "Exact dated model version and source display identity checked; effort is undisclosed and stays Default. Frontend measures the benchmark-internal build environment.",
+      "targets": [
+        {
+          "presetId": "builtin.agent.arena.gemini-3-8-flash.high",
+          "modelName": "Gemini 3.8 Flash",
+          "profile": "High",
+          "harness": "AA Agent Harness",
+          "provenance": {
+            "kind": "lower_profile_fallback",
+            "sourceProfile": "Default (source effort undisclosed)",
+            "sourceLevel": 0,
+            "targetProfile": "High",
+            "targetLevel": 4
+          }
+        },
+        {
+          "presetId": "builtin.harness.gemini-3-8-flash.high.antigravity-sdk",
+          "modelName": "Gemini 3.8 Flash",
+          "profile": "High",
+          "harness": "Antigravity SDK",
+          "provenance": {
+            "kind": "lower_profile_fallback",
+            "sourceProfile": "Default (source effort undisclosed)",
+            "sourceLevel": 0,
+            "targetProfile": "High",
+            "targetLevel": 4
+          }
+        },
+        {
+          "presetId": "builtin.harness.gemini-3-8-flash.high.opencode",
+          "modelName": "Gemini 3.8 Flash",
+          "profile": "High",
+          "harness": "OpenCode",
+          "provenance": {
+            "kind": "lower_profile_fallback",
+            "sourceProfile": "Default (source effort undisclosed)",
+            "sourceLevel": 0,
+            "targetProfile": "High",
+            "targetLevel": 4
+          }
+        },
+        {
+          "presetId": "builtin.subscription.google-ai-pro.gemini-3-8-flash.high.antigravity-sdk",
+          "modelName": "Gemini 3.8 Flash",
+          "profile": "High",
+          "harness": "Antigravity SDK",
+          "provenance": {
+            "kind": "lower_profile_fallback",
+            "sourceProfile": "Default (source effort undisclosed)",
+            "sourceLevel": 0,
+            "targetProfile": "High",
+            "targetLevel": 4
+          }
+        },
+        {
+          "presetId": "builtin.subscription.google-ai-pro.gemini-3-8-flash.high.opencode",
+          "modelName": "Gemini 3.8 Flash",
+          "profile": "High",
+          "harness": "OpenCode",
+          "provenance": {
+            "kind": "lower_profile_fallback",
+            "sourceProfile": "Default (source effort undisclosed)",
+            "sourceLevel": 0,
+            "targetProfile": "High",
+            "targetLevel": 4
+          }
+        },
+        {
+          "presetId": "builtin.subscription.google-ai-ultra-20x.gemini-3-8-flash.high.antigravity-sdk",
+          "modelName": "Gemini 3.8 Flash",
+          "profile": "High",
+          "harness": "Antigravity SDK",
+          "provenance": {
+            "kind": "lower_profile_fallback",
+            "sourceProfile": "Default (source effort undisclosed)",
+            "sourceLevel": 0,
+            "targetProfile": "High",
+            "targetLevel": 4
+          }
+        },
+        {
+          "presetId": "builtin.subscription.google-ai-ultra-20x.gemini-3-8-flash.high.opencode",
+          "modelName": "Gemini 3.8 Flash",
+          "profile": "High",
+          "harness": "OpenCode",
+          "provenance": {
+            "kind": "lower_profile_fallback",
+            "sourceProfile": "Default (source effort undisclosed)",
+            "sourceLevel": 0,
+            "targetProfile": "High",
+            "targetLevel": 4
+          }
+        }
+      ]
+    },
+    {
+      "cardId": "card-designarena-kimi-k3-default",
+      "productLineId": "kimi_k3",
+      "baseOpenRouterCardId": "card-openrouter-moonshotai-kimi-k3",
+      "openRouterModelId": "moonshotai/kimi-k3",
+      "canonicalModelVersion": "moonshotai/kimi-k3-20260715",
+      "source": {
+        "arena": "models",
+        "category": "codecategories",
+        "modelPermaslug": "moonshotai/kimi-k3-20260715",
+        "displayName": "Kimi K3"
+      },
+      "sourceProfile": {
+        "label": "Default",
+        "level": 0,
+        "disclosed": false
+      },
+      "reviewedReason": "Exact dated model version and source display identity checked; effort is undisclosed and stays Default. Frontend measures the benchmark-internal build environment.",
+      "targets": [
+        {
+          "presetId": "builtin.harness.kimi-k3.max.kimi-code-cli",
+          "modelName": "Kimi K3",
+          "profile": "Max",
+          "harness": "Kimi Code CLI",
+          "provenance": {
+            "kind": "lower_profile_fallback",
+            "sourceProfile": "Default (source effort undisclosed)",
+            "sourceLevel": 0,
+            "targetProfile": "Max",
+            "targetLevel": 6
+          }
+        }
+      ]
+    },
+    {
+      "cardId": "card-designarena-muse-spark-13-xhigh",
+      "productLineId": "muse_spark_13",
+      "baseOpenRouterCardId": "card-openrouter-meta-muse-spark-1-3",
+      "openRouterModelId": "meta/muse-spark-1.3",
+      "canonicalModelVersion": "meta/muse-spark-1.3-20260902",
+      "source": {
+        "arena": "models",
+        "category": "codecategories",
+        "modelPermaslug": "meta/muse-spark-1.3-20260902",
+        "displayName": "Muse Spark 1.3 (xhigh)"
+      },
+      "sourceProfile": {
+        "label": "XHigh",
+        "level": 5,
+        "disclosed": true
+      },
+      "reviewedReason": "Exact dated model and explicitly published xhigh row; the same-ID Max row is a separate configuration.",
+      "targets": [
+        {
+          "presetId": "builtin.harness.muse-spark-1-3.xhigh.muse-code",
+          "modelName": "Muse Spark 1.3",
+          "profile": "XHigh",
+          "harness": "Muse Code",
+          "provenance": {
+            "kind": "exact"
+          }
+        },
+        {
+          "presetId": "builtin.api-tier.meta-contributor.muse-spark-1-3.xhigh.muse-code",
+          "modelName": "Muse Spark 1.3",
+          "profile": "XHigh",
+          "harness": "Muse Code",
+          "provenance": {
+            "kind": "exact"
+          }
+        }
+      ]
+    },
+    {
+      "cardId": "card-designarena-muse-spark-13-max",
+      "productLineId": "muse_spark_13",
+      "baseOpenRouterCardId": "card-openrouter-meta-muse-spark-1-3",
+      "openRouterModelId": "meta/muse-spark-1.3",
+      "canonicalModelVersion": "meta/muse-spark-1.3-20260902",
+      "source": {
+        "arena": "models",
+        "category": "codecategories",
+        "modelPermaslug": "meta/muse-spark-1.3-20260902",
+        "displayName": "Muse Spark 1.3 Max"
+      },
+      "sourceProfile": {
+        "label": "Max",
+        "level": 6,
+        "disclosed": true
+      },
+      "reviewedReason": "Exact dated model and explicitly published Max row retained without a target; Max must not backfill XHigh.",
+      "targets": []
+    }
+  ],
+  "exclusions": [
+    {
+      "productLineId": "qwen_38_max",
+      "reason": "Published Qwen3.8 Max is qwen/qwen3.8-max-20260803; the reader configuration requires fixed 0902. No cross-version fallback."
+    },
+    {
+      "productLineId": "gpt_61_sol",
+      "reason": "No GPT-6.1 Sol row. Older GPT/Code entries cannot supply its score."
+    },
+    {
+      "productLineId": "claude_sonnet_55",
+      "reason": "No Sonnet 5.5 row. Sonnet 5 and 4.6 rows are retired versions."
+    },
+    {
+      "productLineId": "deepseek_v41_flash",
+      "reason": "No V4.1 Flash row. V4 Flash/0731 and V4 Pro are separate versions and products."
+    },
+    {
+      "productLineId": "gpt_6_astra",
+      "reason": "No GPT-6 Astra row; Pro and ordinary profiles cannot borrow historical GPT rows."
+    },
+    {
+      "productLineId": "gpt_6_luna",
+      "reason": "No GPT-6 Luna row."
+    },
+    {
+      "productLineId": "gpt_56_terra",
+      "reason": "No GPT-5.6 Terra row."
+    },
+    {
+      "productLineId": "longcat_20",
+      "reason": "No LongCat 2.0 row."
+    },
+    {
+      "productLineId": "gemini_35_flash_lite",
+      "reason": "No Gemini 3.5 Flash Lite row; other Gemini/Lite versions are not interchangeable."
+    },
+    {
+      "productLineId": "mistral_medium_35",
+      "reason": "No Mistral Medium 3.5 row; older Medium and Large versions are separate."
+    },
+    {
+      "productLineId": "step_5_preview",
+      "reason": "No Step 5 Preview row; Step 3.7 Flash cannot backfill it."
+    },
+    {
+      "productLineId": "qwen_38_24t_a95b",
+      "reason": "No Qwen3.8 2.4T A95B row."
+    },
+    {
+      "productLineId": "muse_glimmer",
+      "reason": "No Muse Glimmer row; Muse Spark is a separate product."
+    },
+    {
+      "productLineId": "qwen_38_flash_next",
+      "reason": "No Qwen3.8 Flash Next row."
+    },
+    {
+      "productLineId": "hy4_preview",
+      "reason": "No Hy4 Preview row; Hy3 Low is a retired model."
+    },
+    {
+      "productLineId": "qwen_38_27b",
+      "reason": "No Qwen3.8 27B row."
+    },
+    {
+      "productLineId": "command_a_plus",
+      "reason": "No Command A+ row."
+    },
+    {
+      "productLineId": "nemotron_35_lightning",
+      "reason": "No Nemotron 3.5 Lightning row; Nemotron 3 Ultra is a separate model."
+    }
+  ]
+}

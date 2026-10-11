@@ -87,7 +87,7 @@ export const ALL_METRIC_DEFINITIONS: MetricDefinition[] = [
   {
     id: "designarena_frontend", name: "DesignArena Frontend", source: "DesignArena", domain: "frontend",
     metricType: "continuous_relative", internalWeightInDomain: 0.4, higherIsBetter: true,
-    unit: "Elo", description: "官方 Overall Frontend Elo；API 未取得时保持缺测。", officialUrl: "https://www.designarena.ai/leaderboard/code",
+    unit: "Elo", description: "官方 Overall Frontend Elo；按审核后的精确版本与 effort 连接，未披露档位保留 Default 回退条件。", officialUrl: "https://www.designarena.ai/leaderboard/code",
   },
   {
     id: "aa_terminalbench_v4", name: "AA Terminal-Bench 4.0", source: "Artificial Analysis", domain: "agentic",

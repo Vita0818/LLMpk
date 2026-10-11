@@ -60,6 +60,21 @@ const subscriptionRows = buildConfigurationMetricRows(subscriptionScore);
 assert.equal(subscriptionRows.at(-2)?.label, 'Monthly Price');
 assert.equal(subscriptionRows.at(-1)?.label, 'API Equivalent');
 
+const fable = snapshot.scores.find((item) => (
+  item.config.subscriptionData?.pricingEvidenceId === 'sa-2026-10-05-max-20x-fable-5-1'
+));
+assert.ok(fable, 'Fable must use the reviewed SemiAnalysis record.');
+const fableAllowanceRow = buildConfigurationMetricRows(fable).at(-1)!;
+assert.equal(fableAllowanceRow.value, '2,485', 'Display the net Fable allowance exactly once.');
+assert.match(fableAllowanceRow.title, /SemiAnalysis 2026-10-05/u);
+assert.match(fableAllowanceRow.title, /50%/u);
+const legacyEstimate = snapshot.scores.find((item) => (
+  item.config.subscriptionData?.pricingEvidenceId === 'legacy-subscription-estimate'
+));
+assert.ok(legacyEstimate);
+assert.match(buildConfigurationMetricRows(legacyEstimate).at(-1)!.value, /^≈ /u);
+assert.match(buildConfigurationMetricRows(legacyEstimate).at(-1)!.title, /旧估算/u);
+
 for (const unit of ['Resolution Rate', 'Resolved Rate', 'Pass Rate']) {
   assert.equal(
     formatConfigurationRawMetricValue(0.373, unit),

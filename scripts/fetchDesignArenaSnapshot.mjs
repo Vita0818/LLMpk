@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import {
   atomicWriteFile,
@@ -8,10 +9,13 @@ import {
   timestampForPath,
 } from './sourceSnapshotUtils.mjs';
 import {
-  DESIGN_ARENA_FRONTEND_API_URL,
+  DESIGN_ARENA_OPENROUTER_FRONTEND_API_URL,
   DESIGN_ARENA_FRONTEND_PAGE_URL,
-  validateDesignArenaFrontendPayload,
+  validateOpenRouterDesignArenaPayload,
+  validateReviewedDesignArenaSourceRows,
 } from './designArenaSnapshotUtils.mjs';
+import { readBenchmarkApiKey } from './fetchOpenRouterBenchmarkSnapshot.mjs';
+import { OPENROUTER_BENCHMARK_KEY_NAME } from './openRouterBenchmarkSnapshotUtils.mjs';
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const OUTPUT_PATH = path.resolve(
@@ -24,14 +28,13 @@ const RAW_DIR = path.resolve(
 );
 
 async function main() {
-  const apiKey = process.env.DESIGNARENA_API_KEY?.trim();
+  const apiKey = readBenchmarkApiKey();
   if (!apiKey) {
     throw new Error(
-      'DESIGNARENA_API_KEY is required for the official Design Arena API. '
-      + 'Apply at https://www.designarena.ai/developers/apply.',
+      `${OPENROUTER_BENCHMARK_KEY_NAME} is required. Set the dedicated key in .env.benchmarks.local.`,
     );
   }
-  const response = await fetchSource(DESIGN_ARENA_FRONTEND_API_URL, {
+  const response = await fetchSource(DESIGN_ARENA_OPENROUTER_FRONTEND_API_URL, {
     accept: 'application/json',
     headers: { Authorization: 'Bearer ' + apiKey },
   });
@@ -42,18 +45,25 @@ async function main() {
     throw new Error('Design Arena returned a non-JSON leaderboard response.');
   }
   const fetchedAt = new Date().toISOString();
-  const parsed = validateDesignArenaFrontendPayload(payload, { now: fetchedAt });
+  const parsed = validateOpenRouterDesignArenaPayload(payload, { now: fetchedAt });
+  const manifest = JSON.parse(readFileSync(path.join(ROOT, 'src', 'data', 'designArenaReviewedMappings.json'), 'utf8'));
+  const reviewed = validateReviewedDesignArenaSourceRows(parsed.rows, manifest);
   const rawPath = path.join(
     RAW_DIR,
     timestampForPath(new Date(fetchedAt)) + '-overall-frontend.json',
   );
   atomicWriteFile(rawPath, response.body);
   const snapshot = {
-    schemaVersion: 'design-arena-source-snapshot/v1',
+    schemaVersion: 'design-arena-source-snapshot/v2',
+    state: 'validated',
     fetchedAt,
     source: {
-      apiUrl: DESIGN_ARENA_FRONTEND_API_URL,
+      apiUrl: DESIGN_ARENA_OPENROUTER_FRONTEND_API_URL,
       leaderboardUrl: DESIGN_ARENA_FRONTEND_PAGE_URL,
+      transport: 'openrouter-benchmarks',
+      citation: payload.meta.citation,
+      license: 'CC BY 4.0',
+      licenseUrl: 'https://creativecommons.org/licenses/by/4.0/',
       finalUrl: response.finalUrl,
       rawSnapshotFile: path.relative(ROOT, rawPath),
       sha256: sha256(response.body),
@@ -63,8 +73,10 @@ async function main() {
     arena: 'models',
     category: 'codecategories',
     metric: 'elo',
-    lastUpdated: parsed.lastUpdated,
-    responseTimestamp: parsed.responseTimestamp,
+    sourceAsOf: parsed.sourceAsOf,
+    lastUpdated: null,
+    responseMeta: parsed.responseMeta,
+    reviewedMappingVersion: manifest.schemaVersion,
     rows: parsed.rows,
   };
   atomicWriteJson(OUTPUT_PATH, snapshot);
@@ -72,8 +84,9 @@ async function main() {
     status: 'VALIDATED_DESIGN_ARENA_FRONTEND_SNAPSHOT',
     output: path.relative(ROOT, OUTPUT_PATH),
     rowCount: snapshot.rows.length,
-    lastUpdated: snapshot.lastUpdated,
-    rowsWithOpenRouterId: snapshot.rows.filter((row) => row.openRouterId).length,
+    sourceAsOf: snapshot.sourceAsOf,
+    leaderboardUpdateTime: 'not-published',
+    ...reviewed,
   }, null, 2));
 }
 

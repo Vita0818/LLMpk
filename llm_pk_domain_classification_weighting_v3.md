@@ -15,7 +15,7 @@ HLE 与 CritPt 组成高难度独立推理评测，Arena 数学和检索评价�
 
 Coding 将文本编程与真实仓库的 blocker 通过率结合。FrontierCode 按官方当前 1.1 Main 和实际 effort/harness 记录，不取“最佳档位”代替所展示档位。七月 SWE-rebench 滚动窗口暂退出评分，保留历史详情。
 
-Frontend 单独计分。DesignArena 尚未取得 API 密钥，当前没有该项观测；配置权重仍为 40%，因此只有 Arena WebDev 时覆盖率明确为 60%。不把缺测数据标成满覆盖，也不拼造 DesignArena Elo。
+Frontend 单独计分。2026-10-08 已接通经审核的 DesignArena Overall Frontend 来源，权重保持 40%。同时具有 Arena WebDev 与 DesignArena 时覆盖率为 100%，仅有 WebDev 时为 60%，仅有 DesignArena 时为 40%，仍不能通过领域 60% 门槛。不把缺测标成满覆盖，不拼造 Elo，也不跨版本或将高 effort 成绩向低 effort 回填。
 
 Agentic 的 AA TB4 是固定 mini-swe-agent 下的模型级评测，不能说成 Codex/Claude Code 的实测。Arena Agent Mode 是生产执行信号，只连接相应 Agent/CLI 路线；允许的向上回退必须保留来源环境。直接 Terminal-Bench CLI 记录保留作详情，不与 AA TB4 重复计分。
 

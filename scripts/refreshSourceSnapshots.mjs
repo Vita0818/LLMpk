@@ -11,6 +11,7 @@ import {
   sha256,
   timestampForPath,
 } from './sourceSnapshotUtils.mjs';
+import { readBenchmarkApiKey } from './fetchOpenRouterBenchmarkSnapshot.mjs';
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const CACHE_ROOT = path.resolve(
@@ -88,6 +89,14 @@ async function main() {
     FRONTIERCODE_SNAPSHOT_OUTPUT: STAGED.frontierCode,
     FRONTIERCODE_RAW_SNAPSHOT_DIR: path.join(RUN_DIRECTORY, 'raw', 'frontiercode'),
   });
+  if (readBenchmarkApiKey()) {
+    STAGED.designArena = path.join(RUN_DIRECTORY, 'designArenaSourceSnapshot.json');
+    PUBLISHED.designArena = path.join(ROOT, 'src', 'data', 'designArenaSourceSnapshot.json');
+    await run('DesignArena reviewed Frontend', 'fetchDesignArenaSnapshot.mjs', {
+      DESIGNARENA_SNAPSHOT_OUTPUT: STAGED.designArena,
+      DESIGNARENA_RAW_SNAPSHOT_DIR: path.join(RUN_DIRECTORY, 'raw', 'design-arena'),
+    });
+  }
   await run('Cross-source validation', 'validateSourceSnapshots.mjs', {
     AA_SOURCE_SNAPSHOT_PATH: STAGED.artificialAnalysis,
     ARENA_RAW_EXTRACTION_PATH: STAGED.arena,

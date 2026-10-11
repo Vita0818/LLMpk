@@ -1,5 +1,6 @@
 import React from 'react';
 import { getCompactMetricName } from '../data/compactMetricNames';
+import { getSubscriptionPricingEvidence } from '../data/subscriptionPricing';
 import { ALL_METRIC_DEFINITIONS, DOMAIN_DEFINITIONS } from '../engine/scoringEngine';
 import type { DomainId } from '../types/llm_pk';
 import type { PublicLeaderboardScore } from '../types/publicLeaderboard';
@@ -116,6 +117,19 @@ export const buildConfigurationMetricRows = (
   const throughput = scoreItem.config.openRouterData?.throughputP50TokensPerSec;
   const ttft = scoreItem.config.openRouterData?.ttftP50Seconds;
   const subscription = scoreItem.config.subscriptionData;
+  const pricingEvidence = getSubscriptionPricingEvidence(subscription?.pricingEvidenceId);
+  const subscriptionCostTitle = subscription
+    ? [
+        '可用月度 API 等效额度（USD）；已计入模型额度限制。',
+        pricingEvidence?.kind === 'measured'
+          ? `SemiAnalysis ${pricingEvidence.publishedOn}，agentic 工作负载；${pricingEvidence.checkedOn} 核对。`
+          : '旧估算；暂无对应模型的 SemiAnalysis 公开实测。',
+        subscription.usableQuotaFraction < 1
+          ? `完整额度基准 $${formatCostValue(subscription.apiEquivalentCostUSD)} × ${(subscription.usableQuotaFraction * 100).toFixed(0)}%；不再次折半。`
+          : '',
+        '满额使用下的折算值，实际利用率及缓存比例会影响成本。',
+      ].filter(Boolean).join(' ')
+    : undefined;
   const inputPrice = scoreItem.config.openRouterData?.inputPricePerMToken;
   const outputPrice = scoreItem.config.openRouterData?.outputPricePerMToken;
 
@@ -161,19 +175,15 @@ export const buildConfigurationMetricRows = (
       id: 'cost_output',
       label: subscription ? 'API Equivalent' : 'Output Price',
       value: subscription
-        ? `${formatCostValue(subscription.apiEquivalentCostUSD)}${
-            subscription.usableQuotaFraction < 1
-              ? ` × ${(subscription.usableQuotaFraction * 100).toFixed(0)}%`
-              : ''
-          }`
+        ? `${pricingEvidence?.kind === 'measured' ? '' : '≈ '}${formatCostValue(
+            subscription.apiEquivalentCostUSD * subscription.usableQuotaFraction,
+          )}`
         : outputPrice === null || outputPrice === undefined
           ? '--'
           : outputPrice.toFixed(2),
       color: '#6366F1',
       domainId: null,
-      title: subscription
-        ? 'API-equivalent monthly allowance and model-usable share'
-        : 'Output Price - Price Metric (Raw Value)',
+      title: subscriptionCostTitle ?? 'Output Price - Price Metric (Raw Value)',
     },
   ];
 };

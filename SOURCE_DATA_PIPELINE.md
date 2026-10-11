@@ -19,11 +19,29 @@ including exact efforts/harnesses, source hash and raw snapshot path. Current
 Cognition rows supersede rounded September static evidence when exact identities
 match. Other versions and environments do not borrow these rows.
 
-`npm run refresh:design-arena` continues to require DESIGNARENA_API_KEY.
-The committed pending snapshot contains no rows. Once an approved key is
-configured, the validated API result connects through unique OpenRouter IDs;
-undisclosed source effort remains an explicit Default-to-higher fallback.
-The reserved 40% Frontend slot remains missing until real data arrives.
+`npm run refresh:design-arena` uses the dedicated
+LLMPK_OPENROUTER_BENCHMARK_API_KEY from .env.benchmarks.local to read the
+official DesignArena Models Arena / codecategories data through OpenRouter.
+The October 8 capture retains 149 raw source configurations. Thirteen source
+identities have been reviewed explicitly; twelve model families / twenty
+existing configurations receive the Frontend metric. Undisclosed source
+effort retains an authored Default-to-higher fallback. Same-ID XHigh and Max
+records remain separate, and missing versions retain the missing 40% weight.
+
+## October 11 subscription pricing review
+
+`src/data/subscriptionPricing.ts` records nine exact plan/model allowances
+from SemiAnalysis's October 5 public agentic-workload charts, reviewed on
+October 11. Eight subscription variants of four existing models bring the
+inventory to 48 configurations / 30 families, still 32 visible representatives.
+Opus's two access variants are explicitly added to the DesignArena mapping
+manifest (22 targets total); no benchmark results or missing efforts are inferred.
+
+Fable's $2,485 net allowance is stored as a $4,970 full-plan basis × 50%,
+applying its cap exactly once. Unmatched plans keep an explicit legacy-estimate
+marker. These reviewed subscription measurements are independent of automatic
+API/source refreshes. After editing the reviewed records, regenerate the public
+snapshot and run the mapping, scoring, detail, playback and source tests.
 
 # Source data refresh pipeline
 
@@ -47,9 +65,11 @@ The command:
 3. fetches the OpenRouter model catalog and every available Standard endpoint
    performance row, including endpoint input/output prices, time to first
    token, output speed, and request counts;
-4. validates structure, provenance, target-model coverage, field types,
+4. when the dedicated benchmark key is configured, stages DesignArena and
+   validates its source shape and every reviewed source configuration;
+5. validates structure, provenance, target-model coverage, field types,
    row-count regressions, and cross-source freshness;
-5. publishes the staged snapshots only if every check passes.
+6. publishes the staged snapshots only if every check passes.
 
 Failed runs remain under `.cache/oagxm-source-snapshots/<run-id>` for
 inspection and do not replace the published files.
@@ -104,6 +124,7 @@ longer active scoring metrics.
 - `src/data/arenaRawExtraction.json`
 - `src/data/openRouterCatalogSnapshot.json`
 - `src/data/openRouterPerformanceSnapshot.json`
+- `src/data/designArenaSourceSnapshot.json` (when the dedicated key is configured)
 - `src/data/sourceSnapshotValidationReport.json`
 
 The raw AA and Arena HTML captures, SHA-256 hashes, response metadata, and run
@@ -196,19 +217,83 @@ retained under `.cache/pre-refresh-2026-10-02/` for local comparison.
 
 ## Design Arena access
 
-The official Design Arena API publishes the Models Arena Overall Frontend
-leaderboard at /api/v1/leaderboard/models/codecategories. It reports model
-name, provider, OpenRouter model ID where available, Elo, win rate, average
-generation time, and leaderboard update time. The API requires a Bearer key
-requested through https://www.designarena.ai/developers/apply.
+Run npm run refresh:design-arena with LLMPK_OPENROUTER_BENCHMARK_API_KEY in
+.env.benchmarks.local or the process environment. The command calls the
+OpenRouter Benchmark API with source=design-arena, arena=models and
+category=codecategories; no separate DesignArena key is required. It retains
+the complete raw response and publishes design-arena-source-snapshot/v2 only
+after source validation and reviewed source-identity checks pass.
 
-The fetcher is ready as npm run refresh:design-arena. Set
-DESIGNARENA_API_KEY in a local environment or secret manager before running
-it; never place the key in the repository. The command validates the source
-shape, category, row uniqueness, score ranges, and update time before
-writing a snapshot. No Design Arena score enters the public ranking until
-an authenticated source snapshot exists and exact model/profile links and
-the new weighting version are reviewed.
+src/data/designArenaReviewedMappings.json is the admission manifest. Each
+entry names the exact source model version and display identity, a versioned
+OpenRouter base card, source effort disclosure, and unchanged target preset
+identity. The frontend builder rechecks the pinned catalog version, product
+line, model/profile/harness, and unique complete source row. A permaslug alone
+is insufficient. The reviewed Muse Spark XHigh and Max rows have separate
+source cards, and Max has no lower-profile target. Undisclosed effort uses
+explicit Default fallback only for the authored target configurations.
+
+Source API as-of time, capture time and unavailable leaderboard update time
+are separate fields. Sample size, confidence bounds and per-row benchmark
+or harness versions are not invented. The published all-zero tournament
+counts remain raw metadata, not scoring sample counts. Task latency and API
+pricing in these rows do not overwrite OpenRouter practical measurements.
+
+With the dedicated key configured, the full source-refresh command stages
+this snapshot alongside the other sources. Without the key, it preserves
+the committed DesignArena capture. New source identities require a mapping
+review, and a renamed, missing or duplicate reviewed identity fails refresh
+without replacing the published snapshot. Use npm run test:design-arena to
+check transport validation, version/effort isolation, target admission,
+coverage and runtime fallback authorization.
+
+## OpenRouter benchmark inspection
+
+Added October 8, 2026. OpenRouter exposes its own GPQA Diamond, airline
+tau-bench, BrowseComp, DeepSearchQA, search HLE, and WideSearch results through
+`GET https://openrouter.ai/api/v1/benchmarks?source=openrouter&include_run_config=true`.
+The authenticated endpoint uses a dedicated project key named
+`LLMPK_OPENROUTER_BENCHMARK_API_KEY`; configure it in `.env.benchmarks.local`
+or the process environment. This fetcher never falls back to `OPENROUTER_API_KEY`.
+Only the dedicated variable is read from the local file, and the file is ignored
+by Git. No key is written into a request URL, snapshot, or log.
+
+`npm run refresh:openrouter-benchmarks -- --public-only` requires no key.
+It reads the public `benchmark-leaderboard` and `search-benchmark-lanes`
+export manifests and downloads their immutable dated JSON files. If a dated
+file has a transport failure, the `latest.json` alias is accepted only when
+its byte size and SHA-256 match the same dated manifest exactly. A checksum
+failure never triggers that fallback. Citation, license, methodology, column
+definitions, source fields, nulls, and the complete rows are retained.
+
+The output remains diagnostic-only under
+`.cache/oagxm-source-snapshots/openrouter-benchmarks/latest.snapshot.json`,
+with raw files and manifests in a dated run directory. Override the output
+with `LLMPK_OPENROUTER_BENCHMARK_SNAPSHOT_OUTPUT` if needed. The full scoring
+refresh does not promote these observations into an existing metric slot.
+
+The inspection enforces provider-level uniqueness for classic benchmarks and
+the full model/engine/surface/turn-budget/effort grain for search. WideSearch's
+`item_f1` is kept separate from strict whole-task `score`; other search suites
+use `score` as the primary accuracy field. Export dates and benchmark run dates
+are reported separately. `accuracy_std_dev` describes variation across runs,
+not a confidence interval for the model's score. Task-generation time is not
+TTFT, and per-task benchmark cost is not the token price used in practical scoring.
+
+The classic exports omit reasoning effort and per-run harness versions. Search
+exports retain effort and search settings but can contain old model versions
+and null names. A current model route does not prove a version/effort/harness
+match with a reader configuration. Published provider labels suggesting test
+data are flagged for review and remain in the raw capture. No observation is
+silently filtered, imputed, mapped to a successor, or assigned a scoring weight.
+
+The official [Data API documentation](https://openrouter.ai/docs/cookbook/administration/data-api)
+describes authentication and API score definitions. The public
+[dataset README](https://openrouter.ai/api/v1/datasets/exports/README.md)
+and each dated manifest define export schemas, aggregation, and attribution.
+Exports are licensed under CC BY 4.0; preserve the returned attribution when
+republishing them. The website's wider media/artifact benchmark catalog is not
+an assertion that those datasets are available through this endpoint.
 
 ## Individual commands
 

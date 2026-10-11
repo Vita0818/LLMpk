@@ -90,8 +90,11 @@ export interface OpenRouterCostSpeedData {
 export interface SubscriptionCostData {
   planName: string;
   monthlyPriceUSD: number;
+  /** Full-plan basis; multiply by usableQuotaFraction exactly once. */
   apiEquivalentCostUSD: number;
   usableQuotaFraction: number;
+  /** Reviewed source record, or an explicitly retained legacy estimate. */
+  pricingEvidenceId?: string;
 }
 
 export interface LLMConfiguration {

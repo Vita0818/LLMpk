@@ -46,6 +46,7 @@ const allowedSubscriptionKeys = new Set([
   'monthlyPriceUSD',
   'apiEquivalentCostUSD',
   'usableQuotaFraction',
+  'pricingEvidenceId',
 ]);
 
 if (
@@ -75,6 +76,8 @@ for (const score of publicSnapshot.scores) {
       || !Number.isFinite(subscriptionData.monthlyPriceUSD)
       || !Number.isFinite(subscriptionData.apiEquivalentCostUSD)
       || !Number.isFinite(subscriptionData.usableQuotaFraction)
+      || (subscriptionData.pricingEvidenceId !== undefined
+        && typeof subscriptionData.pricingEvidenceId !== 'string')
     ) {
       throw new Error(
         `Public subscription ${score.config?.id ?? 'unknown'} has invalid display data.`,

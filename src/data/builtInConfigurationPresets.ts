@@ -1,4 +1,5 @@
 import { VERIFIED_DESIGN_ARENA_SOURCE_MODEL_CARDS, VERIFIED_DESIGN_ARENA_SOURCE_OBSERVATIONS } from './designArenaSeedCards';
+import type { DesignArenaReviewedTarget } from './designArenaSeedCards';
 import { DETAIL_ONLY_METRIC_DEFINITIONS } from './detailMetricDefinitions';
 import type {
   ConfigurationAccess,
@@ -9,6 +10,11 @@ import type {
   SourceType,
 } from '../types/admin_mapping';
 import type { SubscriptionCostData } from '../types/llm_pk';
+import {
+  findMeasuredSubscriptionPricing,
+  LEGACY_SUBSCRIPTION_PRICING_EVIDENCE,
+  SEMIANALYSIS_SUBSCRIPTION_SOURCE,
+} from './subscriptionPricing';
 import { RETIRED_READER_MODEL_GROUP_KEYS, READER_CURRENT_MODEL_GROUP_KEYS } from './readerModelRetirementPolicy';
 import { ALL_METRIC_DEFINITIONS } from '../engine/scoringEngine';
 import { SCORING_CONFIG } from '../engine/scoringConfig';
@@ -3927,15 +3933,15 @@ const CHATGPT_PLUS_PLAN: SubscriptionPlanDefinition = {
   monthlyPriceUSD: 20,
   apiEquivalentCostUSD:
     CHATGPT_PRO_20X_API_EQUIVALENT_USD / BASE_PLAN_TO_20X_QUOTA_DIVISOR,
-  note: '20 美元档按同一订阅族的 20× 比例折合 100 美元 API 用量；100 美元 5× 档成本效率相同，因此不重复建盒。',
+  note: '未匹配到同模型实测时保留旧估算 100 美元；当前模型使用逐套餐实测，不再由 20× 比例外推。',
 };
 
 const CHATGPT_PRO_20X_PLAN: SubscriptionPlanDefinition = {
   key: 'chatgpt-pro-20x',
-  planName: 'ChatGPT Pro 20×',
+  planName: 'ChatGPT Pro $200',
   monthlyPriceUSD: 200,
   apiEquivalentCostUSD: CHATGPT_PRO_20X_API_EQUIVALENT_USD,
-  note: '200 美元档按已确认口径取 2000 美元 API 等价值。',
+  note: '当前显示为 $200 档，不再宣称 20×；旧 plan key 仅用于存储兼容。未匹配到同模型实测时保留旧估算 2000 美元。',
 };
 
 const CLAUDE_PRO_PLAN: SubscriptionPlanDefinition = {
@@ -3944,7 +3950,7 @@ const CLAUDE_PRO_PLAN: SubscriptionPlanDefinition = {
   monthlyPriceUSD: 20,
   apiEquivalentCostUSD:
     CLAUDE_MAX_20X_API_EQUIVALENT_USD / BASE_PLAN_TO_20X_QUOTA_DIVISOR,
-  note: '20 美元档按同一订阅族的 20× 比例折合 80 美元 API 用量；100 美元 5× 档成本效率相同，因此不重复建盒。',
+  note: '未匹配到同模型实测时保留旧估算 80 美元；当前模型使用逐套餐实测，不再由 20× 比例外推。',
 };
 
 const CLAUDE_MAX_20X_PLAN: SubscriptionPlanDefinition = {
@@ -3952,7 +3958,7 @@ const CLAUDE_MAX_20X_PLAN: SubscriptionPlanDefinition = {
   planName: 'Claude Max 20×',
   monthlyPriceUSD: 200,
   apiEquivalentCostUSD: CLAUDE_MAX_20X_API_EQUIVALENT_USD,
-  note: '200 美元档按社区实测的近似量级取整为 1600 美元 API 等价值。',
+  note: '未匹配到同模型实测时保留旧估算 1600 美元；当前模型的额度分别核实。',
 };
 
 const GOOGLE_AI_PRO_PLAN: SubscriptionPlanDefinition = {
@@ -3961,7 +3967,7 @@ const GOOGLE_AI_PRO_PLAN: SubscriptionPlanDefinition = {
   monthlyPriceUSD: 20,
   apiEquivalentCostUSD:
     GOOGLE_AI_ULTRA_20X_API_EQUIVALENT_USD / BASE_PLAN_TO_20X_QUOTA_DIVISOR,
-  note: '20 美元档结合社区实测用量与推理 token 换算，折合约 260 美元 Gemini API 用量。',
+  note: '保留旧估算约 260 美元 Gemini API 用量；2026-10-11 未获得对应模型的 SemiAnalysis 公开实测，不标为已核实额度。',
 };
 
 const GOOGLE_AI_ULTRA_20X_PLAN: SubscriptionPlanDefinition = {
@@ -3969,7 +3975,7 @@ const GOOGLE_AI_ULTRA_20X_PLAN: SubscriptionPlanDefinition = {
   planName: 'Google AI Ultra 20×',
   monthlyPriceUSD: 200,
   apiEquivalentCostUSD: GOOGLE_AI_ULTRA_20X_API_EQUIVALENT_USD,
-  note: '200 美元 20× 档按与 Pro 相同的额度比例折合约 5200 美元 Gemini API 用量。',
+  note: '保留旧估算约 5200 美元 Gemini API 用量；2026-10-11 未获得对应模型的 SemiAnalysis 公开实测，不标为已核实额度。',
 };
 
 const SUPERGROK_PLAN: SubscriptionPlanDefinition = {
@@ -3977,11 +3983,31 @@ const SUPERGROK_PLAN: SubscriptionPlanDefinition = {
   planName: 'SuperGrok',
   monthlyPriceUSD: 30,
   apiEquivalentCostUSD: 150,
-  note: '社区实测的基础订阅额度折合约 150 美元 xAI API 用量；更高档位沿用相同成本效率，因此只保留这一档。',
+  note: '保留旧估算约 150 美元 xAI API 用量；2026-10-11 未获得对应模型的 SemiAnalysis 公开实测，不外推其他档位或模型。',
 };
 
 const SUBSCRIPTION_CONFIGURATION_TARGETS:
   readonly SubscriptionConfigurationTarget[] = [
+  {
+    key: 'gpt-6-1-sol.max.codex-cli',
+    basePresetId: 'builtin.harness.gpt-6-1-sol.max.codex-cli',
+    plans: [CHATGPT_PLUS_PLAN, CHATGPT_PRO_20X_PLAN],
+  },
+  {
+    key: 'gpt-6-astra.max.codex-cli',
+    basePresetId: 'builtin.harness.gpt-6-astra.max.codex-cli',
+    plans: [CHATGPT_PLUS_PLAN, CHATGPT_PRO_20X_PLAN],
+  },
+  {
+    key: 'claude-opus-5-5.max.claude-code',
+    basePresetId: 'builtin.harness.claude-opus-5-5.max.claude-code',
+    plans: [CLAUDE_PRO_PLAN, CLAUDE_MAX_20X_PLAN],
+  },
+  {
+    key: 'claude-sonnet-5-5.max.claude-code',
+    basePresetId: 'builtin.harness.claude-sonnet-5-5.max.claude-code',
+    plans: [CLAUDE_PRO_PLAN, CLAUDE_MAX_20X_PLAN],
+  },
   {
     key: 'gpt-5-6-sol.max.codex-cli',
     basePresetId: 'builtin.harness.gpt-5-6-sol.max.codex-cli',
@@ -4099,6 +4125,32 @@ function buildSubscriptionConfigurationPresets(
       throw new Error(`Missing subscription base preset ${spec.basePresetId}.`);
     }
 
+    const measurement = findMeasuredSubscriptionPricing(
+      spec.planName, base.identity.model.name,
+    );
+    if (measurement && measurement.monthlyPriceUSD !== spec.monthlyPriceUSD) {
+      throw new Error(`Subscription measurement price mismatch for ${spec.key}.`);
+    }
+    const subscriptionData: SubscriptionCostData = measurement
+      ? {
+          planName: spec.planName,
+          monthlyPriceUSD: spec.monthlyPriceUSD,
+          apiEquivalentCostUSD: measurement.usableApiEquivalentCostUSD
+            / measurement.usableQuotaFraction,
+          usableQuotaFraction: measurement.usableQuotaFraction,
+          pricingEvidenceId: measurement.id,
+        }
+      : {
+          planName: spec.planName,
+          monthlyPriceUSD: spec.monthlyPriceUSD,
+          apiEquivalentCostUSD: spec.apiEquivalentCostUSD,
+          usableQuotaFraction: spec.usableQuotaFraction,
+          pricingEvidenceId: LEGACY_SUBSCRIPTION_PRICING_EVIDENCE.id,
+        };
+    const pricingNote = measurement
+      ? `SemiAnalysis ${measurement.publishedOn} agentic 实测：${measurement.modelName} 可用月度 API 等效额度 $${measurement.usableApiEquivalentCostUSD}，已含模型额度限制。按实测折扣系数映射本站统一成本场景；未披露 effort，不冒充 Max 专属配额测试。来源：${SEMIANALYSIS_SUBSCRIPTION_SOURCE}。${spec.planName.startsWith('ChatGPT Pro') ? '采用降额后的新购 $200 档；旧订阅截至 2026-10-29 的临时高额度不纳入。' : ''}`
+      : spec.note;
+
     return definePreset({
       key: spec.key,
       productLineId: base.productLineId,
@@ -4112,13 +4164,8 @@ function buildSubscriptionConfigurationPresets(
       },
       origin: base.origin,
       access: 'subscription',
-      subscriptionData: {
-        planName: spec.planName,
-        monthlyPriceUSD: spec.monthlyPriceUSD,
-        apiEquivalentCostUSD: spec.apiEquivalentCostUSD,
-        usableQuotaFraction: spec.usableQuotaFraction,
-      },
-      note: [base.note, spec.note].filter(Boolean).join(' '),
+      subscriptionData,
+      note: [base.note, pricingNote].filter(Boolean).join(' '),
       ...(base.sourceCardIds
         ? { sourceCardIds: [...base.sourceCardIds] }
         : {}),
@@ -4835,18 +4882,20 @@ function curateReaderFacingPresets(
 }
 
 function attachDesignArenaEvidence(preset: BuiltInConfigurationPreset): BuiltInConfigurationPreset {
-  const linkedIds = new Set(presetCardIds(preset));
-  const matches = VERIFIED_DESIGN_ARENA_SOURCE_MODEL_CARDS.filter(card => (
-    card.metadataJson?.scope?.productLineId === preset.productLineId
-    && linkedIds.has(card.metadataJson?.sourceIdentity?.baseOpenRouterCardId)
-  ));
-  if (matches.length === 0) return preset;
-  const targetLevel = presetProfileStrength(preset.identity.model.profile);
+  const links = VERIFIED_DESIGN_ARENA_SOURCE_MODEL_CARDS.flatMap(card => {
+    if (card.metadataJson?.scope?.productLineId !== preset.productLineId) return [];
+    const targets = card.metadataJson?.reviewedMapping?.targets as readonly DesignArenaReviewedTarget[] | undefined;
+    const target = targets?.find(candidate => candidate.presetId === preset.id);
+    if (!target || target.modelName !== preset.identity.model.name
+      || target.profile !== preset.identity.model.profile
+      || target.harness !== preset.identity.harness.name) return [];
+    return [{ cardId: card.id, provenance: target.provenance }];
+  });
+  if (links.length === 0) return preset;
+  if (links.length !== 1) throw new Error(`Ambiguous reviewed DesignArena score for ${preset.id}.`);
   return { ...preset, sourceCardLinks: [
     ...(preset.sourceCardLinks || []),
-    ...matches.map(card => targetLevel > 0
-      ? lowerProfileFallback(card.id, 'Default (source effort undisclosed)', 0, preset.identity.model.profile, targetLevel)
-      : { cardId: card.id, provenance: { kind: 'exact' as const } }),
+    ...links,
   ] };
 }
 
@@ -4903,4 +4952,4 @@ export const BUILT_IN_CONFIGURATION_PRESET_COUNT = BUILT_IN_CONFIGURATION_PRESET
  * additions visible during Vite hot updates as well as after a full reload.
  */
 export const BUILT_IN_CONFIGURATION_PRESET_INVENTORY_VERSION =
-  '2026-10-02-successor-inventory-v50';
+  '2026-10-11-semianalysis-subscriptions-v51';

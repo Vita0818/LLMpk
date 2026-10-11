@@ -80,6 +80,9 @@ const scores: PublicLeaderboardScore[] = adminMappingStore
           monthlyPriceUSD: sourceSubscriptionData.monthlyPriceUSD,
           apiEquivalentCostUSD: sourceSubscriptionData.apiEquivalentCostUSD,
           usableQuotaFraction: sourceSubscriptionData.usableQuotaFraction,
+          ...(sourceSubscriptionData.pricingEvidenceId
+            ? { pricingEvidenceId: sourceSubscriptionData.pricingEvidenceId }
+            : {}),
         }
       : undefined;
 

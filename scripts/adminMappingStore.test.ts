@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict';
 import retiredReaderConfigurationIds from './fixtures/retiredReaderConfigurationIds.json';
 import { getEmbeddedConfidenceRadius } from '../src/data/metricUncertainty';
+import {
+  findMeasuredSubscriptionPricing,
+  getSubscriptionPricingEvidence,
+  SEMIANALYSIS_SUBSCRIPTION_SOURCE,
+} from '../src/data/subscriptionPricing';
 import { OAGXM_SCOPE } from '../src/data/oagxmScope';
 import { VERIFIED_SOURCE_MODEL_CARDS, VERIFIED_SOURCE_OBSERVATIONS } from '../src/data/seedCards';
 import {
@@ -1273,6 +1278,7 @@ interface ExpectedSubscriptionPreset {
   monthlyPriceUSD: number;
   apiEquivalentCostUSD: number;
   usableQuotaFraction: number;
+  pricingEvidenceId: string;
 }
 
 interface ExpectedSubscriptionTarget {
@@ -1399,7 +1405,7 @@ const expectedSubscriptionPlans = [
   },
   {
     key: 'chatgpt-pro-20x',
-    providerLabel: 'ChatGPT Pro 20×',
+    providerLabel: 'ChatGPT Pro $200',
     monthlyPriceUSD: 200,
     apiEquivalentCostUSD: 2000,
     targets: chatGptPlusTargets.slice(0, 1),
@@ -1451,10 +1457,42 @@ const expectedSubscriptionPresets = new Map<string, ExpectedSubscriptionPreset>(
         monthlyPriceUSD: plan.monthlyPriceUSD,
         apiEquivalentCostUSD: plan.apiEquivalentCostUSD,
         usableQuotaFraction: target.usableQuotaFraction,
+        pricingEvidenceId: 'legacy-subscription-estimate',
       },
     ],
   )),
 );
+// Independent transcription of the public charts. These fixtures catch
+// plan-wide reuse, 20x extrapolation, and double application of Fable's cap.
+const measuredSubscriptionExpectations = [
+  ['chatgpt-plus', 'gpt-6-1-sol.max.codex-cli', 'ChatGPT Plus', 20, 211, 1, 'sa-2026-10-05-plus-sol-6-1'],
+  ['chatgpt-pro-20x', 'gpt-6-1-sol.max.codex-cli', 'ChatGPT Pro $200', 200, 2084, 1, 'sa-2026-10-05-pro-200-sol-6-1'],
+  ['chatgpt-plus', 'gpt-6-astra.max.codex-cli', 'ChatGPT Plus', 20, 162, 1, 'sa-2026-10-05-plus-astra-6'],
+  ['chatgpt-pro-20x', 'gpt-6-astra.max.codex-cli', 'ChatGPT Pro $200', 200, 2897, 1, 'sa-2026-10-05-pro-200-astra-6'],
+  ['claude-pro', 'claude-opus-5-5.max.claude-code', 'Claude Pro', 20, 1178, 1, 'sa-2026-10-05-pro-opus-5-5'],
+  ['claude-max-20x', 'claude-opus-5-5.max.claude-code', 'Claude Max 20×', 200, 11726, 1, 'sa-2026-10-05-max-20x-opus-5-5'],
+  ['claude-pro', 'claude-sonnet-5-5.max.claude-code', 'Claude Pro', 20, 1241, 1, 'sa-2026-10-05-pro-sonnet-5-5'],
+  ['claude-max-20x', 'claude-sonnet-5-5.max.claude-code', 'Claude Max 20×', 200, 12524, 1, 'sa-2026-10-05-max-20x-sonnet-5-5'],
+  ['claude-max-20x', 'claude-fable-5-1.max.chat', 'Claude Max 20×', 200, 2485, 0.5, 'sa-2026-10-05-max-20x-fable-5-1'],
+] as const;
+for (const [planKey, targetKey, providerLabel, monthlyPriceUSD, usableAllowance, usableQuotaFraction, pricingEvidenceId] of measuredSubscriptionExpectations) {
+  expectedSubscriptionPresets.set(`builtin.subscription.${planKey}.${targetKey}`, {
+    basePresetId: `builtin.harness.${targetKey.replace('fable-5-1.max.chat', 'fable-5-1.max.claude-code')}`,
+    providerLabel,
+    monthlyPriceUSD,
+    apiEquivalentCostUSD: usableAllowance / usableQuotaFraction,
+    usableQuotaFraction,
+    pricingEvidenceId,
+  });
+  const evidence = getSubscriptionPricingEvidence(pricingEvidenceId);
+  assert.equal(evidence?.kind, 'measured');
+  assert.equal(evidence?.sourceUrl, SEMIANALYSIS_SUBSCRIPTION_SOURCE);
+  assert.equal(evidence?.publishedOn, '2026-10-05');
+}
+assert.equal(findMeasuredSubscriptionPricing('ChatGPT Plus', 'GPT-5.6 Terra'), undefined);
+assert.equal(findMeasuredSubscriptionPricing('Claude Pro', 'Claude Fable 5.1'), undefined);
+assert.equal(findMeasuredSubscriptionPricing('Google AI Pro', 'Gemini 3.8 Flash'), undefined);
+assert.equal(getSubscriptionPricingEvidence('unreviewed-source'), undefined);
 const subscriptionPresets = BUILT_IN_CONFIGURATION_PRESETS
   .filter(({ access }) => access === 'subscription');
 assert.equal(subscriptionPresets.length, expectedSubscriptionPresets.size);
@@ -1472,6 +1510,7 @@ for (const preset of subscriptionPresets) {
     monthlyPriceUSD: expected.monthlyPriceUSD,
     apiEquivalentCostUSD: expected.apiEquivalentCostUSD,
     usableQuotaFraction: expected.usableQuotaFraction,
+    pricingEvidenceId: expected.pricingEvidenceId,
   });
   const basePreset = ALL_CONFIGURATION_PRESET_CANDIDATES.find(
     (candidate) => candidate.id === expected.basePresetId,
@@ -1856,6 +1895,16 @@ for (const box of installedPresetBoxes) {
     assert.equal(config.access.entryPoint, expectedEntryPoint);
     assert.equal(config.provider, preset.subscriptionData.planName);
     assert.deepEqual(config.subscriptionData, preset.subscriptionData);
+    const expected = expectedSubscriptionPresets.get(preset.id)!;
+    const api = config.openRouterData;
+    if (api) {
+      const expectedCost = (api.inputPricePerMToken + 0.25 * api.outputPricePerMToken)
+        * expected.monthlyPriceUSD
+        / (expected.apiEquivalentCostUSD * expected.usableQuotaFraction);
+      const actualCost = scoreByConfigurationId.get(box.id)?.practicalBreakdown.effectiveScenarioCostUSD;
+      assert.ok(typeof actualCost === 'number' && Math.abs(actualCost - expectedCost) < 1e-10,
+        `${preset.id} must score its net monthly allowance without another quota reduction.`);
+    }
   }
   if (isPlainChatHarness(preset.identity.harness.name)) {
     assert.ok(
@@ -2543,7 +2592,9 @@ for (const release of [
   assert.equal(stack[0].card.id, `card-aa-coding-agent-${release.cardPrefix}-max`);
   assert.ok(stack.every(({ card }) => card.metadataJson?.scope?.productLineId === release.line));
   assert.equal(scoreByConfigurationId.get(box.id)?.eligibleForGlobalLeaderboard, false, 'Fresh CLI results must not override missing dialogue/reasoning coverage.');
-  assert.equal(BUILT_IN_CONFIGURATION_PRESETS.filter((preset) => preset.productLineId === release.line).length, 1);
+  const currentRoutes = BUILT_IN_CONFIGURATION_PRESETS.filter((preset) => preset.productLineId === release.line);
+  assert.equal(currentRoutes.filter((preset) => preset.access === 'api').length, 1);
+  assert.equal(currentRoutes.filter((preset) => preset.access === 'subscription').length, 2);
 }
 assert.ok(!BUILT_IN_CONFIGURATION_PRESETS.some((preset) => (
   ['gemini_4_argon', 'gpt_61_sol_pro'].includes(preset.productLineId)

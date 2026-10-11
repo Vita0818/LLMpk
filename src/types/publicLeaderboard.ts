@@ -25,6 +25,7 @@ export type PublicSubscriptionData = Pick<
   | 'monthlyPriceUSD'
   | 'apiEquivalentCostUSD'
   | 'usableQuotaFraction'
+  | 'pricingEvidenceId'
 >;
 
 export interface PublicLeaderboardConfiguration {

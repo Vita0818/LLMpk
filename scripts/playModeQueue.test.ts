@@ -36,8 +36,8 @@ assert(
   'Playback queue must contain one representative per identical radar route group.',
 );
 assert(
-  snapshot.scores.filter(s=>s.eligibleForGlobalLeaderboard).length - queue.length === 5,
-  'Covered playback should collapse equivalent Google and Fable access routes.',
+  snapshot.scores.filter(s=>s.eligibleForGlobalLeaderboard).length - queue.length === 9,
+  'Covered playback should collapse equivalent Google, Fable, Opus and Astra access routes.',
 );
 assert(
   radarOverviewScores.length === queue.length,
@@ -97,9 +97,9 @@ assert(buildRepresentativeConfigurationQueue(insufficientRoutes)[0].config.id ==
 
 const expectedRepresentatives = [
   "Kimi K3 Max | Kimi Code CLI | Moonshot AI API",
-  "Claude Opus 5.5 Max | Claude Code | Anthropic API",
+  "Claude Opus 5.5 Max | Claude Code | Claude Max 20×",
   "Claude Fable 5.1 Max | Claude Code | Claude Max 20×",
-  "GPT-6 Astra Max | Codex CLI | OpenAI API",
+  "GPT-6 Astra Max | Codex CLI | ChatGPT Pro $200",
   "GPT-6 Luna Max | Codex CLI | OpenAI API",
   "MiMo-V2.6-Pro Default | --- | Xiaomi API",
   "GLM-5.3 Max | --- | Z.ai API",
