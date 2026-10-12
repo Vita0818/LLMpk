@@ -1,4 +1,5 @@
 import type { DomainId } from '../types/llm_pk';
+import { VALS_METRIC_DEFINITIONS } from './valsMetricDefinitions';
 
 export interface DetailOnlyMetricDefinition {
   id: string;
@@ -12,6 +13,9 @@ export interface DetailOnlyMetricDefinition {
  * in the current six-domain scoring algorithm.
  */
 export const DETAIL_ONLY_METRIC_DEFINITIONS: readonly DetailOnlyMetricDefinition[] = [
+  ...VALS_METRIC_DEFINITIONS.filter(metric => metric.scoringWeightInDomain === 0).map(metric => ({
+    id: metric.id, name: `Vals · ${metric.name}`, unit: '%' as const, domain: metric.domain,
+  })),
   {
     id: 'aa_ifbench',
     name: 'IFBench',

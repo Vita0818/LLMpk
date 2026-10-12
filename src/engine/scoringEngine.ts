@@ -12,6 +12,7 @@ import {
   MetricUncertaintyStatus,
 } from '../types/llm_pk';
 import { DOMAIN_IDS, getCoverageStatus, SCORING_CONFIG } from './scoringConfig';
+import { VALS_METRIC_DEFINITIONS } from '../data/valsMetricDefinitions';
 import {
   isCapabilityMetricApplicableToConfiguration,
 } from '../data/executionMetricPolicy';
@@ -23,7 +24,7 @@ export const DOMAIN_DEFINITIONS: Record<DomainId, DomainDefinition> = {
   coding: { id: "coding", name: "Coding", nameEn: "Coding", weight: 1 / 6, color: "#047857", description: "编程解题与代码库修改的可合并质量。" },
   frontend: { id: "frontend", name: "Frontend", nameEn: "Frontend", weight: 1 / 6, color: "#B45309", description: "Web 应用、界面设计与前端交付体验。" },
   agentic: { id: "agentic", name: "Agentic", nameEn: "Agentic", weight: 1 / 6, color: "#1D4ED8", description: "终端任务、工具使用、恢复与生产 Agent 行为。" },
-  documents: { id: "documents", name: "Documents", nameEn: "Documents", weight: 1 / 6, color: "#06B6D4", description: "基于专业文档完成有可验证交付要求的工作。" },
+  documents: { id: "documents", name: "Documents", nameEn: "Documents", weight: 1 / 6, color: "#06B6D4", description: "专业 PDF、Excel 建模与法律工作成果的可验证交付。" },
 };
 
 // AA capability evidence is restricted to HLE, CritPt, TB4 and GDP.pdf.
@@ -51,79 +52,86 @@ export const ALL_METRIC_DEFINITIONS: MetricDefinition[] = [
   },
   {
     id: "aa_hle", name: "Humanity’s Last Exam", source: "Artificial Analysis", domain: "reasoning",
-    metricType: "accuracy", internalWeightInDomain: 0.3, higherIsBetter: true,
+    metricType: "accuracy", internalWeightInDomain: 0.25, higherIsBetter: true,
     unit: "pass@1", description: "AA 独立测量的高难度跨学科推理。", officialUrl: "https://artificialanalysis.ai/evaluations/humanitys-last-exam",
   },
   {
     id: "aa_critpt", name: "CritPt", source: "Artificial Analysis", domain: "reasoning",
-    metricType: "accuracy", internalWeightInDomain: 0.25, higherIsBetter: true,
+    metricType: "accuracy", internalWeightInDomain: 0.20, higherIsBetter: true,
     unit: "pass@1", description: "专业物理与理论科学推理。", officialUrl: "https://artificialanalysis.ai/evaluations/critpt",
   },
   {
     id: "arena_text_math", name: "Arena Math", source: "Arena.ai", domain: "reasoning",
-    metricType: "continuous_relative", internalWeightInDomain: 0.25, higherIsBetter: true,
+    metricType: "continuous_relative", internalWeightInDomain: 0.20, higherIsBetter: true,
     unit: "Score", description: "真实用户数学任务。", officialUrl: "https://arena.ai/leaderboard/text/math",
   },
   {
     id: "arena_search", name: "Search Arena", source: "Arena.ai", domain: "reasoning",
-    metricType: "continuous_relative", internalWeightInDomain: 0.2, higherIsBetter: true,
+    metricType: "continuous_relative", internalWeightInDomain: 0.15, higherIsBetter: true,
     unit: "Score", description: "检索、知识与 Grounding 的用户评价。", officialUrl: "https://arena.ai/leaderboard/search",
   },
   {
     id: "arena_text_coding", name: "Arena Coding", source: "Arena.ai", domain: "coding",
-    metricType: "continuous_relative", internalWeightInDomain: 0.6, higherIsBetter: true,
+    metricType: "continuous_relative", internalWeightInDomain: 0.40, higherIsBetter: true,
     unit: "Score", description: "文本式编程与代码解题。", officialUrl: "https://arena.ai/leaderboard/text/coding",
   },
   {
     id: "frontiercode_v11_main_pass_rate", name: "FrontierCode 1.1 Main · Pass Rate", source: "FrontierCode", domain: "coding",
-    metricType: "accuracy", internalWeightInDomain: 0.4, higherIsBetter: true,
+    metricType: "accuracy", internalWeightInDomain: 0.30, higherIsBetter: true,
     unit: "Pass Rate", description: "官方当前 1.1 Main 记录；保留实际 effort 与 harness，衡量全部 blocker 通过率。", officialUrl: "https://cognition.com/frontiercode",
   },
   {
     id: "arena_code_webdev", name: "Arena WebDev", source: "Arena.ai", domain: "frontend",
-    metricType: "continuous_relative", internalWeightInDomain: 0.6, higherIsBetter: true,
+    metricType: "continuous_relative", internalWeightInDomain: 0.40, higherIsBetter: true,
     unit: "Score", description: "端到端 Web 构建与 UI 体验。", officialUrl: "https://arena.ai/leaderboard/code/webdev",
   },
   {
     id: "designarena_frontend", name: "DesignArena Frontend", source: "DesignArena", domain: "frontend",
-    metricType: "continuous_relative", internalWeightInDomain: 0.4, higherIsBetter: true,
+    metricType: "continuous_relative", internalWeightInDomain: 0.30, higherIsBetter: true,
     unit: "Elo", description: "官方 Overall Frontend Elo；按审核后的精确版本与 effort 连接，未披露档位保留 Default 回退条件。", officialUrl: "https://www.designarena.ai/leaderboard/code",
   },
   {
     id: "aa_terminalbench_v4", name: "AA Terminal-Bench 4.0", source: "Artificial Analysis", domain: "agentic",
-    metricType: "accuracy", internalWeightInDomain: 0.6, higherIsBetter: true,
+    metricType: "accuracy", internalWeightInDomain: 0.40, higherIsBetter: true,
     unit: "pass@1", description: "66 项终端任务，mini-swe-agent，每任务三次；模型级评测，不冒充生产 CLI。", officialUrl: "https://artificialanalysis.ai/evaluations/terminalbench-4-0",
   },
   {
     id: "arena_agent_success", name: "Confirmed Success", source: "Arena.ai", domain: "agentic",
-    metricType: "continuous_relative", internalWeightInDomain: 0.14, higherIsBetter: true,
+    metricType: "continuous_relative", internalWeightInDomain: 0.10, higherIsBetter: true,
     unit: "Score Point", description: "生产 Agent 的确认成功效果量。", officialUrl: "https://arena.ai/leaderboard/agent",
   },
   {
     id: "arena_agent_steerability", name: "Steerability", source: "Arena.ai", domain: "agentic",
-    metricType: "continuous_relative", internalWeightInDomain: 0.08, higherIsBetter: true,
+    metricType: "continuous_relative", internalWeightInDomain: 0.06, higherIsBetter: true,
     unit: "Score Point", description: "来源正向 steering_burden/steerability 效果量。", officialUrl: "https://arena.ai/leaderboard/agent",
   },
   {
     id: "arena_agent_praise", name: "Praise vs Complaint", source: "Arena.ai", domain: "agentic",
-    metricType: "continuous_relative", internalWeightInDomain: 0.04, higherIsBetter: true,
+    metricType: "continuous_relative", internalWeightInDomain: 0.03, higherIsBetter: true,
     unit: "Score Point", description: "用户好评与投诉净差。", officialUrl: "https://arena.ai/leaderboard/agent",
   },
   {
     id: "arena_agent_bash_recovery", name: "Bash Recovery", source: "Arena.ai", domain: "agentic",
-    metricType: "continuous_relative", internalWeightInDomain: 0.08, higherIsBetter: true,
+    metricType: "continuous_relative", internalWeightInDomain: 0.06, higherIsBetter: true,
     unit: "Score Point", description: "终端报错后的恢复。", officialUrl: "https://arena.ai/leaderboard/agent",
   },
   {
     id: "arena_agent_tool_hallucination", name: "Tool Hallucination", source: "Arena.ai", domain: "agentic",
-    metricType: "continuous_relative", internalWeightInDomain: 0.06, higherIsBetter: true,
+    metricType: "continuous_relative", internalWeightInDomain: 0.05, higherIsBetter: true,
     unit: "Score Point", description: "工具幻觉抑制效果量。", officialUrl: "https://arena.ai/leaderboard/agent",
   },
   {
     id: "aa_gdp_pdf_all_pass", name: "GDP.pdf · All-pass", source: "Artificial Analysis", domain: "documents",
-    metricType: "accuracy", internalWeightInDomain: 1.0, higherIsBetter: true,
+    metricType: "accuracy", internalWeightInDomain: 0.50, higherIsBetter: true,
     unit: "pass@1", description: "专业 PDF 文档任务的全部交付要求通过率。", officialUrl: "https://artificialanalysis.ai/evaluations/gdp-pdf",
   },
+  ...VALS_METRIC_DEFINITIONS.filter(metric => metric.scoringWeightInDomain > 0).map(metric => ({
+    id: metric.id, name: `Vals · ${metric.name}`, source: 'Vals AI' as const, domain: metric.domain,
+    metricType: 'accuracy' as const, internalWeightInDomain: metric.scoringWeightInDomain,
+    higherIsBetter: true, unit: '%',
+    description: 'Vals 官方独立任务评测；保留来源 effort 与实际测试环境。',
+    officialUrl: `https://www.vals.ai/benchmarks/${metric.slug}`,
+  })),
 ];
 
 // Helper: Math Median

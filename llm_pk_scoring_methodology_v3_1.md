@@ -1,0 +1,49 @@
+# LLMpk Scoring v3.1
+
+生效日期：2026-10-12。六领域、26 项能力指标，Practical Adjustment 保持 v1.4。此次增加七项 Vals 独立评测并调整领域内权重；六域权重与覆盖门槛沿用 v3.0。指标与来源见 [Weighting v3.1](llm_pk_domain_classification_weighting_v3_1.md) 和 [Registry v3.1](llm_pk_data_source_registry_v3_1.md)。旧版本的相对分不直接与 v3.1 分数比较。
+
+## 真实覆盖率是评分前提
+
+对领域 d、配置权重 w、实际观测集合 O：
+
+`coverage_d = sum(w_i, i in O) / sum(w_i, i in d)`
+
+每域覆盖至少 60% 才生成领域分。总覆盖率是六域覆盖的等权平均。全部六域均达标、总覆盖率至少 75%，才生成能力总分和综合排名。原始观测为 0 是有效结果；缺测为 null。缺测指标保留配置权重，不能删除列来抬高覆盖。
+
+合格领域内按已观测的权重重新聚合：`w'_i = w_i / sum(w_j, j in O)`。60% / 75% 是透明的产品规则，允许一定缺测；它不能代替对任务类别、版本、effort、harness 和测量条件的审查。
+
+## 单项与领域分
+
+准确率或有界任务评分比例经过 Logit 变换，错误率先转成 1-p，Elo/连续效果量保留来源尺度。Vals 使用各独立榜的 `overall` 定义，包括部分分、加权任务分或全通过口径，以百分比展示，不统一标成 pass@1。基础相对分以同批参考配置的最高值 100、中位数 50 校准：
+
+`s_base = 100 * 2 ^ (-(y_max - y_i) / (y_max - y_median))`
+
+参与量与来源置信区间决定可靠度 rho：`s = 50 + rho * (s_base - 50)`。50 是已观测弱信号的收缩中心，不能用于填补缺测。没有可用置信区间时，来源不确定性标为 unknown。
+
+领域几何指数为 `q_d = sum(w'_i * log(s_i / 50))`，再按同批合格参考配置校准领域分。低覆盖配置不参与该领域校准。能力总分是六域分数的等权几何平均，不做第三次整榜归一化：
+
+`R = (Chatting * Reasoning * Coding * Frontend * Agentic * Documents) ^ (1/6)`
+
+任一领域不合格或总覆盖未达标时，R=null。榜单、雷达、对比、偏好排序和播放模式共同使用此规则；偏好排序允许用户主动选择较小领域集合，不能自动删除被选中但缺测的领域。
+
+## Vals 模型归因与来源条件
+
+七项 Vals 任务进入能力权重：Legal Research、Tax Agent、Code Migration、Vibe Code Bench 1.1、Finance Agent v2、Excel Modeling、Harvey HLAB。Vals Index 和 Vals TB4 保留作参考，避免重复聚合或重复计算同名终端任务。
+
+部分公布分包含在原模型拒答后由备用模型完成的任务。对来源已披露的备用任务，使用 Vals 官方 `noFallbackScorePct`，将这些任务计为失败；不自行推算原模型成绩。公布分、原模型分、备用和拒答次数、实际运行设置与来源校验值均保留。拒答已经作为失败计入的任务不再重复扣分。
+
+例如 Opus 5.5 的独立 Code Migration 公布分为 66.646%，原模型口径为 18.416%，包含 106 个备用任务。本站计分使用 18.416%，详情同时保留公布分和该条件。Vals Index 中的 Code Migration 子集另存，不能代替独立完整套件。
+
+备用统计仅在模型 ID、benchmark ID 和公布分与当前运行匹配时使用，错误或过期统计使刷新失败。来源未披露备用统计时，保留公布分并标注未知。SE 保留标准误定义；原模型分没有单独披露 SE 时，不借用混合公布分的 SE，也不生成 95% CI。
+
+来源只连接已审核的固定模型版本与运行条件。允许显式的较低 effort 向更高 effort 补缺，保留来源档位；不跨继任版本、Max 向 XHigh、Pro/Fast 或生产 harness 复制成绩。Vals 自己的评测工具环境保留原名，OpenHands 数据不是 Codex/Claude Code 的生产实测。
+
+## 实用分与目录
+
+Practical v1.4 使用同场景 API 成本、订阅可用额度、吞吐与 TTFT 的饱和效用调整。奖励上限各 +7.5，速度惩罚界 -8，成本惩罚界 -12：
+
+`practicalScore = max(0, R + speedDelta + costDelta)`
+
+缺少 R 或来源支持的成本/速度时，实用分保持 null。Vals 的每任务费用、整任务耗时和 Token 总数作为来源上下文保留，不替代 API 单价、TTFT 或吞吐。订阅成本继续采用 2026-10-11 核对的 SemiAnalysis 口径及明确标记的旧估算；Fable 可用额度 $2,485 只应用一次模型限制。
+
+目录按已审核的当前产品线及继任关系维护。访问路线与订阅共享能力证据，不重复增加参考校准权重。公开快照 schema v2 增加仅含展示字段的 `valsData`，来源卡、内部 ID 与逐任务记录保留在构建端。详情主区显示 26 项计分指标和 4 项费用/速度数据，可展开 Vals 来源区查看档位、环境、日期、原模型与公布分的区别。

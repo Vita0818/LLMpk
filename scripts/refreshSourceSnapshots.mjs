@@ -25,6 +25,7 @@ const STAGED = {
   openRouterCatalog: path.join(RUN_DIRECTORY, 'openRouterCatalogSnapshot.json'),
   openRouterPerformance: path.join(RUN_DIRECTORY, 'openRouterPerformanceSnapshot.json'),
   frontierCode: path.join(RUN_DIRECTORY, 'frontierCodeSourceSnapshot.json'),
+  vals: path.join(RUN_DIRECTORY, 'valsSourceSnapshot.json'),
   validation: path.join(RUN_DIRECTORY, 'sourceSnapshotValidationReport.json'),
 };
 const PUBLISHED = {
@@ -33,6 +34,7 @@ const PUBLISHED = {
   openRouterCatalog: path.join(ROOT, 'src', 'data', 'openRouterCatalogSnapshot.json'),
   openRouterPerformance: path.join(ROOT, 'src', 'data', 'openRouterPerformanceSnapshot.json'),
   frontierCode: path.join(ROOT, 'src', 'data', 'frontierCodeSourceSnapshot.json'),
+  vals: path.join(ROOT, 'src', 'data', 'valsSourceSnapshot.json'),
   validation: path.join(ROOT, 'src', 'data', 'sourceSnapshotValidationReport.json'),
 };
 
@@ -88,6 +90,10 @@ async function main() {
   await run('FrontierCode', 'fetchFrontierCodeSnapshot.mjs', {
     FRONTIERCODE_SNAPSHOT_OUTPUT: STAGED.frontierCode,
     FRONTIERCODE_RAW_SNAPSHOT_DIR: path.join(RUN_DIRECTORY, 'raw', 'frontiercode'),
+  });
+  await run('Vals reviewed benchmark evidence', 'fetchValsSnapshot.mjs', {
+    VALS_SNAPSHOT_OUTPUT: STAGED.vals,
+    VALS_RAW_SNAPSHOT_DIR: path.join(RUN_DIRECTORY, 'raw', 'vals'),
   });
   if (readBenchmarkApiKey()) {
     STAGED.designArena = path.join(RUN_DIRECTORY, 'designArenaSourceSnapshot.json');

@@ -1,4 +1,4 @@
-> Current scoring policy: [Registry v3](llm_pk_data_source_registry_v3.md), [Weights v3](llm_pk_domain_classification_weighting_v3.md), [Scoring v3](llm_pk_scoring_methodology_v3.md). Earlier source captures below remain historical provenance.
+> Current scoring policy: [Registry v3.1](llm_pk_data_source_registry_v3_1.md), [Weights v3.1](llm_pk_domain_classification_weighting_v3_1.md), [Scoring v3.1](llm_pk_scoring_methodology_v3_1.md). Earlier source captures below remain historical provenance.
 
 ## October 3 scoring migration
 
@@ -294,6 +294,58 @@ and each dated manifest define export schemas, aggregation, and attribution.
 Exports are licensed under CC BY 4.0; preserve the returned attribution when
 republishing them. The website's wider media/artifact benchmark catalog is not
 an assertion that those datasets are available through this endpoint.
+
+## Vals AI access
+
+Added October 12, 2026. `npm run refresh:vals` reads the official Vals Index
+and its eight standalone component pages. Each page identifies its public
+JSON through `BenchmarkViewLoader`; the fetcher extracts this reference
+without executing page scripts, requires the official `www.vals.ai` origin,
+and validates the JSON's benchmark identity, model inventory, task tables,
+dates, numeric ranges and nulls. No authentication is needed.
+
+Complete JSON and HTML captures stay in a dated raw cache. The committed
+`vals-source-snapshot/v1` keeps all task/category results and public metadata,
+source and capture dates, settings, standard errors, costs, durations, token
+totals, checksums and any refusal-fallback notices from the methodology page.
+The capture contains nine benchmark views, 111 model/execution identifiers
+and 8,819 observed result rows. Result-row counts are not sample counts.
+
+`src/data/valsReviewedMappings.json` pins 24 source identities against fixed
+catalog versions and 198 `overall` executions. Each execution pins benchmark
+version, model ID, task, effort, harness, provider, output budget and sampling
+settings. A changed/missing reviewed identity fails refresh without replacing
+the published snapshot; new source models do not gain automatic mappings.
+The full source-refresh command stages Vals alongside the other sources and
+publishes only after the individual Vals checks and cross-source checks pass.
+
+`src/data/valsSeedCards.ts` produces source cards and versioned observations,
+then attaches authored evidence to existing reader configuration identities.
+Unmapped rows stay in the snapshot. Unknown numerical efforts stay unlinked;
+Muse Spark Max does not fill XHigh, and undated Qwen Max does not fill 0902.
+Vals benchmark scaffolding remains its own environment in the public detail
+data. Native source-card metadata is kept out of the public bundle; the public
+snapshot includes only the small display evidence structure.
+
+Vals Index and standalone results remain separate, including Code Migration's
+index subset versus its full standalone task suite. Vals task cost and elapsed
+time never overwrite API price, TTFT or throughput. Standard errors are not
+converted into confidence intervals. V3.1 selects seven standalone Vals metrics,
+bringing the weighted set to 26; the aggregate index and Vals TB4 stay references.
+Reader admission remains a separate, explicit policy.
+
+The page loader identifies the chart's refusal/fallback metadata module.
+The fetcher parses its static literal declarations with `@babel/parser`, never
+executing the upstream module. The module's checksum and raw capture are kept.
+Metadata must match the published model/benchmark score. When fallback tasks
+are disclosed, scoring uses the official `noFallbackScorePct`; it preserves
+the published score and fallback/refusal counts. Unavailable metadata remains
+unknown. The original-model score receives no invented or borrowed SE.
+
+Environment overrides: `VALS_SNAPSHOT_OUTPUT` and `VALS_RAW_SNAPSHOT_DIR`.
+Use `npm run test:vals` for source parsing, settings/version isolation,
+missing/zero evidence, official refusal attribution, the public display contract
+and v3.1 capability/coverage calculations.
 
 ## Individual commands
 

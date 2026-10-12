@@ -38,6 +38,7 @@ export interface PublicLeaderboardConfiguration {
   observations: Record<string, PublicMetricObservation>;
   openRouterData?: PublicOpenRouterData;
   subscriptionData?: PublicSubscriptionData;
+  valsData?: import('../data/valsMetricDefinitions').ValsBenchmarkEvidence[];
 }
 
 export interface PublicLeaderboardScore {
@@ -52,5 +53,6 @@ export interface PublicLeaderboardScore {
 
 export interface PublicLeaderboardSnapshot {
   schemaVersion: 2;
+  scoringVersion?: string;
   scores: PublicLeaderboardScore[];
 }

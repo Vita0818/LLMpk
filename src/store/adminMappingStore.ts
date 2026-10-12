@@ -34,6 +34,8 @@ import {
 import { VERIFIED_SOURCE_MODEL_CARDS, VERIFIED_SOURCE_OBSERVATIONS } from '../data/seedCards';
 import { getSubscriptionPricingEvidence } from '../data/subscriptionPricing';
 import { VERIFIED_DESIGN_ARENA_SOURCE_MODEL_CARDS, VERIFIED_DESIGN_ARENA_SOURCE_OBSERVATIONS } from '../data/designArenaSeedCards';
+import { VERIFIED_VALS_SOURCE_MODEL_CARDS, VERIFIED_VALS_SOURCE_OBSERVATIONS, getValsDisplayEvidence } from '../data/valsSeedCards';
+import { VALS_METRIC_DEFINITIONS, type ValsBenchmarkEvidence } from '../data/valsMetricDefinitions';
 import {
   VERIFIED_HARNESS_SOURCE_MODEL_CARDS,
   VERIFIED_HARNESS_SOURCE_OBSERVATIONS,
@@ -189,7 +191,8 @@ function isKnownSource(source: unknown): source is SourceType {
     || source === 'terminal_bench'
     || source === 'swe_rebench'
     || source === 'frontier_code'
-    || source === 'design_arena';
+    || source === 'design_arena'
+    || source === 'vals';
 }
 
 /**
@@ -630,6 +633,7 @@ function belongsToExpectedHost(source: SourceType, value: unknown): boolean {
       return host === 'swe-rebench.com' || host.endsWith('.swe-rebench.com');
     }
     if (source === 'design_arena') return host === 'designarena.ai' || host.endsWith('.designarena.ai');
+    if (source === 'vals') return host === 'vals.ai' || host === 'www.vals.ai';
     return host === 'cognition.com' || host.endsWith('.cognition.com');
   } catch {
     return false;
@@ -674,6 +678,7 @@ function sourceMetricIsAllowed(source: SourceType, metricId: unknown): boolean {
   if (source === 'terminal_bench') return metricId.startsWith('tbench_');
   if (source === 'swe_rebench') return metricId.startsWith('swe_rebench_');
   if (source === 'design_arena') return metricId === 'designarena_frontend';
+  if (source === 'vals') return VALS_METRIC_DEFINITIONS.some(metric => metric.id === metricId);
   return metricId.startsWith('frontiercode_');
 }
 
@@ -1938,6 +1943,7 @@ export class AdminMappingStore {
       ...VERIFIED_RECOVERED_SOURCE_MODEL_CARDS,
       ...VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_MODEL_CARDS,
       ...VERIFIED_DESIGN_ARENA_SOURCE_MODEL_CARDS,
+      ...VERIFIED_VALS_SOURCE_MODEL_CARDS,
     ];
     const rawObservations = [
       ...parseArray<SourceObservation>(VERIFIED_SOURCE_OBSERVATIONS),
@@ -1947,6 +1953,7 @@ export class AdminMappingStore {
       ...VERIFIED_RECOVERED_SOURCE_OBSERVATIONS,
       ...VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_OBSERVATIONS,
       ...VERIFIED_DESIGN_ARENA_SOURCE_OBSERVATIONS,
+      ...VERIFIED_VALS_SOURCE_OBSERVATIONS,
     ];
     const sourceData = sanitizeSourceData(rawCards, rawObservations);
     this.catalogFingerprint = buildCatalogFingerprint(sourceData.cards, sourceData.observations);
@@ -2465,6 +2472,7 @@ export class AdminMappingStore {
       ? getOpenRouterPromotionalPricing(builtInPreset.productLineId)
       : undefined;
     const observationsMap: Record<string, MetricObservation> = {};
+    const valsData: ValsBenchmarkEvidence[] = [];
 
     // The stack is already top-to-bottom. The first verified observation for
     // a metric wins; lower cards can fill a missing metric but cannot silently
@@ -2493,6 +2501,8 @@ export class AdminMappingStore {
             testDate: observation.snapshotDate,
             harness: configurationIdentity?.harness?.name,
           };
+          const valsEvidence = getValsDisplayEvidence(card, observation, provenance);
+          if (valsEvidence) valsData.push(valsEvidence);
         });
       });
 
@@ -2615,6 +2625,7 @@ export class AdminMappingStore {
       },
       ...(openRouterData ? { openRouterData } : {}),
       ...(subscriptionData ? { subscriptionData } : {}),
+      ...(valsData.length > 0 ? { valsData } : {}),
       observations: observationsMap,
     };
   }

@@ -39,13 +39,14 @@ The reviewed successor-pruned inventory contains 30 model families / 48 configur
 The reader view folds equivalent model/harness/radar access routes, preferring
 the highest subscription tier. Its table and all selectors share the same 32
 visible configurations; the complete scoring inventory stays available internally.
-Scoring v3 requires every domain to reach 60% weighted observed evidence and
+Scoring v3.1 uses 26 metrics, including seven standalone Vals benchmarks, and
+requires every domain to reach 60% weighted observed evidence and
 at least 75% overall coverage before assigning a total or rank. Missing
 observations are null; insufficient configurations remain inspectable.
 
-- [Scoring v3](llm_pk_scoring_methodology_v3.md)
-- [Domain weights v3](llm_pk_domain_classification_weighting_v3.md)
-- [Source registry v3](llm_pk_data_source_registry_v3.md)
+- [Scoring v3.1](llm_pk_scoring_methodology_v3_1.md)
+- [Domain weights v3.1](llm_pk_domain_classification_weighting_v3_1.md)
+- [Source registry v3.1](llm_pk_data_source_registry_v3_1.md)
 
 Refresh the current FrontierCode 1.1 Main evidence with `npm run refresh:frontiercode`.
 DesignArena Overall Frontend is sourced through OpenRouter's authenticated
@@ -63,6 +64,47 @@ Source refresh updates published values only after the reviewed identities
 validate. New model or profile links must be authored in
 `src/data/designArenaReviewedMappings.json`; they are not inferred from a
 model ID or selected by highest Elo.
+
+## Vals AI evidence and scoring
+
+Vals AI is available in the source-card pool and in an expandable section on
+configuration and comparison details. The October 12 capture contains the
+Vals Index 2.1 and eight standalone components: Finance Agent v2, Excel
+Modeling, Vibe Code Bench 1.1, Code Migration, Terminal-Bench 4.0, Legal
+Research, Harvey HLAB, and Tax Agent Bench. Their source update dates are
+October 7–8. Seven standalone tasks participate in v3.1; Vals Index and Vals
+Terminal-Bench remain references to avoid duplicate aggregation and task weighting.
+
+```bash
+npm run refresh:vals
+npm run test:vals
+```
+
+The fetcher follows each official page's `BenchmarkViewLoader` JSON reference;
+no API key is required. It retains all published task/category rows, source
+dates, settings, standard errors, task costs, durations, raw-file paths and
+SHA-256 hashes. `src/data/valsReviewedMappings.json` pins the admitted model
+version and each benchmark's actual execution settings. Changed or missing
+reviewed executions fail refresh before the published snapshot is replaced.
+
+The capture has 111 source model/execution identifiers and 8,819 result rows.
+Reviewed mappings produce 198 cards from 24 source identities, including a
+separate, unlinked Muse Spark Max identity. Source evidence attaches
+to 39 existing configurations. The reader inventory remains 30 model product
+lines / 48 configurations / 32 visible representatives.
+
+The detail section displays source effort, benchmark environment, standard
+error, update date and published versus original-model scores. Vals runs retain their own execution identity;
+OpenHands results are not relabelled as Claude Code or Codex measurements.
+The standalone Code Migration run remains separate from the Vals Index's
+smaller migration subset. Official refusal/fallback statistics are parsed as
+static data from the chart module, without executing it. Disclosed fallback
+tasks use Vals' published `noFallbackScorePct` (fallback tasks count as failures);
+the original published result and fallback count remain visible. Missing
+metadata is marked unknown. The cleaned result does not reuse a mixed run's
+standard error. Task cost/duration do not enter API pricing,
+TTFT or throughput. Unordered effort and missing dated model versions remain
+unlinked where no reviewed profile/version match exists.
 
 ## Subscription pricing
 

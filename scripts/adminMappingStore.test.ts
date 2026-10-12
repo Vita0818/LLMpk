@@ -1771,7 +1771,8 @@ assert.equal(qwenFlashNextConfig.openRouterData?.inputPricePerMToken, 0.15);
 assert.equal(qwenFlashNextConfig.openRouterData?.outputPricePerMToken, 0.47);
 assert.ok((qwenFlashNextConfig.openRouterData?.ttftP50Seconds || 0) > 0);
 assert.ok((qwenFlashNextConfig.openRouterData?.throughputP50TokensPerSec || 0) > 0);
-assert.equal(scoreByConfigurationId.get(qwenFlashNextBox.id)?.availableDomainCount, 2);
+assert.equal(scoreByConfigurationId.get(qwenFlashNextBox.id)?.availableDomainCount, 0,
+  'V3.1 must keep unmatched Vals weights missing instead of upgrading sparse legacy evidence.');
 assert.equal(scoreByConfigurationId.get(qwenFlashNextBox.id)?.eligibleForGlobalLeaderboard, false);
 const hy4Box = installedPresetBoxes.find((box) => (
   box.builtInPresetId === 'builtin.hy4-preview.high'
@@ -1779,14 +1780,15 @@ const hy4Box = installedPresetBoxes.find((box) => (
 assert.ok(hy4Box, 'Hy4 Preview High must enter as the explicitly approved sparse release.');
 const hy4Stack = reconciledV3Store.getLinkedCardStack(hy4Box.id);
 assert.deepEqual(
-  hy4Stack.map(({ card }) => card.id),
+  hy4Stack.filter(({ card }) => card.source !== 'vals').map(({ card }) => card.id),
   [
     'card-openrouter-tencent-hy4-preview',
     'card-openrouter-standard-performance-tencent-hy4-preview',
     'card-arena-hy4-preview',
   ],
-  'Hy4 Preview must use only its exact OpenRouter practical cards and current Arena WebDev row.',
+  'Hy4 Preview must retain its exact OpenRouter practical cards and current Arena WebDev row.',
 );
+assert.equal(hy4Stack.filter(({ card }) => card.source === 'vals').length, 9);
 assert.deepEqual(
   hy4Stack.find(({ card }) => card.id === 'card-arena-hy4-preview')?.link.provenance,
   {
@@ -2185,13 +2187,19 @@ for (const expectation of august2026ReleaseExpectations) {
     `${expectation.modelName} practical data must be copied from its linked OpenRouter cards.`,
   );
   const score = scoreByConfigurationId.get(box.id);
-  assert.ok(
-    (score?.availableDomainCount || 0) >= 5,
-    `${expectation.modelName} must have enough independent domains for the global ranking.`,
-  );
-  assert.notEqual(score?.rawCapabilityScore, null);
-  assert.notEqual(score?.practicalBreakdown.practicalScore, null);
-  assert.equal(score?.eligibleForGlobalLeaderboard, true);
+  if (expectation.productLineId === 'muse_glimmer') {
+    assert.equal(score?.availableDomainCount, 2,
+      'Muse Glimmer has no matching Vals release and must retain its missing v3.1 evidence.');
+    assert.equal(score?.rawCapabilityScore, null);
+    assert.equal(score?.practicalBreakdown.practicalScore, null);
+    assert.equal(score?.eligibleForGlobalLeaderboard, false);
+  } else {
+    assert.ok((score?.availableDomainCount || 0) >= 5,
+      `${expectation.modelName} must have enough independent domains for the global ranking.`);
+    assert.notEqual(score?.rawCapabilityScore, null);
+    assert.notEqual(score?.practicalBreakdown.practicalScore, null);
+    assert.equal(score?.eligibleForGlobalLeaderboard, true);
+  }
 }
 
 const retainedDeepSeekHistoricalCard = baseCards.find(({ id }) => id === 'card-arena-deepseek-v4-pro-high-20260813');

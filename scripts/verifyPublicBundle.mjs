@@ -40,6 +40,7 @@ const allowedConfigurationKeys = new Set([
   'observations',
   'openRouterData',
   'subscriptionData',
+  'valsData',
 ]);
 const allowedSubscriptionKeys = new Set([
   'planName',
@@ -48,9 +49,16 @@ const allowedSubscriptionKeys = new Set([
   'usableQuotaFraction',
   'pricingEvidenceId',
 ]);
+const allowedValsKeys = new Set([
+  'metricId', 'rawValue', 'standardError', 'benchmarkVersion', 'sourceUrl', 'sourceUpdated',
+  'sourceProfile', 'sourceHarness', 'profileFallback', 'hasRefusalFallbackNotice',
+  'publishedRawValue', 'scoreBasis', 'fallbackCount', 'refusalCount',
+]);
 
 if (
   publicSnapshot.schemaVersion !== 2
+  || typeof publicSnapshot.scoringVersion !== 'string'
+  || !/^\d+\.\d+$/u.test(publicSnapshot.scoringVersion)
   || !Array.isArray(publicSnapshot.scores)
   || publicSnapshot.scores.length === 0
 ) {
@@ -93,6 +101,33 @@ for (const score of publicSnapshot.scores) {
       || !observationKeys.includes('rawValue')
     ) {
       throw new Error('Public metric observation contains non-display metadata.');
+    }
+  }
+
+  if (score.config?.valsData !== undefined) {
+    const evidence = score.config.valsData;
+    if (!Array.isArray(evidence) || evidence.length > 9
+      || new Set(evidence.map(item => item.metricId)).size !== evidence.length) {
+      throw new Error('Public Vals evidence must contain unique registered results.');
+    }
+    for (const row of evidence) {
+      const source = new URL(row.sourceUrl);
+      if (Object.keys(row).length !== allowedValsKeys.size
+        || Object.keys(row).some(key => !allowedValsKeys.has(key))
+        || typeof row.metricId !== 'string' || !/^vals_[a-z0-9_]+$/u.test(row.metricId)
+        || (row.rawValue !== null && (!Number.isFinite(row.rawValue) || row.rawValue < 0 || row.rawValue > 1))
+        || (row.publishedRawValue !== null && (!Number.isFinite(row.publishedRawValue) || row.publishedRawValue < 0 || row.publishedRawValue > 1))
+        || !['published', 'no-fallback'].includes(row.scoreBasis)
+        || [row.fallbackCount, row.refusalCount].some(value => value !== null && (!Number.isSafeInteger(value) || value < 0))
+        || (row.standardError !== null && (!Number.isFinite(row.standardError) || row.standardError < 0 || row.standardError > 1))
+        || source.origin !== 'https://www.vals.ai' || !/^\/benchmarks\/[\w-]+$/u.test(source.pathname)
+        || !/^\d{4}-\d{2}-\d{2}$/u.test(row.sourceUpdated)
+        || typeof row.sourceProfile !== 'string'
+        || (row.sourceHarness !== null && typeof row.sourceHarness !== 'string')
+        || (row.benchmarkVersion !== null && typeof row.benchmarkVersion !== 'string')
+        || typeof row.profileFallback !== 'boolean' || typeof row.hasRefusalFallbackNotice !== 'boolean') {
+        throw new Error('Public Vals evidence exposes unsupported or invalid display data.');
+      }
     }
   }
 }

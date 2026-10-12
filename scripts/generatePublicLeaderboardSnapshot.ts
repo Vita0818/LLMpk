@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { ALL_METRIC_DEFINITIONS } from '../src/engine/scoringEngine';
+import { SCORING_CONFIG } from '../src/engine/scoringConfig';
 import { DETAIL_ONLY_METRIC_DEFINITIONS } from '../src/data/detailMetricDefinitions';
 import type { DomainId } from '../src/types/llm_pk';
 import type {
@@ -74,6 +75,15 @@ const scores: PublicLeaderboardScore[] = adminMappingStore
       }
       : undefined;
     const sourceSubscriptionData = score.config.subscriptionData;
+    const valsData = score.config.valsData?.map(evidence => ({
+      metricId: evidence.metricId, rawValue: evidence.rawValue, standardError: evidence.standardError,
+      publishedRawValue: evidence.publishedRawValue, scoreBasis: evidence.scoreBasis,
+      fallbackCount: evidence.fallbackCount, refusalCount: evidence.refusalCount,
+      benchmarkVersion: evidence.benchmarkVersion, sourceUrl: evidence.sourceUrl,
+      sourceUpdated: evidence.sourceUpdated, sourceProfile: evidence.sourceProfile,
+      sourceHarness: evidence.sourceHarness, profileFallback: evidence.profileFallback,
+      hasRefusalFallbackNotice: evidence.hasRefusalFallbackNotice,
+    }));
     const subscriptionData = sourceSubscriptionData
       ? {
           planName: sourceSubscriptionData.planName,
@@ -97,6 +107,7 @@ const scores: PublicLeaderboardScore[] = adminMappingStore
         observations,
         ...(openRouterData ? { openRouterData } : {}),
         ...(subscriptionData ? { subscriptionData } : {}),
+        ...(valsData?.length ? { valsData } : {}),
       },
       domainScores,
       overallCoverage: score.overallCoverage,
@@ -109,6 +120,7 @@ const scores: PublicLeaderboardScore[] = adminMappingStore
 
 const snapshot: PublicLeaderboardSnapshot = {
   schemaVersion: 2,
+  scoringVersion: SCORING_CONFIG.version,
   scores,
 };
 

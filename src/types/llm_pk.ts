@@ -6,7 +6,8 @@ export type MetricSource =
   | 'Terminal-Bench'
   | 'SWE-rebench'
   | 'FrontierCode'
-  | 'DesignArena';
+  | 'DesignArena'
+  | 'Vals AI';
 
 export type MetricType =
   | 'accuracy'                   // Pass@1, Accuracy (Logit transformed)
@@ -143,6 +144,9 @@ export interface LLMConfiguration {
 
   // Fixed-price subscription details, when this is a subscription route.
   subscriptionData?: SubscriptionCostData;
+
+  /** Independent Vals runs retain their own effort and benchmark environment. */
+  valsData?: import('../data/valsMetricDefinitions').ValsBenchmarkEvidence[];
 
   // Atomic Observations map: metricId -> MetricObservation
   observations: Record<string, MetricObservation>;

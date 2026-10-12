@@ -1,0 +1,4774 @@
+{
+  "schemaVersion": "vals-reviewed-mappings/v1",
+  "reviewedAt": "2026-10-12",
+  "policy": "Explicit model/version and published execution settings. Vals benchmark scaffolding stays visible and is not a measurement of the displayed production CLI. Only authored exact or upward profile links may attach supplementary evidence; unknown numerical effort stays unlinked.",
+  "entries": [
+    {
+      "key": "anthropic-claude-fable-5-1",
+      "modelId": "anthropic/claude-fable-5-1",
+      "displayName": "Claude Fable 5.1",
+      "productLineId": "claude_fable_51",
+      "baseCardId": "card-openrouter-anthropic-claude-fable-5-1",
+      "canonicalModelVersion": "anthropic/claude-fable-5.1-20260831",
+      "targets": [
+        {
+          "presetId": "builtin.harness.claude-fable-5-1.max.claude-code",
+          "modelName": "Claude Fable 5.1",
+          "profile": "Max",
+          "profileLevel": 6,
+          "harness": "Claude Code"
+        },
+        {
+          "presetId": "builtin.subscription.claude-max-20x.claude-fable-5-1.max.chat",
+          "modelName": "Claude Fable 5.1",
+          "profile": "Max",
+          "profileLevel": 6,
+          "harness": "Claude Code"
+        }
+      ],
+      "executions": [
+        {
+          "benchmarkSlug": "vals_index",
+          "benchmarkVersion": "2.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "fabv2",
+          "benchmarkVersion": "2",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "emb",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vibe-code",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "code-migration",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "terminal-bench-4",
+          "benchmarkVersion": "4.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "legal_research",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "hlab",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        }
+      ]
+    },
+    {
+      "key": "anthropic-claude-opus-5-5",
+      "modelId": "anthropic/claude-opus-5-5",
+      "displayName": "Claude Opus 5.5",
+      "productLineId": "claude_opus_55",
+      "baseCardId": "card-openrouter-anthropic-claude-opus-5-5",
+      "canonicalModelVersion": "anthropic/claude-opus-5.5-20260921",
+      "targets": [
+        {
+          "presetId": "builtin.harness.claude-opus-5-5.max.claude-code",
+          "modelName": "Claude Opus 5.5",
+          "profile": "Max",
+          "profileLevel": 6,
+          "harness": "Claude Code"
+        },
+        {
+          "presetId": "builtin.subscription.claude-max-20x.claude-opus-5-5.max.claude-code",
+          "modelName": "Claude Opus 5.5",
+          "profile": "Max",
+          "profileLevel": 6,
+          "harness": "Claude Code"
+        },
+        {
+          "presetId": "builtin.subscription.claude-pro.claude-opus-5-5.max.claude-code",
+          "modelName": "Claude Opus 5.5",
+          "profile": "Max",
+          "profileLevel": 6,
+          "harness": "Claude Code"
+        }
+      ],
+      "executions": [
+        {
+          "benchmarkSlug": "vals_index",
+          "benchmarkVersion": "2.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "fabv2",
+          "benchmarkVersion": "2",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "emb",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vibe-code",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "code-migration",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "terminal-bench-4",
+          "benchmarkVersion": "4.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "legal_research",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "hlab",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        }
+      ]
+    },
+    {
+      "key": "anthropic-claude-sonnet-5-5",
+      "modelId": "anthropic/claude-sonnet-5-5",
+      "displayName": "Claude Sonnet 5.5",
+      "productLineId": "claude_sonnet_55",
+      "baseCardId": "card-openrouter-anthropic-claude-sonnet-5-5",
+      "canonicalModelVersion": "anthropic/claude-sonnet-5.5-20260928",
+      "targets": [
+        {
+          "presetId": "builtin.harness.claude-sonnet-5-5.max.claude-code",
+          "modelName": "Claude Sonnet 5.5",
+          "profile": "Max",
+          "profileLevel": 6,
+          "harness": "Claude Code"
+        },
+        {
+          "presetId": "builtin.subscription.claude-max-20x.claude-sonnet-5-5.max.claude-code",
+          "modelName": "Claude Sonnet 5.5",
+          "profile": "Max",
+          "profileLevel": 6,
+          "harness": "Claude Code"
+        },
+        {
+          "presetId": "builtin.subscription.claude-pro.claude-sonnet-5-5.max.claude-code",
+          "modelName": "Claude Sonnet 5.5",
+          "profile": "Max",
+          "profileLevel": 6,
+          "harness": "Claude Code"
+        }
+      ],
+      "executions": [
+        {
+          "benchmarkSlug": "vals_index",
+          "benchmarkVersion": "2.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "fabv2",
+          "benchmarkVersion": "2",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "emb",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vibe-code",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "code-migration",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "terminal-bench-4",
+          "benchmarkVersion": "4.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "legal_research",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "hlab",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        }
+      ]
+    },
+    {
+      "key": "openai-gpt-5-6-terra",
+      "modelId": "openai/gpt-5.6-terra",
+      "displayName": "GPT-5.6 Terra",
+      "productLineId": "gpt_56_terra",
+      "baseCardId": "card-openrouter-openai-gpt-5-6-terra",
+      "canonicalModelVersion": "openai/gpt-5.6-terra-20260709",
+      "targets": [
+        {
+          "presetId": "builtin.harness.gpt-5-6-terra.max.codex-cli",
+          "modelName": "GPT-5.6 Terra",
+          "profile": "Max",
+          "profileLevel": 6,
+          "harness": "Codex CLI"
+        },
+        {
+          "presetId": "builtin.subscription.chatgpt-plus.gpt-5-6-terra.max.codex-cli",
+          "modelName": "GPT-5.6 Terra",
+          "profile": "Max",
+          "profileLevel": 6,
+          "harness": "Codex CLI"
+        }
+      ],
+      "executions": [
+        {
+          "benchmarkSlug": "vals_index",
+          "benchmarkVersion": "2.1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "fabv2",
+          "benchmarkVersion": "2",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "emb",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vibe-code",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "code-migration",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "terminal-bench-4",
+          "benchmarkVersion": "4.0",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "legal_research",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "hlab",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        }
+      ]
+    },
+    {
+      "key": "openai-gpt-6-astra",
+      "modelId": "openai/gpt-6-astra",
+      "displayName": "GPT-6 Astra",
+      "productLineId": "gpt_6_astra",
+      "baseCardId": "card-openrouter-openai-gpt-6-astra",
+      "canonicalModelVersion": "openai/gpt-6-astra-20260903",
+      "targets": [
+        {
+          "presetId": "builtin.harness.gpt-6-astra.max.codex-cli",
+          "modelName": "GPT-6 Astra",
+          "profile": "Max",
+          "profileLevel": 6,
+          "harness": "Codex CLI"
+        },
+        {
+          "presetId": "builtin.subscription.chatgpt-plus.gpt-6-astra.max.codex-cli",
+          "modelName": "GPT-6 Astra",
+          "profile": "Max",
+          "profileLevel": 6,
+          "harness": "Codex CLI"
+        },
+        {
+          "presetId": "builtin.subscription.chatgpt-pro-20x.gpt-6-astra.max.codex-cli",
+          "modelName": "GPT-6 Astra",
+          "profile": "Max",
+          "profileLevel": 6,
+          "harness": "Codex CLI"
+        }
+      ],
+      "executions": [
+        {
+          "benchmarkSlug": "vals_index",
+          "benchmarkVersion": "2.1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "fabv2",
+          "benchmarkVersion": "2",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "emb",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vibe-code",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "code-migration",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "terminal-bench-4",
+          "benchmarkVersion": "4.0",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "legal_research",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "hlab",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        }
+      ]
+    },
+    {
+      "key": "openai-gpt-6-luna",
+      "modelId": "openai/gpt-6-luna",
+      "displayName": "GPT-6 Luna",
+      "productLineId": "gpt_6_luna",
+      "baseCardId": "card-openrouter-openai-gpt-6-luna",
+      "canonicalModelVersion": "openai/gpt-6-luna-20260922",
+      "targets": [
+        {
+          "presetId": "builtin.harness.gpt-6-luna.max.codex-cli",
+          "modelName": "GPT-6 Luna",
+          "profile": "Max",
+          "profileLevel": 6,
+          "harness": "Codex CLI"
+        }
+      ],
+      "executions": [
+        {
+          "benchmarkSlug": "vals_index",
+          "benchmarkVersion": "2.1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "fabv2",
+          "benchmarkVersion": "2",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "emb",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vibe-code",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "code-migration",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "terminal-bench-4",
+          "benchmarkVersion": "4.0",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "legal_research",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "hlab",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        }
+      ]
+    },
+    {
+      "key": "openai-gpt-6-1-sol",
+      "modelId": "openai/gpt-6.1-sol",
+      "displayName": "GPT-6.1 Sol",
+      "productLineId": "gpt_61_sol",
+      "baseCardId": "card-openrouter-openai-gpt-6-1-sol",
+      "canonicalModelVersion": "openai/gpt-6.1-sol-20260929",
+      "targets": [
+        {
+          "presetId": "builtin.harness.gpt-6-1-sol.max.codex-cli",
+          "modelName": "GPT-6.1 Sol",
+          "profile": "Max",
+          "profileLevel": 6,
+          "harness": "Codex CLI"
+        },
+        {
+          "presetId": "builtin.subscription.chatgpt-plus.gpt-6-1-sol.max.codex-cli",
+          "modelName": "GPT-6.1 Sol",
+          "profile": "Max",
+          "profileLevel": 6,
+          "harness": "Codex CLI"
+        },
+        {
+          "presetId": "builtin.subscription.chatgpt-pro-20x.gpt-6-1-sol.max.codex-cli",
+          "modelName": "GPT-6.1 Sol",
+          "profile": "Max",
+          "profileLevel": 6,
+          "harness": "Codex CLI"
+        }
+      ],
+      "executions": [
+        {
+          "benchmarkSlug": "vals_index",
+          "benchmarkVersion": "2.1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "fabv2",
+          "benchmarkVersion": "2",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "emb",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vibe-code",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "code-migration",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "terminal-bench-4",
+          "benchmarkVersion": "4.0",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "legal_research",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "hlab",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        }
+      ]
+    },
+    {
+      "key": "google-gemini-3-5-flash-lite",
+      "modelId": "google/gemini-3.5-flash-lite",
+      "displayName": "Gemini 3.5 Flash Lite",
+      "productLineId": "gemini_35_flash_lite",
+      "baseCardId": "card-openrouter-google-gemini-3-5-flash-lite",
+      "canonicalModelVersion": "google/gemini-3.5-flash-lite-20260721",
+      "targets": [
+        {
+          "presetId": "builtin.data-md.gemini-3-5-flash-lite.high.ai-studio",
+          "modelName": "Gemini 3.5 Flash-Lite",
+          "profile": "High",
+          "profileLevel": 4,
+          "harness": "---"
+        },
+        {
+          "presetId": "builtin.subscription.google-ai-pro.gemini-3-5-flash-lite.high.chat",
+          "modelName": "Gemini 3.5 Flash-Lite",
+          "profile": "High",
+          "profileLevel": 4,
+          "harness": "---"
+        }
+      ],
+      "executions": [
+        {
+          "benchmarkSlug": "fabv2",
+          "benchmarkVersion": "2",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Google",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "emb",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Google",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vibe-code",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Google",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "code-migration",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Google",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "legal_research",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Google",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "hlab",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Google",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Google",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        }
+      ]
+    },
+    {
+      "key": "google-gemini-3-8-flash",
+      "modelId": "google/gemini-3.8-flash",
+      "displayName": "Gemini 3.8 Flash",
+      "productLineId": "gemini_38_flash",
+      "baseCardId": "card-openrouter-google-gemini-3-8-flash",
+      "canonicalModelVersion": "google/gemini-3.8-flash-20260902",
+      "targets": [
+        {
+          "presetId": "builtin.agent.arena.gemini-3-8-flash.high",
+          "modelName": "Gemini 3.8 Flash",
+          "profile": "High",
+          "profileLevel": 4,
+          "harness": "AA Agent Harness"
+        },
+        {
+          "presetId": "builtin.harness.gemini-3-8-flash.high.antigravity-sdk",
+          "modelName": "Gemini 3.8 Flash",
+          "profile": "High",
+          "profileLevel": 4,
+          "harness": "Antigravity SDK"
+        },
+        {
+          "presetId": "builtin.harness.gemini-3-8-flash.high.opencode",
+          "modelName": "Gemini 3.8 Flash",
+          "profile": "High",
+          "profileLevel": 4,
+          "harness": "OpenCode"
+        },
+        {
+          "presetId": "builtin.subscription.google-ai-pro.gemini-3-8-flash.high.antigravity-sdk",
+          "modelName": "Gemini 3.8 Flash",
+          "profile": "High",
+          "profileLevel": 4,
+          "harness": "Antigravity SDK"
+        },
+        {
+          "presetId": "builtin.subscription.google-ai-pro.gemini-3-8-flash.high.opencode",
+          "modelName": "Gemini 3.8 Flash",
+          "profile": "High",
+          "profileLevel": 4,
+          "harness": "OpenCode"
+        },
+        {
+          "presetId": "builtin.subscription.google-ai-ultra-20x.gemini-3-8-flash.high.antigravity-sdk",
+          "modelName": "Gemini 3.8 Flash",
+          "profile": "High",
+          "profileLevel": 4,
+          "harness": "Antigravity SDK"
+        },
+        {
+          "presetId": "builtin.subscription.google-ai-ultra-20x.gemini-3-8-flash.high.opencode",
+          "modelName": "Gemini 3.8 Flash",
+          "profile": "High",
+          "profileLevel": 4,
+          "harness": "OpenCode"
+        }
+      ],
+      "executions": [
+        {
+          "benchmarkSlug": "vals_index",
+          "benchmarkVersion": "2.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Google",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "fabv2",
+          "benchmarkVersion": "2",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Google",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "emb",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Google",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vibe-code",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Google",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "code-migration",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Google",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "terminal-bench-4",
+          "benchmarkVersion": "4.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Google",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "legal_research",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Google",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "hlab",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Google",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Google",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        }
+      ]
+    },
+    {
+      "key": "grok-grok-4-7",
+      "modelId": "grok/grok-4.7",
+      "displayName": "Grok 4.7",
+      "productLineId": "grok_47",
+      "baseCardId": "card-openrouter-x-ai-grok-4-7",
+      "canonicalModelVersion": "x-ai/grok-4.7-20260916",
+      "targets": [
+        {
+          "presetId": "builtin.harness.grok-4-7.xhigh.grok-build",
+          "modelName": "Grok 4.7",
+          "profile": "XHigh",
+          "profileLevel": 5,
+          "harness": "Grok Build"
+        }
+      ],
+      "executions": [
+        {
+          "benchmarkSlug": "vals_index",
+          "benchmarkVersion": "2.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "max_output_tokens": null,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "SpaceXAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "fabv2",
+          "benchmarkVersion": "2",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "max_output_tokens": null,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "SpaceXAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "emb",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "max_output_tokens": null,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "SpaceXAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vibe-code",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "max_output_tokens": null,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "SpaceXAI",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "code-migration",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "max_output_tokens": null,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "SpaceXAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "terminal-bench-4",
+          "benchmarkVersion": "4.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "max_output_tokens": null,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "SpaceXAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "legal_research",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "max_output_tokens": null,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "SpaceXAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "hlab",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "max_output_tokens": null,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "SpaceXAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "max_output_tokens": null,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "SpaceXAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        }
+      ]
+    },
+    {
+      "key": "zai-glm-5-3",
+      "modelId": "zai/glm-5.3",
+      "displayName": "GLM 5.3",
+      "productLineId": "glm_53",
+      "baseCardId": "card-openrouter-z-ai-glm-5-3",
+      "canonicalModelVersion": "z-ai/glm-5.3-20260816",
+      "targets": [
+        {
+          "presetId": "builtin.data-md.glm-5-3.max",
+          "modelName": "GLM-5.3",
+          "profile": "Max",
+          "profileLevel": 6,
+          "harness": "---"
+        }
+      ],
+      "executions": [
+        {
+          "benchmarkSlug": "vals_index",
+          "benchmarkVersion": "2.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Fireworks AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "fabv2",
+          "benchmarkVersion": "2",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Fireworks AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "emb",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Zhipu AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vibe-code",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Zhipu AI",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "code-migration",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Zhipu AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "terminal-bench-4",
+          "benchmarkVersion": "4.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Zhipu AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "legal_research",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Zhipu AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "hlab",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Zhipu AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Zhipu AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        }
+      ]
+    },
+    {
+      "key": "zai-glm-5-3-flash",
+      "modelId": "zai/glm-5.3-flash",
+      "displayName": "GLM 5.3 Flash",
+      "productLineId": "glm_53_flash",
+      "baseCardId": "card-openrouter-z-ai-glm-5-3-flash",
+      "canonicalModelVersion": "z-ai/glm-5.3-flash-20260826",
+      "targets": [
+        {
+          "presetId": "builtin.glm-5-3-flash.max",
+          "modelName": "GLM-5.3-Flash",
+          "profile": "Max",
+          "profileLevel": 6,
+          "harness": "---"
+        }
+      ],
+      "executions": [
+        {
+          "benchmarkSlug": "fabv2",
+          "benchmarkVersion": "2",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Fireworks AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "emb",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Zhipu AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vibe-code",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Zhipu AI",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "code-migration",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Zhipu AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "legal_research",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Zhipu AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "hlab",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Zhipu AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Zhipu AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        }
+      ]
+    },
+    {
+      "key": "minimax-minimax-m3",
+      "modelId": "minimax/MiniMax-M3",
+      "displayName": "MiniMax-M3",
+      "productLineId": "minimax_m3",
+      "baseCardId": "card-openrouter-minimax-minimax-m3",
+      "canonicalModelVersion": "minimax/minimax-m3-20260531",
+      "targets": [
+        {
+          "presetId": "builtin.agent.arena.minimax-m3.max",
+          "modelName": "MiniMax M3",
+          "profile": "Max",
+          "profileLevel": 6,
+          "harness": "AA Agent Harness"
+        }
+      ],
+      "executions": [
+        {
+          "benchmarkSlug": "vals_index",
+          "benchmarkVersion": "2.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 512000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "MiniMax",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "fabv2",
+          "benchmarkVersion": "2",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 512000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "MiniMax",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "emb",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 512000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "MiniMax",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "vibe-code",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 512000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "MiniMax",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "code-migration",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 512000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "MiniMax",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "terminal-bench-4",
+          "benchmarkVersion": "4.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 512000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "MiniMax",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "legal_research",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 512000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "MiniMax",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "hlab",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 512000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "MiniMax",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 512000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "MiniMax",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        }
+      ]
+    },
+    {
+      "key": "alibaba-qwen3-7-plus",
+      "modelId": "alibaba/qwen3.7-plus",
+      "displayName": "Qwen 3.7 Plus",
+      "productLineId": "qwen_37_plus",
+      "baseCardId": "card-openrouter-qwen-qwen3-7-plus",
+      "canonicalModelVersion": "qwen/qwen3.7-plus-20260602",
+      "targets": [
+        {
+          "presetId": "builtin.harness.qwen-3-7-plus.max.claude-code",
+          "modelName": "Qwen3.7 Plus",
+          "profile": "Max",
+          "profileLevel": 6,
+          "harness": "Claude Code"
+        }
+      ],
+      "executions": [
+        {
+          "benchmarkSlug": "fabv2",
+          "benchmarkVersion": "2",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Alibaba",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "emb",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Alibaba",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "vibe-code",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Alibaba",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "code-migration",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Alibaba",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "legal_research",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Alibaba",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "hlab",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Alibaba",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Alibaba",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        }
+      ]
+    },
+    {
+      "key": "alibaba-qwen3-8-27b",
+      "modelId": "alibaba/qwen3.8-27b",
+      "displayName": "Qwen 3.8 27B",
+      "productLineId": "qwen_38_27b",
+      "baseCardId": "card-openrouter-qwen-qwen3-8-27b",
+      "canonicalModelVersion": "qwen/qwen3.8-27b-20260814",
+      "targets": [
+        {
+          "presetId": "builtin.qwen3-8-27b.xhigh",
+          "modelName": "Qwen3.8 27B",
+          "profile": "XHigh",
+          "profileLevel": 5,
+          "harness": "---"
+        }
+      ],
+      "executions": [
+        {
+          "benchmarkSlug": "fabv2",
+          "benchmarkVersion": "2",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Alibaba",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "emb",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Alibaba",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vibe-code",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Alibaba",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "code-migration",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Alibaba",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "legal_research",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Alibaba",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "hlab",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Alibaba",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Alibaba",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        }
+      ]
+    },
+    {
+      "key": "deepseek-deepseek-v4-1-flash",
+      "modelId": "deepseek/deepseek-v4.1-flash",
+      "displayName": "DeepSeek V4.1 Flash",
+      "productLineId": "deepseek_v41_flash",
+      "baseCardId": "card-openrouter-deepseek-deepseek-v4-1-flash",
+      "canonicalModelVersion": "deepseek/deepseek-v4.1-flash-20260910",
+      "targets": [
+        {
+          "presetId": "builtin.deepseek-v4-1-flash.max",
+          "modelName": "DeepSeek V4.1 Flash",
+          "profile": "Max",
+          "profileLevel": 6,
+          "harness": "---"
+        }
+      ],
+      "executions": [
+        {
+          "benchmarkSlug": "vals_index",
+          "benchmarkVersion": "2.1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 384000,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "DeepSeek",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "fabv2",
+          "benchmarkVersion": "2",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 384000,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "DeepSeek",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "emb",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 384000,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "DeepSeek",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vibe-code",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 384000,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "DeepSeek",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "code-migration",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 384000,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "DeepSeek",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "terminal-bench-4",
+          "benchmarkVersion": "4.0",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 384000,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "DeepSeek",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "legal_research",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 1,
+            "max_output_tokens": 384000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "DeepSeek",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "hlab",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 1,
+            "max_output_tokens": 384000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "DeepSeek",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 1,
+            "max_output_tokens": 384000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "DeepSeek",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        }
+      ]
+    },
+    {
+      "key": "xiaomi-mimo-v2-6-pro",
+      "modelId": "xiaomi/mimo-v2.6-pro",
+      "displayName": "MiMo V2.6 Pro",
+      "productLineId": "mimo_v26_pro",
+      "baseCardId": "card-openrouter-xiaomi-mimo-v2-6-pro",
+      "canonicalModelVersion": "xiaomi/mimo-v2.6-pro-20260921",
+      "targets": [
+        {
+          "presetId": "builtin.mimo-v2-6-pro.default",
+          "modelName": "MiMo-V2.6-Pro",
+          "profile": "Default",
+          "profileLevel": 0,
+          "harness": "---"
+        }
+      ],
+      "executions": [
+        {
+          "benchmarkSlug": "vals_index",
+          "benchmarkVersion": "2.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Xiaomi",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "fabv2",
+          "benchmarkVersion": "2",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Xiaomi",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "emb",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Xiaomi",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "vibe-code",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Xiaomi",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "code-migration",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Xiaomi",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "terminal-bench-4",
+          "benchmarkVersion": "4.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Xiaomi",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "legal_research",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Xiaomi",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "hlab",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Xiaomi",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Xiaomi",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        }
+      ]
+    },
+    {
+      "key": "kimi-kimi-k3",
+      "modelId": "kimi/kimi-k3",
+      "displayName": "Kimi K3",
+      "productLineId": "kimi_k3",
+      "baseCardId": "card-openrouter-moonshotai-kimi-k3",
+      "canonicalModelVersion": "moonshotai/kimi-k3-20260715",
+      "targets": [
+        {
+          "presetId": "builtin.harness.kimi-k3.max.kimi-code-cli",
+          "modelName": "Kimi K3",
+          "profile": "Max",
+          "profileLevel": 6,
+          "harness": "Kimi Code CLI"
+        }
+      ],
+      "executions": [
+        {
+          "benchmarkSlug": "vals_index",
+          "benchmarkVersion": "2.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 262144,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Moonshot AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "fabv2",
+          "benchmarkVersion": "2",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 262144,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Moonshot AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "emb",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 262144,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Moonshot AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vibe-code",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 262144,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Moonshot AI",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "code-migration",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 262144,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Moonshot AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "terminal-bench-4",
+          "benchmarkVersion": "4.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 262144,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Moonshot AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "legal_research",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 262144,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Moonshot AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "hlab",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 262144,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Moonshot AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 262144,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Moonshot AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        }
+      ]
+    },
+    {
+      "key": "meta-muse-spark-1-3",
+      "modelId": "meta/muse_spark_1_3",
+      "displayName": "Muse Spark 1.3",
+      "productLineId": "muse_spark_13",
+      "baseCardId": "card-openrouter-meta-muse-spark-1-3",
+      "canonicalModelVersion": "meta/muse-spark-1.3-20260902",
+      "targets": [
+        {
+          "presetId": "builtin.harness.muse-spark-1-3.xhigh.muse-code",
+          "modelName": "Muse Spark 1.3",
+          "profile": "XHigh",
+          "profileLevel": 5,
+          "harness": "Muse Code"
+        },
+        {
+          "presetId": "builtin.api-tier.meta-contributor.muse-spark-1-3.xhigh.muse-code",
+          "modelName": "Muse Spark 1.3",
+          "profile": "XHigh",
+          "profileLevel": 5,
+          "harness": "Muse Code"
+        }
+      ],
+      "executions": [
+        {
+          "benchmarkSlug": "vals_index",
+          "benchmarkVersion": "2.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "fabv2",
+          "benchmarkVersion": "2",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "emb",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vibe-code",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "code-migration",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "terminal-bench-4",
+          "benchmarkVersion": "4.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "legal_research",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "hlab",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        }
+      ]
+    },
+    {
+      "key": "meta-muse-spark-1-3-max",
+      "modelId": "meta/muse_spark_1_3_max",
+      "displayName": "Muse Spark 1.3 Max",
+      "productLineId": "muse_spark_13",
+      "baseCardId": "card-openrouter-meta-muse-spark-1-3",
+      "canonicalModelVersion": "meta/muse-spark-1.3-20260902",
+      "targets": [],
+      "executions": [
+        {
+          "benchmarkSlug": "vals_index",
+          "benchmarkVersion": "2.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "fabv2",
+          "benchmarkVersion": "2",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "emb",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vibe-code",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "code-migration",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "terminal-bench-4",
+          "benchmarkVersion": "4.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "legal_research",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "hlab",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        }
+      ]
+    },
+    {
+      "key": "tencent-hy4-preview",
+      "modelId": "tencent/hy4-preview",
+      "displayName": "Hy4 Preview",
+      "productLineId": "hy4_preview",
+      "baseCardId": "card-openrouter-tencent-hy4-preview",
+      "canonicalModelVersion": "tencent/hy4-preview-20260827",
+      "targets": [
+        {
+          "presetId": "builtin.hy4-preview.high",
+          "modelName": "Hy4 Preview",
+          "profile": "High",
+          "profileLevel": 4,
+          "harness": "---"
+        }
+      ],
+      "executions": [
+        {
+          "benchmarkSlug": "vals_index",
+          "benchmarkVersion": "2.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.9,
+            "top_p": 1,
+            "max_output_tokens": 64000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Tencent",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "fabv2",
+          "benchmarkVersion": "2",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.9,
+            "top_p": 1,
+            "max_output_tokens": 64000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Tencent",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "emb",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.9,
+            "top_p": 1,
+            "max_output_tokens": 64000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Tencent",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "vibe-code",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.9,
+            "top_p": 1,
+            "max_output_tokens": 64000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Tencent",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "code-migration",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.9,
+            "top_p": 1,
+            "max_output_tokens": 64000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Tencent",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "terminal-bench-4",
+          "benchmarkVersion": "4.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.9,
+            "top_p": 1,
+            "max_output_tokens": 64000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Tencent",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "legal_research",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.9,
+            "top_p": 1,
+            "max_output_tokens": 64000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Tencent",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "hlab",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.9,
+            "top_p": 1,
+            "max_output_tokens": 64000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Tencent",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.9,
+            "top_p": 1,
+            "max_output_tokens": 64000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Tencent",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        }
+      ]
+    },
+    {
+      "key": "mistralai-mistral-medium-3-5",
+      "modelId": "mistralai/mistral-medium-3.5",
+      "displayName": "Mistral Medium 3.5",
+      "productLineId": "mistral_medium_35",
+      "baseCardId": "card-openrouter-mistralai-mistral-medium-3-5",
+      "canonicalModelVersion": "mistralai/mistral-medium-3.5-20260430",
+      "targets": [
+        {
+          "presetId": "builtin.data-md.mistral-medium-3-5.max",
+          "modelName": "Mistral Medium 3.5",
+          "profile": "Max",
+          "profileLevel": 6,
+          "harness": "---"
+        }
+      ],
+      "executions": [
+        {
+          "benchmarkSlug": "fabv2",
+          "benchmarkVersion": "2",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "max_output_tokens": 80000,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Mistral AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "emb",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "max_output_tokens": 80000,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Mistral AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vibe-code",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "max_output_tokens": 80000,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Mistral AI",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "code-migration",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "max_output_tokens": 80000,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Mistral AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "legal_research",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "max_output_tokens": 80000,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Mistral AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "hlab",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "max_output_tokens": 80000,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Mistral AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "max_output_tokens": 80000,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Mistral AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        }
+      ]
+    },
+    {
+      "key": "thinkingmachines-inkling",
+      "modelId": "thinkingmachines/inkling",
+      "displayName": "Inkling",
+      "productLineId": "inkling",
+      "baseCardId": "card-openrouter-thinkingmachines-inkling",
+      "canonicalModelVersion": "thinkingmachines/inkling-20260715",
+      "targets": [
+        {
+          "presetId": "builtin.inkling.xhigh",
+          "modelName": "Inkling",
+          "profile": "XHigh",
+          "profileLevel": 5,
+          "harness": "---"
+        }
+      ],
+      "executions": [
+        {
+          "benchmarkSlug": "vals_index",
+          "benchmarkVersion": "2.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 1,
+            "max_output_tokens": 256000,
+            "reasoning": null,
+            "reasoning_effort": "0.99",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Thinkingmachines",
+            "harness": null
+          },
+          "profile": {
+            "label": "0.99",
+            "level": null,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "fabv2",
+          "benchmarkVersion": "2",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 1,
+            "max_output_tokens": 256000,
+            "reasoning": null,
+            "reasoning_effort": "0.99",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Thinkingmachines",
+            "harness": null
+          },
+          "profile": {
+            "label": "0.99",
+            "level": null,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "emb",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 1,
+            "max_output_tokens": 256000,
+            "reasoning": null,
+            "reasoning_effort": "0.99",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Thinkingmachines",
+            "harness": null
+          },
+          "profile": {
+            "label": "0.99",
+            "level": null,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vibe-code",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 1,
+            "max_output_tokens": 256000,
+            "reasoning": null,
+            "reasoning_effort": "0.99",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Thinkingmachines",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "0.99",
+            "level": null,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "code-migration",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 1,
+            "max_output_tokens": 256000,
+            "reasoning": null,
+            "reasoning_effort": "0.99",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Thinkingmachines",
+            "harness": null
+          },
+          "profile": {
+            "label": "0.99",
+            "level": null,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "terminal-bench-4",
+          "benchmarkVersion": "4.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 1,
+            "max_output_tokens": 256000,
+            "reasoning": null,
+            "reasoning_effort": "0.99",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Thinkingmachines",
+            "harness": null
+          },
+          "profile": {
+            "label": "0.99",
+            "level": null,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "legal_research",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 1,
+            "max_output_tokens": 256000,
+            "reasoning": null,
+            "reasoning_effort": "0.99",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Thinkingmachines",
+            "harness": null
+          },
+          "profile": {
+            "label": "0.99",
+            "level": null,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "hlab",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 1,
+            "max_output_tokens": 256000,
+            "reasoning": null,
+            "reasoning_effort": "0.99",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Thinkingmachines",
+            "harness": null
+          },
+          "profile": {
+            "label": "0.99",
+            "level": null,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 1,
+            "max_output_tokens": 256000,
+            "reasoning": null,
+            "reasoning_effort": "0.99",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Thinkingmachines",
+            "harness": null
+          },
+          "profile": {
+            "label": "0.99",
+            "level": null,
+            "disclosed": true
+          }
+        }
+      ]
+    },
+    {
+      "key": "cohere-command-a-plus-05-2026",
+      "modelId": "cohere/command-a-plus-05-2026",
+      "displayName": "Command A+",
+      "productLineId": "command_a_plus",
+      "baseCardId": "card-openrouter-cohere-command-a-plus",
+      "canonicalModelVersion": "cohere/command-a-plus-05-2026",
+      "targets": [],
+      "executions": [
+        {
+          "benchmarkSlug": "fabv2",
+          "benchmarkVersion": "2",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.9,
+            "top_p": 0.95,
+            "max_output_tokens": 64000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Cohere",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        }
+      ]
+    }
+  ],
+  "exclusions": [
+    {
+      "productLineId": "qwen_38_max",
+      "modelId": "alibaba/qwen3.8-max",
+      "reason": "Vals does not identify the fixed 0902 release required by the reader configuration."
+    },
+    {
+      "productLineId": "nemotron_35_lightning",
+      "modelId": "fireworks/nemotron-lightning-3p5-30b-a3b",
+      "reason": "The Fireworks deployment has no reviewed link to the pinned NVIDIA route/version."
+    },
+    {
+      "productLineId": "step_5_preview",
+      "modelId": "stepfun/step-5-preview",
+      "reason": "No pinned OpenRouter base version is available in the current verified catalog; retained in the raw snapshot."
+    },
+    {
+      "productLineId": "command_a_plus",
+      "modelId": "cohere/command-a-plus-05-2026",
+      "reason": "Source cards are retained, but undisclosed effort cannot be ordered against the reader Thinking profile."
+    },
+    {
+      "productLineId": "muse_spark_13",
+      "modelId": "meta/muse_spark_1_3_max",
+      "reason": "Published Max results are retained as separate source cards and cannot fill the reader XHigh configuration."
+    },
+    {
+      "productLineId": "longcat_20",
+      "reason": "No matching Vals model record."
+    },
+    {
+      "productLineId": "muse_glimmer",
+      "reason": "No matching Vals model record."
+    },
+    {
+      "productLineId": "qwen_38_24t_a95b",
+      "reason": "No matching Vals model record."
+    },
+    {
+      "productLineId": "qwen_38_flash_next",
+      "reason": "No matching Vals model record."
+    }
+  ]
+}

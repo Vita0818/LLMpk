@@ -45,6 +45,7 @@ export const SourceModelCardPool: React.FC<SourceModelCardPoolProps> = ({ cards 
       { id: 'swe_rebench', label: 'SWE-rebench' },
       { id: 'frontier_code', label: 'FrontierCode' },
       { id: 'design_arena', label: 'DesignArena' },
+      { id: 'vals', label: 'Vals AI' },
     ];
     return definitions.map((definition) => ({
       ...definition,
@@ -130,9 +131,14 @@ export const SourceModelCardPool: React.FC<SourceModelCardPoolProps> = ({ cards 
               >
                 <div className="flex items-center gap-2.5 min-w-0">
                   <GripVertical className="w-4 h-4 text-slate-400 flex-shrink-0" />
-                  <span className="text-xs font-semibold text-slate-900 truncate">
-                    {card.exactSourceModelName}
-                  </span>
+                  <div className="min-w-0">
+                    <span className="block truncate text-xs font-semibold text-slate-900">{card.exactSourceModelName}</span>
+                    {card.source === 'vals' && (
+                      <span className="mt-0.5 block truncate text-[10px] text-slate-500">
+                        {card.metadataJson?.sourceIdentity?.benchmarkName} · {card.metadataJson?.sourceIdentity?.effort}
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 {usageCount > 0 && (

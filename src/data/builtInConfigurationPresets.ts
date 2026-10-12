@@ -1,5 +1,7 @@
 import { VERIFIED_DESIGN_ARENA_SOURCE_MODEL_CARDS, VERIFIED_DESIGN_ARENA_SOURCE_OBSERVATIONS } from './designArenaSeedCards';
 import type { DesignArenaReviewedTarget } from './designArenaSeedCards';
+import { VERIFIED_VALS_SOURCE_MODEL_CARDS, VERIFIED_VALS_SOURCE_OBSERVATIONS } from './valsSeedCards';
+import type { ValsReviewedTarget } from './valsSeedCards';
 import { DETAIL_ONLY_METRIC_DEFINITIONS } from './detailMetricDefinitions';
 import type {
   ConfigurationAccess,
@@ -3057,6 +3059,7 @@ const SOURCE_LABELS: Record<SourceType, string> = {
   swe_rebench: 'SWE-rebench',
   frontier_code: 'FrontierCode',
   design_arena: 'DesignArena',
+  vals: 'Vals AI',
 };
 
 const REPLACEMENT_BENCHMARK_SOURCES: ReadonlySet<SourceType> = new Set([
@@ -3064,6 +3067,7 @@ const REPLACEMENT_BENCHMARK_SOURCES: ReadonlySet<SourceType> = new Set([
   'terminal_bench',
   'swe_rebench',
   'frontier_code',
+  'vals',
 ]);
 
 function parseVerifiedSourceCards(): SourceModelCard[] {
@@ -3096,6 +3100,7 @@ function parseVerifiedSourceCards(): SourceModelCard[] {
     ...VERIFIED_RECOVERED_SOURCE_MODEL_CARDS,
     ...VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_MODEL_CARDS,
     ...VERIFIED_DESIGN_ARENA_SOURCE_MODEL_CARDS,
+    ...VERIFIED_VALS_SOURCE_MODEL_CARDS,
   ];
 }
 
@@ -3123,6 +3128,7 @@ function parseVerifiedSourceObservations(): SourceObservation[] {
     ...VERIFIED_RECOVERED_SOURCE_OBSERVATIONS,
     ...VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_OBSERVATIONS,
     ...VERIFIED_DESIGN_ARENA_SOURCE_OBSERVATIONS,
+    ...VERIFIED_VALS_SOURCE_OBSERVATIONS,
   ];
 }
 
@@ -4903,16 +4909,39 @@ export const ALL_CONFIGURATION_PRESET_CANDIDATES: readonly BuiltInConfigurationP
   ...PROVIDER_NEUTRAL_PRACTICAL_AUGMENTATION.presets,
   ...API_PRICING_VARIANT_PRESETS,
   ...SUBSCRIPTION_CONFIGURATION_PRESETS,
-].map(attachDesignArenaEvidence);
+].map(attachDesignArenaEvidence).map(attachValsEvidence);
 
 const READER_FACING_CONFIGURATION_CURATION =
   curateReaderFacingPresets(ALL_CONFIGURATION_PRESET_CANDIDATES);
 
-/**
- * Compact reader-facing inventory. Sparse source records remain available as
- * cards for future matching but no longer flood the leaderboard as
- * "数据不足" configurations.
- */
+/** Attach only authored Vals executions; nearest model-profile fallbacks win. */
+function attachValsEvidence(preset: BuiltInConfigurationPreset): BuiltInConfigurationPreset {
+  const links = VERIFIED_VALS_SOURCE_MODEL_CARDS.flatMap(card => {
+    if (card.metadataJson?.scope?.productLineId !== preset.productLineId) return [];
+    const targets = card.metadataJson?.reviewedMapping?.targets as readonly (
+      ValsReviewedTarget & { provenance: ConfigurationSourceLinkProvenance }
+    )[] | undefined;
+    const target = targets?.find(candidate => candidate.presetId === preset.id);
+    if (!target || target.modelName !== preset.identity.model.name
+      || target.profile !== preset.identity.model.profile
+      || target.harness !== preset.identity.harness.name) return [];
+    return [{ cardId: card.id, provenance: target.provenance }];
+  });
+  if (links.length === 0) return preset;
+  const profileLevel = (link: BuiltInConfigurationPresetSourceCardLink) => (
+    link.provenance.kind === 'lower_profile_fallback' ? link.provenance.sourceLevel
+      : link.provenance.kind === 'lower_profile_harness_fallback' ? link.provenance.sourceProfileLevel
+        : Number.POSITIVE_INFINITY
+  );
+  const sourceCardLinks = [...(preset.sourceCardLinks || []), ...links].sort((left, right) => {
+    const leftLevel = profileLevel(left);
+    const rightLevel = profileLevel(right);
+    return leftLevel === rightLevel ? 0 : leftLevel > rightLevel ? -1 : 1;
+  });
+  return { ...preset, sourceCardLinks };
+}
+
+/** Compact reviewed reader inventory; source admission cannot create a model. */
 export const BUILT_IN_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] =
   READER_FACING_CONFIGURATION_CURATION.presets;
 export const BUILT_IN_CONFIGURATION_CURATION_ROWS:
@@ -4952,4 +4981,4 @@ export const BUILT_IN_CONFIGURATION_PRESET_COUNT = BUILT_IN_CONFIGURATION_PRESET
  * additions visible during Vite hot updates as well as after a full reload.
  */
 export const BUILT_IN_CONFIGURATION_PRESET_INVENTORY_VERSION =
-  '2026-10-11-semianalysis-subscriptions-v51';
+  '2026-10-12-vals-scoring-v3-1-v52';

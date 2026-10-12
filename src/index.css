@@ -172,10 +172,12 @@
 
 .configuration-detail-panels {
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
   gap: 24px;
 }
 
 .configuration-detail-radar { height: 100%; }
+.configuration-detail-metrics { max-height: 100%; overflow-y: auto; overscroll-behavior: contain; }
 .configuration-detail-shell .configuration-metric-list { column-gap: 16px; row-gap: 2px; }
 .configuration-detail-shell .configuration-metric-row { min-height: 0; padding: 4px 0; }
 .configuration-detail-shell .configuration-metric-row > span { font-size: 12px; line-height: 16px; }
@@ -193,6 +195,7 @@
   .configuration-detail-scores > div > div:first-child { font-size: 10px; letter-spacing: 0; }
   .configuration-detail-scores > div > div:last-child { font-size: 24px; }
   .configuration-detail-panels { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; gap: 8px; }
+  .configuration-detail-metrics { max-height: 55dvh; }
   .configuration-detail-shell .configuration-metric-list { column-gap: 12px; row-gap: 0; }
   .configuration-detail-shell .configuration-metric-row { padding: 2px 0; }
 }

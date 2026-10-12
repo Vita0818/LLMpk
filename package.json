@@ -8,7 +8,7 @@
     "generate:public-snapshot": "esbuild scripts/generatePublicLeaderboardSnapshot.ts --bundle --platform=node --format=esm --outfile=/tmp/llmpk-generate-public-snapshot.mjs && node /tmp/llmpk-generate-public-snapshot.mjs",
     "verify:public-bundle": "node scripts/verifyPublicBundle.mjs",
     "build": "npm run generate:public-snapshot && tsc -b && vite build && npm run verify:public-bundle",
-    "test": "npm run test:source-extraction && npm run test:scoring-v3 && npm run test:scoring && npm run test:custom-ranking && npm run test:pareto && npm run test:admin-mapping && npm run test:scope && npm run test:detail-content && npm run test:play-mode && npm run test:openrouter-pricing && npm run test:openrouter-speed && npm run test:openrouter-benchmarks && npm run test:design-arena",
+    "test": "npm run test:source-extraction && npm run test:scoring-v3 && npm run test:scoring && npm run test:custom-ranking && npm run test:pareto && npm run test:admin-mapping && npm run test:scope && npm run test:detail-content && npm run test:play-mode && npm run test:openrouter-pricing && npm run test:openrouter-speed && npm run test:openrouter-benchmarks && npm run test:design-arena && npm run test:vals",
     "test:source-extraction": "node scripts/sourceExtraction.test.mjs",
     "test:scoring": "esbuild scripts/scoringEngine.test.ts --bundle --platform=node --format=esm --outfile=/tmp/llmpk-scoring-engine.test.mjs && node /tmp/llmpk-scoring-engine.test.mjs",
     "test:custom-ranking": "esbuild scripts/customRanking.test.ts --bundle --platform=node --format=esm --outfile=/tmp/llmpk-custom-ranking.test.mjs && node /tmp/llmpk-custom-ranking.test.mjs",
@@ -33,6 +33,8 @@
     "refresh:openrouter-performance": "node scripts/fetchOpenRouterPerformanceSnapshot.mjs",
     "refresh:openrouter-benchmarks": "node scripts/fetchOpenRouterBenchmarkSnapshot.mjs",
     "refresh:design-arena": "node scripts/fetchDesignArenaSnapshot.mjs",
+    "refresh:vals": "node scripts/fetchValsSnapshot.mjs",
+    "test:vals": "node scripts/valsSnapshot.test.mjs && esbuild scripts/valsIntegration.test.ts --bundle --platform=node --format=esm --outfile=/tmp/llmpk-vals-integration.test.mjs && node /tmp/llmpk-vals-integration.test.mjs",
     "validate:source-snapshots": "node scripts/validateSourceSnapshots.mjs",
     "preview": "vite preview",
     "test:scoring-v3": "esbuild scripts/scoringV3Policies.test.ts --bundle --platform=node --format=esm --outfile=/tmp/llmpk-scoring-v3.test.mjs && node /tmp/llmpk-scoring-v3.test.mjs",
@@ -44,6 +46,7 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@babel/parser": "7.29.7",
     "@tailwindcss/vite": "^4.0.0",
     "@types/node": "^22.10.0",
     "@types/react": "^19.0.0",

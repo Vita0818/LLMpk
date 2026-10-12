@@ -37,6 +37,7 @@ const sourceLabels: Record<SourceType, string> = {
   swe_rebench: 'SWE-rebench',
   frontier_code: 'FrontierCode',
   design_arena: 'DesignArena',
+  vals: 'Vals AI',
 };
 
 export const ConfigurationBoxCard: React.FC<ConfigurationBoxCardProps> = React.memo(({

@@ -12,6 +12,7 @@ import { validateFrontierCodePayload } from './frontierCodeSnapshotUtils.mjs';
 import type { SourceModelCard } from '../src/types/admin_mapping';
 
 assert.equal(snapshot.schemaVersion, 2);
+assert.equal(snapshot.scoringVersion, SCORING_CONFIG.version);
 for (const preset of BUILT_IN_CONFIGURATION_PRESETS) {
   assert.equal(RETIRED_READER_MODEL_GROUP_KEYS.has(preset.productLineId), false);
 }
@@ -74,4 +75,4 @@ assert.equal(buildDesignArenaSourceCards({rows:[]},[base]).cards.length,0);
 if ('state' in designSnapshot && designSnapshot.state === 'awaiting-api-key') {
   assert.equal(VERIFIED_DESIGN_ARENA_SOURCE_MODEL_CARDS.length,0,'An outstanding API key must not create frontend results.');
 }
-console.log(`v3 source identity, successor policy and independent coverage checks: PASS (${snapshot.scores.length} configurations, ${ranked} eligible).`);
+console.log(`v3.1 source identity, successor policy and independent coverage checks: PASS (${snapshot.scores.length} configurations, ${ranked} eligible).`);
