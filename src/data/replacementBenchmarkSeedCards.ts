@@ -54,6 +54,7 @@ const PRODUCTS = {
   gpt6Luna: { vendorId: 'openai', vendorName: 'OpenAI', productLineId: 'gpt_6_luna', productLineName: 'GPT-6 Luna', tier: 'official' },
   opus55: { vendorId: 'anthropic', vendorName: 'Anthropic', productLineId: 'claude_opus_55', productLineName: 'Claude Opus 5.5', tier: 'official' },
   sonnet55: { vendorId: 'anthropic', vendorName: 'Anthropic', productLineId: 'claude_sonnet_55', productLineName: 'Claude Sonnet 5.5', tier: 'official' },
+  haiku55: { vendorId: 'anthropic', vendorName: 'Anthropic', productLineId: 'claude_haiku_55', productLineName: 'Claude Haiku 5.5', tier: 'official' },
   grok47: { vendorId: 'xai', vendorName: 'xAI', productLineId: 'grok_47', productLineName: 'Grok 4.7', tier: 'official' },
   gpt56Sol: {
     vendorId: 'openai', vendorName: 'OpenAI', productLineId: 'gpt_56_sol',
@@ -304,6 +305,7 @@ const CURRENT_FRONTIER_MODELS: Record<string, { scope: ProductScopeSpec; slug: s
   'Claude Fable 5.1': {scope:PRODUCTS.fable51,slug:'claude-fable-5-1',sourceHarness:'claude-code',harness:'Claude Code',companionPrefix:'card-aa-coding-agent-claude-code-claude-fable-5-1-'},
   'Claude Opus 5.5': {scope:PRODUCTS.opus55,slug:'claude-opus-5-5',sourceHarness:'claude-code',harness:'Claude Code',companionPrefix:'card-aa-coding-agent-claude-code-claude-opus-5-5-'},
   'Claude Sonnet 5.5': {scope:PRODUCTS.sonnet55,slug:'claude-sonnet-5-5',sourceHarness:'claude-code',harness:'Claude Code',companionPrefix:'card-aa-coding-agent-claude-code-claude-sonnet-5-5-'},
+  'Claude Haiku 5.5': {scope:PRODUCTS.haiku55,slug:'claude-haiku-5-5',sourceHarness:'claude-code',harness:'Claude Code',companionPrefix:'card-aa-coding-agent-claude-code-claude-haiku-5-5-'},
   'Grok 4.7': {scope:PRODUCTS.grok47,slug:'grok-4-7',sourceHarness:'grok-build',harness:'Grok Build',companionPrefix:'card-aa-coding-agent-grok-build-grok-4-7-'},
 };
 const currentFrontierSpecs: BenchmarkCardSpec[] = frontierSnapshot.rows.flatMap((row) => {

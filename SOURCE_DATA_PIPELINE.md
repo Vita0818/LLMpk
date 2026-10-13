@@ -1,5 +1,56 @@
 > Current scoring policy: [Registry v3.1](llm_pk_data_source_registry_v3_1.md), [Weights v3.1](llm_pk_domain_classification_weighting_v3_1.md), [Scoring v3.1](llm_pk_scoring_methodology_v3_1.md). Earlier source captures below remain historical provenance.
 
+## October 13 model refresh
+
+The reviewed reader inventory is now 34 families / 52 configurations / 36
+representatives. Muse Wonder and Wonder Full stay separate; Full is a Muse
+Code subscription with a known $200 monthly fee and unknown API-equivalent
+allowance. Haiku 5.5 and Mistral Large 4 Preview are also newly admitted.
+The 26 capability weights and coverage gates remain Scoring v3.1.
+
+The GDP.pdf evaluation page initializes only 32 selected models. The reviewed
+public Mistral Medium 3.5 model page exposes the native model record plus its
+complete peer comparison table. `artificialAnalysisProfessionalExtraction.mjs`
+parses only framed JSON objects/arrays from the public Flight payload, joins
+exact source slugs and release dates, and merges 212 GDP.pdf results with the
+initial chart subset. Overlapping values must agree. The source URL and field
+for supplemental records remain explicit; no model-name inference, score
+substitution, upstream JavaScript execution or manifest decryption is used.
+
+This capture has 699 AA model records, 95 coding-agent records, 459 OpenRouter
+catalog routes, 406 Standard performance aggregates, 43 FrontierCode models /
+130 effort rows, 153 DesignArena source rows, and 114 Vals model/execution IDs /
+9,137 result rows. The bulk snapshots pass all 35 cross-source checks.
+DesignArena pins 15 source rows to 24 configurations; Vals pins 28 identities /
+234 runs to 43 configurations. Full's Vals base is its exact AA record and
+release date, not an invented OpenRouter model ID.
+
+Arena's canonical Text/Search URLs moved below `/leaderboard/chat/`. HTTP
+capture currently returns Cloudflare 403, so the nine official pages were
+captured through the normal browser. Complete inline `self.__next_f` scripts
+were read as static source data in bounded chunks after each table loaded;
+the extractor does not execute those scripts. The browser capture manifest
+records the method, source URLs, timestamps, byte sizes and hashes. Feed such
+captures to `scripts/build-arena-raw-extraction.mjs` with `ARENA_SNAPSHOT_DIR`.
+
+Arena now publishes `bash_reliability_no_prereq` instead of the differently
+defined `bash_recovery_steps`. The new signal stays in raw source records;
+the active recovery table retains its original rows, values and October 2
+dates. `ARENA_PREVIOUS_EXTRACTION_PATH` explicitly identifies that prior
+snapshot. Only current signals must share the current cohort; retained
+recovery rows are separately checked against their original field. No new
+model inherits a recovery score from the new reliability task.
+
+FrontierCode publishes valid Haiku pass rates with `flagged_rate=null`.
+Parsers accept that explicit unknown while rejecting invalid pass/mergeability
+rates and invalid non-null flagging rates. Runtime source cards select only
+the exact standalone Claude Code efforts, never Devin Fusion's mixed models.
+
+Raw captures and the publication manifest are under
+`.cache/new-models-2026-10-13/`; pre-refresh snapshots are preserved under
+`.cache/pre-refresh-2026-10-13/`. Run `npm run test:october-models` for the new
+identity, missing-quota, model-effort and coverage regressions.
+
 ## October 3 scoring migration
 
 The reader inventory is successor-pruned to 30 families / 40 configurations,

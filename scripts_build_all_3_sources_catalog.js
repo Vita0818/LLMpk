@@ -1162,14 +1162,14 @@ async function buildVerifiedCatalog() {
           rawValue: metric.field(sourceRecord),
           unit: metric.unit,
           snapshotDate: artificialAnalysisSourceSnapshot.snapshotDate,
-          sourceUrl: profileUrl,
+          sourceUrl: sourceRecord?.sourcePageUrl ?? profileUrl,
           sourceLeaderboard: metric.sourceLeaderboard,
           sourceRecordId: model.id,
-          sourceField: metric.sourceField,
+          sourceField: sourceRecord?.sourceField ?? metric.sourceField,
           scope,
           metadataJson: {
             sourceSnapshot: path.relative(ROOT, ARTIFICIAL_ANALYSIS_SOURCE_SNAPSHOT_PATH),
-            sourcePageId: metric.pageId,
+            sourcePageId: sourceRecord?.sourcePageId ?? metric.pageId,
             scoringRole: ['aa_terminalbench_v4', 'aa_gdp_pdf_all_pass'].includes(metric.id) ? 'capability' : 'detail-only',
           },
         });
@@ -1296,6 +1296,7 @@ async function buildVerifiedCatalog() {
           sourceRecord: row.sourceRecord ?? null,
           sourceLeaderboard: row.sourceLeaderboard || sourceLeaderboard,
           extractedRowCount: metric.rows?.length ?? 0,
+          ...(metric.retention ? { sourceRetention: metric.retention } : {}),
           deduplicatedBy: 'metricId + normalized exactSourceModelName; lower rank, then higher vote count, then first source row',
         },
       });

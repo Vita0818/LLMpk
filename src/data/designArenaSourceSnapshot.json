@@ -1,7 +1,7 @@
 {
   "schemaVersion": "design-arena-source-snapshot/v2",
   "state": "validated",
-  "fetchedAt": "2026-10-08T03:40:05.870Z",
+  "fetchedAt": "2026-10-13T05:05:26.594Z",
   "source": {
     "apiUrl": "https://openrouter.ai/api/v1/benchmarks?source=design-arena&arena=models&category=codecategories",
     "leaderboardUrl": "https://www.designarena.ai/leaderboard/code",
@@ -10,23 +10,23 @@
     "license": "CC BY 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
     "finalUrl": "https://openrouter.ai/api/v1/benchmarks?source=design-arena&arena=models&category=codecategories",
-    "rawSnapshotFile": ".cache/oagxm-source-snapshots/design-arena/20261008T034005Z-overall-frontend.json",
-    "sha256": "0a768ff91d99e7a11a72ca7eac4e59ccab90acf222fbf46cde46995d6a07f67f",
-    "bytes": 54204,
+    "rawSnapshotFile": ".cache/new-models-2026-10-13/raw/design-arena/20261013T050526Z-overall-frontend.json",
+    "sha256": "79af10d5e3ff7646d6fc8550ce61c30a592fb406983a1d170747c25dfd192587",
+    "bytes": 55597,
     "contentType": "application/json"
   },
   "arena": "models",
   "category": "codecategories",
   "metric": "elo",
-  "sourceAsOf": "2026-10-08T00:01:26.879Z",
+  "sourceAsOf": "2026-10-13T00:01:19.369Z",
   "lastUpdated": null,
   "responseMeta": {
-    "as_of": "2026-10-08T00:01:26.879Z",
+    "as_of": "2026-10-13T00:01:19.369Z",
     "version": "v1",
     "source": "design-arena",
     "source_url": "https://www.designarena.ai",
     "citation": "Source: Design Arena (www.designarena.ai) via OpenRouter (openrouter.ai/rankings).",
-    "model_count": 128,
+    "model_count": 132,
     "task_type": null
   },
   "reviewedMappingVersion": "design-arena-reviewed-mappings/v1",
@@ -37,9 +37,9 @@
       "display_name": "Claude Opus 5.5",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1408,
-      "win_rate": 65.4,
-      "avg_generation_time_ms": 267818,
+      "elo": 1393,
+      "win_rate": 64,
+      "avg_generation_time_ms": 275620,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -54,13 +54,13 @@
     },
     {
       "source": "design-arena",
-      "model_permaslug": "moonshotai/kimi-k3-20260715",
-      "display_name": "Kimi K3",
+      "model_permaslug": "anthropic/claude-sonnet-5.5-20260928",
+      "display_name": "Claude Sonnet 5.5",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1369,
-      "win_rate": 63.1,
-      "avg_generation_time_ms": 720561,
+      "elo": 1368,
+      "win_rate": 61.2,
+      "avg_generation_time_ms": 283206,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -69,7 +69,28 @@
         "total": 0
       },
       "pricing": {
-        "prompt": "0.0000035",
+        "prompt": "0.000002",
+        "completion": "0.00001"
+      }
+    },
+    {
+      "source": "design-arena",
+      "model_permaslug": "moonshotai/kimi-k3-20260715",
+      "display_name": "Kimi K3",
+      "arena": "models",
+      "category": "codecategories",
+      "elo": 1365,
+      "win_rate": 62.5,
+      "avg_generation_time_ms": 768032,
+      "tournament_stats": {
+        "first_place": 0,
+        "second_place": 0,
+        "third_place": 0,
+        "fourth_place": 0,
+        "total": 0
+      },
+      "pricing": {
+        "prompt": "0.000003",
         "completion": "0.000015"
       }
     },
@@ -79,9 +100,9 @@
       "display_name": "Muse Spark 1.3 (xhigh)",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1358,
-      "win_rate": 57.3,
-      "avg_generation_time_ms": 196478,
+      "elo": 1357,
+      "win_rate": 57.4,
+      "avg_generation_time_ms": 194990,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -100,9 +121,9 @@
       "display_name": "Muse Spark 1.3 Max",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1357,
+      "elo": 1355,
       "win_rate": 56.7,
-      "avg_generation_time_ms": 247984,
+      "avg_generation_time_ms": 250235,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -117,13 +138,34 @@
     },
     {
       "source": "design-arena",
+      "model_permaslug": "openai/gpt-6.1-sol-20260929",
+      "display_name": "GPT-6.1 Sol",
+      "arena": "models",
+      "category": "codecategories",
+      "elo": 1343,
+      "win_rate": 58.2,
+      "avg_generation_time_ms": 251319,
+      "tournament_stats": {
+        "first_place": 0,
+        "second_place": 0,
+        "third_place": 0,
+        "fourth_place": 0,
+        "total": 0
+      },
+      "pricing": {
+        "prompt": "0.000012",
+        "completion": "0.00006"
+      }
+    },
+    {
+      "source": "design-arena",
       "model_permaslug": "anthropic/claude-fable-5.1-20260831",
       "display_name": "Claude Fable 5.1",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1341,
+      "elo": 1340,
       "win_rate": 59.3,
-      "avg_generation_time_ms": 323222,
+      "avg_generation_time_ms": 323272,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -142,9 +184,9 @@
       "display_name": "Claude Opus 5",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1328,
-      "win_rate": 57.6,
-      "avg_generation_time_ms": 309739,
+      "elo": 1326,
+      "win_rate": 57.4,
+      "avg_generation_time_ms": 312537,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -163,9 +205,9 @@
       "display_name": "MiMo-V2.6-Pro",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1321,
+      "elo": 1320,
       "win_rate": 52.4,
-      "avg_generation_time_ms": 405040,
+      "avg_generation_time_ms": 409641,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -184,9 +226,9 @@
       "display_name": "Muse Spark 1.2",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1318,
+      "elo": 1317,
       "win_rate": 52,
-      "avg_generation_time_ms": 176342,
+      "avg_generation_time_ms": 176019,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -206,8 +248,8 @@
       "arena": "models",
       "category": "codecategories",
       "elo": 1314,
-      "win_rate": 57.7,
-      "avg_generation_time_ms": 166522,
+      "win_rate": 57.6,
+      "avg_generation_time_ms": 166536,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -222,34 +264,13 @@
     },
     {
       "source": "design-arena",
-      "model_permaslug": "z-ai/glm-5.3-20260816",
-      "display_name": "GLM-5.3",
-      "arena": "models",
-      "category": "codecategories",
-      "elo": 1313,
-      "win_rate": 54.9,
-      "avg_generation_time_ms": 423890,
-      "tournament_stats": {
-        "first_place": 0,
-        "second_place": 0,
-        "third_place": 0,
-        "fourth_place": 0,
-        "total": 0
-      },
-      "pricing": {
-        "prompt": "0.0000021",
-        "completion": "0.0000066"
-      }
-    },
-    {
-      "source": "design-arena",
       "model_permaslug": "google/gemini-3.7-flash-20260813",
       "display_name": "Gemini 3.7 Flash",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1313,
-      "win_rate": 54,
-      "avg_generation_time_ms": 127547,
+      "elo": 1312,
+      "win_rate": 53.9,
+      "avg_generation_time_ms": 127727,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -264,13 +285,34 @@
     },
     {
       "source": "design-arena",
+      "model_permaslug": "z-ai/glm-5.3-20260816",
+      "display_name": "GLM-5.3",
+      "arena": "models",
+      "category": "codecategories",
+      "elo": 1309,
+      "win_rate": 54.4,
+      "avg_generation_time_ms": 413308,
+      "tournament_stats": {
+        "first_place": 0,
+        "second_place": 0,
+        "third_place": 0,
+        "fourth_place": 0,
+        "total": 0
+      },
+      "pricing": {
+        "prompt": "0.0000021",
+        "completion": "0.0000066"
+      }
+    },
+    {
+      "source": "design-arena",
       "model_permaslug": "google/gemini-3.8-flash-20260902",
       "display_name": "Gemini 3.8 Flash",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1309,
-      "win_rate": 50.3,
-      "avg_generation_time_ms": 120750,
+      "elo": 1308,
+      "win_rate": 50.4,
+      "avg_generation_time_ms": 121289,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -289,9 +331,9 @@
       "display_name": "Qwen3.8 Max",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1299,
-      "win_rate": 52.7,
-      "avg_generation_time_ms": 684795,
+      "elo": 1297,
+      "win_rate": 52.6,
+      "avg_generation_time_ms": 697648,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -307,9 +349,9 @@
       "display_name": "Grok 4.6",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1296,
-      "win_rate": 52.6,
-      "avg_generation_time_ms": 275335,
+      "elo": 1295,
+      "win_rate": 52.5,
+      "avg_generation_time_ms": 277695,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -330,7 +372,7 @@
       "category": "codecategories",
       "elo": 1293,
       "win_rate": 61.2,
-      "avg_generation_time_ms": 190723,
+      "avg_generation_time_ms": 190715,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -351,7 +393,7 @@
       "category": "codecategories",
       "elo": 1293,
       "win_rate": 53.4,
-      "avg_generation_time_ms": 76505,
+      "avg_generation_time_ms": 77137,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -370,9 +412,9 @@
       "display_name": "GLM 5.2",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1293,
+      "elo": 1291,
       "win_rate": 50.5,
-      "avg_generation_time_ms": 254849,
+      "avg_generation_time_ms": 252685,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -381,8 +423,8 @@
         "total": 0
       },
       "pricing": {
-        "prompt": "0.000000084",
-        "completion": "0.0000043"
+        "prompt": "0.00000112",
+        "completion": "0.00000352"
       }
     },
     {
@@ -393,7 +435,7 @@
       "category": "codecategories",
       "elo": 1289,
       "win_rate": 60.3,
-      "avg_generation_time_ms": 199544,
+      "avg_generation_time_ms": 199539,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -412,9 +454,9 @@
       "display_name": "GLM-5.3-Flash",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1287,
-      "win_rate": 49.5,
-      "avg_generation_time_ms": 405794,
+      "elo": 1286,
+      "win_rate": 49.4,
+      "avg_generation_time_ms": 411310,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -429,13 +471,13 @@
     },
     {
       "source": "design-arena",
-      "model_permaslug": "anthropic/claude-sonnet-5-20260630",
-      "display_name": "Claude Sonnet 5",
+      "model_permaslug": "anthropic/claude-haiku-5.5-20261007",
+      "display_name": "Claude Haiku 5.5",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1281,
-      "win_rate": 53,
-      "avg_generation_time_ms": 200284,
+      "elo": 1282,
+      "win_rate": 50.4,
+      "avg_generation_time_ms": 179261,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -444,8 +486,8 @@
         "total": 0
       },
       "pricing": {
-        "prompt": "0.0000022",
-        "completion": "0.000011"
+        "prompt": "0.00000011",
+        "completion": "0.00000055"
       }
     },
     {
@@ -477,7 +519,7 @@
       "category": "codecategories",
       "elo": 1280,
       "win_rate": 51.4,
-      "avg_generation_time_ms": 217880,
+      "avg_generation_time_ms": 210738,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -492,13 +534,34 @@
     },
     {
       "source": "design-arena",
+      "model_permaslug": "anthropic/claude-sonnet-5-20260630",
+      "display_name": "Claude Sonnet 5",
+      "arena": "models",
+      "category": "codecategories",
+      "elo": 1279,
+      "win_rate": 52.9,
+      "avg_generation_time_ms": 203656,
+      "tournament_stats": {
+        "first_place": 0,
+        "second_place": 0,
+        "third_place": 0,
+        "fourth_place": 0,
+        "total": 0
+      },
+      "pricing": {
+        "prompt": "0.0000022",
+        "completion": "0.000011"
+      }
+    },
+    {
+      "source": "design-arena",
       "model_permaslug": "x-ai/grok-4.5-20260708",
       "display_name": "Grok 4.5",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1280,
+      "elo": 1279,
       "win_rate": 51,
-      "avg_generation_time_ms": 179841,
+      "avg_generation_time_ms": 182748,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -517,9 +580,9 @@
       "display_name": "Qwen3.7 Max",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1279,
-      "win_rate": 54.4,
-      "avg_generation_time_ms": 242571,
+      "elo": 1278,
+      "win_rate": 54.2,
+      "avg_generation_time_ms": 241081,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -528,8 +591,8 @@
         "total": 0
       },
       "pricing": {
-        "prompt": "0.000001475",
-        "completion": "0.000004425"
+        "prompt": "0.000002",
+        "completion": "0.000006"
       }
     },
     {
@@ -538,9 +601,9 @@
       "display_name": "Kimi K2.6",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1276,
+      "elo": 1274,
       "win_rate": 54.8,
-      "avg_generation_time_ms": 409294,
+      "avg_generation_time_ms": 409288,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -559,9 +622,9 @@
       "display_name": "GLM 5.1",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1272,
-      "win_rate": 53.3,
-      "avg_generation_time_ms": 359145,
+      "elo": 1271,
+      "win_rate": 53.2,
+      "avg_generation_time_ms": 361709,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -580,9 +643,9 @@
       "display_name": "Qwen3.7 Plus",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1272,
-      "win_rate": 50.5,
-      "avg_generation_time_ms": 269333,
+      "elo": 1271,
+      "win_rate": 50.4,
+      "avg_generation_time_ms": 273932,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -597,34 +660,13 @@
     },
     {
       "source": "design-arena",
-      "model_permaslug": "xiaomi/mimo-v2.5-pro-20260422",
-      "display_name": "MiMo-V2.5-Pro",
-      "arena": "models",
-      "category": "codecategories",
-      "elo": 1270,
-      "win_rate": 51.9,
-      "avg_generation_time_ms": 310296,
-      "tournament_stats": {
-        "first_place": 0,
-        "second_place": 0,
-        "third_place": 0,
-        "fourth_place": 0,
-        "total": 0
-      },
-      "pricing": {
-        "prompt": "0.000000522",
-        "completion": "0.000001044"
-      }
-    },
-    {
-      "source": "design-arena",
       "model_permaslug": "google/gemini-3.5-flash-20260519",
       "display_name": "Gemini 3.5 Flash",
       "arena": "models",
       "category": "codecategories",
       "elo": 1269,
-      "win_rate": 54.3,
-      "avg_generation_time_ms": 84715,
+      "win_rate": 54.2,
+      "avg_generation_time_ms": 84890,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -639,34 +681,13 @@
     },
     {
       "source": "design-arena",
-      "model_permaslug": "z-ai/glm-5-turbo-20260315",
-      "display_name": "GLM 5 Turbo",
-      "arena": "models",
-      "category": "codecategories",
-      "elo": 1267,
-      "win_rate": 53.9,
-      "avg_generation_time_ms": 364907,
-      "tournament_stats": {
-        "first_place": 0,
-        "second_place": 0,
-        "third_place": 0,
-        "fourth_place": 0,
-        "total": 0
-      },
-      "pricing": {
-        "prompt": "0.0000012",
-        "completion": "0.000004"
-      }
-    },
-    {
-      "source": "design-arena",
       "model_permaslug": "x-ai/grok-4.7-20260916",
       "display_name": "Grok 4.7",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1266,
-      "win_rate": 47.2,
-      "avg_generation_time_ms": 789706,
+      "elo": 1269,
+      "win_rate": 47.8,
+      "avg_generation_time_ms": 789672,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -681,13 +702,55 @@
     },
     {
       "source": "design-arena",
+      "model_permaslug": "xiaomi/mimo-v2.5-pro-20260422",
+      "display_name": "MiMo-V2.5-Pro",
+      "arena": "models",
+      "category": "codecategories",
+      "elo": 1269,
+      "win_rate": 51.8,
+      "avg_generation_time_ms": 316163,
+      "tournament_stats": {
+        "first_place": 0,
+        "second_place": 0,
+        "third_place": 0,
+        "fourth_place": 0,
+        "total": 0
+      },
+      "pricing": {
+        "prompt": "0.000000522",
+        "completion": "0.000001044"
+      }
+    },
+    {
+      "source": "design-arena",
+      "model_permaslug": "z-ai/glm-5-turbo-20260315",
+      "display_name": "GLM 5 Turbo",
+      "arena": "models",
+      "category": "codecategories",
+      "elo": 1266,
+      "win_rate": 53.7,
+      "avg_generation_time_ms": 368421,
+      "tournament_stats": {
+        "first_place": 0,
+        "second_place": 0,
+        "third_place": 0,
+        "fourth_place": 0,
+        "total": 0
+      },
+      "pricing": {
+        "prompt": "0.0000012",
+        "completion": "0.000004"
+      }
+    },
+    {
+      "source": "design-arena",
       "model_permaslug": "openai/gpt-5.5-20260423",
       "display_name": "GPT-5.5",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1264,
-      "win_rate": 53.6,
-      "avg_generation_time_ms": 142043,
+      "elo": 1263,
+      "win_rate": 53.3,
+      "avg_generation_time_ms": 141319,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -708,7 +771,7 @@
       "category": "codecategories",
       "elo": 1263,
       "win_rate": 53.6,
-      "avg_generation_time_ms": 208797,
+      "avg_generation_time_ms": 215608,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -723,13 +786,34 @@
     },
     {
       "source": "design-arena",
+      "model_permaslug": "mistralai/mistral-large-4-0-20261006",
+      "display_name": "Mistral Large 4",
+      "arena": "models",
+      "category": "codecategories",
+      "elo": 1260,
+      "win_rate": 46.4,
+      "avg_generation_time_ms": 381276,
+      "tournament_stats": {
+        "first_place": 0,
+        "second_place": 0,
+        "third_place": 0,
+        "fourth_place": 0,
+        "total": 0
+      },
+      "pricing": {
+        "prompt": "0.000000748",
+        "completion": "0.000002299"
+      }
+    },
+    {
+      "source": "design-arena",
       "model_permaslug": "anthropic/claude-4.8-opus-20260528",
       "display_name": "Claude Opus 4.8",
       "arena": "models",
       "category": "codecategories",
       "elo": 1257,
-      "win_rate": 52.7,
-      "avg_generation_time_ms": 112209,
+      "win_rate": 52.6,
+      "avg_generation_time_ms": 114382,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -748,9 +832,9 @@
       "display_name": "Kimi K2.7 Code",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1257,
-      "win_rate": 50.2,
-      "avg_generation_time_ms": 296697,
+      "elo": 1256,
+      "win_rate": 50,
+      "avg_generation_time_ms": 295844,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -771,7 +855,7 @@
       "category": "codecategories",
       "elo": 1252,
       "win_rate": 50.9,
-      "avg_generation_time_ms": 147981,
+      "avg_generation_time_ms": 148047,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -790,7 +874,7 @@
       "display_name": "GLM 5",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1251,
+      "elo": 1249,
       "win_rate": 55.5,
       "avg_generation_time_ms": 197145,
       "tournament_stats": {
@@ -832,9 +916,9 @@
       "display_name": "Claude Opus 4.5",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1246,
+      "elo": 1245,
       "win_rate": 59.5,
-      "avg_generation_time_ms": 123563,
+      "avg_generation_time_ms": 123562,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -864,8 +948,8 @@
         "total": 0
       },
       "pricing": {
-        "prompt": "0.00000105",
-        "completion": "0.0000105"
+        "prompt": "0.00000156",
+        "completion": "0.00000312"
       }
     },
     {
@@ -876,7 +960,7 @@
       "category": "codecategories",
       "elo": 1240,
       "win_rate": 54.1,
-      "avg_generation_time_ms": 217908,
+      "avg_generation_time_ms": 217914,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -896,8 +980,8 @@
       "arena": "models",
       "category": "codecategories",
       "elo": 1239,
-      "win_rate": 50.5,
-      "avg_generation_time_ms": 271101,
+      "win_rate": 50.3,
+      "avg_generation_time_ms": 272182,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -916,9 +1000,9 @@
       "display_name": "MiniMax M2.7",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1238,
+      "elo": 1236,
       "win_rate": 51,
-      "avg_generation_time_ms": 188597,
+      "avg_generation_time_ms": 188625,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -976,9 +1060,9 @@
       "display_name": "DeepSeek-V4-Flash-0731",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1234,
+      "elo": 1233,
       "win_rate": 46.4,
-      "avg_generation_time_ms": 249817,
+      "avg_generation_time_ms": 249820,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -987,8 +1071,8 @@
         "total": 0
       },
       "pricing": {
-        "prompt": "0.00000014",
-        "completion": "0.00000028"
+        "prompt": "0.000000374",
+        "completion": "0.000001122"
       }
     },
     {
@@ -997,9 +1081,9 @@
       "display_name": "GLM 5V Turbo",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1232,
-      "win_rate": 50,
-      "avg_generation_time_ms": 199558,
+      "elo": 1231,
+      "win_rate": 49.8,
+      "avg_generation_time_ms": 202983,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -1057,9 +1141,9 @@
       "display_name": "GLM 4.7",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1221,
+      "elo": 1220,
       "win_rate": 54.8,
-      "avg_generation_time_ms": 165180,
+      "avg_generation_time_ms": 165194,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -1141,9 +1225,9 @@
       "display_name": "Grok 4.20 Beta",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1211,
+      "elo": 1210,
       "win_rate": 49.6,
-      "avg_generation_time_ms": 76056,
+      "avg_generation_time_ms": 76053,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -1173,8 +1257,8 @@
         "total": 0
       },
       "pricing": {
-        "prompt": "0.00000044",
-        "completion": "0.00000132"
+        "prompt": "0.00000015",
+        "completion": "0.0000003"
       }
     },
     {
@@ -1183,9 +1267,9 @@
       "display_name": "Inkling",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1207,
-      "win_rate": 42,
-      "avg_generation_time_ms": 85039,
+      "elo": 1208,
+      "win_rate": 42.3,
+      "avg_generation_time_ms": 133602,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -1234,7 +1318,7 @@
       },
       "pricing": {
         "prompt": "0.0000003",
-        "completion": "0.0000012"
+        "completion": "0.0000024"
       }
     },
     {
@@ -1264,9 +1348,9 @@
       "display_name": "Grok 4.3",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1191,
-      "win_rate": 44.2,
-      "avg_generation_time_ms": 66896,
+      "elo": 1190,
+      "win_rate": 44,
+      "avg_generation_time_ms": 66715,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -1287,7 +1371,28 @@
       "category": "codecategories",
       "elo": 1187,
       "win_rate": 51.5,
-      "avg_generation_time_ms": 98421,
+      "avg_generation_time_ms": 98423,
+      "tournament_stats": {
+        "first_place": 0,
+        "second_place": 0,
+        "third_place": 0,
+        "fourth_place": 0,
+        "total": 0
+      },
+      "pricing": {
+        "prompt": "0.000003",
+        "completion": "0.000015"
+      }
+    },
+    {
+      "source": "design-arena",
+      "model_permaslug": "anthropic/claude-4.5-sonnet-20250929",
+      "display_name": "Claude Sonnet 4.5 (Thinking)",
+      "arena": "models",
+      "category": "codecategories",
+      "elo": 1186,
+      "win_rate": 51.3,
+      "avg_generation_time_ms": 93774,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -1306,9 +1411,9 @@
       "display_name": "Solar Pro 4",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1187,
+      "elo": 1186,
       "win_rate": 39,
-      "avg_generation_time_ms": 287644,
+      "avg_generation_time_ms": 287621,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -1323,34 +1428,13 @@
     },
     {
       "source": "design-arena",
-      "model_permaslug": "anthropic/claude-4.5-sonnet-20250929",
-      "display_name": "Claude Sonnet 4.5 (Thinking)",
-      "arena": "models",
-      "category": "codecategories",
-      "elo": 1186,
-      "win_rate": 51.3,
-      "avg_generation_time_ms": 93771,
-      "tournament_stats": {
-        "first_place": 0,
-        "second_place": 0,
-        "third_place": 0,
-        "fourth_place": 0,
-        "total": 0
-      },
-      "pricing": {
-        "prompt": "0.000003",
-        "completion": "0.000015"
-      }
-    },
-    {
-      "source": "design-arena",
       "model_permaslug": "stepfun/step-3.7-flash-20260528",
       "display_name": "Step 3.7 Flash",
       "arena": "models",
       "category": "codecategories",
       "elo": 1185,
-      "win_rate": 42.7,
-      "avg_generation_time_ms": 116883,
+      "win_rate": 42.5,
+      "avg_generation_time_ms": 117870,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -1413,7 +1497,7 @@
       "category": "codecategories",
       "elo": 1182,
       "win_rate": 49.2,
-      "avg_generation_time_ms": 75301,
+      "avg_generation_time_ms": 75302,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -1453,9 +1537,9 @@
       "display_name": "Hy3 Low",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1181,
-      "win_rate": 41.1,
-      "avg_generation_time_ms": 132314,
+      "elo": 1180,
+      "win_rate": 41.2,
+      "avg_generation_time_ms": 132343,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -1555,12 +1639,12 @@
     {
       "source": "design-arena",
       "model_permaslug": "openai/gpt-5.2-20251211",
-      "display_name": "GPT-5.2 (None)",
+      "display_name": "GPT-5.2 (Medium)",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1173,
-      "win_rate": 49.8,
-      "avg_generation_time_ms": 167050,
+      "elo": 1174,
+      "win_rate": 49.6,
+      "avg_generation_time_ms": 173373,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -1576,12 +1660,12 @@
     {
       "source": "design-arena",
       "model_permaslug": "openai/gpt-5.2-20251211",
-      "display_name": "GPT-5.2 (Medium)",
+      "display_name": "GPT-5.2 (None)",
       "arena": "models",
       "category": "codecategories",
       "elo": 1173,
-      "win_rate": 49.6,
-      "avg_generation_time_ms": 173371,
+      "win_rate": 49.8,
+      "avg_generation_time_ms": 167050,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -1623,7 +1707,7 @@
       "category": "codecategories",
       "elo": 1171,
       "win_rate": 48.4,
-      "avg_generation_time_ms": 130852,
+      "avg_generation_time_ms": 130854,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -1634,27 +1718,6 @@
       "pricing": {
         "prompt": "0.00000026",
         "completion": "0.00000156"
-      }
-    },
-    {
-      "source": "design-arena",
-      "model_permaslug": "openai/gpt-5.2-20251211",
-      "display_name": "GPT-5.2 (Low)",
-      "arena": "models",
-      "category": "codecategories",
-      "elo": 1170,
-      "win_rate": 50.3,
-      "avg_generation_time_ms": 166018,
-      "tournament_stats": {
-        "first_place": 0,
-        "second_place": 0,
-        "third_place": 0,
-        "fourth_place": 0,
-        "total": 0
-      },
-      "pricing": {
-        "prompt": "0.0000035",
-        "completion": "0.000028"
       }
     },
     {
@@ -1739,6 +1802,27 @@
       "pricing": {
         "prompt": "0.000000625",
         "completion": "0.000005"
+      }
+    },
+    {
+      "source": "design-arena",
+      "model_permaslug": "openai/gpt-5.2-20251211",
+      "display_name": "GPT-5.2 (Low)",
+      "arena": "models",
+      "category": "codecategories",
+      "elo": 1169,
+      "win_rate": 50.3,
+      "avg_generation_time_ms": 166016,
+      "tournament_stats": {
+        "first_place": 0,
+        "second_place": 0,
+        "third_place": 0,
+        "fourth_place": 0,
+        "total": 0
+      },
+      "pricing": {
+        "prompt": "0.0000035",
+        "completion": "0.000028"
       }
     },
     {
@@ -1971,7 +2055,7 @@
       "category": "codecategories",
       "elo": 1148,
       "win_rate": 36.1,
-      "avg_generation_time_ms": 132481,
+      "avg_generation_time_ms": 132186,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -2173,7 +2257,7 @@
       "display_name": "Mistral Medium 3.1 (2508)",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1125,
+      "elo": 1123,
       "win_rate": 45.1,
       "avg_generation_time_ms": 113533,
       "tournament_stats": {
@@ -2196,7 +2280,7 @@
       "category": "codecategories",
       "elo": 1121,
       "win_rate": 40.1,
-      "avg_generation_time_ms": 89575,
+      "avg_generation_time_ms": 89562,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -2238,7 +2322,7 @@
       "category": "codecategories",
       "elo": 1119,
       "win_rate": 43.5,
-      "avg_generation_time_ms": 128526,
+      "avg_generation_time_ms": 128525,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -2288,10 +2372,7 @@
         "fourth_place": 0,
         "total": 0
       },
-      "pricing": {
-        "prompt": "0.00000078",
-        "completion": "0.0000039"
-      }
+      "pricing": null
     },
     {
       "source": "design-arena",
@@ -2398,9 +2479,9 @@
       "display_name": "GPT-5.1 Codex Mini",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1097,
+      "elo": 1098,
       "win_rate": 41.5,
-      "avg_generation_time_ms": 47638,
+      "avg_generation_time_ms": 47654,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -2740,9 +2821,9 @@
       "display_name": "Mercury 2",
       "arena": "models",
       "category": "codecategories",
-      "elo": 1021,
+      "elo": 1022,
       "win_rate": 21.3,
-      "avg_generation_time_ms": 6566,
+      "avg_generation_time_ms": 6768,
       "tournament_stats": {
         "first_place": 0,
         "second_place": 0,
@@ -2813,10 +2894,7 @@
         "fourth_place": 0,
         "total": 0
       },
-      "pricing": {
-        "prompt": "0.000000455",
-        "completion": "0.00000182"
-      }
+      "pricing": null
     },
     {
       "source": "design-arena",
@@ -2934,8 +3012,8 @@
         "total": 0
       },
       "pricing": {
-        "prompt": "0.0000000296",
-        "completion": "0.000000136"
+        "prompt": "0.00000003",
+        "completion": "0.00000015"
       }
     },
     {
@@ -2955,8 +3033,8 @@
         "total": 0
       },
       "pricing": {
-        "prompt": "0.00000013",
-        "completion": "0.00000052"
+        "prompt": "0.00000012",
+        "completion": "0.0000005"
       }
     },
     {

@@ -125,13 +125,17 @@ export const buildConfigurationMetricRows = (
   const ttft = scoreItem.config.openRouterData?.ttftP50Seconds;
   const subscription = scoreItem.config.subscriptionData;
   const pricingEvidence = getSubscriptionPricingEvidence(subscription?.pricingEvidenceId);
-  const subscriptionCostTitle = subscription
+  const usableSubscriptionAllowance = subscription && subscription.apiEquivalentCostUSD !== null && subscription.usableQuotaFraction !== null
+    ? subscription.apiEquivalentCostUSD * subscription.usableQuotaFraction : null;
+  const subscriptionCostTitle = subscription && usableSubscriptionAllowance === null
+    ? '官方月费已公布，API 等效额度尚未公布；成本调整和实用分保持缺测。'
+    : subscription
     ? [
         '可用月度 API 等效额度（USD）；已计入模型额度限制。',
         pricingEvidence?.kind === 'measured'
           ? `SemiAnalysis ${pricingEvidence.publishedOn}，agentic 工作负载；${pricingEvidence.checkedOn} 核对。`
           : '旧估算；暂无对应模型的 SemiAnalysis 公开实测。',
-        subscription.usableQuotaFraction < 1
+        subscription.usableQuotaFraction !== null && subscription.apiEquivalentCostUSD !== null && subscription.usableQuotaFraction < 1
           ? `完整额度基准 $${formatCostValue(subscription.apiEquivalentCostUSD)} × ${(subscription.usableQuotaFraction * 100).toFixed(0)}%；不再次折半。`
           : '',
         '满额使用下的折算值，实际利用率及缓存比例会影响成本。',
@@ -182,9 +186,8 @@ export const buildConfigurationMetricRows = (
       id: 'cost_output',
       label: subscription ? 'API Equivalent' : 'Output Price',
       value: subscription
-        ? `${pricingEvidence?.kind === 'measured' ? '' : '≈ '}${formatCostValue(
-            subscription.apiEquivalentCostUSD * subscription.usableQuotaFraction,
-          )}`
+        ? usableSubscriptionAllowance === null ? '--'
+          : `${pricingEvidence?.kind === 'measured' ? '' : '≈ '}${formatCostValue(usableSubscriptionAllowance)}`
         : outputPrice === null || outputPrice === undefined
           ? '--'
           : outputPrice.toFixed(2),

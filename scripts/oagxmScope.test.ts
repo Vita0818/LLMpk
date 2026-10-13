@@ -9,6 +9,10 @@ import { OAGXM_SCOPE, classifyOagxmModel } from '../src/data/oagxmScope';
  * source-published profiles kept as separate source cards.
  */
 const expectedProductLines: Array<[string, string]> = [
+  ['Muse Wonder (Max)', 'muse_wonder'],
+  ['Muse Wonder Full (Max)', 'muse_wonder_full'],
+  ['Claude Haiku 5.5 (XHigh)', 'claude_haiku_55'],
+  ['Mistral Large 4 Preview', 'mistral_large_4'],
   ['DeepSeek-v4-Flash', 'deepseek_v4_flash'],
   ['DeepSeek V4.1 Flash', 'deepseek_v41_flash'],
   ['DeepSeek-v4-Flash-0731', 'deepseek_v4_flash_0731'],
@@ -109,7 +113,7 @@ for (const [sourceName, productLineId] of expectedProductLines) {
 }
 
 const configuredProductLines = OAGXM_SCOPE.vendors.flatMap((vendor) => vendor.productLines);
-assert.equal(configuredProductLines.length, 79, 'Curated inventory should include the October 2026 model lines');
+assert.equal(configuredProductLines.length, 83, 'Curated inventory should include the October 2026 model lines');
 assert.equal(
   classifyOagxmModel('Claude Fable 5.1')?.productLineId,
   'claude_fable_51',

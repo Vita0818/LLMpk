@@ -439,19 +439,30 @@ function validateArena(snapshot) {
     { rowCounts, minimumEach: 5 },
   );
   const agentMetricIds = REQUIRED_ARENA_METRICS.filter((id) => id.startsWith('arena_agent_'));
-  const agentCohorts = agentMetricIds.map((id) => (
+  const recovery = metrics.arena_agent_bash_recovery;
+  const retainedRecovery = Boolean(recovery?.retention);
+  const validRecoveryRetention = !retainedRecovery || (
+    /^[a-f0-9]{64}$/u.test(recovery.retention.sourceSnapshotSha256 ?? '')
+    && recovery.rows.every(row => Number.isFinite(row.sourceRecord?.signalScores?.bash_recovery_steps)
+      && row.rawValue === row.sourceRecord.signalScores.bash_recovery_steps
+      && row.snapshotDate === recovery.snapshotDate)
+  );
+  const currentAgentMetricIds = agentMetricIds.filter(id => !(
+    id === 'arena_agent_bash_recovery' && retainedRecovery
+  ));
+  const agentCohorts = currentAgentMetricIds.map((id) => (
     new Set((metrics[id]?.rows || []).map((row) => row.exactSourceModelName))
   ));
   const agentReferenceCohort = agentCohorts[0] || new Set();
   check(
     'arena-agent-cohort-consistency',
-    'All five Arena Agent signals describe the same current model cohort.',
-    agentReferenceCohort.size >= 40
+    'Current Arena Agent signals share a cohort; retained Bash Recovery preserves its original source definition and dates.',
+    validRecoveryRetention && agentReferenceCohort.size >= 40
       && agentCohorts.every((cohort) => (
         cohort.size === agentReferenceCohort.size
         && [...cohort].every((name) => agentReferenceCohort.has(name))
       )),
-    { modelCount: agentReferenceCohort.size, rowCounts: agentMetricIds.map((id) => rowCounts[id]) },
+    { modelCount: agentReferenceCohort.size, rowCounts: agentMetricIds.map((id) => rowCounts[id]), retainedRecovery },
   );
 
   const reference = referenceSnapshot(REFERENCE_PATHS.arena, PATHS.arena);
@@ -775,8 +786,9 @@ function validateFrontierCode(snapshot) {
   check('frontiercode-records', 'FrontierCode rows retain unique model/effort/harness identities and valid raw rates.',
     rows.length >= 30 && uniqueValues(rows,r=>`${r.name}:${r.harness}:${r.effort}`)
     && rows.every(r=>typeof r.name === 'string' && r.name.length > 0 && typeof r.harness === 'string'
-      && typeof r.effort === 'string' && [r.passRate,r.mergeabilityScore,r.flaggedRate]
-        .every(v=>Number.isFinite(v) && v>=0 && v<=1)), {rows:rows.length});
+      && typeof r.effort === 'string' && [r.passRate,r.mergeabilityScore]
+        .every(v=>Number.isFinite(v) && v>=0 && v<=1)
+      && (r.flaggedRate === null || (Number.isFinite(r.flaggedRate) && r.flaggedRate>=0 && r.flaggedRate<=1))), {rows:rows.length});
   return {models:new Set(rows.map(r=>r.name)).size,rows:rows.length};
 }
 try {

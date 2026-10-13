@@ -2,6 +2,7 @@ import { existsSync, mkdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { detailedModelRecords } from './artificialAnalysisModelExtraction.mjs';
+import { gdpPdfComparisonRecords, mergePublishedGdpPdfRecords } from './artificialAnalysisProfessionalExtraction.mjs';
 import {
   atomicWriteFile,
   atomicWriteJson,
@@ -263,6 +264,29 @@ async function main() {
         evaluationRecords(page.decoded.payload, page.definition.id, modelByName, modelBySlug),
       ]),
   );
+
+  // The evaluation page sends only its selected chart models. A profile page
+  // publishes the full comparison data with the same exact model slugs.
+  // This reviewed public profile exposes the native comparison records and
+  // its own model record. It supplies evidence, never a model-name fallback.
+  const gdpAnchor = modelBySlug.get('mistral-medium-3-5');
+  if (!gdpAnchor?.slug) throw new Error('GDP.pdf has no published model-page anchor.');
+  const comparisonDefinition = { id: 'professional-model-comparison',
+    url: `https://artificialanalysis.ai/models/${gdpAnchor.slug}`,
+    filename: 'professional-model-comparison.html', kind: 'model-comparison' };
+  const comparisonResponse = await fetchSource(comparisonDefinition.url);
+  const comparisonDecoded = decodeNextFlightPayload(comparisonResponse.body, 'AA professional comparison');
+  const comparisonPath = path.join(RAW_DIRECTORY, comparisonDefinition.filename);
+  atomicWriteFile(comparisonPath, comparisonResponse.body);
+  const comparisonRows = gdpPdfComparisonRecords(comparisonDecoded.payload, modelBySlug);
+  if (comparisonRows.length < 100) throw new Error('Incomplete public AA professional comparison table.');
+  if (!comparisonRows.some(row => row.id === gdpAnchor.id)) throw new Error('AA professional anchor model record is missing.');
+  evaluationRecordsById['gdp-pdf'] = mergePublishedGdpPdfRecords(evaluationRecordsById['gdp-pdf'],
+    comparisonRows.map(row => ({ ...row, sourcePageId: comparisonDefinition.id,
+      sourcePageUrl: comparisonDefinition.url,
+      sourceField: 'models[].gdpPdfAllPass' })));
+  fetchedPages.push({ definition: comparisonDefinition, response: comparisonResponse,
+    decoded: comparisonDecoded, rawPath: comparisonPath });
 
   const currentCodingRows = fetchedPages
     .filter((page) => page.definition.kind === 'coding-agents')

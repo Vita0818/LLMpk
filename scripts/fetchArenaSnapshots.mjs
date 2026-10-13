@@ -21,14 +21,14 @@ const OUTPUT_PATH = path.resolve(
 );
 
 const PAGES = [
-  ['arena_text_instruction', 'https://arena.ai/leaderboard/text/instruction-following'],
-  ['arena_text_multiturn', 'https://arena.ai/leaderboard/text/multi-turn'],
-  ['arena_text_creative', 'https://arena.ai/leaderboard/text/creative-writing'],
-  ['arena_text_hard', 'https://arena.ai/leaderboard/text/hard-prompts'],
-  ['arena_text_math', 'https://arena.ai/leaderboard/text/math'],
-  ['arena_text_coding', 'https://arena.ai/leaderboard/text/coding'],
+  ['arena_text_instruction', 'https://arena.ai/leaderboard/chat/text/instruction-following'],
+  ['arena_text_multiturn', 'https://arena.ai/leaderboard/chat/text/multi-turn'],
+  ['arena_text_creative', 'https://arena.ai/leaderboard/chat/text/creative-writing'],
+  ['arena_text_hard', 'https://arena.ai/leaderboard/chat/text/hard-prompts'],
+  ['arena_text_math', 'https://arena.ai/leaderboard/chat/text/math'],
+  ['arena_text_coding', 'https://arena.ai/leaderboard/chat/text/coding'],
   ['arena_code_webdev', 'https://arena.ai/leaderboard/code/webdev'],
-  ['arena_search', 'https://arena.ai/leaderboard/search'],
+  ['arena_search', 'https://arena.ai/leaderboard/chat/search'],
   ['arena_agent', 'https://arena.ai/leaderboard/agent'],
 ].map(([id, url]) => ({
   id,
@@ -47,6 +47,8 @@ function runExtractor() {
           ...process.env,
           ARENA_SNAPSHOT_DIR: SNAPSHOT_DIRECTORY,
           ARENA_RAW_EXTRACTION_OUTPUT: OUTPUT_PATH,
+          ARENA_PREVIOUS_EXTRACTION_PATH: process.env.ARENA_PREVIOUS_EXTRACTION_PATH
+            ?? path.join(ROOT, 'src', 'data', 'arenaRawExtraction.json'),
         },
         stdio: 'inherit',
       },
@@ -95,4 +97,3 @@ async function main() {
 }
 
 await main();
-

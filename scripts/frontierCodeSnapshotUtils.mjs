@@ -13,7 +13,11 @@ export function validateFrontierCodePayload(payload) {
     for (const effort of efforts) {
       const record = revision.data[name]?.[effort]?.main;
       if (!record) continue;
-      if (![record.correct, record.new_score, record.flagged_rate].every(v=>Number.isFinite(v) && v>=0 && v<=1)) {
+      // New executions can publish a pass rate before the flagging audit is
+      // available. Preserve that explicit null instead of inventing a rate.
+      const validRatio = value => Number.isFinite(value) && value >= 0 && value <= 1;
+      if (![record.correct, record.new_score].every(validRatio)
+        || (record.flagged_rate !== null && !validRatio(record.flagged_rate))) {
         throw new Error('Malformed FrontierCode Main result.');
       }
       rows.push({ name, harness, effort, passRate: record.correct, mergeabilityScore: record.new_score, flaggedRate: record.flagged_rate });

@@ -36,8 +36,8 @@ assert(
   'Playback queue must contain one representative per identical radar route group.',
 );
 assert(
-  snapshot.scores.filter(s=>s.eligibleForGlobalLeaderboard).length - queue.length === 9,
-  'Covered playback should collapse equivalent Google, Fable, Opus and Astra access routes.',
+  snapshot.scores.filter(s=>s.eligibleForGlobalLeaderboard).length - queue.length === 14,
+  'Covered playback should collapse equivalent Google, Fable, Opus, Astra, Sol and Sonnet access routes.',
 );
 assert(
   radarOverviewScores.length === queue.length,

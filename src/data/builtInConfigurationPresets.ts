@@ -16,6 +16,7 @@ import {
   findMeasuredSubscriptionPricing,
   LEGACY_SUBSCRIPTION_PRICING_EVIDENCE,
   SEMIANALYSIS_SUBSCRIPTION_SOURCE,
+  MUSE_CODE_SUBSCRIPTION_PLAN_EVIDENCE,
 } from './subscriptionPricing';
 import { RETIRED_READER_MODEL_GROUP_KEYS, READER_CURRENT_MODEL_GROUP_KEYS } from './readerModelRetirementPolicy';
 import { ALL_METRIC_DEFINITIONS } from '../engine/scoringEngine';
@@ -759,6 +760,31 @@ readonly BuiltInConfigurationPreset[] = [
       'Claude Sonnet 5.5', profile, 'Anthropic', 'Anthropic API · claude-sonnet-5.5',
     ),
     note: 'AA 五档 effort 均披露 Default Fallback；保留该限制，普通 API 与 Claude Code 执行分开建卡。',
+  }),
+];
+
+const OCTOBER_13_MODEL_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
+  ...apiProfilePresets({
+    keyPrefix: 'claude-haiku-5-5', productLineId: 'claude_haiku_55', modelName: 'Claude Haiku 5.5',
+    profileKeys: ['low', 'medium', 'high', 'xhigh', 'max'], origin: 'source-backed',
+    lockExplicitSourceCards: true, lockProviderNeutralPracticalCards: true,
+    identityForProfile: profile => directApiIdentity('Claude Haiku 5.5', profile, 'Anthropic', 'Anthropic API · claude-haiku-5-5'),
+    note: '各档采用 AA 的独立模型记录；Claude Code 执行与普通 API 分开。$0.10/$0.50 为不超过 100K 提示长度的每百万 Token 价格，较长提示的官方档位为 $0.50/$2.50。',
+  }),
+  ...apiProfilePresets({
+    keyPrefix: 'muse-wonder', productLineId: 'muse_wonder', modelName: 'Muse Wonder',
+    profileKeys: ['max'], origin: 'source-backed',
+    lockExplicitSourceCards: true, lockProviderNeutralPracticalCards: true,
+    identityForProfile: profile => directApiIdentity('Muse Wonder', profile, 'Meta', 'Meta Model API · muse-wonder-1.0'),
+    note: '采用 AA 已实测的 Max 档位；不使用默认 Medium 路由的速度代替 Max。Muse Code 与普通模型评测分别保留。',
+  }),
+  ...apiProfilePresets({
+    keyPrefix: 'mistral-large-4', productLineId: 'mistral_large_4', modelName: 'Mistral Large 4 Preview',
+    profileKeys: ['high'], origin: 'source-backed',
+    sharedExactCardIds: ['card-openrouter-mistralai-mistral-large-4-0', 'card-openrouter-standard-performance-mistralai-mistral-large-4-0'],
+    lockExplicitSourceCards: true, lockProviderNeutralPracticalCards: true,
+    identityForProfile: profile => directApiIdentity('Mistral Large 4 Preview', profile, 'Mistral', 'Mistral API · mistral-large-4'),
+    note: '公开预览，默认 High；AA 和 Arena 未披露 effort 的记录保留 Default→High 来源条件。OpenRouter Standard 当前采用公开促销价格。',
   }),
 ];
 
@@ -1883,6 +1909,39 @@ const CLAUDE_OPUS_5_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[]
  * declared Chat fallbacks in the stack.
  */
 const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
+  ...(['low', 'medium', 'high', 'xhigh', 'max'] as const).map(profile => harnessPreset({
+    key: `harness.claude-haiku-5-5.${profile}.claude-code`, productLineId: 'claude_haiku_55',
+    modelName: 'Claude Haiku 5.5', profile: ROUTE_EFFORT_LABELS[profile], harness: 'Claude Code',
+    providerName: 'Anthropic', upstreamApi: 'Anthropic API',
+    exactHarnessCardIds: [`card-aa-coding-agent-claude-code-claude-haiku-5-5-${profile}`],
+    chatFallbackCardIds: [...(planApiProfileCards('claude_haiku_55', profile, ROUTE_EFFORT_LABELS[profile])?.exactCardIds ?? [])],
+    sameHarnessFallbackLinks: [
+      ...(planApiProfileCards('claude_haiku_55', profile, ROUTE_EFFORT_LABELS[profile])?.lowerFallbackCards ?? []).map(fallback =>
+        lowerProfileHarnessFallback(fallback.cardId, fallback.sourceProfile, fallback.sourceLevel,
+          fallback.targetProfile, fallback.targetLevel, 'Claude Code')),
+    ],
+    lockExplicitSourceCards: true, lockProviderNeutralPracticalCards: true,
+    note: 'Claude Code 与 FrontierCode 使用同一已披露 effort；不将 Devin Fusion 的多模型结果归给 Haiku 单模型。',
+  })),
+  harnessPreset({
+    key: 'harness.muse-wonder.max.muse-code', productLineId: 'muse_wonder',
+    modelName: 'Muse Wonder', profile: 'Max', harness: 'Muse Code', providerName: 'Meta', upstreamApi: 'Meta Model API',
+    exactHarnessCardIds: ['card-aa-coding-agent-muse-code-muse-wonder-max'],
+    chatFallbackCardIds: ['card-aa-muse-wonder'],
+    lockExplicitSourceCards: true, lockProviderNeutralPracticalCards: true,
+  }),
+  definePreset({
+    key: 'subscription.muse-code-maximum.muse-wonder-full.max', productLineId: 'muse_wonder_full',
+    identity: { model: {name:'Muse Wonder Full',profile:'Max'}, harness: {name:'Muse Code',environment:'Muse Code subscription'},
+      provider: {name:'Meta',upstream:'Muse Code · muse-wonder-full-1.0'} },
+    origin: 'source-backed', access: 'subscription', providerDisplayLabel: 'Muse Code Maximum Usage',
+    subscriptionData: { planName: 'Muse Code Maximum Usage', monthlyPriceUSD: 200,
+      apiEquivalentCostUSD: null, usableQuotaFraction: null, pricingEvidenceId: MUSE_CODE_SUBSCRIPTION_PLAN_EVIDENCE.id },
+    sourceCardIds: ['card-aa-coding-agent-muse-code-muse-wonder-full-max'],
+    sourceCardLinks: [lowerHarnessFallback('card-aa-muse-wonder-full','Max','Muse Code')],
+    lockExplicitSourceCards: true, lockProviderNeutralPracticalCards: true,
+    note: '仅通过 Muse Code Power/Maximum 订阅提供；API 定价与可用 API 等效额度未公布，实用分保持缺测，不借用 Wonder 的价格或订阅估值。',
+  }),
   ...(['low', 'medium', 'high', 'xhigh', 'max'] as const).map((profile) => harnessPreset({
     key: `harness.gpt-6-1-sol.${profile}.codex-cli`,
     productLineId: 'gpt_61_sol',
@@ -3743,6 +3802,7 @@ const BASE_HAND_AUTHORED_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPre
   ...SEPTEMBER_2026_RELEASE_CONFIGURATION_PRESETS,
   ...SEPTEMBER_25_MODEL_CONFIGURATION_PRESETS,
   ...OCTOBER_2_MODEL_CONFIGURATION_PRESETS,
+  ...OCTOBER_13_MODEL_CONFIGURATION_PRESETS,
   ...AUGUST_2026_RELEASE_CONFIGURATION_PRESETS,
   ...ADDITIONAL_SOURCE_BACKED_CONFIGURATION_PRESETS,
   ...CLAUDE_OPUS_5_CONFIGURATION_PRESETS,
@@ -4656,6 +4716,7 @@ const READER_FACING_PRODUCT_LINE_EXCLUSIONS = new Set<string>([
  * configurations and are deliberately unaffected.
  */
 const READER_FACING_PLAIN_API_PRODUCT_LINE_EXCLUSIONS = new Set<string>([
+  'muse_wonder',
   'gemini_38_flash',
   'gemini_37_flash',
   'muse_spark_13',
@@ -4668,6 +4729,10 @@ const READER_FACING_PLAIN_API_PRODUCT_LINE_EXCLUSIONS = new Set<string>([
  * Missing domains remain missing and are shown as incomplete coverage.
  */
 const READER_APPROVED_SPARSE_PRODUCT_LINES = new Set<string>([
+  'claude_haiku_55',
+  'muse_wonder',
+  'muse_wonder_full',
+  'mistral_large_4',
   'gpt_61_sol',
   'claude_sonnet_55',
   'hy4_preview',
@@ -4704,6 +4769,9 @@ function curateReaderFacingPresets(
   const cardsById = new Map(parseVerifiedSourceCards().map((card) => [card.id, card]));
   const groups = new Map<string, BuiltInConfigurationPreset[]>();
   candidates.forEach((preset) => {
+    // The new OpenRouter route exposes Low/Medium/High, not Max. Keep the
+    // reviewed High execution instead of promoting a generic catalog label.
+    if (preset.productLineId === 'step_5_preview' && preset.identity.model.profile !== 'High') return;
     if (RETIRED_READER_MODEL_GROUP_KEYS.has(presetModelGroupKey(preset))) return;
     if (!READER_CURRENT_MODEL_GROUP_KEYS.has(presetModelGroupKey(preset))) return;
     if (READER_FACING_PRESET_EXCLUSIONS.has(preset.id)) return;
@@ -4981,4 +5049,4 @@ export const BUILT_IN_CONFIGURATION_PRESET_COUNT = BUILT_IN_CONFIGURATION_PRESET
  * additions visible during Vite hot updates as well as after a full reload.
  */
 export const BUILT_IN_CONFIGURATION_PRESET_INVENTORY_VERSION =
-  '2026-10-12-vals-scoring-v3-1-v52';
+  '2026-10-13-wonder-haiku-large4-v53';

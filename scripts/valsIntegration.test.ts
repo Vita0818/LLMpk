@@ -19,14 +19,14 @@ const manifest = reviews as unknown as ValsReviewedManifest;
 const bases = JSON.parse(VERIFIED_SOURCE_MODEL_CARDS) as SourceModelCard[];
 const published = publicSnapshot as unknown as PublicLeaderboardSnapshot;
 assert.deepEqual(UNMATCHED_REVIEWED_VALS_MAPPINGS, []);
-assert.equal(VERIFIED_VALS_SOURCE_MODEL_CARDS.length, 198);
-assert.equal(VERIFIED_VALS_SOURCE_OBSERVATIONS.length, 198);
-assert.equal(BUILT_IN_CONFIGURATION_PRESETS.length, 48);
-assert.equal(BUILT_IN_CONFIGURATION_MODEL_GROUP_COUNT, 30);
+assert.equal(VERIFIED_VALS_SOURCE_MODEL_CARDS.length, 234);
+assert.equal(VERIFIED_VALS_SOURCE_OBSERVATIONS.length, 234);
+assert.equal(BUILT_IN_CONFIGURATION_PRESETS.length, 52);
+assert.equal(BUILT_IN_CONFIGURATION_MODEL_GROUP_COUNT, 34);
 assert.equal(ALL_METRIC_DEFINITIONS.length, 26);
 assert.equal(ALL_METRIC_DEFINITIONS.filter(metric => metric.id.startsWith('vals_')).length, 7);
 assert.equal(ALL_METRIC_DEFINITIONS.some(metric => ['vals_index_v21', 'vals_terminalbench_v4'].includes(metric.id)), false);
-assert.equal(buildRepresentativeConfigurationQueue(published.scores).length, 32);
+assert.equal(buildRepresentativeConfigurationQueue(published.scores).length, 36);
 
 for (const review of manifest.entries) {
   for (const execution of review.executions) {
@@ -87,9 +87,9 @@ Reflect.deleteProperty(globalThis, 'localStorage');
 const { AdminMappingStore } = await import('../src/store/adminMappingStore');
 const store = new AdminMappingStore();
 store.installBuiltInConfigurationPresets();
-assert.equal(store.cards.filter(card => card.source === 'vals').length, 198);
+assert.equal(store.cards.filter(card => card.source === 'vals').length, 234);
 const scores = store.computeLeaderboardScores();
-assert.equal(scores.filter(score => score.config.valsData?.length).length, 39);
+assert.equal(scores.filter(score => score.config.valsData?.length).length, 43);
 const altered = processLLMpkBatchScoring(scores.map(score => ({
   ...score.config, valsData: undefined,
   observations: Object.fromEntries(Object.entries(score.config.observations).map(([id, row]) => [id,
@@ -121,4 +121,4 @@ store.updateBox(fallbackBox.id, { identity: { ...fallbackBox.identity,
 assert.equal(store.getLinkedCardStack(fallbackBox.id, 'vals').length, 0,
   'An authored upward profile link must stop supplying evidence after the target identity changes.');
 
-console.log('Vals reviewed version/effort links, official no-fallback scores, source isolation and v3.1 scoring: PASS (198 cards, 39 configurations)');
+console.log('Vals reviewed version/effort links, official no-fallback scores, source isolation and v3.1 scoring: PASS (234 cards, 43 configurations)');

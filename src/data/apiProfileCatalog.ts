@@ -39,6 +39,27 @@ const tier = (
  */
 export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
   {
+    productLineId: 'claude_haiku_55',
+    tiers: [
+      tier('low', 'Low', 1, ['card-aa-claude-haiku-5-5-low']),
+      tier('medium', 'Medium', 2, ['card-aa-claude-haiku-5-5-medium']),
+      tier('high', 'High', 3, ['card-aa-claude-haiku-5-5-high', 'card-arena-claude-haiku-5-5-high']),
+      tier('xhigh', 'XHigh', 4, ['card-aa-claude-haiku-5-5-xhigh']),
+      tier('max', 'Max', 5, ['card-aa-claude-haiku-5-5']),
+    ],
+  },
+  { productLineId: 'muse_wonder', tiers: [tier('max', 'Max', 5, ['card-aa-muse-wonder'])] },
+  // Model-level evidence for a subscription-only execution; this table does
+  // not itself create an API access route for Wonder Full.
+  { productLineId: 'muse_wonder_full', tiers: [tier('max', 'Max', 5, ['card-aa-muse-wonder-full'])] },
+  {
+    productLineId: 'mistral_large_4',
+    tiers: [
+      tier('default', 'Default', 0, ['card-aa-mistral-large-4', 'card-arena-mistral-large-4']),
+      tier('high', 'High', 3),
+    ],
+  },
+  {
     productLineId: 'gpt_61_sol',
     tiers: [
       tier('low', 'Low', 1, ['card-aa-gpt-6-1-sol-low']),
@@ -137,7 +158,8 @@ export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
   {
     productLineId: 'step_5_preview',
     tiers: [
-      tier('high', 'High', 3, ['card-aa-step-5']),
+      tier('default', 'Default', 0, ['card-arena-step-5-preview']),
+      tier('high', 'High', 3, ['card-aa-step-5', 'card-arena-step-5-preview-high']),
     ],
   },
   {

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "design-arena-reviewed-mappings/v1",
-  "reviewedAt": "2026-10-11",
+  "reviewedAt": "2026-10-13",
   "policy": "Source identity and target preset links are authored explicitly. Refreshing scores does not infer new model, effort, harness, or reader inventory links.",
   "entries": [
     {
@@ -548,6 +548,74 @@
       },
       "reviewedReason": "Exact dated model and explicitly published Max row retained without a target; Max must not backfill XHigh.",
       "targets": []
+    },
+    {
+      "cardId": "card-designarena-anthropic-claude-haiku-5-5-default",
+      "productLineId": "claude_haiku_55",
+      "baseOpenRouterCardId": "card-openrouter-anthropic-claude-haiku-5-5",
+      "openRouterModelId": "anthropic/claude-haiku-5.5",
+      "canonicalModelVersion": "anthropic/claude-haiku-5.5-20261007",
+      "source": {
+        "arena": "models",
+        "category": "codecategories",
+        "modelPermaslug": "anthropic/claude-haiku-5.5-20261007",
+        "displayName": "Claude Haiku 5.5"
+      },
+      "sourceProfile": {
+        "label": "Default",
+        "level": 0,
+        "disclosed": false
+      },
+      "reviewedReason": "Exact October release checked against the official release and dated OpenRouter canonical ID. Source effort is undisclosed and remains Default; benchmark-internal build environment does not become a measurement of the production CLI.",
+      "targets": [
+        {
+          "presetId": "builtin.harness.claude-haiku-5-5.max.claude-code",
+          "modelName": "Claude Haiku 5.5",
+          "profile": "Max",
+          "harness": "Claude Code",
+          "provenance": {
+            "kind": "lower_profile_fallback",
+            "sourceProfile": "Default (source effort undisclosed)",
+            "sourceLevel": 0,
+            "targetProfile": "Max",
+            "targetLevel": 6
+          }
+        }
+      ]
+    },
+    {
+      "cardId": "card-designarena-mistralai-mistral-large-4-default",
+      "productLineId": "mistral_large_4",
+      "baseOpenRouterCardId": "card-openrouter-mistralai-mistral-large-4-0",
+      "openRouterModelId": "mistralai/mistral-large-4-0",
+      "canonicalModelVersion": "mistralai/mistral-large-4-0-20261006",
+      "source": {
+        "arena": "models",
+        "category": "codecategories",
+        "modelPermaslug": "mistralai/mistral-large-4-0-20261006",
+        "displayName": "Mistral Large 4"
+      },
+      "sourceProfile": {
+        "label": "Default",
+        "level": 0,
+        "disclosed": false
+      },
+      "reviewedReason": "Exact October release checked against the official release and dated OpenRouter canonical ID. Source effort is undisclosed and remains Default; benchmark-internal build environment does not become a measurement of the production CLI.",
+      "targets": [
+        {
+          "presetId": "builtin.mistral-large-4.high",
+          "modelName": "Mistral Large 4 Preview",
+          "profile": "High",
+          "harness": "---",
+          "provenance": {
+            "kind": "lower_profile_fallback",
+            "sourceProfile": "Default (source effort undisclosed)",
+            "sourceLevel": 0,
+            "targetProfile": "High",
+            "targetLevel": 4
+          }
+        }
+      ]
     }
   ],
   "exclusions": [

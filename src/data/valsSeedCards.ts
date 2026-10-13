@@ -44,6 +44,8 @@ export interface ValsReviewedMapping {
   displayName: string;
   productLineId: string;
   baseCardId: string;
+  baseSource?: 'openrouter' | 'artificial_analysis';
+  baseReleaseDate?: string;
   canonicalModelVersion: string;
   targets: readonly ValsReviewedTarget[];
   executions: readonly {
@@ -90,9 +92,14 @@ export function buildValsSourceCards(
   }
   for (const review of manifest.entries) {
     const baseMatches = bases.filter(card => card.id === review.baseCardId
-      && card.source === 'openrouter'
-      && card.metadataJson?.sourceIdentity?.canonicalSlug === review.canonicalModelVersion
-      && card.metadataJson?.scope?.productLineId === review.productLineId);
+      && card.metadataJson?.scope?.productLineId === review.productLineId
+      && ((review.baseSource ?? 'openrouter') === 'openrouter'
+        ? card.source === 'openrouter'
+          && card.metadataJson?.sourceIdentity?.canonicalSlug === review.canonicalModelVersion
+        : review.baseSource === 'artificial_analysis' && card.source === 'artificial_analysis'
+          && card.metadataJson?.sourceIdentity?.sourceRecordId === review.canonicalModelVersion
+          && typeof review.baseReleaseDate === 'string'
+          && card.metadataJson?.sourceIdentity?.releaseDate === review.baseReleaseDate));
     for (const execution of review.executions) {
       const id = `card-vals-${review.key}-${execution.benchmarkSlug}`;
       const benchmarks = data.benchmarks.filter(item => item.metadata.slug === execution.benchmarkSlug);

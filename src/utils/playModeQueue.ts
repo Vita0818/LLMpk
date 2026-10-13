@@ -64,10 +64,11 @@ const compareAccessRepresentative = (left: PublicLeaderboardScore, right: Public
   const rightPlan = right.config.subscriptionData;
   if (Boolean(leftPlan) !== Boolean(rightPlan)) return rightPlan ? 1 : -1;
   if (leftPlan && rightPlan) {
+    const allowance = (plan: typeof leftPlan) => plan.apiEquivalentCostUSD !== null && plan.usableQuotaFraction !== null
+      ? plan.apiEquivalentCostUSD * plan.usableQuotaFraction : -1;
     const tierDifference = subscriptionTier(right) - subscriptionTier(left)
       || rightPlan.monthlyPriceUSD - leftPlan.monthlyPriceUSD
-      || rightPlan.apiEquivalentCostUSD * rightPlan.usableQuotaFraction
-        - leftPlan.apiEquivalentCostUSD * leftPlan.usableQuotaFraction;
+      || allowance(rightPlan) - allowance(leftPlan);
     if (tierDifference) return tierDifference;
   }
   return nullableScore(right.practicalBreakdown.practicalScore) - nullableScore(left.practicalBreakdown.practicalScore)

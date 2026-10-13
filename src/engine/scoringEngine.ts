@@ -422,7 +422,7 @@ export function calculateUtilityRatio(r: number): number {
   return r - 1;
 }
 
-/** Main LLMpk Scoring Pipeline Processor — Scoring v3.0. */
+/** Main LLMpk Scoring Pipeline Processor — Scoring v3.1. */
 export function processLLMpkBatchScoring(
   configs: LLMConfiguration[],
   customMetrics: MetricDefinition[] = ALL_METRIC_DEFINITIONS
@@ -709,6 +709,8 @@ export function processLLMpkBatchScoring(
     if (
       !Number.isFinite(monthlyPriceUSD)
       || monthlyPriceUSD <= 0
+      || apiEquivalentCostUSD === null
+      || usableQuotaFraction === null
       || !Number.isFinite(apiEquivalentCostUSD)
       || apiEquivalentCostUSD <= 0
       || !Number.isFinite(usableQuotaFraction)

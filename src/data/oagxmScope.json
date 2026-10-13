@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "oagxm-current-product-lines/v11-2026-10-02-releases",
+  "schemaVersion": "oagxm-current-product-lines/v12-2026-10-13-releases",
   "scopeId": "oagxm-current-product-lines",
   "snapshotPolicy": "Keep every source-published execution profile for the listed product lines, including the Data.md model inventory. Never merge reasoning effort, harness, fast, pro, custom-tools, or serving-environment variants by name. Arena Search and Grounding suffixes are benchmark row labels, so their observations belong to the underlying model rather than a separate execution configuration; the original row identity remains in provenance. Exclude variable latest aliases and :free routes unless a reader-facing configuration explicitly names that free route as its price source; Thinking Machines Inkling is the approved current exception. A model mentioned only through a client or IDE environment is not automatically represented as that environment; it needs a source-published record for the exact profile.",
   "benchmarkBoundary": "General-purpose text or multimodal foundation models supported by the LLM capability registry. Historical Data.md entries are retained only when an exact record is published by Artificial Analysis, Arena, or OpenRouter. Dedicated image, video, speech, embedding, moderation, and safety-only APIs are outside the formal capability leaderboard unless a corresponding source benchmark is added.",
@@ -30,6 +30,7 @@
         { "id": "claude_fable_51", "name": "Claude Fable 5.1", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ]fable[- ]5[._-]1\\b"] },
         { "id": "claude_opus_55", "name": "Claude Opus 5.5", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ]opus[- ]5[._-]5\\b"] },
         { "id": "claude_sonnet_55", "name": "Claude Sonnet 5.5", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ]sonnet[- ]5[._-]5\\b"] },
+        { "id": "claude_haiku_55", "name": "Claude Haiku 5.5", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ]haiku[- ]5[._-]5\\b"] },
         { "id": "claude_fable_5", "name": "Claude Fable 5", "tier": "historical", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ]fable[- ]5\\b(?![._-]1\\b)"] },
         { "id": "claude_opus_5", "name": "Claude Opus 5", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ]opus[- ]5\\b(?![._-]5\\b)"] },
         { "id": "claude_opus_48", "name": "Claude Opus 4.8", "tier": "historical", "rankingClass": "formal_text_agent", "patterns": ["\\bclaude[- ]opus[- ]4[._-]8\\b"] },
@@ -73,6 +74,8 @@
       "name": "Meta",
       "officialModelsUrl": "https://ai.meta.com/llama",
       "productLines": [
+        { "id": "muse_wonder_full", "name": "Muse Wonder Full", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bmuse[- ]wonder[- ]full\\b"] },
+        { "id": "muse_wonder", "name": "Muse Wonder", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bmuse[- ]wonder\\b(?![- ]full\\b)"] },
         { "id": "muse_glimmer", "name": "Muse Glimmer", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bmuse[- ]glimmer(?:[- ]30b)?\\b"] },
         { "id": "muse_spark_13", "name": "Muse Spark 1.3", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bmuse[- ]spark[- ]1\\.3\\b"] },
         { "id": "muse_spark_12", "name": "Muse Spark 1.2", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bmuse[- ]spark[- ]1\\.2\\b"] },
@@ -209,6 +212,7 @@
       "name": "Mistral AI",
       "officialModelsUrl": "https://docs.mistral.ai/getting-started/models/",
       "productLines": [
+        { "id": "mistral_large_4", "name": "Mistral Large 4", "tier": "preview", "rankingClass": "formal_text_agent", "patterns": ["\\bmistral[- ]large[- ]4(?:[._-]0)?\\b"], "allowPreviewSourceRecords": true },
         { "id": "mistral_medium_35", "name": "Mistral Medium 3.5", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bmistral[- ]medium[- ]3[._-]5\\b"] }
       ]
     },

@@ -10,6 +10,7 @@ export interface ReaderModelRetirement {
 }
 
 export const READER_MODEL_RETIREMENTS: readonly ReaderModelRetirement[] = [
+  { modelGroupKey: 'claude_haiku_45', successorModelGroupKey: 'claude_haiku_55', sourceUrl: 'https://www.anthropic.com/claude-haiku-5-5' },
   { modelGroupKey: 'gpt_56_sol', successorModelGroupKey: 'gpt_61_sol', sourceUrl: 'https://developers.openai.com/api/docs/guides/latest-model' },
   { modelGroupKey: 'gpt_6_sol', successorModelGroupKey: 'gpt_61_sol', sourceUrl: 'https://developers.openai.com/api/docs/guides/latest-model' },
   { modelGroupKey: 'gpt_56_luna', successorModelGroupKey: 'gpt_6_luna', sourceUrl: 'https://developers.openai.com/api/docs/guides/latest-model' },
@@ -47,6 +48,10 @@ export const RETIRED_READER_MODEL_GROUP_KEYS: ReadonlySet<string> = new Set(
 /** Reviewed inventory after successor pruning. Scoring changes cannot silently expand it. */
 export const READER_CURRENT_MODEL_GROUP_KEYS: ReadonlySet<string> = new Set(
 [
+  "claude_haiku_55",
+  "muse_wonder",
+  "muse_wonder_full",
+  "mistral_large_4",
   "claude_fable_51",
   "claude_opus_55",
   "claude_sonnet_55",

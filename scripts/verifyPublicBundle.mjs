@@ -82,8 +82,10 @@ for (const score of publicSnapshot.scores) {
       unexpectedSubscriptionKeys.length > 0
       || typeof subscriptionData.planName !== 'string'
       || !Number.isFinite(subscriptionData.monthlyPriceUSD)
-      || !Number.isFinite(subscriptionData.apiEquivalentCostUSD)
-      || !Number.isFinite(subscriptionData.usableQuotaFraction)
+      || !((subscriptionData.apiEquivalentCostUSD === null && subscriptionData.usableQuotaFraction === null)
+        || (Number.isFinite(subscriptionData.apiEquivalentCostUSD) && subscriptionData.apiEquivalentCostUSD > 0
+          && Number.isFinite(subscriptionData.usableQuotaFraction) && subscriptionData.usableQuotaFraction > 0
+          && subscriptionData.usableQuotaFraction <= 1))
       || (subscriptionData.pricingEvidenceId !== undefined
         && typeof subscriptionData.pricingEvidenceId !== 'string')
     ) {

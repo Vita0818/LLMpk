@@ -958,25 +958,24 @@ function sanitizeSubscriptionCostData(value: unknown): SubscriptionCostData | un
   const monthlyPriceUSD = value.monthlyPriceUSD;
   const apiEquivalentCostUSD = value.apiEquivalentCostUSD;
   const usableQuotaFraction = value.usableQuotaFraction;
+  const unknownQuota = apiEquivalentCostUSD === null && usableQuotaFraction === null;
+  const knownQuota = typeof apiEquivalentCostUSD === 'number'
+    && Number.isFinite(apiEquivalentCostUSD) && apiEquivalentCostUSD > 0
+    && typeof usableQuotaFraction === 'number' && Number.isFinite(usableQuotaFraction)
+    && usableQuotaFraction > 0 && usableQuotaFraction <= 1;
   if (
     !planName
     || typeof monthlyPriceUSD !== 'number'
     || !Number.isFinite(monthlyPriceUSD)
     || monthlyPriceUSD <= 0
-    || typeof apiEquivalentCostUSD !== 'number'
-    || !Number.isFinite(apiEquivalentCostUSD)
-    || apiEquivalentCostUSD <= 0
-    || typeof usableQuotaFraction !== 'number'
-    || !Number.isFinite(usableQuotaFraction)
-    || usableQuotaFraction <= 0
-    || usableQuotaFraction > 1
+    || (!unknownQuota && !knownQuota)
   ) return undefined;
 
   return {
     planName,
     monthlyPriceUSD,
-    apiEquivalentCostUSD,
-    usableQuotaFraction,
+    apiEquivalentCostUSD: typeof apiEquivalentCostUSD === 'number' ? apiEquivalentCostUSD : null,
+    usableQuotaFraction: typeof usableQuotaFraction === 'number' ? usableQuotaFraction : null,
     ...(typeof value.pricingEvidenceId === 'string'
       && getSubscriptionPricingEvidence(value.pricingEvidenceId)
       ? { pricingEvidenceId: value.pricingEvidenceId }
@@ -2587,15 +2586,20 @@ export class AdminMappingStore {
       .some((value) => typeof value === 'string' && value.toLocaleLowerCase().includes('openrouter'))
     const configName = box.displayName;
     const displayProviderLabel = configName.split(' | ')[2]?.trim();
-    const readerFacingProvider = displayProviderLabel?.endsWith(' API')
+    const readerFacingProvider = subscriptionData?.planName ?? (displayProviderLabel?.endsWith(' API')
       ? displayProviderLabel.replace(/\s+API$/u, '')
-      : configuredProviderName;
+      : configuredProviderName);
 
     return {
       id: box.id,
       name: configName,
       provider: readerFacingProvider,
-      ...(subscriptionData || apiPricingData
+      ...(apiPricingData || (subscriptionData && builtInPreset && BUILT_IN_CONFIGURATION_PRESETS.some(candidate =>
+        candidate.access !== 'subscription' && !candidate.apiPricingData
+        && candidate.productLineId === builtInPreset.productLineId
+        && candidate.identity.model.name === builtInPreset.identity.model.name
+        && candidate.identity.model.profile === builtInPreset.identity.model.profile
+        && candidate.identity.harness.name === builtInPreset.identity.harness.name))
         ? { capabilityReferenceIncluded: false }
         : {}),
       tags: [box.internalName, box.enabled ? '已启用入榜' : '未启用'],
@@ -2617,6 +2621,8 @@ export class AdminMappingStore {
               ? 'Claude Subscription'
               : subscriptionData.planName.startsWith('Google')
                 ? 'Google Subscription'
+                : subscriptionData.planName.startsWith('Muse Code')
+                  ? 'Meta Subscription'
                 : 'xAI Subscription'
           : usesOpenRouter
             ? 'OpenRouter API'

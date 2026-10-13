@@ -3,6 +3,7 @@ import { OAGXM_SCOPE } from './oagxmScope';
 import {
   fetchedAt as artificialAnalysisFetchedAt,
   modelRecords as artificialAnalysisModelRecords,
+  evaluationRecords as artificialAnalysisEvaluationRecords,
 } from './artificialAnalysisSourceSnapshot.json';
 
 /**
@@ -31,6 +32,8 @@ const longCat20Record = (
 ).find((record) => record.id === LONGCAT_20_SOURCE_RECORD_ID);
 
 const longCat20ModelUrl = 'https://artificialanalysis.ai/models/longcat-2-0';
+const longCat20PdfRecord = (artificialAnalysisEvaluationRecords['gdp-pdf'] as Array<Record<string, unknown>>)
+  .find(record => record.id === LONGCAT_20_SOURCE_RECORD_ID);
 const artificialAnalysisLeaderboardUrl =
   'https://artificialanalysis.ai/leaderboards/models';
 
@@ -40,6 +43,8 @@ interface RecoveredMetricSpec {
   rawValue: unknown;
   unit: string;
   sourceLeaderboard: string;
+  sourceUrl?: string;
+  sourcePageId?: string;
   confidenceLow?: unknown;
   confidenceHigh?: unknown;
   practicalFallback?: boolean;
@@ -58,6 +63,19 @@ const longCat20GdpvalBreakdown = (
 
 const longCat20MetricSpecs: readonly RecoveredMetricSpec[] = longCat20Record
   ? [
+    {
+      metricId: 'aa_terminalbench_v4', sourceField: 'terminalBench40',
+      rawValue: longCat20Record.terminalBench40, unit: 'ratio',
+      sourceLeaderboard: 'https://artificialanalysis.ai/evaluations/terminalbench-4-0',
+    },
+    {
+      metricId: 'aa_gdp_pdf_all_pass',
+      sourceField: typeof longCat20PdfRecord?.sourceField === 'string' ? longCat20PdfRecord.sourceField : 'gdpPdfAllPass',
+      rawValue: longCat20PdfRecord?.gdpPdfAllPass, unit: 'ratio',
+      sourceLeaderboard: 'https://artificialanalysis.ai/evaluations/gdp-pdf',
+      sourceUrl: typeof longCat20PdfRecord?.sourcePageUrl === 'string' ? longCat20PdfRecord.sourcePageUrl : longCat20ModelUrl,
+      sourcePageId: typeof longCat20PdfRecord?.sourcePageId === 'string' ? longCat20PdfRecord.sourcePageId : 'gdp-pdf',
+    },
     {
       metricId: 'aa_critpt',
       sourceField: 'critpt',
@@ -206,11 +224,11 @@ readonly SourceObservation[] = longCat20MetricSpecs.flatMap((spec) => {
     ...(confidenceLow === null ? {} : { confidenceLow }),
     ...(confidenceHigh === null ? {} : { confidenceHigh }),
     snapshotDate: SNAPSHOT_DATE,
-    sourceUrl: longCat20ModelUrl,
+    sourceUrl: spec.sourceUrl ?? longCat20ModelUrl,
     sourceLeaderboard: spec.sourceLeaderboard,
     metadataJson: {
       sourceSnapshot: 'src/data/artificialAnalysisSourceSnapshot.json',
-      sourcePageId: 'model-leaderboard',
+      sourcePageId: spec.sourcePageId ?? 'model-leaderboard',
       ...(spec.practicalFallback ? { scoringRole: 'practical-fallback' } : {}),
       sourceRecordId: LONGCAT_20_SOURCE_RECORD_ID,
       sourceField: spec.sourceField,

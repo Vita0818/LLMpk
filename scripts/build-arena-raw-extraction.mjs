@@ -31,37 +31,37 @@ const leaderboardDefinitions = [
   {
     metricId: 'arena_text_instruction',
     sourceLeaderboard: 'Arena Text — Instruction Following',
-    sourceUrl: 'https://arena.ai/leaderboard/text/instruction-following',
+    sourceUrl: 'https://arena.ai/leaderboard/chat/text/instruction-following',
     snapshotFile: 'arena_subpage_arena_text_instruction.html',
   },
   {
     metricId: 'arena_text_multiturn',
     sourceLeaderboard: 'Arena Text — Multi-Turn',
-    sourceUrl: 'https://arena.ai/leaderboard/text/multi-turn',
+    sourceUrl: 'https://arena.ai/leaderboard/chat/text/multi-turn',
     snapshotFile: 'arena_subpage_arena_text_multiturn.html',
   },
   {
     metricId: 'arena_text_creative',
     sourceLeaderboard: 'Arena Text — Creative Writing',
-    sourceUrl: 'https://arena.ai/leaderboard/text/creative-writing',
+    sourceUrl: 'https://arena.ai/leaderboard/chat/text/creative-writing',
     snapshotFile: 'arena_subpage_arena_text_creative.html',
   },
   {
     metricId: 'arena_text_hard',
     sourceLeaderboard: 'Arena Text — Hard Prompts',
-    sourceUrl: 'https://arena.ai/leaderboard/text/hard-prompts',
+    sourceUrl: 'https://arena.ai/leaderboard/chat/text/hard-prompts',
     snapshotFile: 'arena_subpage_arena_text_hard.html',
   },
   {
     metricId: 'arena_text_math',
     sourceLeaderboard: 'Arena Text — Math',
-    sourceUrl: 'https://arena.ai/leaderboard/text/math',
+    sourceUrl: 'https://arena.ai/leaderboard/chat/text/math',
     snapshotFile: 'arena_subpage_arena_text_math.html',
   },
   {
     metricId: 'arena_text_coding',
     sourceLeaderboard: 'Arena Text — Coding',
-    sourceUrl: 'https://arena.ai/leaderboard/text/coding',
+    sourceUrl: 'https://arena.ai/leaderboard/chat/text/coding',
     snapshotFile: 'arena_subpage_arena_text_coding.html',
   },
   {
@@ -73,7 +73,7 @@ const leaderboardDefinitions = [
   {
     metricId: 'arena_search',
     sourceLeaderboard: 'Arena Search — Overall',
-    sourceUrl: 'https://arena.ai/leaderboard/search',
+    sourceUrl: 'https://arena.ai/leaderboard/chat/search',
     snapshotFile: 'arena_subpage_arena_search.html',
   },
 ];
@@ -326,6 +326,30 @@ function buildAgentMetrics() {
   const metrics = {};
 
   for (const metric of agentDefinition.metrics) {
+    if (metric.metricId === 'arena_agent_bash_recovery'
+      && sourceRows.every(entry => !Number.isFinite(entry.signalScores?.bash_recovery_steps)
+        && Number.isFinite(entry.signalScores?.bash_reliability_no_prereq))) {
+      // Reliability is a different task definition, not an alias for recovery.
+      // Keep the previously published recovery evidence and its original dates.
+      const previousPath = process.env.ARENA_PREVIOUS_EXTRACTION_PATH;
+      const previous = previousPath && existsSync(previousPath)
+        ? JSON.parse(readFileSync(previousPath, 'utf8')) : null;
+      const retained = previous?.metrics?.arena_agent_bash_recovery;
+      if (previous?.schemaVersion !== 'arena-raw-extraction/v1' || !retained?.rows?.length
+        || !retained.rows.every(row => Number.isFinite(row.rawValue)
+          && row.rawValue === row.sourceRecord?.signalScores?.bash_recovery_steps)) {
+        fail('Arena replaced Bash Recovery with Bash Reliability. Supply ARENA_PREVIOUS_EXTRACTION_PATH to retain the original recovery evidence; do not substitute the new signal.');
+      }
+      metrics[metric.metricId] = {
+        ...retained,
+        retention: {
+          reason: 'Upstream now publishes bash_reliability_no_prereq, a different task from bash_recovery_steps.',
+          sourceSnapshotSha256: createHash('sha256').update(readFileSync(previousPath)).digest('hex'),
+          retainedAt: extractedAt,
+        },
+      };
+      continue;
+    }
     const rows = sourceRows.map((entry, sourceOrder) => createAgentRow(entry, metric, sourceOrder));
     metrics[metric.metricId] = {
       sourceUrl: agentDefinition.sourceUrl,
@@ -353,6 +377,9 @@ const manifest = {
   source: {
     name: 'Arena.ai',
     collectionMethod: 'Official Arena.ai leaderboard Next.js payload captured from each canonical source URL.',
+    ...(existsSync(resolve(snapshotDirectory, 'manifest.json'))
+      ? { captureManifest: JSON.parse(readFileSync(resolve(snapshotDirectory, 'manifest.json'), 'utf8')) }
+      : {}),
   },
   metrics,
 };

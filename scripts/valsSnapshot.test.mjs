@@ -11,7 +11,7 @@ const manifest = JSON.parse(readFileSync(new URL('../src/data/valsReviewedMappin
 assert.deepEqual(snapshot.benchmarks.map(item => item.metadata.slug), VALS_BENCHMARK_SLUGS);
 assert.equal(snapshot.counts.modelIds, new Set(snapshot.benchmarks.flatMap(item => item.metadata.models)).size);
 assert.equal(snapshot.counts.observedRows, snapshot.benchmarks.reduce((sum, item) => sum + item.observedRows, 0));
-assert.deepEqual(validateReviewedValsRows(snapshot.benchmarks, manifest), { reviewedModels: 24, reviewedRows: 198 });
+assert.deepEqual(validateReviewedValsRows(snapshot.benchmarks, manifest), { reviewedModels: 28, reviewedRows: 234 });
 for (const benchmark of snapshot.benchmarks) {
   validateValsBenchmarkPayload(benchmark, benchmark.metadata.slug, { now: snapshot.fetchedAt });
   assert.match(benchmark.source.sha256, /^[a-f0-9]{64}$/u);

@@ -1,14 +1,14 @@
 {
   "schemaVersion": "frontiercode-source-snapshot/v1",
-  "fetchedAt": "2026-10-02T16:15:16.979Z",
+  "fetchedAt": "2026-10-13T05:16:25.658Z",
   "revision": "1.1",
   "dataset": "main",
   "taskCount": 100,
   "source": {
     "url": "https://cognition.com/data/frontiercode-leaderboard/data.json",
     "leaderboardUrl": "https://cognition.com/frontiercode",
-    "sha256": "e609a8f3c134b3747ed323f72475bcc7d3012588a880f598123e03cea738b54e",
-    "rawSnapshotFile": ".cache/frontiercode/20261002T161516Z.json"
+    "sha256": "913a7befb74bf6facf490099cbe982dc17972ee5c4a5ff859eb918d2c5e4d3bf",
+    "rawSnapshotFile": ".cache/new-models-2026-10-13/raw/frontiercode/20261013T051625Z.json"
   },
   "rows": [
     {
@@ -114,6 +114,46 @@
       "passRate": 0.5115,
       "mergeabilityScore": 0.4621,
       "flaggedRate": 0.0465
+    },
+    {
+      "name": "Claude Haiku 5.5",
+      "harness": "claude-code",
+      "effort": "low",
+      "passRate": 0.385,
+      "mergeabilityScore": 0.3476,
+      "flaggedRate": null
+    },
+    {
+      "name": "Claude Haiku 5.5",
+      "harness": "claude-code",
+      "effort": "medium",
+      "passRate": 0.462,
+      "mergeabilityScore": 0.4163,
+      "flaggedRate": null
+    },
+    {
+      "name": "Claude Haiku 5.5",
+      "harness": "claude-code",
+      "effort": "high",
+      "passRate": 0.466,
+      "mergeabilityScore": 0.4189,
+      "flaggedRate": null
+    },
+    {
+      "name": "Claude Haiku 5.5",
+      "harness": "claude-code",
+      "effort": "xhigh",
+      "passRate": 0.508,
+      "mergeabilityScore": 0.4583,
+      "flaggedRate": null
+    },
+    {
+      "name": "Claude Haiku 5.5",
+      "harness": "claude-code",
+      "effort": "max",
+      "passRate": 0.5165,
+      "mergeabilityScore": 0.4636,
+      "flaggedRate": null
     },
     {
       "name": "GPT-6 Sol",

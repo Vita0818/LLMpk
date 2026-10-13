@@ -200,8 +200,8 @@ assert.deepEqual(
 );
 assert.equal(
   VERIFIED_RECOVERED_SOURCE_OBSERVATIONS.length,
-  11,
-  'LongCat 2.0 recovery must retain every currently published numeric field without filling missing GDPval or speed values.',
+  15,
+  'LongCat 2.0 recovery must retain current numeric fields, including real zero TB4, GDP.pdf and speed, without filling missing GDPval.',
 );
 assert.ok(
   VERIFIED_RECOVERED_SOURCE_OBSERVATIONS.some((observation) => (
@@ -1273,11 +1273,11 @@ for (const preset of BUILT_IN_CONFIGURATION_PRESETS.filter(({ access }) => acces
   );
 }
 interface ExpectedSubscriptionPreset {
-  basePresetId: string;
+  basePresetId: string | null;
   providerLabel: string;
   monthlyPriceUSD: number;
-  apiEquivalentCostUSD: number;
-  usableQuotaFraction: number;
+  apiEquivalentCostUSD: number | null;
+  usableQuotaFraction: number | null;
   pricingEvidenceId: string;
 }
 
@@ -1493,6 +1493,10 @@ assert.equal(findMeasuredSubscriptionPricing('ChatGPT Plus', 'GPT-5.6 Terra'), u
 assert.equal(findMeasuredSubscriptionPricing('Claude Pro', 'Claude Fable 5.1'), undefined);
 assert.equal(findMeasuredSubscriptionPricing('Google AI Pro', 'Gemini 3.8 Flash'), undefined);
 assert.equal(getSubscriptionPricingEvidence('unreviewed-source'), undefined);
+expectedSubscriptionPresets.set('builtin.subscription.muse-code-maximum.muse-wonder-full.max', {
+  basePresetId: null, providerLabel: 'Muse Code Maximum Usage', monthlyPriceUSD: 200,
+  apiEquivalentCostUSD: null, usableQuotaFraction: null, pricingEvidenceId: 'meta-muse-code-maximum-2026-10-12',
+});
 const subscriptionPresets = BUILT_IN_CONFIGURATION_PRESETS
   .filter(({ access }) => access === 'subscription');
 assert.equal(subscriptionPresets.length, expectedSubscriptionPresets.size);
@@ -1512,6 +1516,11 @@ for (const preset of subscriptionPresets) {
     usableQuotaFraction: expected.usableQuotaFraction,
     pricingEvidenceId: expected.pricingEvidenceId,
   });
+  if (expected.basePresetId === null) {
+    assert.equal(preset.productLineId, 'muse_wonder_full');
+    assert.equal(preset.subscriptionData?.apiEquivalentCostUSD, null);
+    continue;
+  }
   const basePreset = ALL_CONFIGURATION_PRESET_CANDIDATES.find(
     (candidate) => candidate.id === expected.basePresetId,
   );
@@ -1893,13 +1902,17 @@ for (const box of installedPresetBoxes) {
         ? 'Claude Subscription'
         : preset.subscriptionData.planName.startsWith('Google')
           ? 'Google Subscription'
+          : preset.subscriptionData.planName.startsWith('Muse Code')
+            ? 'Meta Subscription'
           : 'xAI Subscription';
     assert.equal(config.access.entryPoint, expectedEntryPoint);
     assert.equal(config.provider, preset.subscriptionData.planName);
     assert.deepEqual(config.subscriptionData, preset.subscriptionData);
     const expected = expectedSubscriptionPresets.get(preset.id)!;
     const api = config.openRouterData;
-    if (api) {
+    if (expected.apiEquivalentCostUSD === null || expected.usableQuotaFraction === null) {
+      assert.equal(scoreByConfigurationId.get(box.id)?.practicalBreakdown.effectiveScenarioCostUSD, null);
+    } else if (api) {
       const expectedCost = (api.inputPricePerMToken + 0.25 * api.outputPricePerMToken)
         * expected.monthlyPriceUSD
         / (expected.apiEquivalentCostUSD * expected.usableQuotaFraction);
@@ -2599,7 +2612,12 @@ for (const release of [
   const stack = reconciledV3Store.getLinkedCardStack(box.id);
   assert.equal(stack[0].card.id, `card-aa-coding-agent-${release.cardPrefix}-max`);
   assert.ok(stack.every(({ card }) => card.metadataJson?.scope?.productLineId === release.line));
-  assert.equal(scoreByConfigurationId.get(box.id)?.eligibleForGlobalLeaderboard, false, 'Fresh CLI results must not override missing dialogue/reasoning coverage.');
+  const currentScore = scoreByConfigurationId.get(box.id)!;
+  assert.equal(currentScore.domainScores.chatting.coverage, 1,
+    'New official Arena Text records now complete the dialogue evidence.');
+  assert.ok(currentScore.domainScores.reasoning.coverage >= 0.6);
+  assert.equal(currentScore.eligibleForGlobalLeaderboard, true,
+    'The newly observed non-CLI evidence permits ranking under the unchanged coverage gates.');
   const currentRoutes = BUILT_IN_CONFIGURATION_PRESETS.filter((preset) => preset.productLineId === release.line);
   assert.equal(currentRoutes.filter((preset) => preset.access === 'api').length, 1);
   assert.equal(currentRoutes.filter((preset) => preset.access === 'subscription').length, 2);

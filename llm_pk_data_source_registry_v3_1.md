@@ -61,3 +61,17 @@ Google AI Pro / Ultra 保留旧估算 $260 / $5,200，GPT-5.6 Terra 的 ChatGPT 
 配置详情的 Vals 区域单独披露来源 effort、评测环境、榜单更新时间、公布分、原模型分和标准误。官方图表模块公开逐模型/评测的拒答和备用统计；获取器只解析静态数据声明，不执行上游脚本。元数据的 benchmark ID、模型 ID 和公布分必须与 JSON 当前运行匹配。已披露备用任务时使用官方 `noFallbackScorePct`，将备用任务计为失败；例如 Opus 5.5 的 Code Migration 从公布的 66.646% 改用官方原模型口径 18.416%，106 个备用任务保留可查。未披露备用信息时采用公布分并标注未知。SE 不变成 95% CI，原模型口径缺少独立 SE 时也不借用混合公布分的 SE。`harness=null` 保留为环境未披露，Vibe Code 的 OpenHands 环境保留原名。
 
 Muse Spark 1.3 Max 与 XHigh 分别存卡；Max 不连接 XHigh 配置。Vals 的 Qwen3.8 Max 没有证明是本站固定的 0902 版本，暂不连接。未披露 effort 使用明确的 Default 条件；只允许已经声明的向上档位回退，`0.99` 等未解释数值不自动等价于 XHigh。当前未连接的版本、产品和档位继续保留在完整来源快照中。
+
+## 2026-10-13 新模型与来源刷新
+
+本次增加四条独立产品线：[Muse Wonder / Wonder Full](https://dev.meta.ai/models/muse-wonder)、[Claude Haiku 5.5](https://www.anthropic.com/claude-haiku-5-5)、[Mistral Large 4 Preview](https://mistral.ai/news/mistral-large-4/)。目录为 34 条产品线 / 52 个内部配置，公开页合并为 36 个代表配置，其中 21 个达到六域及总体覆盖门槛。原有 Scoring v3.1 的 26 项指标与权重保持不变。
+
+Wonder 与 Full 各自保留 AA Max 模型和 Muse Code 执行证据；不合并或跨型号补分。Full 当前只通过 Muse Code Power / Maximum 订阅提供，官方月费分别为 $50 / $200。本站采用 Maximum 访问代表，月费显示 $200；API 定价及可用 API 等效额度未披露，额度、成本调整和实用分保持 null。其 Vals 来源以 AA 固定模型 ID `muse-wonder-full` 与 2026-10-12 发布日期双重锁定，不伪造 OpenRouter 版本。
+
+Haiku 5.5 保留 Low、Medium、High、XHigh、Max 独立来源，公开页采用已测 Max Claude Code 执行。FrontierCode Main Max 通过率为 51.65%；新行的 flagged rate 未公布，保留 null。Devin Fusion 的 Opus 主模型 / Haiku 副模型结果不归给 Haiku 单模型。Haiku 基础输入 / 输出价格 $0.10 / $0.50 对应不超过 100K 的提示长度，超过该阈值为 $0.50 / $2.50；批处理另存，不冒充普通 API 价格。
+
+新的 Vals 抓取日期为 10 月 13 日，九个来源页面均更新于 10 月 12 日；完整档案包含 114 个模型/执行 ID 与 9,137 条结果。28 个已审核身份生成 234 张来源卡，为 43 个既有配置提供证据。DesignArena 10 月 13 日镜像包含 153 行，15 个审核来源连接 24 个配置；新增 Haiku 5.5 和 Mistral Large 4 的完整版本映射，未披露 effort 继续标记 Default。
+
+AA GDP.pdf 主榜初始化只提供 32 个选中模型；[官方模型比较页](https://artificialanalysis.ai/models/mistral-medium-3-5)公开完整原始比较记录。本站按精确 slug 和发布日期连接，静态解析模型自身及对比表，补齐 212 条 GDP.pdf 记录；与初始榜重复的值必须一致。补充行保留实际来源页和字段，不复制继任模型或不同 effort 的成绩。LongCat 2.0 的 TB4 原始 0 分与 GDP.pdf 原始 6.4% 均保留，不将 0 当成缺测。
+
+Arena Text / Search 迁移到 `/leaderboard/chat/`。本次通过正常浏览器读取九个官方页面的完整内嵌 Flight 数据，静态解析并保存抓取方式与哈希；没有执行来源脚本。Arena 的新 Bash Reliability（`bash_reliability_no_prereq`）与旧 Bash Recovery（`bash_recovery_steps`）定义不同，不能替换旧计分项。旧恢复记录保留原值和 10 月 2 日日期，新可靠性字段留在原始档案中。Wonder、Full、Haiku 尚缺 Chatting 来源，继续显示领域分和覆盖状态而不分配总分或名次。

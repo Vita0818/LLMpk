@@ -31,7 +31,7 @@ interface HarnessCodingAgentRow {
   deepSwe?: number;
   sweAtlasQna?: number;
   terminalBenchV2?: number;
-  meanCostUsd: number;
+  meanCostUsd: number | null;
   meanAgentWallTimeSec: number;
   meanSteps: number;
   harnessVersion: string;
@@ -351,6 +351,24 @@ interface StructuredHarnessBinding {
  */
 const STRUCTURED_HARNESS_BINDINGS: readonly StructuredHarnessBinding[] = [
   ...(['low', 'medium', 'high', 'xhigh', 'max'] as const).map((profile): StructuredHarnessBinding => ({
+    key: `claude-code-claude-haiku-5-5-${profile}`,
+    expectedDisplayLabel: `Claude Code - Haiku 5.5 (${profile})`,
+    harness: 'Claude Code',
+    productLineId: 'claude_haiku_55',
+    productLineName: 'Claude Haiku 5.5',
+    canonicalProfileKey: `claude-haiku-5-5-${profile}-claude-code`,
+    vendorId: 'anthropic', vendorName: 'Anthropic', tier: 'official',
+  })),
+  ...(['muse-wonder', 'muse-wonder-full'] as const).map((model): StructuredHarnessBinding => ({
+    key: `muse-code-${model}-max`,
+    expectedDisplayLabel: `Muse Code - ${model === 'muse-wonder' ? 'Muse Wonder' : 'Muse Wonder Full'} (max)`,
+    harness: 'Muse Code',
+    productLineId: model === 'muse-wonder' ? 'muse_wonder' : 'muse_wonder_full',
+    productLineName: model === 'muse-wonder' ? 'Muse Wonder' : 'Muse Wonder Full',
+    canonicalProfileKey: `${model}-max-muse-code`,
+    vendorId: 'meta', vendorName: 'Meta', tier: 'official',
+  })),
+  ...(['low', 'medium', 'high', 'xhigh', 'max'] as const).map((profile): StructuredHarnessBinding => ({
     key: `codex-gpt-6-1-sol-${profile}`,
     expectedDisplayLabel: profile === 'max'
       ? 'Codex - GPT-6.1 Sol (max)'
@@ -622,7 +640,7 @@ interface StructuredCodingAgentRecord {
     mean?: { reward?: number };
   }>;
   mean?: {
-    costUsd?: number;
+    costUsd?: number | null;
     agentWallTimeSec?: number;
     steps?: number;
   };
@@ -671,7 +689,7 @@ function projectStructuredHarnessRow(
   if (
     !sourceRecordId
     || indexScore === undefined
-    || meanCostUsd === undefined
+    || (meanCostUsd === undefined && record.mean?.costUsd !== null)
     || meanAgentWallTimeSec === undefined
     || meanSteps === undefined
   ) {
@@ -695,7 +713,7 @@ function projectStructuredHarnessRow(
     deepSwe: rewardFor('deep-swe'),
     sweAtlasQna: rewardFor('swe-atlas-qna'),
     terminalBenchV2: rewardFor('terminal-bench-v2', 'terminal-bench-v2.1'),
-    meanCostUsd,
+    meanCostUsd: meanCostUsd ?? null,
     meanAgentWallTimeSec,
     meanSteps,
     harnessVersion: harnessVersionRange(record),

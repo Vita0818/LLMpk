@@ -16,7 +16,7 @@ assert.equal(snapshot.scoringVersion, SCORING_CONFIG.version);
 for (const preset of BUILT_IN_CONFIGURATION_PRESETS) {
   assert.equal(RETIRED_READER_MODEL_GROUP_KEYS.has(preset.productLineId), false);
 }
-assert.equal(READER_CURRENT_MODEL_GROUP_KEYS.size, 30);
+assert.equal(READER_CURRENT_MODEL_GROUP_KEYS.size, 34);
 let ranked = 0;
 for (const score of snapshot.scores) {
   assert.deepEqual(Object.keys(score.domainScores), [...DOMAIN_IDS]);
@@ -49,7 +49,7 @@ for (const score of snapshot.scores) {
 assert.ok(ranked>5 && ranked<snapshot.scores.length,'Covered and insufficient configurations must both remain visible.');
 
 const freshCards=VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_MODEL_CARDS.filter(c=>c.id.startsWith('card-frontiercode-current-'));
-assert.equal(freshCards.length,37);
+assert.equal(freshCards.length,42);
 for (const card of freshCards) {
   const name = card.exactSourceModelName.split(' (')[0];
   const effort = card.metadataJson?.execution?.effort;
@@ -62,6 +62,18 @@ for (const card of freshCards) {
 }
 assert.throws(()=>validateFrontierCodePayload({v1_1:{subsets:{main:150},models:[]}}));
 assert.throws(()=>validateFrontierCodePayload({v1_1:{subsets:{main:100},models:['Unscoped model'],harness:{},data:{}}}));
+const unpublishedFlagAudit = {v1_1:{subsets:{main:100},models:Array.from({length:30},(_,i)=>`Model ${i}`),
+  harness:Object.fromEntries(Array.from({length:30},(_,i)=>[`Model ${i}`,'claude-code'])),
+  efforts:Object.fromEntries(Array.from({length:30},(_,i)=>[`Model ${i}`,['max']])),
+  data:Object.fromEntries(Array.from({length:30},(_,i)=>[`Model ${i}`,{max:{main:{correct:0.5165,new_score:0.4636,flagged_rate:null as number|null}}}]))}};
+assert.ok(validateFrontierCodePayload(unpublishedFlagAudit).every(row=>row.passRate===0.5165&&row.flaggedRate===null),
+  'Published pass rates remain usable when the source explicitly leaves the flagging audit unknown.');
+const invalidPassRate=structuredClone(unpublishedFlagAudit);
+invalidPassRate.v1_1.data['Model 0'].max.main.correct=NaN;
+assert.throws(()=>validateFrontierCodePayload(invalidPassRate));
+const invalidFlagRate=structuredClone(unpublishedFlagAudit);
+invalidFlagRate.v1_1.data['Model 0'].max.main.flagged_rate=-0.1;
+assert.throws(()=>validateFrontierCodePayload(invalidFlagRate));
 
 const base:SourceModelCard={id:'card-openrouter-test-model',source:'openrouter',exactSourceModelName:'test/model',latestSnapshotDate:'2026-10-02',
   metadataJson:{scope:{productLineId:'test_model'},sourceIdentity:{sourceRecordId:'test/model'}}};

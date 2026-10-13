@@ -35,9 +35,9 @@ The production site is expected at:
 
 ## Current scoring policy
 
-The reviewed successor-pruned inventory contains 30 model families / 48 configurations.
+The reviewed successor-pruned inventory contains 34 model families / 52 configurations.
 The reader view folds equivalent model/harness/radar access routes, preferring
-the highest subscription tier. Its table and all selectors share the same 32
+the highest subscription tier. Its table and all selectors share the same 36
 visible configurations; the complete scoring inventory stays available internally.
 Scoring v3.1 uses 26 metrics, including seven standalone Vals benchmarks, and
 requires every domain to reach 60% weighted observed evidence and
@@ -51,8 +51,8 @@ observations are null; insufficient configurations remain inspectable.
 Refresh the current FrontierCode 1.1 Main evidence with `npm run refresh:frontiercode`.
 DesignArena Overall Frontend is sourced through OpenRouter's authenticated
 Benchmark API and connected through an explicit, reviewed mapping manifest.
-The October 8 capture links 12 current model families / 22 configurations,
-including two explicitly reviewed Opus subscription variants added October 11.
+The October 13 capture links 14 current model families / 24 configurations,
+including the explicitly reviewed Haiku 5.5 and Mistral Large 4 releases.
 Undisclosed effort keeps its Default fallback; missing versions stay missing.
 
 ```bash
@@ -68,11 +68,11 @@ model ID or selected by highest Elo.
 ## Vals AI evidence and scoring
 
 Vals AI is available in the source-card pool and in an expandable section on
-configuration and comparison details. The October 12 capture contains the
+configuration and comparison details. The October 13 capture contains the
 Vals Index 2.1 and eight standalone components: Finance Agent v2, Excel
 Modeling, Vibe Code Bench 1.1, Code Migration, Terminal-Bench 4.0, Legal
 Research, Harvey HLAB, and Tax Agent Bench. Their source update dates are
-October 7–8. Seven standalone tasks participate in v3.1; Vals Index and Vals
+October 12. Seven standalone tasks participate in v3.1; Vals Index and Vals
 Terminal-Bench remain references to avoid duplicate aggregation and task weighting.
 
 ```bash
@@ -87,11 +87,47 @@ SHA-256 hashes. `src/data/valsReviewedMappings.json` pins the admitted model
 version and each benchmark's actual execution settings. Changed or missing
 reviewed executions fail refresh before the published snapshot is replaced.
 
-The capture has 111 source model/execution identifiers and 8,819 result rows.
-Reviewed mappings produce 198 cards from 24 source identities, including a
+The capture has 114 source model/execution identifiers and 9,137 result rows.
+Reviewed mappings produce 234 cards from 28 source identities, including a
 separate, unlinked Muse Spark Max identity. Source evidence attaches
-to 39 existing configurations. The reader inventory remains 30 model product
-lines / 48 configurations / 32 visible representatives.
+to 43 existing configurations. The reader inventory contains 34 model product
+lines / 52 configurations / 36 visible representatives.
+
+## October 13 model refresh
+
+The current inventory adds Muse Wonder Max with Muse Code, Muse Wonder Full
+Max through the Muse Code Maximum Usage subscription, Claude Haiku 5.5 Max
+with Claude Code, and Mistral Large 4 Preview High through its public API.
+Wonder and Wonder Full have separate model identities. Spark 1.3 and Mistral
+Medium 3.5 remain distinct available product lines. Haiku 4.5 is superseded.
+
+All four releases have nine explicitly reviewed Vals runs. Haiku and Mistral
+also have dated DesignArena mappings; Haiku's five FrontierCode efforts retain
+their actual Claude Code harness. No Devin Fusion multi-model score is assigned
+to Haiku alone. Full's Vals identity is pinned to its AA model record and
+October 12 release because no OpenRouter API route exists for that model.
+
+Muse Code Maximum Usage is officially $200/month, but its API-equivalent
+allowance is unpublished. The detail view shows the monthly price and an
+unknown allowance; cost adjustment and practical score remain null. Wonder,
+Wonder Full and Haiku still lack Arena Chatting evidence and receive no total
+or rank under the existing coverage gates. Mistral Large 4 qualifies. The
+reader inventory has 21 ranked and 15 insufficient representatives.
+
+AA GDP.pdf's initial chart selects only 32 models. The official public model
+comparison records provide 212 exact GDP.pdf scores, including the profile
+model itself. The fetcher joins published slugs and release dates, rejects
+conflicting overlap values, and records the actual comparison-page provenance.
+This keeps chart selection from deleting valid measurements. LongCat's real
+zero Terminal-Bench score and its published GDP.pdf result remain real data.
+
+Arena Text/Search now use the `/leaderboard/chat/` paths. This refresh captured
+the nine public pages' complete inline Flight data through the normal browser
+after HTTP capture returned Cloudflare 403. Capture method, timestamps and
+hashes are recorded separately. Arena's new `bash_reliability_no_prereq` is
+not substituted for `bash_recovery_steps`; historical recovery evidence keeps
+its October 2 dates. FrontierCode's unpublished flagging rates remain null
+while its published pass rates remain usable. Scoring weights stay at v3.1.
 
 The detail section displays source effort, benchmark environment, standard
 error, update date and published versus original-model scores. Vals runs retain their own execution identity;

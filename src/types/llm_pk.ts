@@ -92,8 +92,8 @@ export interface SubscriptionCostData {
   planName: string;
   monthlyPriceUSD: number;
   /** Full-plan basis; multiply by usableQuotaFraction exactly once. */
-  apiEquivalentCostUSD: number;
-  usableQuotaFraction: number;
+  apiEquivalentCostUSD: number | null;
+  usableQuotaFraction: number | null;
   /** Reviewed source record, or an explicitly retained legacy estimate. */
   pricingEvidenceId?: string;
 }
@@ -133,6 +133,7 @@ export interface LLMConfiguration {
       | 'ChatGPT Subscription'
       | 'Claude Subscription'
       | 'Google Subscription'
+      | 'Meta Subscription'
       | 'xAI Subscription'
       | 'vLLM Local';
     routingPolicy?: 'default' | 'price' | 'throughput' | 'fixed';

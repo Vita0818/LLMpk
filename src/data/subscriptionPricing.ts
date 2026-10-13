@@ -10,7 +10,7 @@ export const SEMIANALYSIS_SUBSCRIPTION_SOURCE =
 
 export interface SubscriptionPricingEvidence {
   id: string;
-  kind: 'measured' | 'legacy-estimate';
+  kind: 'measured' | 'legacy-estimate' | 'official-plan-only';
   checkedOn: string;
   sourceUrl?: string;
   publishedOn?: string;
@@ -69,6 +69,12 @@ export const LEGACY_SUBSCRIPTION_PRICING_EVIDENCE: SubscriptionPricingEvidence =
   checkedOn: SUBSCRIPTION_PRICING_CHECKED_ON,
 };
 
+export const MUSE_CODE_SUBSCRIPTION_PLAN_EVIDENCE: SubscriptionPricingEvidence = {
+  id: 'meta-muse-code-maximum-2026-10-12', kind: 'official-plan-only',
+  checkedOn: '2026-10-13', publishedOn: '2026-10-12',
+  sourceUrl: 'https://dev.meta.ai/models/muse-wonder',
+};
+
 export function findMeasuredSubscriptionPricing(
   planName: string,
   modelName: string,
@@ -81,6 +87,7 @@ export function findMeasuredSubscriptionPricing(
 export function getSubscriptionPricingEvidence(
   id: string | undefined,
 ): SubscriptionPricingEvidence | undefined {
+  if (id === MUSE_CODE_SUBSCRIPTION_PLAN_EVIDENCE.id) return MUSE_CODE_SUBSCRIPTION_PLAN_EVIDENCE;
   if (id === LEGACY_SUBSCRIPTION_PRICING_EVIDENCE.id) {
     return LEGACY_SUBSCRIPTION_PRICING_EVIDENCE;
   }
