@@ -69,8 +69,11 @@ model ID or selected by highest Elo.
 
 ## Vals AI evidence and scoring
 
-Vals AI is available in the source-card pool and in an expandable section on
-configuration and comparison details. The October 24 capture contains the
+Vals AI is available in the source-card pool and in the shared metric list on
+configuration and comparison details. All nine metrics appear once, alongside
+the other benchmarks, with the two non-scoring rows visibly marked as references.
+Source links and execution conditions remain available on their rows; there is
+no separate Vals accordion. The October 24 capture contains the
 Vals Index 2.2 and eight standalone components: Finance Agent v2, Excel
 Modeling, Vibe Code Bench 1.1, Code Migration, Terminal-Bench 4.0, Legal
 Research, HLAB-Vals 1.1, and Tax Agent Bench. Their source update dates range

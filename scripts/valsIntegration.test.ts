@@ -10,7 +10,7 @@ import {
 import { BUILT_IN_CONFIGURATION_PRESETS, BUILT_IN_CONFIGURATION_MODEL_GROUP_COUNT } from '../src/data/builtInConfigurationPresets';
 import { ALL_METRIC_DEFINITIONS, processLLMpkBatchScoring } from '../src/engine/scoringEngine';
 import { buildRepresentativeConfigurationQueue } from '../src/utils/playModeQueue';
-import { buildConfigurationMetricRows, buildValsMetricRows } from '../src/components/ConfigurationDetailContent';
+import { buildConfigurationMetricRows } from '../src/components/ConfigurationDetailContent';
 import type { SourceModelCard } from '../src/types/admin_mapping';
 import type { PublicLeaderboardSnapshot } from '../src/types/publicLeaderboard';
 
@@ -75,13 +75,17 @@ assert.notEqual(migration.rawValue, index.tasks.code_migration['anthropic/claude
   'The standalone full migration run must not be replaced by the index subset.');
 assert.equal(sonnet.config.valsData!.find(row => row.metricId === 'vals_index_v22')!.hasRefusalFallbackNotice, true);
 assert.equal(sonnet.config.valsData!.find(row => row.metricId === 'vals_vibe_code_v11')!.sourceHarness, 'OpenHands');
-assert.equal(buildConfigurationMetricRows(sonnet).length, 30, 'All 26 weighted metrics and four practical fields must be visible.');
-assert.equal(buildValsMetricRows(sonnet).find(row => row.id === 'vals_code_migration_v1')!.value, '69.83%');
+assert.equal(buildConfigurationMetricRows(sonnet).length, 32, 'All 26 weighted metrics, two references and four practical fields share one list.');
+const migrationRow = buildConfigurationMetricRows(sonnet).find(row => row.id === 'vals_code_migration_v1')!;
+assert.equal(migrationRow.value, '69.8%');
+assert.equal(migrationRow.sourceUrl, migration.sourceUrl);
+assert.match(migrationRow.title, /SE/u);
+assert.match(migrationRow.title, /来源更新/u);
 const zero = structuredClone(sonnet);
-zero.config.valsData![0].rawValue = 0;
-assert.equal(buildValsMetricRows(zero)[0].value, '0.00%');
-zero.config.valsData![0].rawValue = null;
-assert.equal(buildValsMetricRows(zero)[0].value, '--');
+zero.config.observations.vals_index_v22.rawValue = 0;
+assert.equal(buildConfigurationMetricRows(zero).find(row => row.id === 'vals_index_v22')!.value, '0.0%');
+zero.config.observations.vals_index_v22.rawValue = null;
+assert.equal(buildConfigurationMetricRows(zero).find(row => row.id === 'vals_index_v22')!.value, '--');
 
 Reflect.deleteProperty(globalThis, 'localStorage');
 const { AdminMappingStore } = await import('../src/store/adminMappingStore');

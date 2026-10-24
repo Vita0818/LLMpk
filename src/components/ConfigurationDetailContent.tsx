@@ -3,7 +3,7 @@ import { getCompactMetricName } from '../data/compactMetricNames';
 import { getSubscriptionPricingEvidence } from '../data/subscriptionPricing';
 import { VALS_METRIC_DEFINITIONS } from '../data/valsMetricDefinitions';
 import { ALL_METRIC_DEFINITIONS, DOMAIN_DEFINITIONS } from '../engine/scoringEngine';
-import type { DomainId } from '../types/llm_pk';
+import type { DomainId, MetricDefinition } from '../types/llm_pk';
 import type { PublicLeaderboardScore } from '../types/publicLeaderboard';
 import { getProviderBrandTheme } from '../utils/providerColors';
 import { RadarChart } from './RadarChart';
@@ -24,6 +24,8 @@ export interface ConfigurationMetricRow {
   color: string;
   domainId: DomainId | null;
   title: string;
+  sourceUrl?: string;
+  referenceOnly?: boolean;
 }
 
 export const formatConfigurationScore = (score: number | null | undefined) =>
@@ -93,19 +95,43 @@ const formatCostValue = (value: number) =>
 export const buildConfigurationMetricRows = (
   scoreItem: PublicLeaderboardScore
 ): ConfigurationMetricRow[] => {
+  const displayedMetrics: MetricDefinition[] = [
+    ...ALL_METRIC_DEFINITIONS,
+    ...VALS_METRIC_DEFINITIONS.filter(metric => metric.scoringWeightInDomain === 0).map(metric => ({
+      id: metric.id,
+      name: metric.name,
+      source: 'Vals AI' as const,
+      domain: metric.domain,
+      metricType: 'accuracy' as const,
+      internalWeightInDomain: 0,
+      higherIsBetter: true,
+      unit: '%',
+      description: '仅参考，不参与计分。',
+      officialUrl: `https://www.vals.ai/benchmarks/${metric.slug}`,
+    })),
+  ];
   const benchmarkRows = CONFIGURATION_DETAIL_DOMAIN_ORDER.flatMap((domainId) => {
     const domainDefinition = DOMAIN_DEFINITIONS[domainId];
-    const scoredMetrics = ALL_METRIC_DEFINITIONS.filter(
+    const domainMetrics = displayedMetrics.filter(
       (metric) => metric.domain === domainId
     );
-    return scoredMetrics.map((metric) => {
+    return domainMetrics.map((metric) => {
       const rawValue = scoreItem.config.observations[metric.id]?.rawValue;
       const formattedValue = formatConfigurationRawMetricValue(rawValue, metric.unit);
       const valsEvidence = scoreItem.config.valsData?.find(item => item.metricId === metric.id);
       const sourceConditions = valsEvidence
-        ? ` · Vals ${valsEvidence.sourceProfile} / ${valsEvidence.sourceHarness ?? '评测环境未披露'}${valsEvidence.scoreBasis === 'no-fallback'
-          ? ` · 原模型口径：备用任务计失败；公布分 ${((valsEvidence.publishedRawValue ?? 0) * 100).toFixed(2)}%`
-          : ' · 来源公布分'}`
+        ? ` · ${[
+          `Vals v${valsEvidence.benchmarkVersion ?? '未披露'}`,
+          `来源更新 ${valsEvidence.sourceUpdated}`,
+          `${valsEvidence.sourceProfile} / ${valsEvidence.sourceHarness ?? '评测环境未披露'}`,
+          valsEvidence.profileFallback ? '使用已审核的较低档位来源' : '',
+          valsEvidence.rawValue !== null ? `来源成绩 ${(valsEvidence.rawValue * 100).toFixed(2)}%` : '',
+          valsEvidence.standardError !== null ? `SE ${(valsEvidence.standardError * 100).toFixed(2)}（标准误）` : '',
+          valsEvidence.scoreBasis === 'no-fallback'
+            ? `原模型口径：备用任务计失败${valsEvidence.publishedRawValue !== null ? `；公布分 ${(valsEvidence.publishedRawValue * 100).toFixed(2)}%` : ''}`
+            : '来源公布分',
+          valsEvidence.fallbackCount === null ? '备用信息未披露' : `备用任务 ${valsEvidence.fallbackCount}`,
+        ].filter(Boolean).join(' · ')}`
         : '';
 
       return {
@@ -114,9 +140,11 @@ export const buildConfigurationMetricRows = (
         value: formattedValue,
         color: domainDefinition.color,
         domainId,
-        title: `${metric.name} (${domainDefinition.nameEn}) · ${'internalWeightInDomain' in metric
+        sourceUrl: valsEvidence?.sourceUrl ?? metric.officialUrl,
+        referenceOnly: metric.internalWeightInDomain === 0,
+        title: `${metric.name} (${domainDefinition.nameEn}) · ${metric.internalWeightInDomain > 0
           ? `计分权重 ${(metric.internalWeightInDomain * 100).toFixed(0)}%`
-          : '仅展示，不计分'} · Raw Value: ${formattedValue}${sourceConditions}`,
+          : '仅参考，不计分'} · Raw Value: ${formattedValue}${sourceConditions}`,
       };
     });
   });
@@ -248,65 +276,6 @@ export const ConfigurationRadar: React.FC<ConfigurationRadarProps> = ({
   );
 };
 
-export const buildValsMetricRows = (scoreItem: PublicLeaderboardScore) => (
-  VALS_METRIC_DEFINITIONS.map(metric => {
-    const evidence = scoreItem.config.valsData?.find(item => item.metricId === metric.id);
-    const value = evidence?.rawValue;
-    return {
-      id: metric.id, label: metric.name,
-      scoringWeight: metric.scoringWeightInDomain,
-      value: typeof value === 'number' && Number.isFinite(value) ? `${(value * 100).toFixed(2)}%` : '--',
-      evidence,
-      conditions: evidence
-        ? `${evidence.sourceProfile} · ${evidence.sourceHarness ?? (metric.slug === 'vals_index' ? '分项环境各异' : '环境未披露')}`
-        : '暂无匹配来源',
-    };
-  })
-);
-
-const ValsSupplementaryMetrics: React.FC<{ scoreItem: PublicLeaderboardScore }> = ({ scoreItem }) => {
-  const rows = buildValsMetricRows(scoreItem);
-  const matchedCount = rows.filter(row => typeof row.evidence?.rawValue === 'number').length;
-  return (
-    <details className="border-t border-neutral-200 pt-2 text-xs">
-      <summary className="cursor-pointer rounded px-1.5 py-1 font-semibold text-neutral-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-        Vals AI <span className="font-normal text-neutral-500">· 7 项计分，2 项参考 · {matchedCount}/{rows.length}</span>
-      </summary>
-      <div className="mt-2 px-1.5 pr-2">
-        <p className="mb-3 leading-relaxed text-neutral-500">采用官方原模型口径，备用任务计失败；未披露备用信息时保留公布分。SE 为标准误。</p>
-        <div className="grid grid-cols-1 gap-x-5 gap-y-3 sm:grid-cols-2">
-          {rows.map(row => (
-            <div key={row.id} className="min-w-0" data-vals-metric-id={row.id}>
-              <div className="flex items-baseline justify-between gap-2">
-                {row.evidence ? (
-                  <a href={row.evidence.sourceUrl} target="_blank" rel="noreferrer"
-                    className="min-w-0 truncate font-semibold text-neutral-700 underline decoration-neutral-300 underline-offset-2 hover:text-blue-600"
-                    title={`Vals ${row.label} · v${row.evidence.benchmarkVersion ?? '未披露'} · 榜单更新 ${row.evidence.sourceUpdated}${row.evidence.profileFallback ? ' · 使用已审核的较低档位来源' : ''}`}>
-                    {row.label}
-                  </a>
-                ) : <span className="min-w-0 truncate font-semibold text-neutral-500">{row.label}</span>}
-                <span className="shrink-0 font-brand-mono font-bold text-neutral-950">{row.value}</span>
-              </div>
-              <p className="mt-0.5 truncate text-[10px] text-neutral-500" title={row.conditions}>
-                {row.scoringWeight > 0 ? `领域权重 ${Math.round(row.scoringWeight * 100)}%` : '仅参考'} · {row.conditions}
-              </p>
-              {row.evidence && (
-                <p className="mt-0.5 text-[10px] text-neutral-500">
-                  {row.evidence.sourceUpdated}
-                  {row.evidence.standardError !== null ? ` · SE ${(row.evidence.standardError * 100).toFixed(2)}` : ''}
-                  {row.evidence.scoreBasis === 'no-fallback' && row.evidence.publishedRawValue !== null
-                    ? ` · 公布 ${(row.evidence.publishedRawValue * 100).toFixed(2)}% · ${row.evidence.fallbackCount} 备用任务计失败`
-                    : row.evidence.fallbackCount === null ? ' · 备用信息未披露' : ''}
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-    </details>
-  );
-};
-
 interface ConfigurationMetricListProps {
   scoreItem: PublicLeaderboardScore;
   columns?: 1 | 2;
@@ -324,12 +293,11 @@ export const ConfigurationMetricList: React.FC<ConfigurationMetricListProps> = (
   const hasHoveredDomain = hoveredDomain !== null;
 
   return (
-    <div className="space-y-2">
-      <div
-        className={`configuration-metric-list grid gap-x-6 gap-y-1.5 font-brand-mono text-xs sm:text-sm ${
+    <div
+      className={`configuration-metric-list grid gap-x-6 gap-y-1.5 font-brand-mono text-xs sm:text-sm ${
         columns === 2 ? 'grid-cols-2' : 'grid-cols-1'
       }`}
-      >
+    >
       {rows.map((row) => {
         const isMatchedDomain = row.domainId !== null && hoveredDomain === row.domainId;
         const isDimmed = hasHoveredDomain && !isMatchedDomain;
@@ -350,12 +318,18 @@ export const ConfigurationMetricList: React.FC<ConfigurationMetricListProps> = (
             data-metric-id={row.id}
           >
             <span
-              className={`min-w-0 truncate text-xs sm:text-sm ${
+              className={`flex min-w-0 items-center gap-1.5 text-xs sm:text-sm ${
                 isMatchedDomain ? 'font-black' : 'font-bold'
               }`}
               style={{ color: row.color }}
             >
-              {row.label}
+              {row.sourceUrl ? (
+                <a href={row.sourceUrl} target="_blank" rel="noreferrer"
+                  className="min-w-0 truncate rounded hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current">
+                  {row.label}
+                </a>
+              ) : <span className="truncate">{row.label}</span>}
+              {row.referenceOnly && <span className="shrink-0 text-[9px] font-normal text-neutral-500">仅参考</span>}
             </span>
             <span className="shrink-0 font-brand-mono text-xs font-black text-neutral-950 sm:text-sm">
               {row.value}
@@ -363,8 +337,6 @@ export const ConfigurationMetricList: React.FC<ConfigurationMetricListProps> = (
           </div>
         );
       })}
-      </div>
-      <ValsSupplementaryMetrics scoreItem={scoreItem} />
     </div>
   );
 };
