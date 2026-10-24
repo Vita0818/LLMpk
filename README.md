@@ -40,14 +40,15 @@ successor pruning and the October 24 reader cleanup.
 The reader view folds equivalent model/harness/radar access routes, preferring
 the highest subscription tier. Its table and all selectors share the same 35
 visible configurations; the complete scoring inventory stays available internally.
-Scoring v3.1 uses 26 metrics, including seven standalone Vals benchmarks, and
+Scoring v3.2 assigns positive weights to all 48 verified benchmark fields
+already attached to current configurations, including all nine Vals metrics, and
 requires every domain to reach 60% weighted observed evidence and
 at least 75% overall coverage before assigning a total or rank. Missing
 observations are null; insufficient configurations remain inspectable.
 
-- [Scoring v3.1](llm_pk_scoring_methodology_v3_1.md)
-- [Domain weights v3.1](llm_pk_domain_classification_weighting_v3_1.md)
-- [Source registry v3.1](llm_pk_data_source_registry_v3_1.md)
+- [Scoring v3.2](llm_pk_scoring_methodology_v3_2.md)
+- [Domain weights v3.2](llm_pk_domain_classification_weighting_v3_2.md)
+- [Source registry v3.2](llm_pk_data_source_registry_v3_2.md)
 
 Refresh the current FrontierCode 1.1 Main evidence with `npm run refresh:frontiercode`.
 DesignArena Overall Frontend is sourced through OpenRouter's authenticated
@@ -67,18 +68,44 @@ validate. New model or profile links must be authored in
 `src/data/designArenaReviewedMappings.json`; they are not inferred from a
 model ID or selected by highest Elo.
 
+## Scoring v3.2: complete metric coverage
+
+Every verified benchmark already attached to the current cohort receives a
+positive weight and a row in the shared detail/comparison list: 48 benchmarks
+plus four practical fields. This includes the 16 formerly undisplayed fields,
+the two former Vals references, and GPQA, SciCode, AA TB2.1 and Coding Agent
+TB v2 that had been filtered from the public snapshot. The generator now fails
+on any unweighted attached benchmark instead of silently omitting it.
+
+Six domains remain equal; each domain's metric budget sums to 100%. Terminal
+sources/versions share 28% of Agentic, the Coding Agent index and coding
+components share 15% of Coding, and the two Omniscience signals share 18% of
+Reasoning. Aggregate and component scores can still be correlated; these are
+explicit product budgets, not claims of statistical independence.
+
+The 49 configuration identities and all previously published raw values are
+unchanged. Original source dates, model/effort/Harness boundaries and nulls
+remain explicit. The public view has 35 representatives: 17 ranked and 18
+insufficient. MiMo Flash, Flash-Lite and Mistral Large 4 now lack sufficient
+expanded evidence under the unchanged gates. Scores across policy versions
+must not be read as a model's improvement or decline over time.
+
+Run `npm run test:scoring-v32` for the full-metric contribution, display and
+source-date checks. Earlier policy documents remain historical records.
+
 ## Vals AI evidence and scoring
 
 Vals AI is available in the source-card pool and in the shared metric list on
-configuration and comparison details. All nine metrics appear once, alongside
-the other benchmarks, with the two non-scoring rows visibly marked as references.
+configuration and comparison details. All nine metrics appear once alongside
+the other benchmarks and now participate in scoring with visible domain weights.
 Source links and execution conditions remain available on their rows; there is
 no separate Vals accordion. The October 24 capture contains the
 Vals Index 2.2 and eight standalone components: Finance Agent v2, Excel
 Modeling, Vibe Code Bench 1.1, Code Migration, Terminal-Bench 4.0, Legal
 Research, HLAB-Vals 1.1, and Tax Agent Bench. Their source update dates range
-from October 18 to October 22. Seven standalone tasks participate in v3.1; Vals Index and Vals
-Terminal-Bench remain references to avoid duplicate aggregation and task weighting.
+from October 18 to October 22. All nine metrics participate in v3.2. Vals Index receives 5% of Agentic;
+Terminal-Bench sources and versions share a 28% Agentic budget, limiting
+overlapping signals rather than adding full independent task weights.
 
 ```bash
 npm run refresh:vals
@@ -115,8 +142,9 @@ Muse Code XHigh. Neither borrows an older model's CLI or FrontierCode result.
 Spark Open's Fireworks Max WebDev row cannot be used for XHigh. Newly
 published Arena Text records now let Wonder and Haiku 5.5 qualify under the
 unchanged six-domain and 75% overall coverage gates. Wonder Full stays
-separate and retains its unknown subscription allowance. After the reader
-cleanup, there are 20 ranked and 15 insufficient reader representatives.
+separate and retains its unknown subscription allowance. Under the prior v3.1 policy, reader cleanup left 20 ranked and 15 insufficient
+representatives. The expanded v3.2 evidence gives 17 ranked and 18 insufficient
+representatives under the same 60%/75% coverage gates.
 
 The cleanup removes every shipped route of GPT-5.6 Terra, MiniMax M3,
 Qwen3.7 Plus, Mistral Medium 3.5 and Muse Spark 1.3: five model families and
@@ -125,7 +153,7 @@ other four are editorial inventory archives, not provider end-of-life claims.
 Their raw records, reviewed source cards and historical candidates remain
 available. Distinct budget lines such as Flash-Lite and Nemotron stay in the
 reader inventory. The inventory version migrates installed built-in boxes;
-unrelated user drafts remain intact. Weights and coverage gates are unchanged.
+unrelated user drafts remain intact. The subsequent v3.2 revision expands metric weights while retaining coverage gates.
 
 AA now sends a current-only `initialModels` transport. The fetcher joins it
 to the complete public model comparison by exact slug and release date,

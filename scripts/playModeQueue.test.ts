@@ -36,7 +36,7 @@ assert(
   'Playback queue must contain one representative per identical radar route group.',
 );
 assert(
-  snapshot.scores.filter(s=>s.eligibleForGlobalLeaderboard).length - queue.length === 14,
+  snapshot.scores.filter(s=>s.eligibleForGlobalLeaderboard).length - queue.length === 13,
   'Covered playback should collapse equivalent Google, Fable, Opus, Astra, Sol and Sonnet access routes.',
 );
 assert(
@@ -97,7 +97,6 @@ assert(buildRepresentativeConfigurationQueue(insufficientRoutes)[0].config.id ==
 
 const expectedRepresentatives = [
   "Gemini 4 Argon High | --- | Google API",
-  "MiMo-V2.6-Flash Default | --- | Xiaomi API",
   "Claude Opus 5.5 Max | Claude Code | Claude Max 20×",
   "Claude Fable 5.1 Max | Claude Code | Claude Max 20×",
   "GPT-6 Astra Max | Codex CLI | ChatGPT Pro $200",

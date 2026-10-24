@@ -1,4 +1,22 @@
-> Current scoring policy: [Registry v3.1](llm_pk_data_source_registry_v3_1.md), [Weights v3.1](llm_pk_domain_classification_weighting_v3_1.md), [Scoring v3.1](llm_pk_scoring_methodology_v3_1.md). Earlier source captures below remain historical provenance.
+> Current scoring policy: [Registry v3.2](llm_pk_data_source_registry_v3_2.md), [Weights v3.2](llm_pk_domain_classification_weighting_v3_2.md), [Scoring v3.2](llm_pk_scoring_methodology_v3_2.md). Earlier captures and policy counts below remain historical provenance.
+
+## October 24 complete metric scoring revision
+
+Scoring v3.2 uses all 48 verified benchmark types attached to the same 49
+reviewed configurations. It adds the 16 undisplayed public fields, both former
+Vals reference metrics, and the four GPQA/SciCode/old-terminal fields formerly
+filtered from public serialization. No raw score or model identity is changed.
+
+`capabilityMetricWeights.json` supplies all positive weights. The public
+snapshot generator rejects any attached benchmark outside that scored set;
+price/speed fallback fields alone remain separate. Each serialized metric
+preserves its original source snapshot date. The shared renderer displays all
+48 metrics and their domain weights once, followed by four practical fields.
+
+Terminal variants share a 28% Agentic budget; the Coding Agent index and coding
+components share 15% of Coding; Omniscience's pair shares 18% of Reasoning.
+Version and Harness boundaries remain unchanged. Current evidence gives 17
+ranked and 18 insufficient representatives under the same coverage gates.
 
 ## October 24 model and source refresh
 

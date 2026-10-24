@@ -98,9 +98,11 @@ for (const score of publicSnapshot.scores) {
   for (const observation of Object.values(score.config?.observations ?? {})) {
     const observationKeys = Object.keys(observation);
     if (
-      observationKeys.length !== 2
+      (observationKeys.length !== 2 && observationKeys.length !== 3)
       || !observationKeys.includes('metricId')
       || !observationKeys.includes('rawValue')
+      || observationKeys.some(key => !['metricId', 'rawValue', 'sourceSnapshotDate'].includes(key))
+      || (observation.sourceSnapshotDate !== undefined && !/^\d{4}-\d{2}-\d{2}$/u.test(observation.sourceSnapshotDate))
     ) {
       throw new Error('Public metric observation contains non-display metadata.');
     }

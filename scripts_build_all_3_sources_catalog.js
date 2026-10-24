@@ -27,6 +27,7 @@ const OPENROUTER_PERFORMANCE_SNAPSHOT_PATH = path.resolve(
     ?? path.join(ROOT, 'src', 'data', 'openRouterPerformanceSnapshot.json'),
 );
 const SNAPSHOT_DATE = new Date().toISOString().slice(0, 10);
+const CAPABILITY_METRIC_WEIGHTS = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/data/capabilityMetricWeights.json'), 'utf8'));
 
 const AA_LEADERBOARD_URL = 'https://artificialanalysis.ai/leaderboards/models';
 const OPENROUTER_CATALOG_URL = 'https://openrouter.ai/api/v1/models';
@@ -1159,7 +1160,7 @@ async function buildVerifiedCatalog() {
           sourceRecordId: model.id,
           sourceField: fieldSource(model, metric.sourceField).sourceField,
           scope,
-          metadataJson: { scoringRole: ['aa_hle', 'aa_critpt'].includes(metric.id) ? 'capability' : 'detail-only',
+          metadataJson: { scoringRole: CAPABILITY_METRIC_WEIGHTS[metric.id] > 0 ? 'capability' : 'detail-only',
             sourcePageId: fieldSource(model, metric.sourceField).sourcePageId },
         });
       }
@@ -1181,7 +1182,7 @@ async function buildVerifiedCatalog() {
           metadataJson: {
             sourceSnapshot: path.relative(ROOT, ARTIFICIAL_ANALYSIS_SOURCE_SNAPSHOT_PATH),
             sourcePageId: fieldSource(sourceRecord, metric.sourceField).sourcePageId ?? metric.pageId,
-            scoringRole: ['aa_terminalbench_v4', 'aa_gdp_pdf_all_pass'].includes(metric.id) ? 'capability' : 'detail-only',
+            scoringRole: CAPABILITY_METRIC_WEIGHTS[metric.id] > 0 ? 'capability' : 'detail-only',
           },
         });
       }

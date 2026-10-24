@@ -23,6 +23,10 @@ const PUBLIC_METRIC_IDS = new Set([
   ...ALL_METRIC_DEFINITIONS.map((metric) => metric.id),
   ...DETAIL_ONLY_METRIC_DEFINITIONS.map((metric) => metric.id),
 ]);
+const SCORING_METRIC_IDS = new Set(ALL_METRIC_DEFINITIONS.map(metric => metric.id));
+const PRACTICAL_FALLBACK_METRIC_IDS = new Set([
+  'aa_price_input', 'aa_price_output', 'aa_throughput_median', 'aa_ttft_median',
+]);
 
 function publicConfigurationId(configurationName: string): string {
   const digest = createHash('sha256')
@@ -48,6 +52,11 @@ if (installation.invalidPresetCount > 0 || installation.unresolvedSourceCardCoun
 const scores: PublicLeaderboardScore[] = adminMappingStore
   .computeLeaderboardScores()
   .map((score) => {
+    const unweighted = Object.keys(score.config.observations).filter(id =>
+      !SCORING_METRIC_IDS.has(id) && !PRACTICAL_FALLBACK_METRIC_IDS.has(id));
+    if (unweighted.length > 0) {
+      throw new Error(`Configuration ${score.config.name} has benchmark evidence without scoring weights: ${unweighted.join(', ')}.`);
+    }
     const observations = Object.fromEntries(
       Object.entries(score.config.observations)
         .filter(([metricId]) => PUBLIC_METRIC_IDS.has(metricId))
@@ -56,6 +65,7 @@ const scores: PublicLeaderboardScore[] = adminMappingStore
           {
             metricId,
             rawValue: observation.rawValue,
+            ...(observation.testDate ? { sourceSnapshotDate: observation.testDate } : {}),
           },
         ]),
     );

@@ -178,8 +178,8 @@
 
 .configuration-detail-radar { height: 100%; }
 .configuration-detail-metrics { max-height: 100%; overflow-y: auto; overscroll-behavior: contain; }
-.configuration-detail-shell .configuration-metric-list { column-gap: 16px; row-gap: 2px; }
-.configuration-detail-shell .configuration-metric-row { min-height: 0; padding: 4px 0; }
+.configuration-detail-shell .configuration-metric-list { column-gap: 16px; row-gap: 0; }
+.configuration-detail-shell .configuration-metric-row { min-height: 0; padding: 2px 0; }
 .configuration-detail-shell .configuration-metric-row > span { font-size: 12px; line-height: 16px; }
 .configuration-detail-main--play { padding-top: 144px; }
 .configuration-detail-main--play .configuration-metric-row { padding-top: 1px; padding-bottom: 1px; }

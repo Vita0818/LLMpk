@@ -87,4 +87,4 @@ assert.equal(buildDesignArenaSourceCards({rows:[]},[base]).cards.length,0);
 if ('state' in designSnapshot && designSnapshot.state === 'awaiting-api-key') {
   assert.equal(VERIFIED_DESIGN_ARENA_SOURCE_MODEL_CARDS.length,0,'An outstanding API key must not create frontend results.');
 }
-console.log(`v3.1 source identity, successor policy and independent coverage checks: PASS (${snapshot.scores.length} configurations, ${ranked} eligible).`);
+console.log(`v3.2 source identity, successor policy and independent coverage checks: PASS (${snapshot.scores.length} configurations, ${ranked} eligible).`);

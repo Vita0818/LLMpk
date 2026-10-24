@@ -31,8 +31,6 @@ const expectedBenchmarkIds = CONFIGURATION_DETAIL_DOMAIN_ORDER.flatMap((domainId
   ...ALL_METRIC_DEFINITIONS.filter((metric) => metric.domain === domainId).map(
     (metric) => metric.id
   ),
-  ...VALS_METRIC_DEFINITIONS.filter(metric => metric.domain === domainId && metric.scoringWeightInDomain === 0)
-    .map(metric => metric.id),
 ]);
 const expectedTrailingIds = [
   'speed_throughput',
@@ -47,15 +45,14 @@ const assertSharedDetailContract = (score: PublicLeaderboardScore) => {
   assert.equal(
     rows.length,
     ALL_METRIC_DEFINITIONS.length +
-      2 +
       expectedTrailingIds.length
   );
   assert.deepEqual(
     rows.map((row) => row.id),
     [...expectedBenchmarkIds, ...expectedTrailingIds]
   );
-  assert.deepEqual(rows.filter(row => row.referenceOnly).map(row => row.id),
-    ['vals_index_v22', 'vals_terminalbench_v4']);
+  assert.equal(rows.filter(row => (row.weightInDomain ?? 0) > 0).length, 48,
+    'Every benchmark row exposes its positive domain weight.');
   for (const columns of [1, 2] as const) {
     const markup = renderToStaticMarkup(createElement(ConfigurationMetricList, { scoreItem: score, columns }));
     assert.doesNotMatch(markup, /<details|<summary/u, 'Metrics must be visible without expanding a source-specific section.');
@@ -63,8 +60,7 @@ const assertSharedDetailContract = (score: PublicLeaderboardScore) => {
       assert.equal(markup.split(`data-metric-id="${metric.id}"`).length - 1, 1,
         'Each Vals metric must appear exactly once in both shared layouts.');
     }
-    assert.equal(markup.match(/>仅参考<\/span>/gu)?.length, 2,
-      'Both reference scores must be labelled in the visible list.');
+    assert.doesNotMatch(markup, /仅参考/u, 'The expanded scoring list has no reference-only metrics.');
   }
 };
 

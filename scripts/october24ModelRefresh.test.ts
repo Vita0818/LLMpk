@@ -84,7 +84,7 @@ assert.ok(spark.config.name.startsWith('Muse Spark Open XHigh'));
 assert.equal(spark.config.observations.arena_code_webdev, undefined,
   'The Fireworks Max execution cannot be used as a lower XHigh result.');
 assert.equal(spark.config.valsData?.length, 9);
-for (const line of ['gemini_4_argon', 'mimo_v26_flash', 'muse_wonder', 'claude_haiku_55']) {
+for (const line of ['gemini_4_argon', 'muse_wonder', 'claude_haiku_55']) {
   assert.equal(scoreFor(line).eligibleForGlobalLeaderboard, true,
     `${line} now has enough independently published evidence under the unchanged gates.`);
 }
@@ -92,7 +92,7 @@ assert.equal(scoreFor('muse_wonder_full').domainScores.chatting.coverage, 0);
 
 assert.equal(SCORING_CONFIG.coverage.officialMinimum, 0.6);
 assert.equal(SCORING_CONFIG.coverage.overallMinimum, 0.75);
-assert.equal(ALL_METRIC_DEFINITIONS.find(metric => metric.id === 'vals_hlab_v11')?.internalWeightInDomain, 0.25);
+assert.equal(ALL_METRIC_DEFINITIONS.find(metric => metric.id === 'vals_hlab_v11')?.internalWeightInDomain, 0.15);
 assert.equal(ALL_METRIC_DEFINITIONS.some(metric => metric.id === 'vals_hlab_v1'), false);
 for (const score of publicSnapshot.scores) {
   assert.equal(Object.hasOwn(score.config.observations, 'vals_hlab_v1'), false);

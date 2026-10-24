@@ -805,7 +805,7 @@ function buildCatalogFingerprint(cards: SourceModelCard[], observations: SourceO
       })
       .sort(),
     ...observations
-      .map((observation) => `${observation.id}|${observation.sourceModelCardId}|${observation.metricId}|${observation.rawValue}|${observation.sourceUrl || ''}|${observation.metadataJson?.sourceField || observation.metadataJson?.sourceLeaderboard || ''}|${observation.metadataJson?.scope?.productLineId || ''}`)
+      .map((observation) => `${observation.id}|${observation.sourceModelCardId}|${observation.metricId}|${observation.rawValue}|${observation.sourceUrl || ''}|${observation.metadataJson?.sourceField || observation.metadataJson?.sourceLeaderboard || ''}|${observation.metadataJson?.scope?.productLineId || ''}|${observation.metadataJson?.scoringRole || ''}`)
       .sort(),
   ].join('\n');
 

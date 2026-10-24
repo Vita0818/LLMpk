@@ -1,9 +1,8 @@
 import React from 'react';
 import { getCompactMetricName } from '../data/compactMetricNames';
 import { getSubscriptionPricingEvidence } from '../data/subscriptionPricing';
-import { VALS_METRIC_DEFINITIONS } from '../data/valsMetricDefinitions';
 import { ALL_METRIC_DEFINITIONS, DOMAIN_DEFINITIONS } from '../engine/scoringEngine';
-import type { DomainId, MetricDefinition } from '../types/llm_pk';
+import type { DomainId } from '../types/llm_pk';
 import type { PublicLeaderboardScore } from '../types/publicLeaderboard';
 import { getProviderBrandTheme } from '../utils/providerColors';
 import { RadarChart } from './RadarChart';
@@ -25,7 +24,7 @@ export interface ConfigurationMetricRow {
   domainId: DomainId | null;
   title: string;
   sourceUrl?: string;
-  referenceOnly?: boolean;
+  weightInDomain?: number;
 }
 
 export const formatConfigurationScore = (score: number | null | undefined) =>
@@ -95,28 +94,14 @@ const formatCostValue = (value: number) =>
 export const buildConfigurationMetricRows = (
   scoreItem: PublicLeaderboardScore
 ): ConfigurationMetricRow[] => {
-  const displayedMetrics: MetricDefinition[] = [
-    ...ALL_METRIC_DEFINITIONS,
-    ...VALS_METRIC_DEFINITIONS.filter(metric => metric.scoringWeightInDomain === 0).map(metric => ({
-      id: metric.id,
-      name: metric.name,
-      source: 'Vals AI' as const,
-      domain: metric.domain,
-      metricType: 'accuracy' as const,
-      internalWeightInDomain: 0,
-      higherIsBetter: true,
-      unit: '%',
-      description: '仅参考，不参与计分。',
-      officialUrl: `https://www.vals.ai/benchmarks/${metric.slug}`,
-    })),
-  ];
   const benchmarkRows = CONFIGURATION_DETAIL_DOMAIN_ORDER.flatMap((domainId) => {
     const domainDefinition = DOMAIN_DEFINITIONS[domainId];
-    const domainMetrics = displayedMetrics.filter(
+    const domainMetrics = ALL_METRIC_DEFINITIONS.filter(
       (metric) => metric.domain === domainId
     );
     return domainMetrics.map((metric) => {
-      const rawValue = scoreItem.config.observations[metric.id]?.rawValue;
+      const observation = scoreItem.config.observations[metric.id];
+      const rawValue = observation?.rawValue;
       const formattedValue = formatConfigurationRawMetricValue(rawValue, metric.unit);
       const valsEvidence = scoreItem.config.valsData?.find(item => item.metricId === metric.id);
       const sourceConditions = valsEvidence
@@ -141,10 +126,8 @@ export const buildConfigurationMetricRows = (
         color: domainDefinition.color,
         domainId,
         sourceUrl: valsEvidence?.sourceUrl ?? metric.officialUrl,
-        referenceOnly: metric.internalWeightInDomain === 0,
-        title: `${metric.name} (${domainDefinition.nameEn}) · ${metric.internalWeightInDomain > 0
-          ? `计分权重 ${(metric.internalWeightInDomain * 100).toFixed(0)}%`
-          : '仅参考，不计分'} · Raw Value: ${formattedValue}${sourceConditions}`,
+        weightInDomain: metric.internalWeightInDomain,
+        title: `${metric.name} (${domainDefinition.nameEn}) · 计分权重 ${(metric.internalWeightInDomain * 100).toFixed(0)}% · ${metric.source} · Raw Value: ${formattedValue}${observation?.sourceSnapshotDate ? ` · 来源快照 ${observation.sourceSnapshotDate}` : ''}${sourceConditions}`,
       };
     });
   });
@@ -329,7 +312,7 @@ export const ConfigurationMetricList: React.FC<ConfigurationMetricListProps> = (
                   {row.label}
                 </a>
               ) : <span className="truncate">{row.label}</span>}
-              {row.referenceOnly && <span className="shrink-0 text-[9px] font-normal text-neutral-500">仅参考</span>}
+              {row.weightInDomain !== undefined && <span className="shrink-0 text-[9px] font-normal text-neutral-500" title="领域内配置权重">{Math.round(row.weightInDomain * 100)}%</span>}
             </span>
             <span className="shrink-0 font-brand-mono text-xs font-black text-neutral-950 sm:text-sm">
               {row.value}

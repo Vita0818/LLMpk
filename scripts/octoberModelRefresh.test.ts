@@ -73,10 +73,12 @@ const internalFull = scores.find(s => s.config.identity.modelName === 'Muse Wond
 assert.equal(internalFull.config.access.entryPoint, 'Meta Subscription');
 assert.notEqual(internalFull.config.capabilityReferenceIncluded, false,
   'A subscription-only model is an independent calibration reference, not a duplicate API access route.');
-assert.ok(mistral.eligibleForGlobalLeaderboard);
+assert.equal(mistral.eligibleForGlobalLeaderboard, false);
+assert.ok(mistral.domainScores.agentic.coverage < 0.6, 'Expanded task evidence is missing; keep the unchanged domain gate.');
+const quotaReference = scores.find(s => s.config.identity.modelName === 'Claude Haiku 5.5')!;
 const unknownQuota = processLLMpkBatchScoring([
-  mistral.config,
-  { ...mistral.config, id: 'known-monthly-unknown-quota', subscriptionData: full.config.subscriptionData },
+  quotaReference.config,
+  { ...quotaReference.config, id: 'known-monthly-unknown-quota', subscriptionData: full.config.subscriptionData },
 ]).find(s => s.config.id === 'known-monthly-unknown-quota')!;
 assert.notEqual(unknownQuota.rawCapabilityScore, null);
 assert.equal(unknownQuota.practicalBreakdown.effectiveScenarioCostUSD, null);
@@ -95,7 +97,7 @@ assert.equal(haiku.config.openRouterData?.inputPricePerMToken, 0.1);
 assert.equal(haiku.config.openRouterData?.outputPricePerMToken, 0.5);
 for (const model of ['Muse Wonder ', 'Claude Haiku 5.5 ']) {
   const score = published.scores.find(s => s.config.name.startsWith(model))!;
-  assert.equal(score.domainScores.chatting.coverage, 1);
+  assert.equal(score.domainScores.chatting.coverage, 0.9);
   assert.equal(score.eligibleForGlobalLeaderboard, true,
     'New independent Arena Text evidence now permits ranking under the existing coverage gates.');
 }

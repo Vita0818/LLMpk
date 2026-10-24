@@ -13,6 +13,8 @@ import {
 } from '../types/llm_pk';
 import { DOMAIN_IDS, getCoverageStatus, SCORING_CONFIG } from './scoringConfig';
 import { VALS_METRIC_DEFINITIONS } from '../data/valsMetricDefinitions';
+import metricWeights from '../data/capabilityMetricWeights.json';
+import { EXPANDED_CAPABILITY_METRIC_DEFINITIONS } from '../data/expandedCapabilityMetricDefinitions';
 import {
   isCapabilityMetricApplicableToConfiguration,
 } from '../data/executionMetricPolicy';
@@ -27,112 +29,119 @@ export const DOMAIN_DEFINITIONS: Record<DomainId, DomainDefinition> = {
   documents: { id: "documents", name: "Documents", nameEn: "Documents", weight: 1 / 6, color: "#06B6D4", description: "专业 PDF、Excel 建模与法律工作成果的可验证交付。" },
 };
 
-// AA capability evidence is restricted to HLE, CritPt, TB4 and GDP.pdf.
-// Retired metrics remain in source snapshots and the detail-only registry.
-export const ALL_METRIC_DEFINITIONS: MetricDefinition[] = [
+// All verified benchmark fields attached to the current cohort receive positive weights.
+// Versions and execution identities remain independent observations.
+const CAPABILITY_METRIC_METADATA: Omit<MetricDefinition, 'internalWeightInDomain'>[] = [
   {
     id: "arena_text_instruction", name: "Instruction Following", source: "Arena.ai", domain: "chatting",
-    metricType: "continuous_relative", internalWeightInDomain: 0.3, higherIsBetter: true,
-    unit: "Score", description: "指令遵循", officialUrl: "https://arena.ai/leaderboard/text/instruction-following",
+    metricType: "continuous_relative", higherIsBetter: true,
+    unit: "Score", description: "指令遵循", officialUrl: "https://arena.ai/leaderboard/chat/text/instruction-following",
   },
   {
     id: "arena_text_multiturn", name: "Multi-Turn", source: "Arena.ai", domain: "chatting",
-    metricType: "continuous_relative", internalWeightInDomain: 0.3, higherIsBetter: true,
-    unit: "Score", description: "多轮对话", officialUrl: "https://arena.ai/leaderboard/text/multi-turn",
+    metricType: "continuous_relative", higherIsBetter: true,
+    unit: "Score", description: "多轮对话", officialUrl: "https://arena.ai/leaderboard/chat/text/multi-turn",
   },
   {
     id: "arena_text_creative", name: "Creative Writing", source: "Arena.ai", domain: "chatting",
-    metricType: "continuous_relative", internalWeightInDomain: 0.2, higherIsBetter: true,
-    unit: "Score", description: "创意写作", officialUrl: "https://arena.ai/leaderboard/text/creative-writing",
+    metricType: "continuous_relative", higherIsBetter: true,
+    unit: "Score", description: "创意写作", officialUrl: "https://arena.ai/leaderboard/chat/text/creative-writing",
   },
   {
     id: "arena_text_hard", name: "Hard Prompts", source: "Arena.ai", domain: "chatting",
-    metricType: "continuous_relative", internalWeightInDomain: 0.2, higherIsBetter: true,
-    unit: "Score", description: "复杂指令", officialUrl: "https://arena.ai/leaderboard/text/hard-prompts",
+    metricType: "continuous_relative", higherIsBetter: true,
+    unit: "Score", description: "复杂指令", officialUrl: "https://arena.ai/leaderboard/chat/text/hard-prompts",
   },
   {
     id: "aa_hle", name: "Humanity’s Last Exam", source: "Artificial Analysis", domain: "reasoning",
-    metricType: "accuracy", internalWeightInDomain: 0.25, higherIsBetter: true,
+    metricType: "accuracy", higherIsBetter: true,
     unit: "pass@1", description: "AA 独立测量的高难度跨学科推理。", officialUrl: "https://artificialanalysis.ai/evaluations/humanitys-last-exam",
   },
   {
     id: "aa_critpt", name: "CritPt", source: "Artificial Analysis", domain: "reasoning",
-    metricType: "accuracy", internalWeightInDomain: 0.20, higherIsBetter: true,
+    metricType: "accuracy", higherIsBetter: true,
     unit: "pass@1", description: "专业物理与理论科学推理。", officialUrl: "https://artificialanalysis.ai/evaluations/critpt",
   },
   {
     id: "arena_text_math", name: "Arena Math", source: "Arena.ai", domain: "reasoning",
-    metricType: "continuous_relative", internalWeightInDomain: 0.20, higherIsBetter: true,
-    unit: "Score", description: "真实用户数学任务。", officialUrl: "https://arena.ai/leaderboard/text/math",
+    metricType: "continuous_relative", higherIsBetter: true,
+    unit: "Score", description: "真实用户数学任务。", officialUrl: "https://arena.ai/leaderboard/chat/text/math",
   },
   {
     id: "arena_search", name: "Search Arena", source: "Arena.ai", domain: "reasoning",
-    metricType: "continuous_relative", internalWeightInDomain: 0.15, higherIsBetter: true,
-    unit: "Score", description: "检索、知识与 Grounding 的用户评价。", officialUrl: "https://arena.ai/leaderboard/search",
+    metricType: "continuous_relative", higherIsBetter: true,
+    unit: "Score", description: "检索、知识与 Grounding 的用户评价。", officialUrl: "https://arena.ai/leaderboard/chat/search",
   },
   {
     id: "arena_text_coding", name: "Arena Coding", source: "Arena.ai", domain: "coding",
-    metricType: "continuous_relative", internalWeightInDomain: 0.40, higherIsBetter: true,
-    unit: "Score", description: "文本式编程与代码解题。", officialUrl: "https://arena.ai/leaderboard/text/coding",
+    metricType: "continuous_relative", higherIsBetter: true,
+    unit: "Score", description: "文本式编程与代码解题。", officialUrl: "https://arena.ai/leaderboard/chat/text/coding",
   },
   {
     id: "frontiercode_v11_main_pass_rate", name: "FrontierCode 1.1 Main · Pass Rate", source: "FrontierCode", domain: "coding",
-    metricType: "accuracy", internalWeightInDomain: 0.30, higherIsBetter: true,
+    metricType: "accuracy", higherIsBetter: true,
     unit: "Pass Rate", description: "官方当前 1.1 Main 记录；保留实际 effort 与 harness，衡量全部 blocker 通过率。", officialUrl: "https://cognition.com/frontiercode",
   },
   {
     id: "arena_code_webdev", name: "Arena WebDev", source: "Arena.ai", domain: "frontend",
-    metricType: "continuous_relative", internalWeightInDomain: 0.40, higherIsBetter: true,
+    metricType: "continuous_relative", higherIsBetter: true,
     unit: "Score", description: "端到端 Web 构建与 UI 体验。", officialUrl: "https://arena.ai/leaderboard/code/webdev",
   },
   {
     id: "designarena_frontend", name: "DesignArena Frontend", source: "DesignArena", domain: "frontend",
-    metricType: "continuous_relative", internalWeightInDomain: 0.30, higherIsBetter: true,
+    metricType: "continuous_relative", higherIsBetter: true,
     unit: "Elo", description: "官方 Overall Frontend Elo；按审核后的精确版本与 effort 连接，未披露档位保留 Default 回退条件。", officialUrl: "https://www.designarena.ai/leaderboard/code",
   },
   {
     id: "aa_terminalbench_v4", name: "AA Terminal-Bench 4.0", source: "Artificial Analysis", domain: "agentic",
-    metricType: "accuracy", internalWeightInDomain: 0.40, higherIsBetter: true,
+    metricType: "accuracy", higherIsBetter: true,
     unit: "pass@1", description: "66 项终端任务，mini-swe-agent，每任务三次；模型级评测，不冒充生产 CLI。", officialUrl: "https://artificialanalysis.ai/evaluations/terminalbench-4-0",
   },
   {
     id: "arena_agent_success", name: "Confirmed Success", source: "Arena.ai", domain: "agentic",
-    metricType: "continuous_relative", internalWeightInDomain: 0.10, higherIsBetter: true,
+    metricType: "continuous_relative", higherIsBetter: true,
     unit: "Score Point", description: "生产 Agent 的确认成功效果量。", officialUrl: "https://arena.ai/leaderboard/agent",
   },
   {
     id: "arena_agent_steerability", name: "Steerability", source: "Arena.ai", domain: "agentic",
-    metricType: "continuous_relative", internalWeightInDomain: 0.06, higherIsBetter: true,
+    metricType: "continuous_relative", higherIsBetter: true,
     unit: "Score Point", description: "来源正向 steering_burden/steerability 效果量。", officialUrl: "https://arena.ai/leaderboard/agent",
   },
   {
     id: "arena_agent_praise", name: "Praise vs Complaint", source: "Arena.ai", domain: "agentic",
-    metricType: "continuous_relative", internalWeightInDomain: 0.03, higherIsBetter: true,
+    metricType: "continuous_relative", higherIsBetter: true,
     unit: "Score Point", description: "用户好评与投诉净差。", officialUrl: "https://arena.ai/leaderboard/agent",
   },
   {
     id: "arena_agent_bash_recovery", name: "Bash Recovery", source: "Arena.ai", domain: "agentic",
-    metricType: "continuous_relative", internalWeightInDomain: 0.06, higherIsBetter: true,
+    metricType: "continuous_relative", higherIsBetter: true,
     unit: "Score Point", description: "终端报错后的恢复。", officialUrl: "https://arena.ai/leaderboard/agent",
   },
   {
     id: "arena_agent_tool_hallucination", name: "Tool Hallucination", source: "Arena.ai", domain: "agentic",
-    metricType: "continuous_relative", internalWeightInDomain: 0.05, higherIsBetter: true,
+    metricType: "continuous_relative", higherIsBetter: true,
     unit: "Score Point", description: "工具幻觉抑制效果量。", officialUrl: "https://arena.ai/leaderboard/agent",
   },
   {
     id: "aa_gdp_pdf_all_pass", name: "GDP.pdf · All-pass", source: "Artificial Analysis", domain: "documents",
-    metricType: "accuracy", internalWeightInDomain: 0.50, higherIsBetter: true,
+    metricType: "accuracy", higherIsBetter: true,
     unit: "pass@1", description: "专业 PDF 文档任务的全部交付要求通过率。", officialUrl: "https://artificialanalysis.ai/evaluations/gdp-pdf",
   },
-  ...VALS_METRIC_DEFINITIONS.filter(metric => metric.scoringWeightInDomain > 0).map(metric => ({
+  ...EXPANDED_CAPABILITY_METRIC_DEFINITIONS,
+  ...VALS_METRIC_DEFINITIONS.map(metric => ({
     id: metric.id, name: `Vals · ${metric.name}`, source: 'Vals AI' as const, domain: metric.domain,
-    metricType: 'accuracy' as const, internalWeightInDomain: metric.scoringWeightInDomain,
+    metricType: 'accuracy' as const,
     higherIsBetter: true, unit: '%',
     description: 'Vals 官方独立任务评测；保留来源 effort 与实际测试环境。',
     officialUrl: `https://www.vals.ai/benchmarks/${metric.slug}`,
   })),
 ];
+
+export const ALL_METRIC_DEFINITIONS: MetricDefinition[] = CAPABILITY_METRIC_METADATA.map(metric => {
+  const weight = (metricWeights as Readonly<Record<string, number>>)[metric.id];
+  if (!Number.isFinite(weight) || weight <= 0) throw new Error(`Missing positive scoring weight for ${metric.id}.`);
+  return { ...metric, internalWeightInDomain: weight };
+});
 
 // Helper: Math Median
 export function calculateMedian(numbers: number[]): number {
@@ -422,7 +431,7 @@ export function calculateUtilityRatio(r: number): number {
   return r - 1;
 }
 
-/** Main LLMpk Scoring Pipeline Processor — Scoring v3.1. */
+/** Main LLMpk Scoring Pipeline Processor — Scoring v3.2. */
 export function processLLMpkBatchScoring(
   configs: LLMConfiguration[],
   customMetrics: MetricDefinition[] = ALL_METRIC_DEFINITIONS

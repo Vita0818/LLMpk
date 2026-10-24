@@ -1769,8 +1769,9 @@ assert.equal(qwenFlashNextConfig.openRouterData?.inputPricePerMToken, 0.15);
 assert.equal(qwenFlashNextConfig.openRouterData?.outputPricePerMToken, 0.47);
 assert.ok((qwenFlashNextConfig.openRouterData?.ttftP50Seconds || 0) > 0);
 assert.ok((qwenFlashNextConfig.openRouterData?.throughputP50TokensPerSec || 0) > 0);
-assert.equal(scoreByConfigurationId.get(qwenFlashNextBox.id)?.availableDomainCount, 0,
-  'V3.1 must keep unmatched Vals weights missing instead of upgrading sparse legacy evidence.');
+assert.equal(scoreByConfigurationId.get(qwenFlashNextBox.id)?.availableDomainCount, 1,
+  'The expanded AA reasoning evidence can qualify a domain without inventing missing Vals runs.');
+assert.equal(qwenFlashNextConfig.valsData, undefined);
 assert.equal(scoreByConfigurationId.get(qwenFlashNextBox.id)?.eligibleForGlobalLeaderboard, false);
 const hy4Box = installedPresetBoxes.find((box) => (
   box.builtInPresetId === 'builtin.hy4-preview.high'
@@ -2471,7 +2472,10 @@ const agentUncertaintyScore = scoreByConfigurationId.get(agentUncertaintyBox.id)
 assert.equal(agentUncertaintyConfig.observations.arena_agent_bash_recovery, undefined,
   'A release newer than the retained recovery capture cannot borrow an old model’s result.');
 const recoveryWeight = ALL_METRIC_DEFINITIONS.find(metric => metric.id === 'arena_agent_bash_recovery')!.internalWeightInDomain;
-assert.ok(Math.abs(agentUncertaintyScore!.domainScores.agentic.coverage - (1 - recoveryWeight)) < 1e-12);
+assert.ok(agentUncertaintyScore!.domainScores.agentic.coverage <= 1 - recoveryWeight + 1e-12);
+assert.equal(agentUncertaintyScore!.domainScores.agentic.metricDetails
+  .find(metric => metric.metricId === 'arena_agent_bash_recovery')!.isMissing, true,
+  'A changed source task cannot manufacture recovery evidence in the expanded metric set.');
 const kimiPresets = BUILT_IN_CONFIGURATION_PRESETS.filter(
   (preset) => preset.productLineId === 'kimi_k31_pro',
 );
@@ -2497,8 +2501,9 @@ for (const metricId of [
 }
 const kimiCodeScore = scoreByConfigurationId.get(kimiCodeBox.id);
 assert.equal(kimiCodeScore?.rawCapabilityScore, null, 'Missing independent domains must keep the new model unranked.');
-assert.equal(kimiCodeScore?.domainScores.reasoning.coverage, 0.45);
-assert.equal(kimiCodeScore?.domainScores.reasoning.score, null);
+assert.ok(Math.abs(kimiCodeScore!.domainScores.reasoning.coverage - 0.67) < 1e-12);
+assert.notEqual(kimiCodeScore?.domainScores.reasoning.score, null,
+  'Previously undisplayed reasoning evidence now contributes under v3.2.');
 assert.equal(kimiCodeScore?.domainScores.documents.score, null);
 for (const [presetId, expectedAuthorProvider] of [
   ['builtin.harness.claude-opus-4-8.max.claude-code', 'Anthropic'],
@@ -2567,8 +2572,8 @@ for (const release of [
   assert.equal(stack[0].card.id, `card-aa-coding-agent-${release.cardPrefix}-max`);
   assert.ok(stack.every(({ card }) => card.metadataJson?.scope?.productLineId === release.line));
   const currentScore = scoreByConfigurationId.get(box.id)!;
-  assert.equal(currentScore.domainScores.chatting.coverage, 1,
-    'New official Arena Text records now complete the dialogue evidence.');
+  assert.equal(currentScore.domainScores.chatting.coverage, 0.9,
+    'The four Arena dialogue tasks do not invent a missing IFBench observation.');
   assert.ok(currentScore.domainScores.reasoning.coverage >= 0.6);
   assert.equal(currentScore.eligibleForGlobalLeaderboard, true,
     'The newly observed non-CLI evidence permits ranking under the unchanged coverage gates.');

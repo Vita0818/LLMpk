@@ -23,9 +23,9 @@ assert.equal(VERIFIED_VALS_SOURCE_MODEL_CARDS.length, 259);
 assert.equal(VERIFIED_VALS_SOURCE_OBSERVATIONS.length, 259);
 assert.equal(BUILT_IN_CONFIGURATION_PRESETS.length, 49);
 assert.equal(BUILT_IN_CONFIGURATION_MODEL_GROUP_COUNT, 33);
-assert.equal(ALL_METRIC_DEFINITIONS.length, 26);
-assert.equal(ALL_METRIC_DEFINITIONS.filter(metric => metric.id.startsWith('vals_')).length, 7);
-assert.equal(ALL_METRIC_DEFINITIONS.some(metric => ['vals_index_v22', 'vals_terminalbench_v4'].includes(metric.id)), false);
+assert.equal(ALL_METRIC_DEFINITIONS.length, 48);
+assert.equal(ALL_METRIC_DEFINITIONS.filter(metric => metric.id.startsWith('vals_')).length, 9);
+assert.equal(ALL_METRIC_DEFINITIONS.some(metric => ['vals_index_v22', 'vals_terminalbench_v4'].includes(metric.id)), true);
 assert.equal(buildRepresentativeConfigurationQueue(published.scores).length, 35);
 
 for (const review of manifest.entries) {
@@ -75,7 +75,7 @@ assert.notEqual(migration.rawValue, index.tasks.code_migration['anthropic/claude
   'The standalone full migration run must not be replaced by the index subset.');
 assert.equal(sonnet.config.valsData!.find(row => row.metricId === 'vals_index_v22')!.hasRefusalFallbackNotice, true);
 assert.equal(sonnet.config.valsData!.find(row => row.metricId === 'vals_vibe_code_v11')!.sourceHarness, 'OpenHands');
-assert.equal(buildConfigurationMetricRows(sonnet).length, 32, 'All 26 weighted metrics, two references and four practical fields share one list.');
+assert.equal(buildConfigurationMetricRows(sonnet).length, 52, 'All 48 weighted metrics and four practical fields share one list.');
 const migrationRow = buildConfigurationMetricRows(sonnet).find(row => row.id === 'vals_code_migration_v1')!;
 assert.equal(migrationRow.value, '69.8%');
 assert.equal(migrationRow.sourceUrl, migration.sourceUrl);
@@ -106,7 +106,7 @@ for (const score of scores) {
   assert.equal(score.practicalBreakdown.speedDelta, comparison.practicalBreakdown.speedDelta, 'Vals duration must not overwrite TTFT.');
 }
 assert.ok(scores.some(score => score.rawCapabilityScore !== altered.find(item => item.config.id === score.config.id)!.rawCapabilityScore),
-  'Changing a selected Vals observation must affect v3.1 capability scores.');
+  'Changing a selected Vals observation must affect v3.2 capability scores.');
 const opus = published.scores.find(score => score.config.name.startsWith('Claude Opus 5.5'))!;
 const opusMigration = opus.config.valsData!.find(row => row.metricId === 'vals_code_migration_v1')!;
 assert.equal(opusMigration.rawValue, 18.416 / 100);
@@ -125,4 +125,4 @@ store.updateBox(fallbackBox.id, { identity: { ...fallbackBox.identity,
 assert.equal(store.getLinkedCardStack(fallbackBox.id, 'vals').length, 0,
   'An authored upward profile link must stop supplying evidence after the target identity changes.');
 
-console.log(`Vals reviewed version/effort links, official no-fallback scores, source isolation and v3.1 scoring: PASS (${VERIFIED_VALS_SOURCE_MODEL_CARDS.length} cards, ${scores.filter(score => score.config.valsData?.length).length} configurations)`);
+console.log(`Vals reviewed version/effort links, official no-fallback scores, source isolation and v3.2 scoring: PASS (${VERIFIED_VALS_SOURCE_MODEL_CARDS.length} cards, ${scores.filter(score => score.config.valsData?.length).length} configurations)`);

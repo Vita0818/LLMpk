@@ -10,7 +10,7 @@ export const MethodologyDocView: React.FC = () => {
       <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-6">
         <div>
           <h1 className="text-2xl font-bold text-slate-950">LLMpk Scoring v{SCORING_CONFIG.version}</h1>
-          <p className="mt-1 text-xs">六域等权；模型与执行配置分别记录；覆盖不足保留详情。</p>
+          <p className="mt-1 text-xs">{ALL_METRIC_DEFINITIONS.length} 项计分指标全部展示；六域等权；覆盖不足保留详情。</p>
         </div>
         <div className="flex gap-2" role="tablist" aria-label="评分规范">
           {(['scoring', 'weighting', 'registry'] as const).map(id => (
@@ -45,13 +45,14 @@ export const MethodologyDocView: React.FC = () => {
               </li>)}
             </ul>
           </div>)}
-          <p>DesignArena Overall Frontend 占 40%，按已审核的模型版本与运行档位连接。未披露档位时保留 Default 回退标注；同时有 Arena WebDev 与 DesignArena 时覆盖率为 100%，只有 WebDev 时为 60%，只有 DesignArena 时为 40%。缺测权重留在覆盖分母。</p>
+          <p>终端任务的五个来源/版本共用 Agentic 的 28% 预算；AA Coding Agent 指数、DeepSWE 和 SWE-Atlas 共用 Coding 的 15%；Omniscience 两个信号共用 Reasoning 的 18%。综合指数仍参与计分，但采用受限权重；这些信号不宣称统计独立。</p>
+          <p>Frontend 为 Arena WebDev 40%、DesignArena 30%、Vals Vibe Code 30%。来源缺失仍占覆盖分母，不按同名任务、继任模型或其他档位补值。</p>
         </>}
         {activeDoc === 'registry' && <>
           <h2 className="text-lg font-bold">可核实的当前来源</h2>
           <p>订阅价格于 2026-10-11 按 <a href={SEMIANALYSIS_SUBSCRIPTION_SOURCE} target="_blank" rel="noreferrer" className="text-blue-700 underline">SemiAnalysis 10 月实测</a>逐套餐、逐模型更新，采用公开 agentic 月度 API 等效额度。ChatGPT $200 档使用降额后的新购限额；临时保留至 10 月 29 日的旧额度不纳入。Google、SuperGrok 与旧 Terra 尚无本次可核对的公开数值，保留旧估算，不能视为 SemiAnalysis 实测。</p>
-          <p>Artificial Analysis 的能力指标只采用 HLE、CritPt、Terminal-Bench 4.0 和 GDP.pdf All-pass。GDP.pdf 计入 Documents。旧 DeepSWE、SWE-Atlas、τ³、Omniscience、LCR、GDPval 与七月 SWE-rebench 时间窗只保留详情。</p>
-          <p>FrontierCode 使用官方当前 1.1 Main 的 Pass Rate，按实际模型、effort 和 harness 连接，不把“最佳档位”冒充 Max。AA TB4 是 mini-swe-agent 的模型级评测；直接 Terminal-Bench CLI 结果另存，不重复计分。</p>
+          <p>当前配置已核验并挂接的 48 种评测全部分配正权重，包含 AA 的知识、长文本、防幻觉、自动化和专业工作任务；Vals 的九项成绩均计分。GDPval、EnigmaEval、Terminal-Bench-Science 和七月 SWE-rebench 在当前配置没有匹配成绩，继续保留于历史来源池。</p>
+          <p>FrontierCode 保留当前 1.1 Main 的实际 effort 与 harness。Terminal-Bench 2.1、4.0、AA Coding Agent 的旧版 v2 及生产 CLI 成绩独立保留；共用终端任务预算，不能互相补值。指标行的“来源快照”说明记录日期，不表示重新执行任务。</p>
           <p>Arena Agent Mode 只进入生产 Agent/CLI 路线；已声明的单向回退保留来源环境，不借给普通 Chat。高 effort 不向低 effort 回填，不跨模型版本、Pro、Fast 或 Qwen3.8-Max 固定 0902 快照借成绩。</p>
           <p>DesignArena 的来源行同时保留模型版本和发布的档位名称；同一模型 ID 的 XHigh 与 Max 是不同记录。前端成绩反映 DesignArena 内部构建环境，不冒充所展示 CLI 的独立实测；来源未披露置信区间或样本量时保持未知。</p>
           <p>DesignArena 数据来源：<a href="https://www.designarena.ai" target="_blank" rel="noreferrer" className="text-blue-700 underline">Design Arena</a>，经 <a href="https://openrouter.ai/rankings" target="_blank" rel="noreferrer" className="text-blue-700 underline">OpenRouter</a> 提供；采用 <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer" className="text-blue-700 underline">CC BY 4.0</a> 许可。</p>

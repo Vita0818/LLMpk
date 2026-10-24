@@ -5119,4 +5119,4 @@ export const BUILT_IN_CONFIGURATION_PRESET_COUNT = BUILT_IN_CONFIGURATION_PRESET
  * additions visible during Vite hot updates as well as after a full reload.
  */
 export const BUILT_IN_CONFIGURATION_PRESET_INVENTORY_VERSION =
-  '2026-10-24-reader-archive-five-lines-v55';
+  '2026-10-24-scoring32-complete-metrics-v56';

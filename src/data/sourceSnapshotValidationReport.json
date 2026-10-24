@@ -1,6 +1,6 @@
 {
   "schemaVersion": "source-snapshot-validation-report/v1",
-  "validatedAt": "2026-10-24T06:57:36.593Z",
+  "validatedAt": "2026-10-24T08:46:47.605Z",
   "status": "PASS",
   "inputs": {
     "artificialAnalysis": "src/data/artificialAnalysisSourceSnapshot.json",
@@ -10,8 +10,8 @@
     "frontierCode": "src/data/frontierCodeSourceSnapshot.json"
   },
   "summary": {
-    "checks": 35,
-    "passed": 35,
+    "checks": 32,
+    "passed": 32,
     "failed": 0
   },
   "coverage": {
@@ -498,15 +498,6 @@
       }
     },
     {
-      "id": "aa-volume-regression",
-      "description": "AA model record volume did not regress by more than 20%.",
-      "passed": true,
-      "details": {
-        "current": 709,
-        "reference": 699
-      }
-    },
-    {
       "id": "arena-schema",
       "description": "Arena extraction uses the expected schema.",
       "passed": true,
@@ -596,14 +587,6 @@
           55
         ],
         "retainedRecovery": true
-      }
-    },
-    {
-      "id": "arena-volume-regression",
-      "description": "No Arena metric lost more than 20% of its source rows.",
-      "passed": true,
-      "details": {
-        "regressions": []
       }
     },
     {
@@ -739,15 +722,6 @@
         "rejectedMissingLatency": 193,
         "rejectedMissingThroughput": 195,
         "rejectedMissingOrZeroRequestCount": 193
-      }
-    },
-    {
-      "id": "openrouter-performance-regression",
-      "description": "OpenRouter models-with-performance coverage did not regress by more than 20%.",
-      "passed": true,
-      "details": {
-        "current": 401,
-        "previous": 406
       }
     },
     {

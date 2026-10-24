@@ -6,6 +6,7 @@ import {
   transformRawMetric,
 } from '../src/engine/scoringEngine';
 import { DOMAIN_IDS, getCoverageStatus, SCORING_CONFIG } from '../src/engine/scoringConfig';
+import metricWeights from '../src/data/capabilityMetricWeights.json';
 import { DETAIL_ONLY_METRIC_DEFINITIONS } from '../src/data/detailMetricDefinitions';
 import type { DomainId, LLMConfiguration, MetricDefinition, MetricObservation } from '../src/types/llm_pk';
 import {
@@ -73,8 +74,8 @@ nearlyEqual(
 assert.equal(new Set(ALL_METRIC_DEFINITIONS.map((definition) => definition.id)).size, ALL_METRIC_DEFINITIONS.length);
 assert.equal(
   ALL_METRIC_DEFINITIONS.some((definition) => definition.id === 'aa_coding_agent_index'),
-  false,
-  'The composite AA Coding Agent Index must not be scored beside its three component metrics.',
+  true,
+  'The requested full-evidence policy includes the index within a limited family budget.',
 );
 assert.equal(
   new Set(DETAIL_ONLY_METRIC_DEFINITIONS.map((definition) => definition.id)).size,
@@ -98,28 +99,17 @@ DOMAIN_IDS.forEach((domainId) => {
 const metricDefinitionsById = new Map(
   ALL_METRIC_DEFINITIONS.map((definition) => [definition.id, definition]),
 );
-assert.equal(ALL_METRIC_DEFINITIONS.length, 26);
-assert.deepEqual(ALL_METRIC_DEFINITIONS.filter(m => m.source === 'Artificial Analysis').map(m=>m.id).sort(),
-  ['aa_hle','aa_critpt','aa_terminalbench_v4','aa_gdp_pdf_all_pass'].sort());
+assert.equal(ALL_METRIC_DEFINITIONS.length, 48);
 assert.deepEqual(DOMAIN_IDS.map(id => DOMAIN_DEFINITIONS[id].nameEn),
   ['Chatting','Reasoning','Coding','Frontend','Agentic','Documents']);
-for (const [id, domain, weight] of [
-  ['aa_hle','reasoning',.25],['aa_critpt','reasoning',.20],['arena_search','reasoning',.15],
-  ['arena_code_webdev','frontend',.40],['designarena_frontend','frontend',.30],
-  ['frontiercode_v11_main_pass_rate','coding',.30],['aa_terminalbench_v4','agentic',.40],
-  ['aa_gdp_pdf_all_pass','documents',.50],
-  ['vals_legal_research_v1','reasoning',.10],['vals_tax_agent_v1','reasoning',.10],
-  ['vals_code_migration_v1','coding',.30],['vals_vibe_code_v11','frontend',.30],
-  ['vals_finance_agent_v2','agentic',.30],['vals_excel_modeling_v1','documents',.25],
-  ['vals_hlab_v11','documents',.25],
-] as const) {
-  assert.equal(metricDefinitionsById.get(id)?.domain, domain);
-  nearlyEqual(metricDefinitionsById.get(id)!.internalWeightInDomain,weight);
+assert.deepEqual([...metricDefinitionsById.keys()].sort(), Object.keys(metricWeights).sort());
+for (const [id, weight] of Object.entries(metricWeights)) {
+  assert.ok(weight > 0, `${id} must actively score.`);
+  nearlyEqual(metricDefinitionsById.get(id)!.internalWeightInDomain, weight);
 }
-for (const id of ['aa_gpqa_diamond','aa_scicode','aa_terminalbench_v21','aa_tau3_banking',
-  'aa_gdpval_v2','aa_coding_agent_deepswe','aa_coding_agent_swe_atlas_qna',
-  'aa_omniscience_accuracy','aa_omniscience_nonhallucination','aa_lcr','swe_rebench_v2',
-  'scale_enigmaeval','tbench_science_v01','tbench_v4']) assert.equal(metricDefinitionsById.has(id),false);
+for (const id of ['aa_gdpval_v2', 'swe_rebench_v2', 'scale_enigmaeval', 'tbench_science_v01']) {
+  assert.equal(metricDefinitionsById.has(id), false, 'Unmatched historical records cannot manufacture current evidence.');
+}
 
 // v3: retain configured weights for coverage, aggregate observed scores only.
 // Passing the domain gate does not bypass the six-domain total gate.
@@ -517,4 +507,4 @@ assert.equal(
   null,
 );
 
-console.log('scoringEngine Scoring v3.1 + Practical Adjustment v1.4 policies: PASS');
+console.log('scoringEngine Scoring v3.2 + Practical Adjustment v1.4 policies: PASS');

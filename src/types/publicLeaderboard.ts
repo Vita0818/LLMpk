@@ -9,6 +9,8 @@ import type {
 export interface PublicMetricObservation {
   metricId: string;
   rawValue: number | null;
+  /** Original source snapshot date; not a claim that the task was rerun then. */
+  sourceSnapshotDate?: string;
 }
 
 export type PublicOpenRouterData = Pick<
