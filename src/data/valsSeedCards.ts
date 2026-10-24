@@ -109,6 +109,7 @@ export function buildValsSourceCards(
       const metric = VALS_METRIC_DEFINITIONS.find(item => item.slug === execution.benchmarkSlug);
       if (baseMatches.length !== 1 || benchmarks.length !== 1 || !metric || !row
         || (benchmark.metadata.version ?? null) !== execution.benchmarkVersion
+        || metric.benchmarkVersion !== execution.benchmarkVersion
         || !matchesSettings(row, execution.settings)
         || !matchesProfile(row, execution.profile)
         || (row.stderr !== null && row.stderr !== undefined && (typeof row.stderr !== 'number'

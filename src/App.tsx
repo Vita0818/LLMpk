@@ -244,7 +244,7 @@ export function App() {
           <div className="flex items-center gap-3 text-slate-400 font-mono">
             <span>Scoring v{SCORING_CONFIG.version}</span>
             <span>&bull;</span>
-            <span>Weighting v2.2</span>
+            <span>Weighting v{SCORING_CONFIG.version}</span>
           </div>
         </div>
       </footer>

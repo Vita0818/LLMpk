@@ -48,6 +48,7 @@ const CODING_AGENT_HARNESS_NAMES: ReadonlySet<string> = new Set([
   'antigravity sdk',
   'claude code',
   'codex cli',
+  'deepseek harness',
   'gemini cli',
   'grok build',
   'kimi code cli',

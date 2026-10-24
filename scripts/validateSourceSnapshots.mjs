@@ -4,6 +4,8 @@ import {
 } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { hasPublishedCodingAgentModelIdentity } from './artificialAnalysisModelExtraction.mjs';
+import { standardEndpointExclusionReason } from './openRouterEndpointPolicy.mjs';
 import {
   asFiniteNumber,
   atomicWriteJson,
@@ -336,7 +338,7 @@ function validateArtificialAnalysis(snapshot) {
       && codingRows.every((record) => (
         typeof record?.agentName === 'string'
         && typeof record?.displayLabel === 'string'
-        && typeof record?.hostModelSlug === 'string'
+        && hasPublishedCodingAgentModelIdentity(record)
         && Number.isFinite(record?.indexScore)
         && Array.isArray(record?.evals)
         && record.evals.length >= 2
@@ -619,6 +621,7 @@ function validateOpenRouterPerformance(snapshot) {
       && record.stats.p50ThroughputTokensPerSecond > 0
       && Number.isFinite(record?.stats?.requestCount)
       && record.stats.requestCount > 0
+      && standardEndpointExclusionReason(record) === null
       && record?.pricing?.rawPublishedPricing
       && typeof record.pricing.rawPublishedPricing === 'object'
     )),

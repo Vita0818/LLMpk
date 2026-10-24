@@ -35,9 +35,10 @@ The production site is expected at:
 
 ## Current scoring policy
 
-The reviewed successor-pruned inventory contains 34 model families / 52 configurations.
+The reviewed inventory contains 33 model families / 49 configurations after
+successor pruning and the October 24 reader cleanup.
 The reader view folds equivalent model/harness/radar access routes, preferring
-the highest subscription tier. Its table and all selectors share the same 36
+the highest subscription tier. Its table and all selectors share the same 35
 visible configurations; the complete scoring inventory stays available internally.
 Scoring v3.1 uses 26 metrics, including seven standalone Vals benchmarks, and
 requires every domain to reach 60% weighted observed evidence and
@@ -51,8 +52,9 @@ observations are null; insufficient configurations remain inspectable.
 Refresh the current FrontierCode 1.1 Main evidence with `npm run refresh:frontiercode`.
 DesignArena Overall Frontend is sourced through OpenRouter's authenticated
 Benchmark API and connected through an explicit, reviewed mapping manifest.
-The October 13 capture links 14 current model families / 24 configurations,
-including the explicitly reviewed Haiku 5.5 and Mistral Large 4 releases.
+The October 24 capture retains 17 reviewed source rows; after cleanup it links
+12 current model families / 21 configurations,
+including dated Gemini 4 Argon and DeepSeek V4.1 Flash 1017 records.
 Undisclosed effort keeps its Default fallback; missing versions stay missing.
 
 ```bash
@@ -68,11 +70,11 @@ model ID or selected by highest Elo.
 ## Vals AI evidence and scoring
 
 Vals AI is available in the source-card pool and in an expandable section on
-configuration and comparison details. The October 13 capture contains the
-Vals Index 2.1 and eight standalone components: Finance Agent v2, Excel
+configuration and comparison details. The October 24 capture contains the
+Vals Index 2.2 and eight standalone components: Finance Agent v2, Excel
 Modeling, Vibe Code Bench 1.1, Code Migration, Terminal-Bench 4.0, Legal
-Research, Harvey HLAB, and Tax Agent Bench. Their source update dates are
-October 12. Seven standalone tasks participate in v3.1; Vals Index and Vals
+Research, HLAB-Vals 1.1, and Tax Agent Bench. Their source update dates range
+from October 18 to October 22. Seven standalone tasks participate in v3.1; Vals Index and Vals
 Terminal-Bench remain references to avoid duplicate aggregation and task weighting.
 
 ```bash
@@ -87,11 +89,55 @@ SHA-256 hashes. `src/data/valsReviewedMappings.json` pins the admitted model
 version and each benchmark's actual execution settings. Changed or missing
 reviewed executions fail refresh before the published snapshot is replaced.
 
-The capture has 114 source model/execution identifiers and 9,137 result rows.
-Reviewed mappings produce 234 cards from 28 source identities, including a
+The capture has 120 source model/execution identifiers and 6,673 result rows.
+Reviewed mappings produce 259 cards from 33 source identities, including a
 separate, unlinked Muse Spark Max identity. Source evidence attaches
-to 43 existing configurations. The reader inventory contains 34 model product
-lines / 52 configurations / 36 visible representatives.
+to 39 existing configurations. The reader inventory contains 33 model product
+lines / 49 configurations / 35 visible representatives. Index 2.2 and HLAB 1.1
+publish smaller model sets; removed executions stay missing. HLAB 1.0 is not
+used to backfill a missing 1.1 run, and the active metric pins its version
+independently of the reviewed mapping manifest.
+
+## October 24 model and source refresh
+
+Kimi K3.1 Pro and DeepSeek V4.1 Flash 1017 supersede K3 and the September 10
+Flash release in the reader inventory. Their historical raw records remain
+available. MiniMax M3.1 Flash and Muse Spark Open are separate current lines;
+the newly public Gemini 4 Argon API and independently observed MiMo-V2.6-Flash
+also enter the reader view. MiMo Pro and Flash retain distinct Default
+identities. Kimi K3.1 Pro has no reviewed Vals or Kimi Code execution yet.
+
+The new DeepSeek execution uses the actual DeepSeek Harness; Spark Open uses
+Muse Code XHigh. Neither borrows an older model's CLI or FrontierCode result.
+Spark Open's Fireworks Max WebDev row cannot be used for XHigh. Newly
+published Arena Text records now let Wonder and Haiku 5.5 qualify under the
+unchanged six-domain and 75% overall coverage gates. Wonder Full stays
+separate and retains its unknown subscription allowance. After the reader
+cleanup, there are 20 ranked and 15 insufficient reader representatives.
+
+The cleanup removes every shipped route of GPT-5.6 Terra, MiniMax M3,
+Qwen3.7 Plus, Mistral Medium 3.5 and Muse Spark 1.3: five model families and
+seven configurations. Spark 1.3 has an AA deprecated/successor record; the
+other four are editorial inventory archives, not provider end-of-life claims.
+Their raw records, reviewed source cards and historical candidates remain
+available. Distinct budget lines such as Flash-Lite and Nemotron stay in the
+reader inventory. The inventory version migrates installed built-in boxes;
+unrelated user drafts remain intact. Weights and coverage gates are unchanged.
+
+AA now sends a current-only `initialModels` transport. The fetcher joins it
+to the complete public model comparison by exact slug and release date,
+including the separately framed profile model. It retains the real source
+page and native field path and rejects conflicting benchmark values. The
+snapshot has 709 models and 101 coding-agent records; public creator/display
+identities replace omitted internal host aliases without inventing them.
+
+OpenRouter's `variant=standard` response also includes separately labelled
+service tiers. The fetcher checks `service_tier`, `derived_service_tier`,
+the provider route, and public availability. Flex, Priority and Highspeed
+endpoints are excluded from the Standard aggregates, with rejection evidence
+retained. The capture has 401 model aggregates from 1,561 accepted endpoints.
+The public snapshot build fails if any reviewed configuration cannot install.
+Run `npm run test:october24-models` for the release and source-boundary checks.
 
 ## October 13 model refresh
 

@@ -19,6 +19,12 @@ const ARENA_AGENT_METRIC_IDS = new Set([
 ]);
 
 const REVIEWED_ARENA_AGENT_BASE_CARD_IDS = [
+  'card-arena-muse-wonder-max',
+  'card-arena-deepseek-v4-1-flash-20261017-max',
+  'card-arena-kimi-k3-1-pro-max',
+  'card-arena-gemini-4-argon-high',
+  'card-arena-mimo-v2-6-flash',
+  'card-arena-minimax-m3-1-flash',
   'card-arena-claude-fable-5-1-max',
   'card-arena-claude-opus-5-5-high',
   'card-arena-gpt-6-astra-max',

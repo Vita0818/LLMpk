@@ -788,6 +788,67 @@ const OCTOBER_13_MODEL_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPrese
   }),
 ];
 
+const OCTOBER_24_MODEL_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
+  ...apiProfilePresets({
+    keyPrefix: 'kimi-k3-1-pro', productLineId: 'kimi_k31_pro', modelName: 'Kimi K3.1 Pro',
+    profileKeys: ['max'], origin: 'source-backed',
+    sharedExactCardIds: ['card-openrouter-moonshotai-kimi-k3-1-pro', 'card-openrouter-standard-performance-moonshotai-kimi-k3-1-pro'],
+    lockExplicitSourceCards: true, lockProviderNeutralPracticalCards: true,
+    identityForProfile: profile => directApiIdentity('Kimi K3.1 Pro', profile, 'Moonshot AI', 'Moonshot API · kimi-k3.1-pro'),
+    note: '固定 2026-10-23 版本；公开 API 默认 Max。AA 未在模型名披露 effort 的记录保留 Default→Max 来源条件；Kimi K3 的 Kimi Code 和 Vals 成绩不转移给本版本。Standard 统计剔除单独的 Highspeed 路线。',
+  }),
+  ...apiProfilePresets({
+    keyPrefix: 'deepseek-v4-1-flash-1017', productLineId: 'deepseek_v41_flash_1017', modelName: 'DeepSeek V4.1 Flash 1017',
+    profileKeys: ['max'], origin: 'source-backed',
+    sharedExactCardIds: ['card-openrouter-deepseek-deepseek-v4-1-flash-1017', 'card-openrouter-standard-performance-deepseek-deepseek-v4-1-flash-1017'],
+    lockExplicitSourceCards: true, lockProviderNeutralPracticalCards: true,
+    identityForProfile: profile => directApiIdentity('DeepSeek V4.1 Flash 1017', profile, 'DeepSeek', 'DeepSeek API · deepseek-flash · 20261017'),
+    note: '固定 1017 发布版本，与 0910 的普通模型、Codex 和 FrontierCode 行分开；Max 使用 AA 和 Arena 的明确档位。',
+  }),
+  ...apiProfilePresets({
+    keyPrefix: 'minimax-m3-1-flash', productLineId: 'minimax_m31_flash', modelName: 'MiniMax M3.1 Flash',
+    profileKeys: ['max'], origin: 'source-backed',
+    sharedExactCardIds: ['card-openrouter-minimax-minimax-m3-1-flash', 'card-openrouter-standard-performance-minimax-minimax-m3-1-flash'],
+    lockExplicitSourceCards: true, lockProviderNeutralPracticalCards: true,
+    identityForProfile: profile => directApiIdentity('MiniMax M3.1 Flash', profile, 'MiniMax', 'MiniMax API · MiniMax-M3.1-Flash'),
+    note: '公开 API 默认 Max；AA 与 Arena 未披露 effort 的行保留 Default→Max 回退条件。免费首发已结束，使用当前实际端点价格；不沿用 M3 的评测。',
+  }),
+  ...apiProfilePresets({
+    keyPrefix: 'muse-spark-open', productLineId: 'muse_spark_open', modelName: 'Muse Spark Open',
+    profileKeys: ['xhigh'], origin: 'source-backed',
+    lockExplicitSourceCards: true, lockProviderNeutralPracticalCards: true,
+    identityForProfile: profile => directApiIdentity('Muse Spark Open', profile, 'Meta', 'Meta Model API · muse-spark-open'),
+    note: 'XHigh 采用 AA 的精确档位及其实际速度；Arena 的 Fireworks Max 不是 XHigh 观测，不向下回填。',
+  }),
+  ...apiProfilePresets({
+    keyPrefix: 'gemini-4-argon', productLineId: 'gemini_4_argon', modelName: 'Gemini 4 Argon',
+    profileKeys: ['high'], origin: 'source-backed',
+    sharedExactCardIds: ['card-openrouter-google-gemini-4-argon', 'card-openrouter-standard-performance-google-gemini-4-argon'],
+    lockExplicitSourceCards: true, lockProviderNeutralPracticalCards: true,
+    identityForProfile: profile => directApiIdentity('Gemini 4 Argon', profile, 'Google', 'Google AI Studio API · gemini-4-argon'),
+    note: '2026-10-13 已发布公开 API；使用 High 的 AA / Arena 记录，并保留各来源的实际发布日期。公开 Standard 价格和速度排除 Flex、Priority 与 Batch 路线。',
+  }),
+  harnessPreset({
+    key: 'harness.deepseek-v4-1-flash-1017.max.deepseek-harness', productLineId: 'deepseek_v41_flash_1017',
+    modelName: 'DeepSeek V4.1 Flash 1017', profile: 'Max', harness: 'DeepSeek Harness',
+    providerName: 'DeepSeek', upstreamApi: 'DeepSeek API · deepseek-flash · 20261017',
+    exactHarnessCardIds: ['card-aa-coding-agent-deepseek-harness-deepseek-v4-1-flash-1017-max'],
+    chatFallbackCardIds: ['card-aa-deepseek-v4-1-flash-1017', 'card-arena-deepseek-v4-1-flash-20261017-max',
+      'card-openrouter-deepseek-deepseek-v4-1-flash-1017'],
+    sameHarnessFallbackLinks: [lowerAgentHarnessFallback(
+      productionAgentModeCardId('card-arena-deepseek-v4-1-flash-20261017-max'), 'Max', 'DeepSeek Harness')],
+    note: 'AA 的实际执行为 DeepSeek Harness 0.2.1rc2；旧版 Codex 和 Chisel 结果不移植到 1017。',
+  }),
+  harnessPreset({
+    key: 'harness.muse-spark-open.xhigh.muse-code', productLineId: 'muse_spark_open',
+    modelName: 'Muse Spark Open', profile: 'XHigh', harness: 'Muse Code', providerName: 'Meta', upstreamApi: 'Meta Model API',
+    exactHarnessCardIds: ['card-aa-coding-agent-muse-code-muse-spark-open-xhigh'],
+    chatFallbackCardIds: ['card-aa-muse-spark-open'],
+    lockExplicitSourceCards: true, lockProviderNeutralPracticalCards: true,
+    note: 'AA 原始执行为 Muse Code / Spark Open XHigh；OpenHands 的 Vals 结果保留其自身执行环境。',
+  }),
+];
+
 const SEPTEMBER_25_MODEL_CONFIGURATION_PRESETS:
 readonly BuiltInConfigurationPreset[] = [
   ...apiProfilePresets({
@@ -886,7 +947,7 @@ readonly BuiltInConfigurationPreset[] = [
     productLineId: 'mimo_v26_flash',
     modelName: 'MiMo-V2.6-Flash',
     profileKeys: ['default'],
-    sharedExactCardIds: ['card-openrouter-xiaomi-mimo-v2-6-flash'],
+    sharedExactCardIds: ['card-openrouter-xiaomi-mimo-v2-6-flash', 'card-openrouter-standard-performance-xiaomi-mimo-v2-6-flash'],
     origin: 'source-backed',
     lockExplicitSourceCards: true,
     identityForProfile: (profile) => directApiIdentity(
@@ -1927,7 +1988,9 @@ const HARNESS_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPreset[] = [
     key: 'harness.muse-wonder.max.muse-code', productLineId: 'muse_wonder',
     modelName: 'Muse Wonder', profile: 'Max', harness: 'Muse Code', providerName: 'Meta', upstreamApi: 'Meta Model API',
     exactHarnessCardIds: ['card-aa-coding-agent-muse-code-muse-wonder-max'],
-    chatFallbackCardIds: ['card-aa-muse-wonder'],
+    chatFallbackCardIds: ['card-aa-muse-wonder', 'card-arena-muse-wonder-max'],
+    sameHarnessFallbackLinks: [lowerAgentHarnessFallback(
+      productionAgentModeCardId('card-arena-muse-wonder-max'), 'Max', 'Muse Code')],
     lockExplicitSourceCards: true, lockProviderNeutralPracticalCards: true,
   }),
   definePreset({
@@ -3803,6 +3866,7 @@ const BASE_HAND_AUTHORED_CONFIGURATION_PRESETS: readonly BuiltInConfigurationPre
   ...SEPTEMBER_25_MODEL_CONFIGURATION_PRESETS,
   ...OCTOBER_2_MODEL_CONFIGURATION_PRESETS,
   ...OCTOBER_13_MODEL_CONFIGURATION_PRESETS,
+  ...OCTOBER_24_MODEL_CONFIGURATION_PRESETS,
   ...AUGUST_2026_RELEASE_CONFIGURATION_PRESETS,
   ...ADDITIONAL_SOURCE_BACKED_CONFIGURATION_PRESETS,
   ...CLAUDE_OPUS_5_CONFIGURATION_PRESETS,
@@ -4476,6 +4540,7 @@ export const BUILT_IN_CONFIGURATION_KEY_VENDOR_KEYS = [
   'openai',
   'tencent',
   'xai',
+  'xiaomi',
   'zai',
 ] as const;
 
@@ -4696,10 +4761,6 @@ const READER_FACING_PRESET_EXCLUSIONS = new Set<string>([
 
 /** Reader-facing removals that apply to every route of the retired model line. */
 const READER_FACING_PRODUCT_LINE_EXCLUSIONS = new Set<string>([
-  // Google currently restricts access to invited Fairwind participants;
-  // AA marks its Antigravity CLI execution unavailable. Preserve raw evidence
-  // in the source pool until the public access route is published.
-  'gemini_4_argon',
   'qwen_37_max',
   'qwen_38_max_preview',
   'source-profile-inkling-small',
@@ -4729,6 +4790,11 @@ const READER_FACING_PLAIN_API_PRODUCT_LINE_EXCLUSIONS = new Set<string>([
  * Missing domains remain missing and are shown as incomplete coverage.
  */
 const READER_APPROVED_SPARSE_PRODUCT_LINES = new Set<string>([
+  'kimi_k31_pro',
+  'deepseek_v41_flash_1017',
+  'minimax_m31_flash',
+  'muse_spark_open',
+  'gemini_4_argon',
   'claude_haiku_55',
   'muse_wonder',
   'muse_wonder_full',
@@ -4772,6 +4838,10 @@ function curateReaderFacingPresets(
     // The new OpenRouter route exposes Low/Medium/High, not Max. Keep the
     // reviewed High execution instead of promoting a generic catalog label.
     if (preset.productLineId === 'step_5_preview' && preset.identity.model.profile !== 'High') return;
+    // These reviewed releases publish unqualified/default model evidence.
+    // A generic catalog "Max" label cannot replace the authored identity.
+    if (['mimo_v26_pro', 'mimo_v26_flash'].includes(preset.productLineId)
+      && preset.identity.model.profile !== 'Default') return;
     if (RETIRED_READER_MODEL_GROUP_KEYS.has(presetModelGroupKey(preset))) return;
     if (!READER_CURRENT_MODEL_GROUP_KEYS.has(presetModelGroupKey(preset))) return;
     if (READER_FACING_PRESET_EXCLUSIONS.has(preset.id)) return;
@@ -5049,4 +5119,4 @@ export const BUILT_IN_CONFIGURATION_PRESET_COUNT = BUILT_IN_CONFIGURATION_PRESET
  * additions visible during Vite hot updates as well as after a full reload.
  */
 export const BUILT_IN_CONFIGURATION_PRESET_INVENTORY_VERSION =
-  '2026-10-13-wonder-haiku-large4-v53';
+  '2026-10-24-reader-archive-five-lines-v55';

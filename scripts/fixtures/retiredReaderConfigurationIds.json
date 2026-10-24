@@ -1,4 +1,6 @@
 [
+  "builtin.harness.kimi-k3.max.kimi-code-cli",
+  "builtin.deepseek-v4-1-flash.max",
   "builtin.agent.arena.claude-sonnet-5.max",
   "builtin.agent.arena.hy3.high",
   "builtin.api-tier.meta-contributor.muse-spark-1-2.xhigh.muse-code",
@@ -51,5 +53,12 @@
   "builtin.subscription.google-ai-ultra-20x.gemini-3-1-pro.high.gemini-cli",
   "builtin.subscription.google-ai-ultra-20x.gemini-3-7-flash.high.antigravity-sdk",
   "builtin.subscription.google-ai-ultra-20x.gemini-3-7-flash.high.opencode",
-  "builtin.subscription.supergrok.grok-4-6.xhigh.chat"
+  "builtin.subscription.supergrok.grok-4-6.xhigh.chat",
+  "builtin.agent.arena.minimax-m3.max",
+  "builtin.harness.qwen-3-7-plus.max.claude-code",
+  "builtin.harness.gpt-5-6-terra.max.codex-cli",
+  "builtin.subscription.chatgpt-plus.gpt-5-6-terra.max.codex-cli",
+  "builtin.data-md.mistral-medium-3-5.max",
+  "builtin.harness.muse-spark-1-3.xhigh.muse-code",
+  "builtin.api-tier.meta-contributor.muse-spark-1-3.xhigh.muse-code"
 ]

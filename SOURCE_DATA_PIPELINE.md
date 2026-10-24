@@ -1,5 +1,66 @@
 > Current scoring policy: [Registry v3.1](llm_pk_data_source_registry_v3_1.md), [Weights v3.1](llm_pk_domain_classification_weighting_v3_1.md), [Scoring v3.1](llm_pk_scoring_methodology_v3_1.md). Earlier source captures below remain historical provenance.
 
+## October 24 model and source refresh
+
+The reviewed inventory contains 33 model families / 49 configurations / 35
+reader representatives. Kimi K3.1 Pro and DeepSeek V4.1 Flash 1017 replace
+their predecessors. MiniMax M3.1 Flash, Muse Spark Open, public Gemini 4 Argon
+and MiMo-V2.6-Flash are admitted separately. The two current MiMo product
+lines keep their authored Default identities; generic Max labels do not
+override them. Scoring weights and coverage gates remain v3.1.
+
+AA's current-only `initialModels` table is supplemented with the complete
+public profile comparison, including the `currentModel` object referenced
+by Flight. Exact slugs and release dates must agree. Native performance
+fields and their page provenance are retained; current explicit nulls are
+not backfilled. The capture includes 709 models, 101 Coding Agent records
+and 228 exact GDP.pdf scores. New Coding Agent rows publish public display
+and creator identities rather than internal `hostModelSlug` values. Missing
+host aliases remain null. Changed task components never fill older DeepSWE
+or Terminal-Bench v2 fields.
+
+All nine Arena pages were read through the normal browser after HTTP 403.
+Complete inline Flight scripts were copied as static text in 80,000-character
+chunks, with length checks, byte counts and SHA-256 hashes. The extraction
+retains the original October 2 Bash recovery observations. Later reliability
+signals cannot supply that task. Literal `+` model keys remain distinct;
+Command R and R+ no longer collide after slug generation.
+
+OpenRouter `variant=standard` is a model variant, not a serving-tier filter.
+The fetcher separately checks the published service tiers, exact provider
+routes and availability flags. It excludes Flex, Priority, Highspeed,
+private, hidden, disabled and BYOK-only endpoints, retaining rejected
+identities and reasons. The fresh capture has 469 catalog routes and 401
+Standard aggregates from 1,561 accepted endpoints. All 1,604 history requests
+succeeded; 98.1% of accepted speed/latency values have history support.
+
+Vals Index 2.2 and HLAB 1.1 are explicitly reviewed revisions. Seven
+standalone task weights remain unchanged. A missing 1.1 execution stays
+missing; the old 1.0 score is not transferred. The active metric also pins
+its benchmark version independently of the mapping manifest. The capture
+has 120 model/execution IDs and 6,673 result rows. Thirty-three reviewed
+identities produce 259 cards and attach to 39 configurations after reader cleanup. The smaller
+Index and HLAB model sets explain the lower raw row count. MiniMax M3.1
+Flash has six reviewed runs; missing Finance v2, Excel v1 and standalone
+Code Migration stay absent. Kimi K3.1 Pro has no Vals execution.
+
+DesignArena includes 159 raw rows, with 17 reviewed source rows / 21 active target
+configurations. New dated Argon and 1017 rows retain undisclosed source effort
+as Default. Source values pass all 35 bulk checks. Raw captures and the
+publication manifest are in `.cache/oct24-refresh/`, and prior snapshots are
+preserved in `.cache/pre-refresh-2026-10-24/`. The public snapshot generator
+fails on an invalid preset, missing source link or omitted configuration.
+
+The subsequent October 24 reader cleanup archives GPT-5.6 Terra, MiniMax M3,
+Qwen3.7 Plus and Mistral Medium 3.5 by editorial policy and retires Muse Spark
+1.3 against AA's deprecated/successor record. All seven shipped routes leave
+the inventory together. `readerModelRetirementPolicy.ts` distinguishes the
+four editorial archives from successor retirements. Historical candidates,
+raw snapshots and reviewed source cards remain available; inactive manifest
+targets are cleared. The bumped inventory version synchronizes previously
+installed built-ins without deleting unrelated user drafts. Scoring weights
+and coverage gates do not change; relative calibration uses the reduced cohort.
+
 ## October 13 model refresh
 
 The reviewed reader inventory is now 34 families / 52 configurations / 36

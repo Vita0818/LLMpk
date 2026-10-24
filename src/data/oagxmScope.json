@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "oagxm-current-product-lines/v12-2026-10-13-releases",
+  "schemaVersion": "oagxm-current-product-lines/v13-2026-10-24-releases",
   "scopeId": "oagxm-current-product-lines",
   "snapshotPolicy": "Keep every source-published execution profile for the listed product lines, including the Data.md model inventory. Never merge reasoning effort, harness, fast, pro, custom-tools, or serving-environment variants by name. Arena Search and Grounding suffixes are benchmark row labels, so their observations belong to the underlying model rather than a separate execution configuration; the original row identity remains in provenance. Exclude variable latest aliases and :free routes unless a reader-facing configuration explicitly names that free route as its price source; Thinking Machines Inkling is the approved current exception. A model mentioned only through a client or IDE environment is not automatically represented as that environment; it needs a source-published record for the exact profile.",
   "benchmarkBoundary": "General-purpose text or multimodal foundation models supported by the LLM capability registry. Historical Data.md entries are retained only when an exact record is published by Artificial Analysis, Arena, or OpenRouter. Dedicated image, video, speech, embedding, moderation, and safety-only APIs are outside the formal capability leaderboard unless a corresponding source benchmark is added.",
@@ -74,6 +74,7 @@
       "name": "Meta",
       "officialModelsUrl": "https://ai.meta.com/llama",
       "productLines": [
+        { "id": "muse_spark_open", "name": "Muse Spark Open", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bmuse[- ]spark[- ]open\\b"] },
         { "id": "muse_wonder_full", "name": "Muse Wonder Full", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bmuse[- ]wonder[- ]full\\b"] },
         { "id": "muse_wonder", "name": "Muse Wonder", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bmuse[- ]wonder\\b(?![- ]full\\b)"] },
         { "id": "muse_glimmer", "name": "Muse Glimmer", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bmuse[- ]glimmer(?:[- ]30b)?\\b"] },
@@ -89,10 +90,11 @@
       "name": "DeepSeek",
       "officialModelsUrl": "https://api-docs.deepseek.com/quick_start/pricing",
       "productLines": [
-        { "id": "deepseek_v41_flash", "name": "DeepSeek V4.1 Flash", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[._-]1[- ]flash\\b"] },
+        { "id": "deepseek_v41_flash_1017", "name": "DeepSeek V4.1 Flash 1017", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[._-]1[- ]flash(?:[- ](?:max|high|low|xhigh|reasoning))*[- ](?:1017|20261017)\\b"] },
+        { "id": "deepseek_v41_flash", "name": "DeepSeek V4.1 Flash", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[._-]1[- ]flash\\b(?![- ](?:1017|20261017)\\b)"] },
         { "id": "deepseek_v4_flash_0731", "name": "DeepSeek-v4-Flash 0731", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[- ]flash[- ]0731\\b", "\\bdeepseek[- ]v?4[- ]flash.*\\b20260731\\b", "2083084415157022911", "date[- ]2026[- ]07[- ]31"] },
         { "id": "deepseek_v4_flash", "name": "DeepSeek-v4-Flash Preview", "tier": "preview", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[- ]flash\\b"] },
-        { "id": "deepseek_v4_pro_0813", "name": "DeepSeek-v4-Pro 0813", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[- ]pro(?:[- ](?:max|high|low|xhigh|reasoning))*[- ](?:0813|20260813)\\b"] },
+        { "id": "deepseek_v4_pro_0813", "name": "DeepSeek-v4-Pro 0813", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[- ]pro(?:[- ](?:max|high|low|xhigh|reasoning))*[- ](?:0813|20260813)\\b", "\\bdeepseek[- ]v?4[- ]pro[ ]*\\((?:max|high|low|xhigh|reasoning)[, ]+(?:0813|20260813)\\)"] },
         { "id": "deepseek_v4_pro", "name": "DeepSeek-v4-Pro", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bdeepseek[- ]v?4[- ]pro\\b(?![- ]?(?:0813|20260813)\\b)"] }
       ]
     },
@@ -136,8 +138,9 @@
       "name": "Moonshot AI",
       "officialModelsUrl": "https://platform.moonshot.ai/docs/guide/start-using-kimi",
       "productLines": [
+        { "id": "kimi_k31_pro", "name": "Kimi K3.1 Pro", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bkimi[- ]k?3[._-]1[- ]pro\\b(?![- ]highspeed\\b)"] },
         { "id": "kimi_k26", "name": "Kimi K2.6", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bkimi[- ]k?2[._-]6\\b"] },
-        { "id": "kimi_k3", "name": "Kimi K3", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bkimi[- ]k?3\\b"] }
+        { "id": "kimi_k3", "name": "Kimi K3", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bkimi[- ]k?3\\b(?![._-]\\d)"] }
       ]
     },
     {
@@ -145,7 +148,8 @@
       "name": "MiniMax",
       "officialModelsUrl": "https://platform.minimax.io/docs/guides/models-intro",
       "productLines": [
-        { "id": "minimax_m3", "name": "MiniMax M3", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bminimax[- ]m3\\b"] }
+        { "id": "minimax_m31_flash", "name": "MiniMax M3.1 Flash", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bminimax[- ]m3[._-]1[- ]flash\\b"] },
+        { "id": "minimax_m3", "name": "MiniMax M3", "tier": "official", "rankingClass": "formal_text_agent", "patterns": ["\\bminimax[- ]m3\\b(?![._-]\\d)"] }
       ]
     },
     {

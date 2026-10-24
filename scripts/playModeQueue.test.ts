@@ -96,14 +96,15 @@ assert(buildRepresentativeConfigurationQueue(insufficientRoutes)[0].config.id ==
   'Missing total scores must not defeat highest-plan selection.');
 
 const expectedRepresentatives = [
-  "Kimi K3 Max | Kimi Code CLI | Moonshot AI API",
+  "Gemini 4 Argon High | --- | Google API",
+  "MiMo-V2.6-Flash Default | --- | Xiaomi API",
   "Claude Opus 5.5 Max | Claude Code | Claude Max 20×",
   "Claude Fable 5.1 Max | Claude Code | Claude Max 20×",
   "GPT-6 Astra Max | Codex CLI | ChatGPT Pro $200",
   "GPT-6 Luna Max | Codex CLI | OpenAI API",
   "MiMo-V2.6-Pro Default | --- | Xiaomi API",
   "GLM-5.3 Max | --- | Z.ai API",
-  "MiniMax M3 Max | AA Agent Harness | MiniMax API",
+  "Claude Haiku 5.5 Max | Claude Code | Anthropic API",
   "Gemini 3.8 Flash High | AA Agent Harness | Google API"
 ];
 

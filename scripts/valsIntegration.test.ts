@@ -19,14 +19,14 @@ const manifest = reviews as unknown as ValsReviewedManifest;
 const bases = JSON.parse(VERIFIED_SOURCE_MODEL_CARDS) as SourceModelCard[];
 const published = publicSnapshot as unknown as PublicLeaderboardSnapshot;
 assert.deepEqual(UNMATCHED_REVIEWED_VALS_MAPPINGS, []);
-assert.equal(VERIFIED_VALS_SOURCE_MODEL_CARDS.length, 234);
-assert.equal(VERIFIED_VALS_SOURCE_OBSERVATIONS.length, 234);
-assert.equal(BUILT_IN_CONFIGURATION_PRESETS.length, 52);
-assert.equal(BUILT_IN_CONFIGURATION_MODEL_GROUP_COUNT, 34);
+assert.equal(VERIFIED_VALS_SOURCE_MODEL_CARDS.length, 259);
+assert.equal(VERIFIED_VALS_SOURCE_OBSERVATIONS.length, 259);
+assert.equal(BUILT_IN_CONFIGURATION_PRESETS.length, 49);
+assert.equal(BUILT_IN_CONFIGURATION_MODEL_GROUP_COUNT, 33);
 assert.equal(ALL_METRIC_DEFINITIONS.length, 26);
 assert.equal(ALL_METRIC_DEFINITIONS.filter(metric => metric.id.startsWith('vals_')).length, 7);
-assert.equal(ALL_METRIC_DEFINITIONS.some(metric => ['vals_index_v21', 'vals_terminalbench_v4'].includes(metric.id)), false);
-assert.equal(buildRepresentativeConfigurationQueue(published.scores).length, 36);
+assert.equal(ALL_METRIC_DEFINITIONS.some(metric => ['vals_index_v22', 'vals_terminalbench_v4'].includes(metric.id)), false);
+assert.equal(buildRepresentativeConfigurationQueue(published.scores).length, 35);
 
 for (const review of manifest.entries) {
   for (const execution of review.executions) {
@@ -47,8 +47,8 @@ for (const review of manifest.entries) {
 
 const museKey = 'meta-muse-spark-1-3';
 const maxKey = 'meta-muse-spark-1-3-max';
-const museId = `card-vals-${museKey}-vals_index`;
-const maxId = `card-vals-${maxKey}-vals_index`;
+const museId = `card-vals-${museKey}-vibe-code`;
+const maxId = `card-vals-${maxKey}-vibe-code`;
 const museScore = VERIFIED_VALS_SOURCE_OBSERVATIONS.find(item => item.sourceModelCardId === museId)!;
 const maxScore = VERIFIED_VALS_SOURCE_OBSERVATIONS.find(item => item.sourceModelCardId === maxId)!;
 assert.notEqual(museScore.rawValue, maxScore.rawValue);
@@ -61,7 +61,7 @@ assert.equal(missing.cards.some(card => card.id === maxId), true, 'Max stays sep
 const wrongVersion = structuredClone(manifest);
 wrongVersion.entries[0].canonicalModelVersion = 'anthropic/claude-fable-5-20260609';
 assert.ok(buildValsSourceCards(data, bases, wrongVersion).unmatchedReviewedMappings.length > 0);
-const duplicateBenchmark = { ...data, benchmarks: [...data.benchmarks, data.benchmarks[0]] };
+const duplicateBenchmark = { ...data, benchmarks: [...data.benchmarks, data.benchmarks.find(item => item.metadata.slug === 'vibe-code')!] };
 assert.equal(buildValsSourceCards(duplicateBenchmark, bases, manifest).cards.some(card => card.id === museId), false);
 for (const preset of BUILT_IN_CONFIGURATION_PRESETS.filter(preset => preset.productLineId === 'qwen_38_max')) {
   assert.equal(preset.sourceCardLinks?.some(link => link.cardId.startsWith('card-vals-')) ?? false, false);
@@ -73,7 +73,7 @@ const index = data.benchmarks.find(item => item.metadata.slug === 'vals_index')!
 assert.equal(migration.rawValue, 0.69825);
 assert.notEqual(migration.rawValue, index.tasks.code_migration['anthropic/claude-sonnet-5-5'].accuracy! / 100,
   'The standalone full migration run must not be replaced by the index subset.');
-assert.equal(sonnet.config.valsData!.find(row => row.metricId === 'vals_index_v21')!.hasRefusalFallbackNotice, true);
+assert.equal(sonnet.config.valsData!.find(row => row.metricId === 'vals_index_v22')!.hasRefusalFallbackNotice, true);
 assert.equal(sonnet.config.valsData!.find(row => row.metricId === 'vals_vibe_code_v11')!.sourceHarness, 'OpenHands');
 assert.equal(buildConfigurationMetricRows(sonnet).length, 30, 'All 26 weighted metrics and four practical fields must be visible.');
 assert.equal(buildValsMetricRows(sonnet).find(row => row.id === 'vals_code_migration_v1')!.value, '69.83%');
@@ -87,9 +87,9 @@ Reflect.deleteProperty(globalThis, 'localStorage');
 const { AdminMappingStore } = await import('../src/store/adminMappingStore');
 const store = new AdminMappingStore();
 store.installBuiltInConfigurationPresets();
-assert.equal(store.cards.filter(card => card.source === 'vals').length, 234);
+assert.equal(store.cards.filter(card => card.source === 'vals').length, 259);
 const scores = store.computeLeaderboardScores();
-assert.equal(scores.filter(score => score.config.valsData?.length).length, 43);
+assert.equal(scores.filter(score => score.config.valsData?.length).length, 39);
 const altered = processLLMpkBatchScoring(scores.map(score => ({
   ...score.config, valsData: undefined,
   observations: Object.fromEntries(Object.entries(score.config.observations).map(([id, row]) => [id,
@@ -121,4 +121,4 @@ store.updateBox(fallbackBox.id, { identity: { ...fallbackBox.identity,
 assert.equal(store.getLinkedCardStack(fallbackBox.id, 'vals').length, 0,
   'An authored upward profile link must stop supplying evidence after the target identity changes.');
 
-console.log('Vals reviewed version/effort links, official no-fallback scores, source isolation and v3.1 scoring: PASS (234 cards, 43 configurations)');
+console.log(`Vals reviewed version/effort links, official no-fallback scores, source isolation and v3.1 scoring: PASS (${VERIFIED_VALS_SOURCE_MODEL_CARDS.length} cards, ${scores.filter(score => score.config.valsData?.length).length} configurations)`);

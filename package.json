@@ -8,7 +8,7 @@
     "generate:public-snapshot": "esbuild scripts/generatePublicLeaderboardSnapshot.ts --bundle --platform=node --format=esm --outfile=/tmp/llmpk-generate-public-snapshot.mjs && node /tmp/llmpk-generate-public-snapshot.mjs",
     "verify:public-bundle": "node scripts/verifyPublicBundle.mjs",
     "build": "npm run generate:public-snapshot && tsc -b && vite build && npm run verify:public-bundle",
-    "test": "npm run test:source-extraction && npm run test:scoring-v3 && npm run test:scoring && npm run test:custom-ranking && npm run test:pareto && npm run test:admin-mapping && npm run test:scope && npm run test:detail-content && npm run test:play-mode && npm run test:openrouter-pricing && npm run test:openrouter-speed && npm run test:openrouter-benchmarks && npm run test:design-arena && npm run test:vals && npm run test:october-models",
+    "test": "npm run test:source-extraction && npm run test:scoring-v3 && npm run test:scoring && npm run test:custom-ranking && npm run test:pareto && npm run test:admin-mapping && npm run test:scope && npm run test:detail-content && npm run test:play-mode && npm run test:openrouter-pricing && npm run test:openrouter-speed && npm run test:openrouter-benchmarks && npm run test:design-arena && npm run test:vals && npm run test:october-models && npm run test:october24-models",
     "test:source-extraction": "node scripts/sourceExtraction.test.mjs",
     "test:scoring": "esbuild scripts/scoringEngine.test.ts --bundle --platform=node --format=esm --outfile=/tmp/llmpk-scoring-engine.test.mjs && node /tmp/llmpk-scoring-engine.test.mjs",
     "test:custom-ranking": "esbuild scripts/customRanking.test.ts --bundle --platform=node --format=esm --outfile=/tmp/llmpk-custom-ranking.test.mjs && node /tmp/llmpk-custom-ranking.test.mjs",
@@ -18,7 +18,7 @@
     "test:detail-content": "esbuild scripts/configurationDetailContent.test.ts --bundle --platform=node --format=esm --outfile=/tmp/llmpk-configuration-detail-content.test.mjs && node /tmp/llmpk-configuration-detail-content.test.mjs",
     "test:play-mode": "esbuild scripts/playModeQueue.test.ts --bundle --platform=node --format=esm --outfile=/tmp/llmpk-play-mode-queue.test.mjs && node /tmp/llmpk-play-mode-queue.test.mjs",
     "test:openrouter-pricing": "esbuild scripts/openRouterPromotionalPricing.test.ts --bundle --platform=node --format=esm --outfile=/tmp/llmpk-openrouter-promotional-pricing.test.mjs && node /tmp/llmpk-openrouter-promotional-pricing.test.mjs",
-    "test:openrouter-speed": "node scripts/openRouterSpeedStabilization.test.mjs",
+    "test:openrouter-speed": "node scripts/openRouterSpeedStabilization.test.mjs && node scripts/openRouterEndpointPolicy.test.mjs",
     "test:design-arena": "node scripts/designArenaSnapshot.test.mjs && esbuild scripts/designArenaIntegration.test.ts --bundle --platform=node --format=esm --outfile=/tmp/llmpk-design-arena-integration.test.mjs && node /tmp/llmpk-design-arena-integration.test.mjs",
     "test:openrouter-benchmarks": "node scripts/openRouterBenchmarkSnapshot.test.mjs",
     "audit:arena": "node scripts/arena_data_self_audit.mjs",
@@ -39,7 +39,8 @@
     "preview": "vite preview",
     "test:scoring-v3": "esbuild scripts/scoringV3Policies.test.ts --bundle --platform=node --format=esm --outfile=/tmp/llmpk-scoring-v3.test.mjs && node /tmp/llmpk-scoring-v3.test.mjs",
     "refresh:frontiercode": "node scripts/fetchFrontierCodeSnapshot.mjs",
-    "test:october-models": "esbuild scripts/octoberModelRefresh.test.ts --bundle --platform=node --format=esm --outfile=/tmp/llmpk-october-model-refresh.test.mjs && node /tmp/llmpk-october-model-refresh.test.mjs"
+    "test:october-models": "esbuild scripts/octoberModelRefresh.test.ts --bundle --platform=node --format=esm --outfile=/tmp/llmpk-october-model-refresh.test.mjs && node /tmp/llmpk-october-model-refresh.test.mjs",
+    "test:october24-models": "esbuild scripts/october24ModelRefresh.test.ts --bundle --platform=node --format=esm --outfile=/tmp/llmpk-october24-model-refresh.test.mjs && node /tmp/llmpk-october24-model-refresh.test.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.475.0",

@@ -28,7 +28,9 @@
 
 ## Vals 模型归因与来源条件
 
-七项 Vals 任务进入能力权重：Legal Research、Tax Agent、Code Migration、Vibe Code Bench 1.1、Finance Agent v2、Excel Modeling、Harvey HLAB。Vals Index 和 Vals TB4 保留作参考，避免重复聚合或重复计算同名终端任务。
+七项 Vals 任务进入能力权重：Legal Research、Tax Agent、Code Migration、Vibe Code Bench 1.1、Finance Agent v2、Excel Modeling、HLAB-Vals 1.1。Vals Index 2.2 和 Vals TB4 保留作参考，避免重复聚合或重复计算同名终端任务。
+
+2026-10-24 修订只升级来源版本：HLAB 使用新的 `vals_hlab_v11` 标识，领域内权重仍为 25%，其余权重、归一化方式与覆盖门槛均不变。缺少新版 HLAB 的模型不能沿用 1.0；数据载入同时核对来源、审核清单和计分指标定义中的版本，防止旧成绩以新版名称参与计分。
 
 部分公布分包含在原模型拒答后由备用模型完成的任务。对来源已披露的备用任务，使用 Vals 官方 `noFallbackScorePct`，将这些任务计为失败；不自行推算原模型成绩。公布分、原模型分、备用和拒答次数、实际运行设置与来源校验值均保留。拒答已经作为失败计入的任务不再重复扣分。
 

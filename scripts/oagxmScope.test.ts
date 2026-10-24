@@ -9,6 +9,13 @@ import { OAGXM_SCOPE, classifyOagxmModel } from '../src/data/oagxmScope';
  * source-published profiles kept as separate source cards.
  */
 const expectedProductLines: Array<[string, string]> = [
+  ['Kimi K3.1 Pro', 'kimi_k31_pro'],
+  ['kimi-k3-1-pro', 'kimi_k31_pro'],
+  ['DeepSeek V4.1 Flash 1017 (Max)', 'deepseek_v41_flash_1017'],
+  ['deepseek-v4.1-flash-max-20261017', 'deepseek_v41_flash_1017'],
+  ['MiniMax-M3.1-Flash', 'minimax_m31_flash'],
+  ['minimax-m3-1-flash', 'minimax_m31_flash'],
+  ['Muse Spark Open (XHigh)', 'muse_spark_open'],
   ['Muse Wonder (Max)', 'muse_wonder'],
   ['Muse Wonder Full (Max)', 'muse_wonder_full'],
   ['Claude Haiku 5.5 (XHigh)', 'claude_haiku_55'],
@@ -17,6 +24,7 @@ const expectedProductLines: Array<[string, string]> = [
   ['DeepSeek V4.1 Flash', 'deepseek_v41_flash'],
   ['DeepSeek-v4-Flash-0731', 'deepseek_v4_flash_0731'],
   ['DeepSeek-v4-Pro 0813', 'deepseek_v4_pro_0813'],
+  ['DeepSeek-V4-Pro (High, 20260813)', 'deepseek_v4_pro_0813'],
   ['deepseek/deepseek-v4-pro-20260813', 'deepseek_v4_pro_0813'],
   ['deepseek-v4-pro-max-20260813', 'deepseek_v4_pro_0813'],
   ['deepseek-v4-pro-high-20260813', 'deepseek_v4_pro_0813'],
@@ -113,7 +121,11 @@ for (const [sourceName, productLineId] of expectedProductLines) {
 }
 
 const configuredProductLines = OAGXM_SCOPE.vendors.flatMap((vendor) => vendor.productLines);
-assert.equal(configuredProductLines.length, 83, 'Curated inventory should include the October 2026 model lines');
+assert.equal(configuredProductLines.length, 87, 'Curated inventory should include the reviewed October 24 model lines');
+assert.equal(classifyOagxmModel('Kimi K3.2')?.productLineId, undefined);
+assert.equal(classifyOagxmModel('Kimi K3.1 Pro Highspeed')?.productLineId, undefined,
+  'The standard route must not absorb a separately named Highspeed model.');
+assert.equal(classifyOagxmModel('MiniMax M3.2')?.productLineId, undefined);
 assert.equal(
   classifyOagxmModel('Claude Fable 5.1')?.productLineId,
   'claude_fable_51',

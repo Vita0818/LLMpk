@@ -8,7 +8,7 @@ import {
 } from '../src/data/designArenaSeedCards';
 import { VERIFIED_SOURCE_MODEL_CARDS } from '../src/data/seedCards';
 import { BUILT_IN_CONFIGURATION_PRESETS } from '../src/data/builtInConfigurationPresets';
-import { READER_CURRENT_MODEL_GROUP_KEYS } from '../src/data/readerModelRetirementPolicy';
+import { READER_CURRENT_MODEL_GROUP_KEYS, RETIRED_READER_MODEL_GROUP_KEYS } from '../src/data/readerModelRetirementPolicy';
 import { ALL_METRIC_DEFINITIONS } from '../src/engine/scoringEngine';
 import type { SourceModelCard } from '../src/types/admin_mapping';
 
@@ -18,11 +18,11 @@ assert.ok(snapshot.rows.length >= reviews.entries.length);
 assert.equal(snapshot.responseMeta.model_count, new Set(snapshot.rows.map(row => row.model_permaslug)).size);
 assert.equal(snapshot.lastUpdated, null);
 assert.equal(snapshot.sourceAsOf, snapshot.responseMeta.as_of);
-assert.equal(VERIFIED_DESIGN_ARENA_SOURCE_MODEL_CARDS.length, 15);
-assert.equal(VERIFIED_DESIGN_ARENA_SOURCE_OBSERVATIONS.length, 15);
+assert.equal(VERIFIED_DESIGN_ARENA_SOURCE_MODEL_CARDS.length, 17);
+assert.equal(VERIFIED_DESIGN_ARENA_SOURCE_OBSERVATIONS.length, 17);
 assert.deepEqual(UNMATCHED_REVIEWED_DESIGN_ARENA_MAPPINGS, []);
-assert.equal(BUILT_IN_CONFIGURATION_PRESETS.length, 52);
-assert.equal(READER_CURRENT_MODEL_GROUP_KEYS.size, 34);
+assert.equal(BUILT_IN_CONFIGURATION_PRESETS.length, 49);
+assert.equal(READER_CURRENT_MODEL_GROUP_KEYS.size, 33);
 assert.equal(ALL_METRIC_DEFINITIONS.length, 26);
 assert.equal(ALL_METRIC_DEFINITIONS.find(metric => metric.id === 'designarena_frontend')?.internalWeightInDomain, 0.3);
 
@@ -65,13 +65,17 @@ for (const review of reviews.entries) {
     }
   }
 }
-assert.equal(targetIds.size, 24);
+assert.equal(targetIds.size, 21);
 for (const preset of BUILT_IN_CONFIGURATION_PRESETS) {
   const designLinks = preset.sourceCardLinks?.filter(link => link.cardId.startsWith('card-designarena-')) ?? [];
   assert.equal(designLinks.length, targetIds.has(preset.id) ? 1 : 0);
 }
 for (const exclusion of reviews.exclusions) {
   const presets = BUILT_IN_CONFIGURATION_PRESETS.filter(preset => preset.productLineId === exclusion.productLineId);
+  if (RETIRED_READER_MODEL_GROUP_KEYS.has(exclusion.productLineId)) {
+    assert.equal(presets.length, 0, 'Historical exclusion records cannot reinstall an archived model.');
+    continue;
+  }
   assert.ok(presets.length > 0);
   for (const preset of presets) {
     const score = publicSnapshot.scores.find(score => score.config.name === preset.displayName)!;
@@ -125,4 +129,4 @@ store.updateBox(opus.id, { identity: { ...opus.identity,
 assert.equal(store.getLinkedCardStack(opus.id).some(({ card }) => card.id === 'card-designarena-claude-opus-55-default'), false,
   'An authored Default-to-Max fallback must be removed after an operator changes the target identity.');
 
-console.log('DesignArena reviewed model/version/effort links, subscription access variants, missing evidence and runtime fallback authorization: PASS (15 source rows, 24 configurations)');
+console.log(`DesignArena reviewed model/version/effort links, subscription access variants, missing evidence and runtime fallback authorization: PASS (${VERIFIED_DESIGN_ARENA_SOURCE_MODEL_CARDS.length} source rows, ${targetIds.size} configurations)`);

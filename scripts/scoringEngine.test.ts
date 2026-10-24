@@ -111,7 +111,7 @@ for (const [id, domain, weight] of [
   ['vals_legal_research_v1','reasoning',.10],['vals_tax_agent_v1','reasoning',.10],
   ['vals_code_migration_v1','coding',.30],['vals_vibe_code_v11','frontend',.30],
   ['vals_finance_agent_v2','agentic',.30],['vals_excel_modeling_v1','documents',.25],
-  ['vals_hlab_v1','documents',.25],
+  ['vals_hlab_v11','documents',.25],
 ] as const) {
   assert.equal(metricDefinitionsById.get(id)?.domain, domain);
   nearlyEqual(metricDefinitionsById.get(id)!.internalWeightInDomain,weight);

@@ -21,6 +21,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { standardEndpointExclusionReason } from './openRouterEndpointPolicy.mjs';
 import {
   OPENROUTER_SPEED_STABILIZATION_POLICY,
   OPENROUTER_SPEED_STABILIZATION_VERSION,
@@ -151,6 +152,7 @@ async function loadModelCatalog() {
 }
 
 function compactStatsRow(model, endpoint, sourceUrl, sourceOrder) {
+  if (standardEndpointExclusionReason(endpoint)) return null;
   const stats = endpoint?.stats;
   const endpointId = typeof endpoint?.id === 'string' ? endpoint.id.trim() : '';
   const p50LatencyMilliseconds = asFiniteNumber(stats?.p50_latency);
@@ -174,6 +176,10 @@ function compactStatsRow(model, endpoint, sourceUrl, sourceOrder) {
     canonicalSlug: model.canonical_slug,
     exactModelName: model.name || model.id,
     variant: endpoint.variant || 'standard',
+    serviceTier: endpoint.service_tier ?? null,
+    derivedServiceTier: endpoint.derived_service_tier ?? null,
+    availabilityFlags: { private: endpoint.is_private ?? null, hidden: endpoint.is_hidden ?? null,
+      disabled: endpoint.is_disabled ?? null, byokOnly: endpoint.is_byok_only ?? null },
     sourceOrder,
     endpointId,
     endpointName: endpoint.name || null,
@@ -470,6 +476,7 @@ async function main() {
   const historyFailures = [];
   const unavailableModels = [];
   const noStatisticsModels = [];
+  const excludedEndpoints = [];
   const endpointDiagnostics = {
     returnedEndpointRows: 0,
     acceptedEndpointRows: 0,
@@ -477,6 +484,7 @@ async function main() {
     rejectedMissingLatency: 0,
     rejectedMissingThroughput: 0,
     rejectedMissingOrZeroRequestCount: 0,
+    rejectedNonStandardEndpoint: 0,
   };
   let cursor = 0;
 
@@ -502,6 +510,16 @@ async function main() {
             endpointDiagnostics.acceptedEndpointRows += 1;
           } else {
             endpointDiagnostics.rejectedEndpointRows += 1;
+            const exclusionReason = standardEndpointExclusionReason(endpoint);
+            if (exclusionReason) {
+              endpointDiagnostics.rejectedNonStandardEndpoint += 1;
+              excludedEndpoints.push({ modelId: model.id, endpointId: endpoint.id ?? null,
+                providerSlug: endpoint.provider_slug ?? null, variant: endpoint.variant ?? null,
+                serviceTier: endpoint.service_tier ?? null, derivedServiceTier: endpoint.derived_service_tier ?? null,
+                availabilityFlags: { private: endpoint.is_private ?? null, hidden: endpoint.is_hidden ?? null,
+                  disabled: endpoint.is_disabled ?? null, byokOnly: endpoint.is_byok_only ?? null },
+                reason: exclusionReason, sourceUrl });
+            }
             const latency = asFiniteNumber(endpoint?.stats?.p50_latency);
             if (latency === null || latency <= 0) {
               endpointDiagnostics.rejectedMissingLatency += 1;
@@ -656,7 +674,7 @@ async function main() {
         requestWeightCaveat: 'requestWeightedMean uses each endpoint current-window request_count as an auxiliary weight, even for stabilized historical values.',
         latencyCaveat: 'timeToFirstTokenMilliseconds summarizes stabilized provider endpoint p50 series; it is not a recomputed global request-level p50.',
       },
-      excludedServiceTiers: ['flex', 'priority'],
+      excludedServiceTiers: ['flex', 'priority', 'highspeed'],
     },
     counts: {
       queriedModels: queriedModelIds.size,
@@ -675,6 +693,7 @@ async function main() {
       ...stabilizationCounts,
     },
     records,
+    excludedEndpoints,
     modelAggregates,
     unavailableModels,
     noStatisticsModels,

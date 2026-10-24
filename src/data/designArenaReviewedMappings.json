@@ -1,6 +1,6 @@
 {
   "schemaVersion": "design-arena-reviewed-mappings/v1",
-  "reviewedAt": "2026-10-13",
+  "reviewedAt": "2026-10-24",
   "policy": "Source identity and target preset links are authored explicitly. Refreshing scores does not infer new model, effort, harness, or reader inventory links.",
   "entries": [
     {
@@ -55,21 +55,7 @@
         "disclosed": false
       },
       "reviewedReason": "Exact dated model version and source display identity checked; effort is undisclosed and stays Default. Frontend measures the benchmark-internal build environment.",
-      "targets": [
-        {
-          "presetId": "builtin.agent.arena.minimax-m3.max",
-          "modelName": "MiniMax M3",
-          "profile": "Max",
-          "harness": "AA Agent Harness",
-          "provenance": {
-            "kind": "lower_profile_fallback",
-            "sourceProfile": "Default (source effort undisclosed)",
-            "sourceLevel": 0,
-            "targetProfile": "Max",
-            "targetLevel": 6
-          }
-        }
-      ]
+      "targets": []
     },
     {
       "cardId": "card-designarena-qwen-37-plus-default",
@@ -89,21 +75,7 @@
         "disclosed": false
       },
       "reviewedReason": "Exact dated model version and source display identity checked; effort is undisclosed and stays Default. Frontend measures the benchmark-internal build environment.",
-      "targets": [
-        {
-          "presetId": "builtin.harness.qwen-3-7-plus.max.claude-code",
-          "modelName": "Qwen3.7 Plus",
-          "profile": "Max",
-          "harness": "Claude Code",
-          "provenance": {
-            "kind": "lower_profile_fallback",
-            "sourceProfile": "Default (source effort undisclosed)",
-            "sourceLevel": 0,
-            "targetProfile": "Max",
-            "targetLevel": 6
-          }
-        }
-      ]
+      "targets": []
     },
     {
       "cardId": "card-designarena-claude-fable-51-default",
@@ -474,21 +446,7 @@
         "disclosed": false
       },
       "reviewedReason": "Exact dated model version and source display identity checked; effort is undisclosed and stays Default. Frontend measures the benchmark-internal build environment.",
-      "targets": [
-        {
-          "presetId": "builtin.harness.kimi-k3.max.kimi-code-cli",
-          "modelName": "Kimi K3",
-          "profile": "Max",
-          "harness": "Kimi Code CLI",
-          "provenance": {
-            "kind": "lower_profile_fallback",
-            "sourceProfile": "Default (source effort undisclosed)",
-            "sourceLevel": 0,
-            "targetProfile": "Max",
-            "targetLevel": 6
-          }
-        }
-      ]
+      "targets": []
     },
     {
       "cardId": "card-designarena-muse-spark-13-xhigh",
@@ -508,26 +466,7 @@
         "disclosed": true
       },
       "reviewedReason": "Exact dated model and explicitly published xhigh row; the same-ID Max row is a separate configuration.",
-      "targets": [
-        {
-          "presetId": "builtin.harness.muse-spark-1-3.xhigh.muse-code",
-          "modelName": "Muse Spark 1.3",
-          "profile": "XHigh",
-          "harness": "Muse Code",
-          "provenance": {
-            "kind": "exact"
-          }
-        },
-        {
-          "presetId": "builtin.api-tier.meta-contributor.muse-spark-1-3.xhigh.muse-code",
-          "modelName": "Muse Spark 1.3",
-          "profile": "XHigh",
-          "harness": "Muse Code",
-          "provenance": {
-            "kind": "exact"
-          }
-        }
-      ]
+      "targets": []
     },
     {
       "cardId": "card-designarena-muse-spark-13-max",
@@ -616,6 +555,74 @@
           }
         }
       ]
+    },
+    {
+      "cardId": "card-designarena-deepseek-v41-flash-1017-default",
+      "productLineId": "deepseek_v41_flash_1017",
+      "baseOpenRouterCardId": "card-openrouter-deepseek-deepseek-v4-1-flash-1017",
+      "openRouterModelId": "deepseek/deepseek-v4.1-flash-1017",
+      "canonicalModelVersion": "deepseek/deepseek-v4.1-flash-20261017",
+      "source": {
+        "arena": "models",
+        "category": "codecategories",
+        "modelPermaslug": "deepseek/deepseek-v4.1-flash-20261017",
+        "displayName": "DeepSeek-V4.1-Flash (1017)"
+      },
+      "sourceProfile": {
+        "label": "Default",
+        "level": 0,
+        "disclosed": false
+      },
+      "reviewedReason": "Exact 20261017 source version and published display identity. Undisclosed effort remains Default; no 0910 record is borrowed.",
+      "targets": [
+        {
+          "presetId": "builtin.harness.deepseek-v4-1-flash-1017.max.deepseek-harness",
+          "modelName": "DeepSeek V4.1 Flash 1017",
+          "profile": "Max",
+          "harness": "DeepSeek Harness",
+          "provenance": {
+            "kind": "lower_profile_fallback",
+            "sourceProfile": "Default (source effort undisclosed)",
+            "sourceLevel": 0,
+            "targetProfile": "Max",
+            "targetLevel": 6
+          }
+        }
+      ]
+    },
+    {
+      "cardId": "card-designarena-gemini-4-argon-default",
+      "productLineId": "gemini_4_argon",
+      "baseOpenRouterCardId": "card-openrouter-google-gemini-4-argon",
+      "openRouterModelId": "google/gemini-4-argon",
+      "canonicalModelVersion": "google/gemini-4-argon-20261013",
+      "source": {
+        "arena": "models",
+        "category": "codecategories",
+        "modelPermaslug": "google/gemini-4-argon-20261013",
+        "displayName": "Gemini 4 Argon"
+      },
+      "sourceProfile": {
+        "label": "Default",
+        "level": 0,
+        "disclosed": false
+      },
+      "reviewedReason": "Exact public API version and source identity. The source does not publish reasoning effort, so only the authored Default-to-High fallback is allowed.",
+      "targets": [
+        {
+          "presetId": "builtin.gemini-4-argon.high",
+          "modelName": "Gemini 4 Argon",
+          "profile": "High",
+          "harness": "---",
+          "provenance": {
+            "kind": "lower_profile_fallback",
+            "sourceProfile": "Default (source effort undisclosed)",
+            "sourceLevel": 0,
+            "targetProfile": "High",
+            "targetLevel": 4
+          }
+        }
+      ]
     }
   ],
   "exclusions": [
@@ -630,10 +637,6 @@
     {
       "productLineId": "claude_sonnet_55",
       "reason": "No Sonnet 5.5 row. Sonnet 5 and 4.6 rows are retired versions."
-    },
-    {
-      "productLineId": "deepseek_v41_flash",
-      "reason": "No V4.1 Flash row. V4 Flash/0731 and V4 Pro are separate versions and products."
     },
     {
       "productLineId": "gpt_6_astra",

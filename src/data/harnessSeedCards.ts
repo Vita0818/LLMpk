@@ -20,7 +20,7 @@ interface HarnessCodingAgentRow {
   harness: string;
   sourceHarnessLabel: string;
   provider: string;
-  hostModelSlug: string;
+  hostModelSlug: string | null;
   productLineId: string;
   productLineName: string;
   canonicalProfileKey: string;
@@ -350,6 +350,15 @@ interface StructuredHarnessBinding {
  * the checked-in official snapshot.
  */
 const STRUCTURED_HARNESS_BINDINGS: readonly StructuredHarnessBinding[] = [
+  { key: 'deepseek-harness-deepseek-v4-1-flash-1017-max',
+    expectedDisplayLabel: "DeepSeek Harness - DeepSeek V4.1 Flash 1017 ({'reasoning_effort': 'max'})",
+    harness: 'DeepSeek Harness', productLineId: 'deepseek_v41_flash_1017',
+    productLineName: 'DeepSeek V4.1 Flash 1017', canonicalProfileKey: 'deepseek-v4-1-flash-1017-max-deepseek-harness',
+    vendorId: 'deepseek', vendorName: 'DeepSeek', tier: 'official' },
+  { key: 'muse-code-muse-spark-open-xhigh',
+    expectedDisplayLabel: 'Muse Code - Muse Spark Open (xhigh)', harness: 'Muse Code',
+    productLineId: 'muse_spark_open', productLineName: 'Muse Spark Open',
+    canonicalProfileKey: 'muse-spark-open-xhigh-muse-code', vendorId: 'meta', vendorName: 'Meta', tier: 'official' },
   ...(['low', 'medium', 'high', 'xhigh', 'max'] as const).map((profile): StructuredHarnessBinding => ({
     key: `claude-code-claude-haiku-5-5-${profile}`,
     expectedDisplayLabel: `Claude Code - Haiku 5.5 (${profile})`,
@@ -708,7 +717,7 @@ function projectStructuredHarnessRow(
     sourceRecordId,
     sourceHarnessLabel: record.agentName || binding.harness,
     provider: record.provider || binding.vendorId,
-    hostModelSlug: record.hostModelSlug || '',
+    hostModelSlug: record.hostModelSlug ?? null,
     indexScore,
     deepSwe: rewardFor('deep-swe'),
     sweAtlasQna: rewardFor('swe-atlas-qna'),
@@ -762,7 +771,7 @@ function projectCurrentBaseHarnessRow(row: HarnessCodingAgentRow): HarnessCoding
     sourceRecordId,
     sourceHarnessLabel: record.agentName || row.sourceHarnessLabel,
     provider: record.provider || row.provider,
-    hostModelSlug: record.hostModelSlug || row.hostModelSlug,
+    hostModelSlug: record.hostModelSlug ?? null,
     indexScore,
     deepSwe: rewardFor('deep-swe'),
     sweAtlasQna: rewardFor('swe-atlas-qna'),

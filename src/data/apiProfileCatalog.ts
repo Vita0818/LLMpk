@@ -38,6 +38,20 @@ const tier = (
  * silently treated as a tier and therefore cannot create a fallback.
  */
 export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
+  { productLineId: 'kimi_k31_pro', tiers: [
+    tier('default', 'Default', 0, ['card-aa-kimi-k3-1-pro']),
+    tier('max', 'Max', 5, ['card-arena-kimi-k3-1-pro-max']),
+  ] },
+  { productLineId: 'deepseek_v41_flash_1017', tiers: [
+    tier('max', 'Max', 5, ['card-aa-deepseek-v4-1-flash-1017', 'card-arena-deepseek-v4-1-flash-20261017-max']),
+  ] },
+  { productLineId: 'minimax_m31_flash', tiers: [
+    tier('default', 'Default', 0, ['card-aa-minimax-m3-1-flash', 'card-arena-minimax-m3-1-flash']),
+    tier('max', 'Max', 5),
+  ] },
+  { productLineId: 'muse_spark_open', tiers: [
+    tier('xhigh', 'XHigh', 4, ['card-aa-muse-spark-open']),
+  ] },
   {
     productLineId: 'claude_haiku_55',
     tiers: [
@@ -48,7 +62,7 @@ export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
       tier('max', 'Max', 5, ['card-aa-claude-haiku-5-5']),
     ],
   },
-  { productLineId: 'muse_wonder', tiers: [tier('max', 'Max', 5, ['card-aa-muse-wonder'])] },
+  { productLineId: 'muse_wonder', tiers: [tier('max', 'Max', 5, ['card-aa-muse-wonder', 'card-arena-muse-wonder-max'])] },
   // Model-level evidence for a subscription-only execution; this table does
   // not itself create an API access route for Wonder Full.
   { productLineId: 'muse_wonder_full', tiers: [tier('max', 'Max', 5, ['card-aa-muse-wonder-full'])] },
@@ -152,7 +166,7 @@ export const API_PROFILE_FAMILIES: readonly ApiProfileFamilyEvidence[] = [
   {
     productLineId: 'mimo_v26_flash',
     tiers: [
-      tier('default', 'Default', 0, ['card-aa-mimo-v2-6-flash']),
+      tier('default', 'Default', 0, ['card-aa-mimo-v2-6-flash', 'card-arena-mimo-v2-6-flash']),
     ],
   },
   {

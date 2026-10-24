@@ -475,6 +475,9 @@ function slugify(value) {
   return String(value)
     .normalize('NFKD')
     .toLowerCase()
+    // Plus is a model identity distinction, including literal Arena keys
+    // such as command-r+-08-2024. It cannot share a card with Command R.
+    .replace(/\+/gu, '-plus-')
     .replace(/[^\p{L}\p{N}]+/gu, '-')
     .replace(/^-+|-+$/g, '') || 'unknown';
 }
@@ -882,7 +885,8 @@ async function buildVerifiedCatalog() {
     if (existing) {
       const metadata = existing.metadataJson;
       if (metadata.scope?.productLineId !== scope.productLineId || metadata.scope?.vendorId !== scope.vendorId) {
-        throw new Error(`A source card cannot span OAGXM product lines: ${id}.`);
+        throw new Error(`A source card cannot span OAGXM product lines: ${id} `
+          + `(${metadata.scope?.productLineId} → ${scope.productLineId}; ${exactSourceModelName}).`);
       }
       metadata.sourceUrls = [...new Set([...metadata.sourceUrls, sourceUrl].filter(Boolean))];
       metadata.sourceLeaderboards = [...new Set([...metadata.sourceLeaderboards, sourceLeaderboard].filter(Boolean))];
@@ -1103,6 +1107,12 @@ async function buildVerifiedCatalog() {
       : extractArtificialAnalysisModels(aaHtml);
     for (const model of aaModels) {
       const profileUrl = `https://artificialanalysis.ai/models/${model.slug}`;
+      const fieldSource = (record, field) => ({
+        sourceUrl: record?.sourceFieldProvenance?.[field]?.sourcePageUrl ?? record?.sourcePageUrl ?? profileUrl,
+        sourcePageId: record?.sourceFieldProvenance?.[field]?.sourcePageId ?? record?.sourcePageId,
+        sourceField: record?.sourceFieldProvenance?.[field]?.sourceField
+          ?? record?.sourceFieldPaths?.[field] ?? record?.sourceField ?? field,
+      });
       const cardId = `card-aa-${slugify(model.slug)}`;
       const scope = classifySourceModelScope(
         cardId,
@@ -1144,12 +1154,13 @@ async function buildVerifiedCatalog() {
           snapshotDate: hasStructuredAaSnapshot
             ? artificialAnalysisSourceSnapshot.snapshotDate
             : SNAPSHOT_DATE,
-          sourceUrl: profileUrl,
+          sourceUrl: fieldSource(model, metric.sourceField).sourceUrl,
           sourceLeaderboard: metric.sourceLeaderboard,
           sourceRecordId: model.id,
-          sourceField: metric.sourceField,
+          sourceField: fieldSource(model, metric.sourceField).sourceField,
           scope,
-          metadataJson: { scoringRole: ['aa_hle', 'aa_critpt'].includes(metric.id) ? 'capability' : 'detail-only' },
+          metadataJson: { scoringRole: ['aa_hle', 'aa_critpt'].includes(metric.id) ? 'capability' : 'detail-only',
+            sourcePageId: fieldSource(model, metric.sourceField).sourcePageId },
         });
       }
       for (const metric of AA_EXTENDED_METRICS) {
@@ -1162,14 +1173,14 @@ async function buildVerifiedCatalog() {
           rawValue: metric.field(sourceRecord),
           unit: metric.unit,
           snapshotDate: artificialAnalysisSourceSnapshot.snapshotDate,
-          sourceUrl: sourceRecord?.sourcePageUrl ?? profileUrl,
+          sourceUrl: fieldSource(sourceRecord, metric.sourceField).sourceUrl,
           sourceLeaderboard: metric.sourceLeaderboard,
           sourceRecordId: model.id,
-          sourceField: sourceRecord?.sourceField ?? metric.sourceField,
+          sourceField: fieldSource(sourceRecord, metric.sourceField).sourceField,
           scope,
           metadataJson: {
             sourceSnapshot: path.relative(ROOT, ARTIFICIAL_ANALYSIS_SOURCE_SNAPSHOT_PATH),
-            sourcePageId: sourceRecord?.sourcePageId ?? metric.pageId,
+            sourcePageId: fieldSource(sourceRecord, metric.sourceField).sourcePageId ?? metric.pageId,
             scoringRole: ['aa_terminalbench_v4', 'aa_gdp_pdf_all_pass'].includes(metric.id) ? 'capability' : 'detail-only',
           },
         });
@@ -1184,14 +1195,14 @@ async function buildVerifiedCatalog() {
           rawValue: metric.field(sourceRecord),
           unit: metric.unit,
           snapshotDate: artificialAnalysisSourceSnapshot.snapshotDate,
-          sourceUrl: profileUrl,
+          sourceUrl: fieldSource(sourceRecord, metric.sourceField).sourceUrl,
           sourceLeaderboard: metric.sourceLeaderboard,
           sourceRecordId: model.id,
-          sourceField: metric.sourceField,
+          sourceField: fieldSource(sourceRecord, metric.sourceField).sourceField,
           scope,
           metadataJson: {
             sourceSnapshot: path.relative(ROOT, ARTIFICIAL_ANALYSIS_SOURCE_SNAPSHOT_PATH),
-            sourcePageId: metric.pageId,
+            sourcePageId: fieldSource(sourceRecord, metric.sourceField).sourcePageId ?? metric.pageId,
             scoringRole: 'practical-fallback',
           },
         });

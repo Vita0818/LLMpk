@@ -1,14 +1,14 @@
 {
   "schemaVersion": "frontiercode-source-snapshot/v1",
-  "fetchedAt": "2026-10-13T05:16:25.658Z",
+  "fetchedAt": "2026-10-24T05:59:11.667Z",
   "revision": "1.1",
   "dataset": "main",
   "taskCount": 100,
   "source": {
     "url": "https://cognition.com/data/frontiercode-leaderboard/data.json",
     "leaderboardUrl": "https://cognition.com/frontiercode",
-    "sha256": "913a7befb74bf6facf490099cbe982dc17972ee5c4a5ff859eb918d2c5e4d3bf",
-    "rawSnapshotFile": ".cache/new-models-2026-10-13/raw/frontiercode/20261013T051625Z.json"
+    "sha256": "ff0040778b7bdf69c705ad7474f771fb5e53cfaf5cf8573b3a4614153543d75f",
+    "rawSnapshotFile": ".cache/oct24-refresh/raw/frontiercode/20261024T055911Z.json"
   },
   "rows": [
     {
@@ -121,7 +121,7 @@
       "effort": "low",
       "passRate": 0.385,
       "mergeabilityScore": 0.3476,
-      "flaggedRate": null
+      "flaggedRate": 0
     },
     {
       "name": "Claude Haiku 5.5",
@@ -129,7 +129,7 @@
       "effort": "medium",
       "passRate": 0.462,
       "mergeabilityScore": 0.4163,
-      "flaggedRate": null
+      "flaggedRate": 0
     },
     {
       "name": "Claude Haiku 5.5",
@@ -137,7 +137,7 @@
       "effort": "high",
       "passRate": 0.466,
       "mergeabilityScore": 0.4189,
-      "flaggedRate": null
+      "flaggedRate": 0
     },
     {
       "name": "Claude Haiku 5.5",
@@ -145,7 +145,7 @@
       "effort": "xhigh",
       "passRate": 0.508,
       "mergeabilityScore": 0.4583,
-      "flaggedRate": null
+      "flaggedRate": 0
     },
     {
       "name": "Claude Haiku 5.5",
@@ -153,7 +153,7 @@
       "effort": "max",
       "passRate": 0.5165,
       "mergeabilityScore": 0.4636,
-      "flaggedRate": null
+      "flaggedRate": 0.002
     },
     {
       "name": "GPT-6 Sol",
@@ -1004,12 +1004,36 @@
       "flaggedRate": 0.006
     },
     {
+      "name": "Mistral Large 4 (Preview)",
+      "harness": "chisel",
+      "effort": "none",
+      "passRate": 0.309,
+      "mergeabilityScore": 0.2787,
+      "flaggedRate": 0.0357
+    },
+    {
+      "name": "Mistral Large 4 (Preview)",
+      "harness": "chisel",
+      "effort": "high",
+      "passRate": 0.435,
+      "mergeabilityScore": 0.3943,
+      "flaggedRate": 0.02
+    },
+    {
       "name": "DeepSeek V4 Pro 0813",
       "harness": "chisel",
       "effort": "high",
       "passRate": 0.318,
       "mergeabilityScore": 0.2855,
       "flaggedRate": 0.106
+    },
+    {
+      "name": "DeepSeek V4.1 Flash",
+      "harness": "chisel",
+      "effort": "high",
+      "passRate": 0.4863,
+      "mergeabilityScore": 0.4387,
+      "flaggedRate": 0.0073
     },
     {
       "name": "GLM 5.3",
@@ -1050,6 +1074,30 @@
       "passRate": 0.428,
       "mergeabilityScore": 0.3796,
       "flaggedRate": 0
+    },
+    {
+      "name": "Gemini 4 Argon",
+      "harness": "chisel",
+      "effort": "low",
+      "passRate": 0.5225,
+      "mergeabilityScore": 0.472,
+      "flaggedRate": 0.0304
+    },
+    {
+      "name": "Gemini 4 Argon",
+      "harness": "chisel",
+      "effort": "medium",
+      "passRate": 0.528,
+      "mergeabilityScore": 0.4755,
+      "flaggedRate": 0.0121
+    },
+    {
+      "name": "Gemini 4 Argon",
+      "harness": "chisel",
+      "effort": "high",
+      "passRate": 0.5085,
+      "mergeabilityScore": 0.4587,
+      "flaggedRate": 0.0103
     }
   ]
 }

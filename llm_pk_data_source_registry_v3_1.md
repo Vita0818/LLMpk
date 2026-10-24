@@ -2,6 +2,8 @@
 
 生效日期：2026-10-12。26 个能力计分指标，其中七项来自 Vals 独立评测；另保留 Vals Index 与 Vals TB4 作参考。六领域及覆盖门槛沿用 v3.0。
 
+最近数据修订：2026-10-24。HLAB 升级为 1.1，Documents 内权重仍为 25%；旧版不补新版缺失。参考指数更新到 Vals Index 2.2，其余任务版本、权重和覆盖门槛不变。下文较早日期保留为历史来源记录，当前快照以本次修订为准。
+
 | 来源 | 当前计分指标 | 原始尺度与边界 |
 | --- | --- | --- |
 | Artificial Analysis | HLE、CritPt、Terminal-Bench 4.0、GDP.pdf All-pass | 准确率比例；精确版本与 effort；保留 Default Fallback 等来源条件 |
@@ -12,7 +14,7 @@
 | DesignArena | Overall Frontend Elo | 官方 Models Arena / codecategories，经 OpenRouter Benchmark API 获取；按完整来源配置与已审核目标连接 |
 | OpenRouter / AA 实用数据 | 输入输出价格、TTFT、吞吐 | 只调整实用分，不进入六域能力权重；来源、路由和 effort 的测量条件需分别审视 |
 | SemiAnalysis 订阅实测 | 逐套餐、逐模型的月度 API 等效额度 | 公开 agentic 工作负载；满额利用假设；只调整成本，不提供能力或速度证据 |
-| Vals AI | Legal Research、Tax Agent、Code Migration、Vibe Code、Finance Agent、Excel Modeling、HLAB | 原始 accuracy 为百分数；已披露备用任务采用官方 noFallbackScorePct；保留公布分、版本、effort、环境、SE 和来源日期 |
+| Vals AI | Legal Research、Tax Agent、Code Migration、Vibe Code、Finance Agent、Excel Modeling、HLAB 1.1 | 原始 accuracy 为百分数；已披露备用任务采用官方 noFallbackScorePct；保留公布分、版本、effort、环境、SE 和来源日期 |
 
 主要官方说明：[AA HLE](https://artificialanalysis.ai/evaluations/humanitys-last-exam)、[CritPt](https://artificialanalysis.ai/evaluations/critpt)、[AA TB4](https://artificialanalysis.ai/evaluations/terminalbench-4-0)、[GDP.pdf](https://artificialanalysis.ai/evaluations/gdp-pdf)、[Arena](https://arena.ai/leaderboard)、[FrontierCode](https://cognition.com/frontiercode)、[DesignArena API](https://docs.designarena.ai/api-reference/overview)。
 
@@ -52,15 +54,29 @@ Google AI Pro / Ultra 保留旧估算 $260 / $5,200，GPT-5.6 Terra 的 ChatGPT 
 
 ## 2026-10-12 Vals 来源接入
 
-从 [Vals 官方页面](https://www.vals.ai/benchmarks/vals_index)实际引用的 `/_astro/benchmark_view_*.json` 获取数据，无需 API Key。九个页面分别抓取与校验：主指数、Finance Agent v2、Excel Modeling Benchmark、Vibe Code Bench 1.1、Code Migration、Terminal-Bench 4.0、Legal Research Bench、Harvey HLAB、Tax Agent Bench。源数据更新于 2026-10-07 至 2026-10-08；抓取时间单独记录，不能当成重新测试时间。
+从 [Vals 官方页面](https://www.vals.ai/benchmarks/vals_index)实际引用的 `/_astro/benchmark_view_*.json` 获取数据，无需 API Key。九个页面分别抓取与校验：主指数、Finance Agent v2、Excel Modeling Benchmark、Vibe Code Bench 1.1、Code Migration、Terminal-Bench 4.0、Legal Research Bench、Harvey HLAB、Tax Agent Bench。最近源数据更新于 2026-10-18 至 2026-10-22；抓取时间单独记录，不能当成重新测试时间。
 
 完整快照保留 111 个模型/执行标识和 8,819 条总体、任务类别及指数分项记录。这些行数不是独立任务样本量。24 个来源身份经过显式版本与运行设置审核，生成 198 张来源卡，并为 39 个既有配置提供 Vals 证据。模型、effort、harness、温度、输出预算及供应商条件写入 `src/data/valsReviewedMappings.json`；刷新只更新既有身份的数值，条件变化、来源消失或重复时要求重新审核。
 
-七项独立评测按任务内容进入 Reasoning、Coding、Frontend、Agentic 与 Documents，领域内权重见 [Weighting v3.1](llm_pk_domain_classification_weighting_v3_1.md)。Vals Index 2.1 的金融/编程/法律/税务 GDP 加权结果作为参考综合指数保存，不重复进入计分。各独立评测也保留自己的总体成绩，尤其 Code Migration 独立榜使用完整任务，而指数使用不同子集，两者不能互填。Vals Terminal-Bench 与 AA Terminal-Bench 保持独立来源；当前只计 AA TB4，Vals TB4 保留作参考；任务耗时与每任务费用只保留在来源档案中，不充当 TTFT、吞吐或 API 单价。
+七项独立评测按任务内容进入 Reasoning、Coding、Frontend、Agentic 与 Documents，领域内权重见 [Weighting v3.1](llm_pk_domain_classification_weighting_v3_1.md)。Vals Index 2.2 的金融/编程/法律/税务 GDP 加权结果作为参考综合指数保存，不重复进入计分。各独立评测也保留自己的总体成绩，尤其 Code Migration 独立榜使用完整任务，而指数使用不同子集，两者不能互填。Vals Terminal-Bench 与 AA Terminal-Bench 保持独立来源；当前只计 AA TB4，Vals TB4 保留作参考；任务耗时与每任务费用只保留在来源档案中，不充当 TTFT、吞吐或 API 单价。
 
 配置详情的 Vals 区域单独披露来源 effort、评测环境、榜单更新时间、公布分、原模型分和标准误。官方图表模块公开逐模型/评测的拒答和备用统计；获取器只解析静态数据声明，不执行上游脚本。元数据的 benchmark ID、模型 ID 和公布分必须与 JSON 当前运行匹配。已披露备用任务时使用官方 `noFallbackScorePct`，将备用任务计为失败；例如 Opus 5.5 的 Code Migration 从公布的 66.646% 改用官方原模型口径 18.416%，106 个备用任务保留可查。未披露备用信息时采用公布分并标注未知。SE 不变成 95% CI，原模型口径缺少独立 SE 时也不借用混合公布分的 SE。`harness=null` 保留为环境未披露，Vibe Code 的 OpenHands 环境保留原名。
 
 Muse Spark 1.3 Max 与 XHigh 分别存卡；Max 不连接 XHigh 配置。Vals 的 Qwen3.8 Max 没有证明是本站固定的 0902 版本，暂不连接。未披露 effort 使用明确的 Default 条件；只允许已经声明的向上档位回退，`0.99` 等未解释数值不自动等价于 XHigh。当前未连接的版本、产品和档位继续保留在完整来源快照中。
+
+## 2026-10-24 新模型、HLAB 1.1 与路由核对
+
+当前在榜目录为 38 条产品线 / 56 个配置，公开页合并为 40 个代表配置；23 个达到六域和总体覆盖门槛，17 个保持数据不足。新增或开放 [Kimi K3.1 Pro](https://www.kimi.ai/blog/kimi-k3-1-pro)、[DeepSeek V4.1 Flash 1017](https://api-docs.deepseek.com/news/news261017/)、[MiniMax M3.1 Flash](https://www.minimax.io/blog/minimax-m31f)、[Muse Spark Open](https://research.meta.ai/blog/muse-spark-open)、[Gemini 4 Argon](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/) 和 MiMo-V2.6-Flash。K3 与 0910 Flash 的历史来源保留，读者配置由继任版本替换；MiniMax M3 与 M3.1 Flash、两条 MiMo 产品线仍各自独立。
+
+K3.1 Pro 没有独立 Vals / Kimi Code 成绩，不套用 K3。1017 使用实际 DeepSeek Harness 0.2.1rc2，不借用 0910 的 Chisel 或 Codex 结果。Spark Open 采用 Muse Code XHigh；Arena 的 Fireworks Max WebDev 行不向 XHigh 下填。新发布的 Arena Text 证据使 Wonder、Haiku 5.5 达到原有门槛，Wonder Full 仍无对应聊天证据和已知订阅等效额度。
+
+AA 当前页面只初始化 272 个当前配置，公开模型比较页包含完整 709 个模型/档位。获取器按原生 slug 和发布日期补全，并读出被 Flight 引用的页面自身模型；每个字段保留实际来源页和原生字段路径，冲突值阻止发布。当前 GDP.pdf 有 228 个真实结果；101 个 Coding Agent 记录中，未再公开的内部 host 别名留空，不借旧值填充。
+
+OpenRouter 的 `variant=standard` 不代表服务档位为 Standard。现在额外核对 `service_tier`、`derived_service_tier`、provider 路线和可用性，排除 Flex、Priority、Highspeed、非公开或 BYOK-only 端点，并保存排除原因。401 个模型的 Standard 汇总来自 1,561 个有效端点；K3.1 Pro 的 Highspeed 价格和吞吐不会混入普通路线。
+
+Vals 九个来源的更新时间为 10 月 18–22 日，包含 120 个模型/执行 ID、6,673 条结果。33 个审核身份形成 259 张来源卡，为 46 个当前配置提供证据。Index 2.2 和 HLAB 1.1 的模型集合缩小，移除行不会由旧版回填。MiniMax M3.1 Flash 只有六个对应版本的结果，原 Finance v2 / Excel v1 / 完整独立 Code Migration 缺失保持缺失。Qwen 内部执行不与 0902 自动连接。
+
+DesignArena 当前有 159 个原始行；17 个审核来源连接 15 个当前家族 / 25 个配置。原 K3 的审核行保留为无目标的历史证据。所有批量来源通过 35 项校验；原始抓取、哈希与发布记录位于 `.cache/oct24-refresh/`，旧快照位于 `.cache/pre-refresh-2026-10-24/`。
 
 ## 2026-10-13 新模型与来源刷新
 

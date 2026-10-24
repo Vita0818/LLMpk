@@ -16,7 +16,7 @@ assert.equal(snapshot.scoringVersion, SCORING_CONFIG.version);
 for (const preset of BUILT_IN_CONFIGURATION_PRESETS) {
   assert.equal(RETIRED_READER_MODEL_GROUP_KEYS.has(preset.productLineId), false);
 }
-assert.equal(READER_CURRENT_MODEL_GROUP_KEYS.size, 34);
+assert.equal(READER_CURRENT_MODEL_GROUP_KEYS.size, 33);
 let ranked = 0;
 for (const score of snapshot.scores) {
   assert.deepEqual(Object.keys(score.domainScores), [...DOMAIN_IDS]);

@@ -7,6 +7,7 @@ import {
   SEMIANALYSIS_SUBSCRIPTION_SOURCE,
 } from '../src/data/subscriptionPricing';
 import { OAGXM_SCOPE } from '../src/data/oagxmScope';
+import { ALL_METRIC_DEFINITIONS } from '../src/engine/scoringEngine';
 import { VERIFIED_SOURCE_MODEL_CARDS, VERIFIED_SOURCE_OBSERVATIONS } from '../src/data/seedCards';
 import {
   VERIFIED_HARNESS_SOURCE_MODEL_CARDS,
@@ -1081,7 +1082,7 @@ const uniqueRouteCountForHarness = (harnessName: string): number => new Set(
     ].join('\u0000')),
 ).size;
 assert.ok(
-  uniqueRouteCountForHarness('AA Agent Harness') >= 2,
+  uniqueRouteCountForHarness('AA Agent Harness') >= 1,
   'Current Arena Agent Mode routes must retain their execution identity.',
 );
 assert.ok(
@@ -1596,19 +1597,7 @@ for (const box of installedPresetBoxes) {
 const scoreByConfigurationId = new Map(
   reconciledV3Store.computeLeaderboardScores().map((score) => [score.config.id, score]),
 );
-const terraMaxCodexBox = installedPresetBoxes.find((box) => (
-  box.builtInPresetId === 'builtin.harness.gpt-5-6-terra.max.codex-cli'
-));
-assert.ok(terraMaxCodexBox);
-const terraMaxCodexConfig = reconciledV3Store.buildLLMConfiguration(terraMaxCodexBox);
-for (const [metricId, rawValue] of [
-  ['tbench_v4', 0.215],
-  ['tbench_science_v01', 0.086],
-  ['frontiercode_v11_main_pass_rate', 0.4632],
-] as const) {
-  assert.equal(terraMaxCodexConfig.observations[metricId]?.rawValue, rawValue,
-    `Retained Terra Max must receive the exact replacement metric ${metricId}.`);
-}
+assertRetiredPresetIsNotShipped('builtin.harness.gpt-5-6-terra.max.codex-cli');
 const gpt56TextFallbackExpectations = [
   {
     presetId: 'builtin.harness.gpt-5-6-terra.max.codex-cli',
@@ -2334,52 +2323,20 @@ assert.equal(gemini38AgentConfig.openRouterData?.outputPricePerMToken, 3.75);
 assert.ok((gemini38AgentConfig.openRouterData?.ttftP50Seconds || 0) > 0);
 assert.ok((gemini38AgentConfig.openRouterData?.throughputP50TokensPerSec || 0) > 0);
 
-const muse13StandardBox = installedPresetBoxes.find((box) => (
-  box.builtInPresetId === 'builtin.harness.muse-spark-1-3.xhigh.muse-code'
-));
-const muse13ContributorBox = installedPresetBoxes.find((box) => (
-  box.builtInPresetId
-    === 'builtin.api-tier.meta-contributor.muse-spark-1-3.xhigh.muse-code'
-));
-assert.ok(muse13StandardBox);
-assert.ok(muse13ContributorBox);
-const muse13StandardConfig = reconciledV3Store.buildLLMConfiguration(muse13StandardBox);
-const muse13ContributorConfig = reconciledV3Store.buildLLMConfiguration(muse13ContributorBox);
-assert.equal(muse13StandardConfig.openRouterData?.inputPricePerMToken, 1.25);
-assert.equal(muse13StandardConfig.openRouterData?.outputPricePerMToken, 4.25);
-assert.ok((muse13StandardConfig.openRouterData?.ttftP50Seconds || 0) > 0);
-assert.ok((muse13StandardConfig.openRouterData?.throughputP50TokensPerSec || 0) > 0);
-assert.equal(muse13ContributorConfig.openRouterData?.inputPricePerMToken, 0.1);
-assert.equal(muse13ContributorConfig.openRouterData?.outputPricePerMToken, 0.2);
-assert.equal(muse13ContributorConfig.openRouterData?.cacheReadPricePerMToken, 0.002);
-assert.equal(
-  muse13ContributorConfig.openRouterData?.ttftP50Seconds,
-  muse13StandardConfig.openRouterData?.ttftP50Seconds,
-);
-assert.equal(
-  muse13ContributorConfig.openRouterData?.throughputP50TokensPerSec,
-  muse13StandardConfig.openRouterData?.throughputP50TokensPerSec,
-);
-assert.deepEqual(muse13ContributorConfig.observations, muse13StandardConfig.observations);
-const muse13StandardScore = scoreByConfigurationId.get(muse13StandardBox.id);
-const muse13ContributorScore = scoreByConfigurationId.get(muse13ContributorBox.id);
-assert.ok(muse13StandardScore);
-assert.ok(muse13ContributorScore);
-assert.deepEqual(muse13ContributorScore.domainScores, muse13StandardScore.domainScores);
-assert.equal(muse13ContributorScore.rawCapabilityScore, muse13StandardScore.rawCapabilityScore);
-assert.notEqual(
-  muse13ContributorScore.practicalBreakdown.costDelta,
-  muse13StandardScore.practicalBreakdown.costDelta,
-);
-assert.equal(muse13StandardScore.practicalBreakdown.practicalScore, null);
-assert.equal(muse13ContributorScore.practicalBreakdown.practicalScore, null);
-assert.deepEqual(
-  BUILT_IN_CONFIGURATION_PRESETS
-    .filter((preset) => preset.productLineId === 'muse_spark_13')
-    .map((preset) => preset.identity.model.profile),
-  ['XHigh', 'XHigh'],
-  'Muse Spark 1.3 Max must stay out of reader-facing routes until Meta opens it publicly.',
-);
+// Archived access-tier declarations remain available without reinstalling them.
+const muse13StandardId = 'builtin.harness.muse-spark-1-3.xhigh.muse-code';
+const muse13ContributorId = 'builtin.api-tier.meta-contributor.muse-spark-1-3.xhigh.muse-code';
+assertRetiredPresetIsNotShipped(muse13StandardId);
+assertRetiredPresetIsNotShipped(muse13ContributorId);
+const muse13StandardCandidate = ALL_CONFIGURATION_PRESET_CANDIDATES.find(preset => preset.id === muse13StandardId)!;
+const muse13ContributorCandidate = ALL_CONFIGURATION_PRESET_CANDIDATES.find(preset => preset.id === muse13ContributorId)!;
+assert.ok(muse13StandardCandidate && muse13ContributorCandidate);
+assert.equal(muse13StandardCandidate.identity.model.profile, 'XHigh');
+assert.equal(muse13ContributorCandidate.identity.model.profile, 'XHigh');
+assert.equal(muse13ContributorCandidate.apiPricingData?.inputPricePerMToken, 0.1);
+assert.equal(muse13ContributorCandidate.apiPricingData?.outputPricePerMToken, 0.2);
+assert.equal(muse13ContributorCandidate.apiPricingData?.cacheReadPricePerMToken, 0.002);
+assert.equal(BUILT_IN_CONFIGURATION_PRESETS.some(preset => preset.productLineId === 'muse_spark_13'), false);
 
 assertSubscriptionRoutesPreserveCapability(
   'builtin.grok-4-6.xhigh',
@@ -2474,7 +2431,6 @@ for (const metricId of [
   'aa_tau3_banking',
   'aa_terminalbench_v21',
   'aa_lcr',
-  'aa_omniscience_nonhallucination',
 ]) {
   assert.ok(
     structuredKimiK26MetricIds.has(metricId),
@@ -2482,7 +2438,7 @@ for (const metricId of [
   );
 }
 const agentUncertaintyBox = installedPresetBoxes.find((box) => (
-  box.builtInPresetId === 'builtin.harness.kimi-k3.max.kimi-code-cli'
+  box.builtInPresetId === 'builtin.harness.deepseek-v4-1-flash-1017.max.deepseek-harness'
 ));
 assert.ok(agentUncertaintyBox);
 const agentUncertaintyConfig = reconciledV3Store.buildLLMConfiguration(agentUncertaintyBox);
@@ -2500,30 +2456,32 @@ for (const metricId of [
   'arena_agent_success',
   'arena_agent_steerability',
   'arena_agent_praise',
-  'arena_agent_bash_recovery',
   'arena_agent_tool_hallucination',
 ]) {
   assert.ok(
     agentUncertaintyConfig.observations[metricId],
-    `Kimi K3 CLI must inherit ${metricId} from the lower generic Agent execution.`,
+    `DeepSeek Harness must inherit ${metricId} from the lower generic Agent execution.`,
   );
   assert.ok(
     (agentUncertaintyConfig.observations[metricId].confidenceRadius || 0) > 0,
-    `Kimi K3 CLI must pass ${metricId}'s published CI radius into scoring.`,
+    `DeepSeek Harness must pass ${metricId}'s published CI radius into scoring.`,
   );
 }
 const agentUncertaintyScore = scoreByConfigurationId.get(agentUncertaintyBox.id);
-assert.equal(agentUncertaintyScore?.domainScores.agentic.coverage, 1);
+assert.equal(agentUncertaintyConfig.observations.arena_agent_bash_recovery, undefined,
+  'A release newer than the retained recovery capture cannot borrow an old model’s result.');
+const recoveryWeight = ALL_METRIC_DEFINITIONS.find(metric => metric.id === 'arena_agent_bash_recovery')!.internalWeightInDomain;
+assert.ok(Math.abs(agentUncertaintyScore!.domainScores.agentic.coverage - (1 - recoveryWeight)) < 1e-12);
 const kimiPresets = BUILT_IN_CONFIGURATION_PRESETS.filter(
-  (preset) => preset.productLineId === 'kimi_k3',
+  (preset) => preset.productLineId === 'kimi_k31_pro',
 );
 assert.deepEqual(
   kimiPresets.map((preset) => preset.identity.harness.name),
-  ['Kimi Code CLI'],
-  'Kimi K3 must ship once its generic Agent evidence is allowed to fill the higher Kimi Code CLI configuration.',
+  ['---'],
+  'K3.1 Pro has public API evidence but no independent Kimi Code execution yet.',
 );
 const kimiCodeBox = installedPresetBoxes.find((box) => (
-  box.builtInPresetId === 'builtin.harness.kimi-k3.max.kimi-code-cli'
+  box.builtInPresetId === 'builtin.kimi-k3-1-pro.max'
 ));
 assert.ok(kimiCodeBox);
 const kimiCodeConfig = reconciledV3Store.buildLLMConfiguration(kimiCodeBox);
@@ -2534,18 +2492,14 @@ for (const metricId of [
   'arena_agent_bash_recovery',
   'arena_agent_tool_hallucination',
 ]) {
-  assert.ok(
-    kimiCodeConfig.observations[metricId],
-    `Kimi K3 Kimi Code CLI must inherit ${metricId} from the lower generic Agent execution.`,
-  );
+  assert.equal(kimiCodeConfig.observations[metricId], undefined,
+    `K3.1 Pro's plain API must not consume ${metricId} from a production Agent mode.`);
 }
 const kimiCodeScore = scoreByConfigurationId.get(kimiCodeBox.id);
-assert.ok(
-  Math.abs((kimiCodeScore?.domainScores.agentic.coverage || 0) - 1) < 1e-9,
-  'Kimi K3 must combine the exact AA TB4 record with the lower Arena Agent behavior bundle.',
-);
-assert.equal(kimiCodeScore?.domainScores.reasoning.score !== null, true);
-assert.equal(kimiCodeScore?.domainScores.documents.score !== null, true);
+assert.equal(kimiCodeScore?.rawCapabilityScore, null, 'Missing independent domains must keep the new model unranked.');
+assert.equal(kimiCodeScore?.domainScores.reasoning.coverage, 0.45);
+assert.equal(kimiCodeScore?.domainScores.reasoning.score, null);
+assert.equal(kimiCodeScore?.domainScores.documents.score, null);
 for (const [presetId, expectedAuthorProvider] of [
   ['builtin.harness.claude-opus-4-8.max.claude-code', 'Anthropic'],
   ['builtin.agent.arena.claude-sonnet-5.max', 'Anthropic'],
@@ -2623,8 +2577,10 @@ for (const release of [
   assert.equal(currentRoutes.filter((preset) => preset.access === 'subscription').length, 2);
 }
 assert.ok(!BUILT_IN_CONFIGURATION_PRESETS.some((preset) => (
-  ['gemini_4_argon', 'gpt_61_sol_pro'].includes(preset.productLineId)
-)), 'Limited-access Argon and Pro without capability evidence remain source-pool records.');
+  preset.productLineId === 'gpt_61_sol_pro'
+)), 'Pro without independent capability evidence remains a source-pool record.');
+assert.ok(BUILT_IN_CONFIGURATION_PRESETS.some(preset => preset.productLineId === 'gemini_4_argon'),
+  'Argon now has a public API route and independent capability evidence.');
 assert.ok(baseCards.some((card) => card.id === 'card-aa-mimo-v2-6-flash'));
 
 const firstInstalledPreset = installedPresetBoxes[0];

@@ -25,7 +25,7 @@ const COMPACT_METRIC_NAMES: Readonly<Record<string, string>> = {
   vals_vibe_code_v11: 'Vals Vibe Code',
   vals_code_migration_v1: 'Vals Migration',
   vals_legal_research_v1: 'Vals Legal',
-  vals_hlab_v1: 'Vals HLAB',
+  vals_hlab_v11: 'Vals HLAB 1.1',
   vals_tax_agent_v1: 'Vals Tax',
   aa_coding_agent_index: 'Coding Agent Index',
   aa_omniscience_accuracy: 'Omniscience Accuracy',

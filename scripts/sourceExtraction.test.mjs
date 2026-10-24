@@ -4,7 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { detailedModelRecords } from './artificialAnalysisModelExtraction.mjs';
+import { detailedModelRecords, mergePublishedModelRecords, hasPublishedCodingAgentModelIdentity } from './artificialAnalysisModelExtraction.mjs';
 import { gdpPdfComparisonRecords, mergePublishedGdpPdfRecords } from './artificialAnalysisProfessionalExtraction.mjs';
 
 // The AA transport split release metadata from effort-specific records.
@@ -17,6 +17,13 @@ const detailed = Array.from({ length: 100 }, (_, index) => ({
   modelCreatorName: 'Test publisher',
   terminalBench21: index / 100,
 }));
+assert.equal(hasPublishedCodingAgentModelIdentity({ hostModelSlug: 'publisher_exact-model' }), true);
+const publicAgentIdentity = { display: { agent: 'Published CLI', model: 'Model (Max)' },
+  modelCreators: [{ slug: 'publisher', name: 'Publisher' }] };
+assert.equal(hasPublishedCodingAgentModelIdentity(publicAgentIdentity), true);
+assert.equal(hasPublishedCodingAgentModelIdentity({ ...publicAgentIdentity, modelCreators: [] }), false);
+assert.equal(hasPublishedCodingAgentModelIdentity({ ...publicAgentIdentity, display: { agent: 'CLI', model: '' } }), false);
+assert.equal(hasPublishedCodingAgentModelIdentity({ hostModelSlug: '' }), false);
 const releases = detailed.map((_, index) => ({
   slug: `publisher-release-${index}`,
   name: `Test model ${index}`,
@@ -51,6 +58,44 @@ const unknown = extract({ modelReleases: {
   models: options,
 } });
 assert.equal(unknown[0].releaseDate, null, 'An unmatched release must remain missing.');
+
+const initialModels = detailedModelRecords(JSON.stringify({
+  modelReleases: { releases, models: options },
+  leaderboard: { initialModels: detailed },
+}));
+assert.deepEqual(initialModels, current,
+  'The full initialModels transport must retain exact effort-to-release joins.');
+assert.throws(() => detailedModelRecords(JSON.stringify({
+  modelReleases: { releases, models: options },
+  leaderboard: { initialModels: detailed.slice(0, 20) },
+})), /complete detailed model array/u,
+'A selected chart subset must not replace the complete model leaderboard.');
+
+const profileModels = detailed.map((model, index) => ({
+  ...model, release: { slug: releases[index].slug },
+  creator: releases[index].creator, releaseDate: releases[index].releaseDate,
+  timescaleData: { medianOutputSpeed: 40 + index, medianTimeToFirstChunk: 2 },
+}));
+const fullComparison = detailedModelRecords('a:' + JSON.stringify({
+  currentModel: profileModels[0],
+  models: ['$a:props:currentModel', ...profileModels.slice(1)],
+}) + '\n');
+assert.equal(fullComparison.length, 100, 'A profile Flight reference must not delete its own model.');
+assert.equal(fullComparison.find(model => model.id === detailed[0].slug).medianOutputTokensPerSecond, 40);
+const primaryPage = { id: 'model-leaderboard', url: 'https://artificialanalysis.ai/leaderboards/models?status=all' };
+const comparisonPage = { id: 'professional-model-comparison', url: 'https://artificialanalysis.ai/models/test-model' };
+const partialCurrent = [{ ...current[0], hle: null }];
+const publishedComparison = fullComparison.map(model => ({ ...model, hle: 0.2 }));
+const complete = mergePublishedModelRecords(partialCurrent, publishedComparison, { primaryPage, comparisonPage });
+assert.equal(complete.length, 100, 'A current-only initial table must not drop historical records.');
+const supplemented = complete.find(model => model.id === current[0].id);
+assert.equal(supplemented.hle, null, 'A current explicit null is not backfilled from another transport.');
+assert.equal(supplemented.sourceFieldProvenance.medianOutputTokensPerSecond.sourcePageUrl, comparisonPage.url);
+assert.equal(supplemented.sourceFieldProvenance.medianOutputTokensPerSecond.sourceField, 'timescaleData.medianOutputSpeed');
+assert.throws(() => mergePublishedModelRecords([{ ...current[0], hle: 0.3 }], publishedComparison,
+  { primaryPage, comparisonPage }), /Conflicting official AA hle/u);
+assert.throws(() => mergePublishedModelRecords([{ ...current[0], releaseDate: '2026-10-01' }], publishedComparison,
+  { primaryPage, comparisonPage }), /release changed/u);
 
 const professionalIdentities = new Map([
   ['model-max', {id:'model-max',slug:'model-max',name:'Model (Max)',releaseDate:'2026-10-07'}],

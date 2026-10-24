@@ -39,7 +39,11 @@ Reflect.deleteProperty(globalThis, 'localStorage');
 const { adminMappingStore } = await import('../src/store/adminMappingStore');
 
 adminMappingStore.resetToLatestVerifiedCatalog();
-adminMappingStore.synchronizeBuiltInConfigurationPresets(true);
+const installation = adminMappingStore.synchronizeBuiltInConfigurationPresets(true);
+if (installation.invalidPresetCount > 0 || installation.unresolvedSourceCardCount > 0
+  || installation.mismatchedSourceCardCount > 0) {
+  throw new Error(`Public snapshot has an incomplete configuration installation: ${JSON.stringify(installation)}`);
+}
 
 const scores: PublicLeaderboardScore[] = adminMappingStore
   .computeLeaderboardScores()
@@ -123,6 +127,9 @@ const snapshot: PublicLeaderboardSnapshot = {
   scoringVersion: SCORING_CONFIG.version,
   scores,
 };
+if (scores.length !== installation.presetCount) {
+  throw new Error(`Public snapshot lost configurations: ${scores.length}/${installation.presetCount}.`);
+}
 
 const outputPath = resolve(
   process.env.PUBLIC_LEADERBOARD_SNAPSHOT_OUTPUT

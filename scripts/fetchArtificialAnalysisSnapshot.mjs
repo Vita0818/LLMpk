@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { detailedModelRecords } from './artificialAnalysisModelExtraction.mjs';
+import { detailedModelRecords, mergePublishedModelRecords, hasPublishedCodingAgentModelIdentity } from './artificialAnalysisModelExtraction.mjs';
 import { gdpPdfComparisonRecords, mergePublishedGdpPdfRecords } from './artificialAnalysisProfessionalExtraction.mjs';
 import {
   atomicWriteFile,
@@ -27,7 +27,9 @@ const PREVIOUS_SNAPSHOT_PATH = path.join(ROOT, 'src', 'data', 'artificialAnalysi
 const PAGE_DEFINITIONS = [
   {
     id: 'model-leaderboard',
-    url: 'https://artificialanalysis.ai/leaderboards/models',
+    // Keep the public All filter in provenance. Its initial transport still
+    // contains only current models, so the full public comparison supplements it.
+    url: 'https://artificialanalysis.ai/leaderboards/models?status=all',
     filename: 'model-leaderboard.html',
     kind: 'models',
   },
@@ -175,6 +177,7 @@ function codingAgentRecords(payload, sourceId) {
       typeof record.id === 'string'
       && typeof record.agentName === 'string'
       && typeof record.displayLabel === 'string'
+      && hasPublishedCodingAgentModelIdentity(record)
       && Array.isArray(record.evals)
       && Number.isFinite(record.indexScore)
     ));
@@ -252,7 +255,21 @@ async function main() {
   }));
 
   const pageById = new Map(fetchedPages.map((page) => [page.definition.id, page]));
-  const models = detailedModelRecords(pageById.get('model-leaderboard').decoded.payload);
+  // A public model profile supplies the complete comparison, including
+  // deprecated profiles and current performance statistics omitted by the
+  // leaderboard's initial current-only transport.
+  const comparisonDefinition = { id: 'professional-model-comparison',
+    url: 'https://artificialanalysis.ai/models/mistral-medium-3-5',
+    filename: 'professional-model-comparison.html', kind: 'model-comparison' };
+  const comparisonResponse = await fetchSource(comparisonDefinition.url);
+  const comparisonDecoded = decodeNextFlightPayload(comparisonResponse.body, 'AA professional comparison');
+  const comparisonPath = path.join(RAW_DIRECTORY, comparisonDefinition.filename);
+  atomicWriteFile(comparisonPath, comparisonResponse.body);
+  const models = mergePublishedModelRecords(
+    detailedModelRecords(pageById.get('model-leaderboard').decoded.payload),
+    detailedModelRecords(comparisonDecoded.payload),
+    { primaryPage: pageById.get('model-leaderboard').definition, comparisonPage: comparisonDefinition },
+  );
   const modelById = new Map(models.map((model) => [model.id, model]));
   const modelByName = new Map(models.map((model) => [model.name, model]));
   const modelBySlug = new Map(models.map((model) => [model.slug, model]));
@@ -261,7 +278,8 @@ async function main() {
       .filter((page) => page.definition.kind === 'evaluation')
       .map((page) => [
         page.definition.id,
-        evaluationRecords(page.decoded.payload, page.definition.id, modelByName, modelBySlug),
+        evaluationRecords(page.decoded.payload, page.definition.id, modelByName, modelBySlug)
+          .map(record => ({ ...record, sourcePageId: page.definition.id, sourcePageUrl: page.definition.url })),
       ]),
   );
 
@@ -271,13 +289,6 @@ async function main() {
   // its own model record. It supplies evidence, never a model-name fallback.
   const gdpAnchor = modelBySlug.get('mistral-medium-3-5');
   if (!gdpAnchor?.slug) throw new Error('GDP.pdf has no published model-page anchor.');
-  const comparisonDefinition = { id: 'professional-model-comparison',
-    url: `https://artificialanalysis.ai/models/${gdpAnchor.slug}`,
-    filename: 'professional-model-comparison.html', kind: 'model-comparison' };
-  const comparisonResponse = await fetchSource(comparisonDefinition.url);
-  const comparisonDecoded = decodeNextFlightPayload(comparisonResponse.body, 'AA professional comparison');
-  const comparisonPath = path.join(RAW_DIRECTORY, comparisonDefinition.filename);
-  atomicWriteFile(comparisonPath, comparisonResponse.body);
   const comparisonRows = gdpPdfComparisonRecords(comparisonDecoded.payload, modelBySlug);
   if (comparisonRows.length < 100) throw new Error('Incomplete public AA professional comparison table.');
   if (!comparisonRows.some(row => row.id === gdpAnchor.id)) throw new Error('AA professional anchor model record is missing.');
@@ -333,7 +344,7 @@ async function main() {
     fetchedAt,
     source: {
       name: 'Artificial Analysis',
-      collectionMethod: 'Official public Next.js Flight payloads; source slugs join model and evaluation tables. Coding Agent rows absent from the current top-20 page retain their prior dated snapshot.',
+      collectionMethod: 'Official public Next.js Flight payloads; exact source slugs and release dates join the current-model transport with the complete public profile comparison. Each model field retains its actual page provenance. Coding Agent rows absent from the current page retain their prior dated snapshot.',
       pages: Object.fromEntries(fetchedPages.map((page) => [
         page.definition.id,
         {

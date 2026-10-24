@@ -57,24 +57,9 @@ assert.equal(getOpenRouterPromotionalPricing('gpt_6_luna'),undefined,
   'A successor must not inherit its predecessor’s promotional pricing.');
 assert.ok(requireScore('GPT-6 Luna Max | Codex CLI | OpenAI API').config.openRouterData);
 
-const terraApi = requireScore('GPT-5.6 Terra Max | Codex CLI | OpenAI API');
-const terraSubscription = requireScore(
+for (const name of [
+  'GPT-5.6 Terra Max | Codex CLI | OpenAI API',
   'GPT-5.6 Terra Max | Codex CLI | ChatGPT Plus',
-);
-assert.equal(terraApi.config.openRouterData?.inputPricePerMToken, 1);
-assert.equal(terraApi.config.openRouterData?.outputPricePerMToken, 6);
-assert.equal(terraApi.practicalBreakdown.effectiveScenarioCostUSD, 2.5);
-assert.equal(
-  terraSubscription.config.subscriptionData?.apiEquivalentCostUSD,
-  100,
-);
-assert.equal(terraSubscription.config.openRouterData?.inputPricePerMToken, 1);
-assert.equal(terraSubscription.config.openRouterData?.outputPricePerMToken, 6);
-assert.equal(
-  terraSubscription.practicalBreakdown.effectiveScenarioCostUSD,
-  1 / 2,
-);
+]) assert.equal(scoresByName.has(name), false, 'Historical pricing must not reinstall an archived model route.');
 
-console.log(
-  'Current Terra pricing, retired-route removal, and successor promotion boundary: PASS',
-);
+console.log('Historical promotion data, archived-route removal, and successor promotion boundary: PASS');

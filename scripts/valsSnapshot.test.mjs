@@ -11,7 +11,7 @@ const manifest = JSON.parse(readFileSync(new URL('../src/data/valsReviewedMappin
 assert.deepEqual(snapshot.benchmarks.map(item => item.metadata.slug), VALS_BENCHMARK_SLUGS);
 assert.equal(snapshot.counts.modelIds, new Set(snapshot.benchmarks.flatMap(item => item.metadata.models)).size);
 assert.equal(snapshot.counts.observedRows, snapshot.benchmarks.reduce((sum, item) => sum + item.observedRows, 0));
-assert.deepEqual(validateReviewedValsRows(snapshot.benchmarks, manifest), { reviewedModels: 28, reviewedRows: 234 });
+assert.deepEqual(validateReviewedValsRows(snapshot.benchmarks, manifest), { reviewedModels: 33, reviewedRows: 259 });
 for (const benchmark of snapshot.benchmarks) {
   validateValsBenchmarkPayload(benchmark, benchmark.metadata.slug, { now: snapshot.fetchedAt });
   assert.match(benchmark.source.sha256, /^[a-f0-9]{64}$/u);
@@ -81,7 +81,9 @@ delete removed.tasks.overall['model-a'];
 assert.throws(() => validateReviewedValsRows([removed], review), /needs review/u);
 assert.deepEqual(extractValsFallbackNotices('<p>Provider refusal used a fallback model &amp; retained the score.</p><p>Other notes.</p>'),
   ['Provider refusal used a fallback model & retained the score.']);
-assert.ok(snapshot.benchmarks.find(item => item.metadata.slug === 'vals_index').fallbackNotices.length > 0);
+assert.ok(Object.values(snapshot.benchmarks.find(item => item.metadata.slug === 'vals_index').refusalFallback)
+  .some(record => record?.status === 'available' && record.fallbacks > 0),
+  'Official fallback evidence must survive even when the page removes its prose notice.');
 const staticSource = 'const v=1,b="fixture",m={"model-a":{benchmarks:{fixture:{fallbacks:2}}}},d={schemaVersion:v,benchmark:b,models:m};globalThis.valsExecuted=true;';
 assert.equal(extractValsRefusalDatasets(staticSource).get('fixture').models['model-a'].benchmarks.fixture.fallbacks, 2);
 assert.equal(globalThis.valsExecuted, undefined, 'Published JavaScript must never be executed.');

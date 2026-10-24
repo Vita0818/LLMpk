@@ -41,7 +41,9 @@ for (const [line, model] of expected) {
   assert.equal(presets.length, 1, `${model} has one reviewed production access route.`);
   const box = store.boxes.find(b => b.builtInPresetId === presets[0].id)!;
   const score = scores.find(s => s.config.id === box.id)!;
-  assert.equal(score.config.valsData?.length, 9);
+  const review = valsReviews.entries.find(entry => entry.productLineId === line)!;
+  assert.equal(score.config.valsData?.length, review.executions.length,
+    'The current source can remove an index execution without filling it from an older version.');
   assert.equal(score.config.observations.arena_agent_bash_recovery, undefined,
     'New models must not borrow historical recovery scores or the different reliability signal.');
 }
@@ -84,17 +86,21 @@ assert.equal(unknownQuota.practicalBreakdown.practicalScore, null,
 
 const haiku = scores.find(s => s.config.identity.modelName === 'Claude Haiku 5.5')!;
 const frontier = frontierSnapshot.rows.find(r => r.name === 'Claude Haiku 5.5' && r.effort === 'max')!;
-assert.equal(frontier.flaggedRate, null);
+assert.ok(frontier.flaggedRate === null || (Number.isFinite(frontier.flaggedRate)
+  && frontier.flaggedRate >= 0 && frontier.flaggedRate <= 1),
+  'A later published audit may replace the original unknown flagging rate.');
 assert.equal(haiku.config.observations.frontiercode_v11_main_pass_rate.rawValue, frontier.passRate);
 assert.equal(frontier.passRate, 0.5165);
 assert.equal(haiku.config.openRouterData?.inputPricePerMToken, 0.1);
 assert.equal(haiku.config.openRouterData?.outputPricePerMToken, 0.5);
-for (const model of ['Muse Wonder ', 'Muse Wonder Full ', 'Claude Haiku 5.5 ']) {
+for (const model of ['Muse Wonder ', 'Claude Haiku 5.5 ']) {
   const score = published.scores.find(s => s.config.name.startsWith(model))!;
-  assert.equal(score.domainScores.chatting.coverage, 0);
-  assert.equal(score.rawCapabilityScore, null);
-  assert.equal(score.eligibleForGlobalLeaderboard, false);
+  assert.equal(score.domainScores.chatting.coverage, 1);
+  assert.equal(score.eligibleForGlobalLeaderboard, true,
+    'New independent Arena Text evidence now permits ranking under the existing coverage gates.');
 }
+assert.equal(full.domainScores.chatting.coverage, 0);
+assert.equal(full.rawCapabilityScore, null, 'Wonder Full must not borrow Wonder’s dialogue evidence.');
 
 const retained = arenaSnapshot.metrics.arena_agent_bash_recovery;
 assert.equal(retained.snapshotDate, '2026-10-02');
