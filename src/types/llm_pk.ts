@@ -7,7 +7,10 @@ export type MetricSource =
   | 'SWE-rebench'
   | 'FrontierCode'
   | 'DesignArena'
-  | 'Vals AI';
+  | 'Vals AI'
+  | 'LiveBench'
+  | 'OpenCompass'
+  | 'Epoch AI';
 
 export type MetricType =
   | 'accuracy'                   // Pass@1, Accuracy (Logit transformed)
@@ -58,6 +61,18 @@ export interface MetricDefinition {
   unit: string;
   description: string;
   officialUrl?: string;
+  dataQuality?: { status: 'under-review' | 'legacy'; note: string; sourceUrl: string };
+}
+
+export interface BenchmarkEvidence {
+  sourceUrl: string;
+  benchmarkVersion: string;
+  sourceProfile: string;
+  sourceHarness: string;
+  sourceUpdated: string;
+  notes: string;
+  profileFallback?: boolean;
+  standardError?: number;
 }
 
 export interface MetricObservation {
@@ -70,6 +85,7 @@ export interface MetricObservation {
   sampleSize?: number;
   testDate?: string;
   harness?: string;
+  benchmarkEvidence?: BenchmarkEvidence;
 }
 
 export interface OpenRouterCostSpeedData {

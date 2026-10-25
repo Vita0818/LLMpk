@@ -4,6 +4,7 @@ export const VALS_ORIGIN = 'https://www.vals.ai';
 export const VALS_BENCHMARK_SLUGS = [
   'vals_index', 'fabv2', 'emb', 'vibe-code', 'code-migration',
   'terminal-bench-4', 'legal_research', 'hlab', 'tax_agent_bench',
+  'proof_bench', 'programbench', 'vcb-1-100',
 ];
 
 function decodeHtmlAttribute(value) {
@@ -129,7 +130,11 @@ export function validateReviewedValsRows(benchmarks, manifest) {
       identities.add(identity);
       const benchmark = benchmarks.find(item => item.metadata.slug === execution.benchmarkSlug);
       const row = benchmark?.tasks[execution.task]?.[entry.modelId];
+      // An explicitly dated revision may impose an authored earliest source date.
+      // Catalog publication dates alone are not model release dates (previews exist).
+      const modelDate = entry.minimumSourceDate ?? null;
       if (!row || (benchmark.metadata.version ?? null) !== execution.benchmarkVersion
+        || (modelDate && benchmark.metadata.updated < modelDate)
         || JSON.stringify(valsExecutionIdentity(row)) !== JSON.stringify(execution.settings)
         || JSON.stringify(valsProfileIdentity(row)) !== JSON.stringify(execution.profile)) {
         throw new Error(`Vals execution needs review: ${identity}. Published data was not replaced.`);

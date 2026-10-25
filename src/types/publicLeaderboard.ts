@@ -11,6 +11,7 @@ export interface PublicMetricObservation {
   rawValue: number | null;
   /** Original source snapshot date; not a claim that the task was rerun then. */
   sourceSnapshotDate?: string;
+  benchmarkEvidence?: import('./llm_pk').BenchmarkEvidence;
 }
 
 export type PublicOpenRouterData = Pick<

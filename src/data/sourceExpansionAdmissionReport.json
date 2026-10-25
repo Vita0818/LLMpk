@@ -1,0 +1,215 @@
+{
+  "schemaVersion": "source-expansion-admission-report/v1",
+  "reviewedAt": "2026-10-25",
+  "scoringVersion": "3.3",
+  "newMetrics": 60,
+  "totalMetrics": 108,
+  "rawDatasets": 23,
+  "rawRecords": 1649,
+  "reviewedIdentities": 343,
+  "reviewedTargets": 666,
+  "sourceDecisions": [
+    {
+      "datasetId": "design-agents",
+      "sourceUrl": "https://openrouter.ai/api/v1/benchmarks?include_run_config=true&source=design-arena&arena=agents",
+      "sourceRows": 81,
+      "admittedIdentities": 15
+    },
+    {
+      "datasetId": "design-models",
+      "sourceUrl": "https://openrouter.ai/api/v1/benchmarks?include_run_config=true",
+      "sourceRows": 416,
+      "admittedIdentities": 38
+    },
+    {
+      "datasetId": "livebench2",
+      "sourceUrl": "https://livebench.ai/data/20261014/table.csv",
+      "sourceRows": 53,
+      "admittedIdentities": 22
+    },
+    {
+      "datasetId": "opencompass-v3",
+      "sourceUrl": "https://cdn.opencompass.org.cn/assets/lm/data-lm-ability_official.json?benchmark=text",
+      "sourceRows": 22,
+      "admittedIdentities": 15
+    },
+    {
+      "datasetId": "epoch-frontiermath_tiers_1_3_v2",
+      "sourceUrl": "https://epoch.ai/data/benchmark_data.zip",
+      "sourceRows": 121,
+      "admittedIdentities": 18
+    },
+    {
+      "datasetId": "epoch-frontiermath_tier_4_v2",
+      "sourceUrl": "https://epoch.ai/data/benchmark_data.zip",
+      "sourceRows": 77,
+      "admittedIdentities": 18
+    },
+    {
+      "datasetId": "epoch-mirrorcode",
+      "sourceUrl": "https://epoch.ai/data/benchmark_data.zip",
+      "sourceRows": 10,
+      "admittedIdentities": 4
+    },
+    {
+      "datasetId": "aa-analyst",
+      "sourceUrl": "https://artificialanalysis.ai/evaluations/aa-analyst-agent",
+      "sourceRows": 27,
+      "admittedIdentities": 17
+    },
+    {
+      "datasetId": "aa-gdpval21",
+      "sourceUrl": "https://artificialanalysis.ai/evaluations/gdpval-aa",
+      "sourceRows": 27,
+      "admittedIdentities": 24
+    },
+    {
+      "datasetId": "aa-critpt2",
+      "sourceUrl": "https://artificialanalysis.ai/evaluations/critpt-v2",
+      "sourceRows": 12,
+      "admittedIdentities": 9
+    },
+    {
+      "datasetId": "aa-3d",
+      "sourceUrl": "https://artificialanalysis.ai/evaluations/aa-3d",
+      "sourceRows": 23,
+      "admittedIdentities": 18
+    },
+    {
+      "datasetId": "aa-tbscience",
+      "sourceUrl": "https://artificialanalysis.ai/evaluations/terminal-bench-science",
+      "sourceRows": 27,
+      "admittedIdentities": 24
+    },
+    {
+      "datasetId": "scale-mcp",
+      "sourceUrl": "https://labs.scale.com/leaderboard/mcp_atlas",
+      "sourceRows": 34,
+      "admittedIdentities": 4
+    },
+    {
+      "datasetId": "scale-hil",
+      "sourceUrl": "https://labs.scale.com/leaderboard/hil",
+      "sourceRows": 30,
+      "admittedIdentities": 9
+    },
+    {
+      "datasetId": "scale-refactor",
+      "sourceUrl": "https://labs.scale.com/leaderboard/sweatlas-refactoring",
+      "sourceRows": 17,
+      "admittedIdentities": 3
+    },
+    {
+      "datasetId": "scale-tests",
+      "sourceUrl": "https://labs.scale.com/leaderboard/sweatlas-tw",
+      "sourceRows": 24,
+      "admittedIdentities": 3
+    },
+    {
+      "datasetId": "scale-pro2-full",
+      "sourceUrl": "https://labs.scale.com/leaderboard/swe_bench_pro_public_v2",
+      "sourceRows": 16,
+      "admittedIdentities": 11
+    },
+    {
+      "datasetId": "scale-pro2-hard",
+      "sourceUrl": "https://labs.scale.com/leaderboard/swe_bench_pro_public_v2",
+      "sourceRows": 16,
+      "admittedIdentities": 10
+    },
+    {
+      "datasetId": "scale-rli",
+      "sourceUrl": "https://labs.scale.com/leaderboard/rli",
+      "sourceRows": 21,
+      "admittedIdentities": 5
+    },
+    {
+      "datasetId": "arena-document",
+      "sourceUrl": "https://arena.ai/leaderboard/chat/document",
+      "sourceRows": 44,
+      "admittedIdentities": 2
+    },
+    {
+      "datasetId": "arena-vision",
+      "sourceUrl": "https://arena.ai/leaderboard/chat/vision",
+      "sourceRows": 167,
+      "admittedIdentities": 14
+    },
+    {
+      "datasetId": "arena-image-webdev",
+      "sourceUrl": "https://arena.ai/leaderboard/code/image-to-webdev",
+      "sourceRows": 65,
+      "admittedIdentities": 14
+    },
+    {
+      "datasetId": "openrouter-native",
+      "sourceUrl": "https://openrouter.ai/api/v1/benchmarks?include_run_config=true",
+      "sourceRows": 319,
+      "admittedIdentities": 46
+    }
+  ],
+  "excludedIdentityReasons": [
+    "Conflicting DesignArena identity groups: all 16 duplicate rows archived, none linked.",
+    "Eight-month Qwen Max does not supply the fixed September 0902 revision.",
+    "Astra/Luna Pro are distinct from the ordinary products.",
+    "OpenRouter search runs name older models and preserve engine/surface/turn settings; they do not supply current versions."
+  ],
+  "conditionalSources": [
+    {
+      "name": "BFCL v4",
+      "url": "https://gorilla.cs.berkeley.edu/leaderboard.html",
+      "dataUrl": "https://gorilla.cs.berkeley.edu/data_overall.csv",
+      "rows": 109,
+      "publishedUpdate": "2026-04-12",
+      "admittedCurrentIdentities": 0,
+      "decision": "The fetched table contains earlier model snapshots; no unique current version/effort match was reviewed."
+    },
+    {
+      "name": "OSWorld 2.0",
+      "url": "https://osworld-v2.xlang.ai/",
+      "dataUrl": "https://osworld-v2.xlang.ai/static/data/leaderboard/official-results.json?v=leaderboard-musespark-v10",
+      "rows": 55,
+      "publishedUpdate": "2026-10-15",
+      "admittedCurrentIdentities": 0,
+      "decision": "Results separate task releases, full/subsets, step budgets and GUI agent settings; no current reader execution identity was reviewed."
+    },
+    {
+      "name": "SWE-bench official",
+      "url": "https://www.swebench.com/",
+      "tables": [
+        {
+          "name": "Multilingual",
+          "rows": 13
+        },
+        {
+          "name": "Test",
+          "rows": 24
+        },
+        {
+          "name": "Verified",
+          "rows": 180
+        },
+        {
+          "name": "Lite",
+          "rows": 84
+        },
+        {
+          "name": "Multimodal",
+          "rows": 22
+        }
+      ],
+      "admittedCurrentIdentities": 0,
+      "decision": "The fetched official tables cover earlier model snapshots and agents, so none are relabelled as current models."
+    }
+  ],
+  "profilePolicy": "Use available same-model/version grades; prefer exact tier, then lower tier; preserve and flag the actual source tier.",
+  "additionalExistingGrades": [
+    {
+      "presetId": "builtin.harness.muse-spark-open.xhigh.muse-code",
+      "sourceCardId": "card-arena-muse-spark-open-max",
+      "sourceProfile": "Max",
+      "metricId": "arena_code_webdev",
+      "policy": "available_profile_evidence"
+    }
+  ]
+}

@@ -75,7 +75,7 @@ assert.notEqual(internalFull.config.capabilityReferenceIncluded, false,
   'A subscription-only model is an independent calibration reference, not a duplicate API access route.');
 assert.equal(mistral.eligibleForGlobalLeaderboard, false);
 assert.ok(mistral.domainScores.agentic.coverage < 0.6, 'Expanded task evidence is missing; keep the unchanged domain gate.');
-const quotaReference = scores.find(s => s.config.identity.modelName === 'Claude Haiku 5.5')!;
+const quotaReference = scores.find(s => s.config.identity.modelName === 'Claude Opus 5.5')!;
 const unknownQuota = processLLMpkBatchScoring([
   quotaReference.config,
   { ...quotaReference.config, id: 'known-monthly-unknown-quota', subscriptionData: full.config.subscriptionData },
@@ -97,9 +97,11 @@ assert.equal(haiku.config.openRouterData?.inputPricePerMToken, 0.1);
 assert.equal(haiku.config.openRouterData?.outputPricePerMToken, 0.5);
 for (const model of ['Muse Wonder ', 'Claude Haiku 5.5 ']) {
   const score = published.scores.find(s => s.config.name.startsWith(model))!;
-  assert.equal(score.domainScores.chatting.coverage, 0.9);
-  assert.equal(score.eligibleForGlobalLeaderboard, true,
-    'New independent Arena Text evidence now permits ranking under the existing coverage gates.');
+  assert.ok(Math.abs(score.domainScores.chatting.coverage - 0.65) < 1e-12);
+  assert.equal(score.availableDomainCount, 6);
+  assert.ok(score.overallCoverage < 0.75);
+  assert.equal(score.eligibleForGlobalLeaderboard, false,
+    'Additional weighted tasks retain the overall gate even when all six domains pass.');
 }
 assert.equal(full.domainScores.chatting.coverage, 0);
 assert.equal(full.rawCapabilityScore, null, 'Wonder Full must not borrow Wonder’s dialogue evidence.');
@@ -117,6 +119,7 @@ const bases = JSON.parse(VERIFIED_SOURCE_MODEL_CARDS) as SourceModelCard[];
 const changed = buildValsSourceCards(valsSnapshot as unknown as ValsSnapshot, bases, reviews);
 assert.equal(changed.cards.some(c => c.id.startsWith('card-vals-meta-muse-wonder-full-')), false,
   'A changed subscription-only model release must fail the pinned Vals identity.');
-assert.equal(changed.cards.filter(c => c.id.startsWith('card-vals-meta-muse-wonder-')).length, 9,
+assert.equal(changed.cards.filter(c => c.id.startsWith('card-vals-meta-muse-wonder-')).length,
+  valsReviews.entries.find(entry => entry.productLineId === 'muse_wonder')!.executions.length,
   'Wonder and Wonder Full keep distinct base identities.');
 console.log('October models: separate identities, subscription unknowns, exact efforts, retained task definitions and coverage gates: PASS');

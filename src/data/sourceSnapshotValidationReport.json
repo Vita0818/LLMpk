@@ -1,6 +1,6 @@
 {
   "schemaVersion": "source-snapshot-validation-report/v1",
-  "validatedAt": "2026-10-24T08:46:47.605Z",
+  "validatedAt": "2026-10-25T08:10:20.354Z",
   "status": "PASS",
   "inputs": {
     "artificialAnalysis": "src/data/artificialAnalysisSourceSnapshot.json",
@@ -10,8 +10,8 @@
     "frontierCode": "src/data/frontierCodeSourceSnapshot.json"
   },
   "summary": {
-    "checks": 32,
-    "passed": 32,
+    "checks": 36,
+    "passed": 36,
     "failed": 0
   },
   "coverage": {
@@ -146,6 +146,16 @@
     "frontierCode": {
       "models": 46,
       "rows": 136
+    },
+    "expansion": {
+      "datasets": 23,
+      "sourceRecords": 1649,
+      "reviewedMappings": 343,
+      "reviewedTargets": 666
+    },
+    "vals": {
+      "reviewedModels": 33,
+      "reviewedRows": 327
     }
   },
   "checks": [
@@ -737,6 +747,32 @@
       "details": {
         "rows": 136
       }
+    },
+    {
+      "id": "expansion-freshness",
+      "description": "Expanded source acquisitions are recent and retain their own capture dates.",
+      "passed": true,
+      "details": {}
+    },
+    {
+      "id": "expansion-registered-metrics",
+      "description": "Every new scored benchmark has reviewed real observations and an independent version identity.",
+      "passed": true,
+      "details": {
+        "metrics": 57
+      }
+    },
+    {
+      "id": "expansion-conflicting-identities",
+      "description": "Conflicting source identities remain archived without a current target.",
+      "passed": true,
+      "details": {}
+    },
+    {
+      "id": "vals-current-standalone-tasks",
+      "description": "All current standalone Vals tasks retain exact execution/version settings.",
+      "passed": true,
+      "details": {}
     }
   ]
 }

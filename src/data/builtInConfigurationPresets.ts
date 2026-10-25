@@ -2,6 +2,7 @@ import { VERIFIED_DESIGN_ARENA_SOURCE_MODEL_CARDS, VERIFIED_DESIGN_ARENA_SOURCE_
 import type { DesignArenaReviewedTarget } from './designArenaSeedCards';
 import { VERIFIED_VALS_SOURCE_MODEL_CARDS, VERIFIED_VALS_SOURCE_OBSERVATIONS } from './valsSeedCards';
 import type { ValsReviewedTarget } from './valsSeedCards';
+import { VERIFIED_EXPANSION_SOURCE_MODEL_CARDS, VERIFIED_EXPANSION_SOURCE_OBSERVATIONS, type ExpansionTarget } from './sourceExpansionSeedCards';
 import { DETAIL_ONLY_METRIC_DEFINITIONS } from './detailMetricDefinitions';
 import type {
   ConfigurationAccess,
@@ -3182,6 +3183,9 @@ const SOURCE_LABELS: Record<SourceType, string> = {
   frontier_code: 'FrontierCode',
   design_arena: 'DesignArena',
   vals: 'Vals AI',
+  livebench: 'LiveBench',
+  opencompass: 'OpenCompass',
+  epoch_ai: 'Epoch AI',
 };
 
 const REPLACEMENT_BENCHMARK_SOURCES: ReadonlySet<SourceType> = new Set([
@@ -3223,6 +3227,7 @@ function parseVerifiedSourceCards(): SourceModelCard[] {
     ...VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_MODEL_CARDS,
     ...VERIFIED_DESIGN_ARENA_SOURCE_MODEL_CARDS,
     ...VERIFIED_VALS_SOURCE_MODEL_CARDS,
+    ...VERIFIED_EXPANSION_SOURCE_MODEL_CARDS,
   ];
 }
 
@@ -3251,6 +3256,7 @@ function parseVerifiedSourceObservations(): SourceObservation[] {
     ...VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_OBSERVATIONS,
     ...VERIFIED_DESIGN_ARENA_SOURCE_OBSERVATIONS,
     ...VERIFIED_VALS_SOURCE_OBSERVATIONS,
+    ...VERIFIED_EXPANSION_SOURCE_OBSERVATIONS,
   ];
 }
 
@@ -3553,7 +3559,8 @@ function buildSourceCatalogConfigurationPresets(
     // Direct benchmark rows enrich an existing, exact three-part
     // configuration. They never manufacture a new reader configuration just
     // because a benchmark published a model/harness row.
-    if (REPLACEMENT_BENCHMARK_SOURCES.has(card.source)) continue;
+    if (REPLACEMENT_BENCHMARK_SOURCES.has(card.source)
+      || card.metadataJson?.sourceIdentity?.selectionMethod === 'reviewed-source-expansion') continue;
     if (alreadyDeclaredCardIds.has(card.id)) continue;
     const scope = sourceCatalogCardScope(card);
     if (!scope) continue;
@@ -4374,6 +4381,8 @@ export function buildPresetCoverageProfiles(
     const observations = presetCoverageCardDeclarations(preset)
       .flatMap((declaration) => (
         (observationsByCard.get(declaration.cardId) || []).filter((observation) => {
+          const productionHarness = observation.metadataJson?.productionHarness;
+          if (productionHarness && productionHarness !== preset.identity.harness.name) return false;
           if (!isHarnessOnlyCapabilityMetric(observation.metricId)) return true;
           if (
             !isCapabilityMetricCompatibleWithSourceLink(
@@ -5047,7 +5056,33 @@ export const ALL_CONFIGURATION_PRESET_CANDIDATES: readonly BuiltInConfigurationP
   ...PROVIDER_NEUTRAL_PRACTICAL_AUGMENTATION.presets,
   ...API_PRICING_VARIANT_PRESETS,
   ...SUBSCRIPTION_CONFIGURATION_PRESETS,
-].map(attachDesignArenaEvidence).map(attachValsEvidence);
+].map(attachDesignArenaEvidence).map(attachValsEvidence).map(attachExpansionEvidence).map(attachAvailableLegacyProfileEvidence);
+
+function attachAvailableLegacyProfileEvidence(preset: BuiltInConfigurationPreset): BuiltInConfigurationPreset {
+  if (preset.id !== 'builtin.harness.muse-spark-open.xhigh.muse-code') return preset;
+  return { ...preset, sourceCardLinks: [...(preset.sourceCardLinks ?? []), {
+    cardId: 'card-arena-muse-spark-open-max',
+    provenance: { kind: 'available_profile_evidence', sourceProfile: 'Max', targetProfile: preset.identity.model.profile },
+  }] };
+}
+
+/** New benchmarks enrich the reviewed inventory without creating model routes. */
+function attachExpansionEvidence(preset: BuiltInConfigurationPreset): BuiltInConfigurationPreset {
+  const links = VERIFIED_EXPANSION_SOURCE_MODEL_CARDS.flatMap(card => {
+    if (card.metadataJson?.scope?.productLineId !== preset.productLineId) return [];
+    const targets = card.metadataJson?.reviewedMapping?.targets as ExpansionTarget[] | undefined;
+    const target = targets?.find(target => target.presetId === preset.id
+      && target.modelName === preset.identity.model.name && target.profile === preset.identity.model.profile
+      && target.harness === preset.identity.harness.name);
+    return target ? [{ cardId: card.id, provenance: target.provenance }] : [];
+  });
+  if (!links.length) return preset;
+  const level = (link: BuiltInConfigurationPresetSourceCardLink) => link.provenance.kind === 'lower_profile_fallback'
+    ? link.provenance.sourceLevel : link.provenance.kind === 'lower_profile_harness_fallback'
+      ? link.provenance.sourceProfileLevel : link.provenance.kind === 'available_profile_evidence' ? -1 : Number.POSITIVE_INFINITY;
+  return { ...preset, sourceCardLinks: [...(preset.sourceCardLinks ?? []), ...links]
+    .sort((left, right) => level(left) === level(right) ? 0 : level(left) > level(right) ? -1 : 1) };
+}
 
 const READER_FACING_CONFIGURATION_CURATION =
   curateReaderFacingPresets(ALL_CONFIGURATION_PRESET_CANDIDATES);
@@ -5069,7 +5104,7 @@ function attachValsEvidence(preset: BuiltInConfigurationPreset): BuiltInConfigur
   const profileLevel = (link: BuiltInConfigurationPresetSourceCardLink) => (
     link.provenance.kind === 'lower_profile_fallback' ? link.provenance.sourceLevel
       : link.provenance.kind === 'lower_profile_harness_fallback' ? link.provenance.sourceProfileLevel
-        : Number.POSITIVE_INFINITY
+        : link.provenance.kind === 'available_profile_evidence' ? -1 : Number.POSITIVE_INFINITY
   );
   const sourceCardLinks = [...(preset.sourceCardLinks || []), ...links].sort((left, right) => {
     const leftLevel = profileLevel(left);
@@ -5119,4 +5154,4 @@ export const BUILT_IN_CONFIGURATION_PRESET_COUNT = BUILT_IN_CONFIGURATION_PRESET
  * additions visible during Vite hot updates as well as after a full reload.
  */
 export const BUILT_IN_CONFIGURATION_PRESET_INVENTORY_VERSION =
-  '2026-10-24-scoring32-complete-metrics-v56';
+  '2026-10-25-scoring33-available-profile-evidence-v58';

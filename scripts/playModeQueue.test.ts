@@ -108,8 +108,12 @@ const expectedRepresentatives = [
 ];
 
 const queueNames = new Set(queue.map((item) => item.config.name));
+const representativeScores = buildRepresentativeConfigurationQueue(snapshot.scores);
 expectedRepresentatives.forEach((name) => {
-  assert(queueNames.has(name), `Missing expected representative route: ${name}`);
+  const representative = representativeScores.find(item => item.config.name === name);
+  assert(representative, `Missing expected representative route: ${name}`);
+  assert(queueNames.has(name) === representative!.eligibleForGlobalLeaderboard,
+    `Playback eligibility must follow current coverage: ${name}`);
 });
 
 for (let index = 1; index < queue.length; index += 1) {

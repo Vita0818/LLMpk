@@ -23,8 +23,8 @@ assert.equal(VERIFIED_DESIGN_ARENA_SOURCE_OBSERVATIONS.length, 17);
 assert.deepEqual(UNMATCHED_REVIEWED_DESIGN_ARENA_MAPPINGS, []);
 assert.equal(BUILT_IN_CONFIGURATION_PRESETS.length, 49);
 assert.equal(READER_CURRENT_MODEL_GROUP_KEYS.size, 33);
-assert.equal(ALL_METRIC_DEFINITIONS.length, 48);
-assert.equal(ALL_METRIC_DEFINITIONS.find(metric => metric.id === 'designarena_frontend')?.internalWeightInDomain, 0.3);
+assert.equal(ALL_METRIC_DEFINITIONS.length, 108);
+assert.equal(ALL_METRIC_DEFINITIONS.find(metric => metric.id === 'designarena_frontend')?.internalWeightInDomain, 0.15);
 
 const targetIds = new Set<string>();
 for (const review of reviews.entries) {
@@ -55,9 +55,9 @@ for (const review of reviews.entries) {
     assert.deepEqual(link?.provenance, target.provenance);
     const score = publicSnapshot.scores.find(score => score.config.name === preset.displayName)!;
     assert.equal(score.config.observations.designarena_frontend?.rawValue, sourceRows[0].elo);
-    const webdev = score.config.observations.arena_code_webdev?.rawValue;
-    const vibeCode = (score.config.observations as Record<string, { rawValue: number | null }>).vals_vibe_code_v11?.rawValue;
-    const expectedCoverage = 0.3 + (Number.isFinite(webdev) ? 0.4 : 0) + (Number.isFinite(vibeCode) ? 0.3 : 0);
+    const expectedCoverage = ALL_METRIC_DEFINITIONS.filter(metric => metric.domain === 'frontend')
+      .filter(metric => Number.isFinite((score.config.observations as Record<string, { rawValue: number | null }>)[metric.id]?.rawValue))
+      .reduce((sum, metric) => sum + metric.internalWeightInDomain, 0);
     assert.ok(Math.abs(score.domainScores.frontend.coverage - expectedCoverage) < 1e-12);
     if (expectedCoverage + Number.EPSILON < 0.6) {
       assert.equal(score.domainScores.frontend.score, null);

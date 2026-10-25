@@ -98,19 +98,33 @@ for (const score of publicSnapshot.scores) {
   for (const observation of Object.values(score.config?.observations ?? {})) {
     const observationKeys = Object.keys(observation);
     if (
-      (observationKeys.length !== 2 && observationKeys.length !== 3)
+      (observationKeys.length < 2 || observationKeys.length > 4)
       || !observationKeys.includes('metricId')
       || !observationKeys.includes('rawValue')
-      || observationKeys.some(key => !['metricId', 'rawValue', 'sourceSnapshotDate'].includes(key))
+      || observationKeys.some(key => !['metricId', 'rawValue', 'sourceSnapshotDate', 'benchmarkEvidence'].includes(key))
       || (observation.sourceSnapshotDate !== undefined && !/^\d{4}-\d{2}-\d{2}$/u.test(observation.sourceSnapshotDate))
     ) {
       throw new Error('Public metric observation contains non-display metadata.');
+    }
+    if (observation.benchmarkEvidence !== undefined) {
+      const evidence = observation.benchmarkEvidence;
+      const permitted = ['sourceUrl', 'benchmarkVersion', 'sourceProfile', 'sourceHarness', 'sourceUpdated', 'notes', 'profileFallback', 'standardError'];
+      const source = new URL(evidence.sourceUrl);
+      const allowedHosts = ['www.designarena.ai', 'livebench.ai', 'rank.opencompass.org.cn', 'epoch.ai', 'artificialanalysis.ai', 'labs.scale.com', 'arena.ai', 'openrouter.ai'];
+      if (!evidence || Object.keys(evidence).some(key => !permitted.includes(key))
+        || !['benchmarkVersion', 'sourceProfile', 'sourceHarness', 'notes'].every(key => typeof evidence[key] === 'string' && evidence[key].length < 1000)
+        || source.protocol !== 'https:' || !allowedHosts.includes(source.hostname) || source.username || source.password || source.search
+        || !/^\d{4}-\d{2}-\d{2}$/u.test(evidence.sourceUpdated)
+        || typeof evidence.profileFallback !== 'boolean'
+        || (evidence.standardError !== undefined && (!Number.isFinite(evidence.standardError) || evidence.standardError < 0))) {
+        throw new Error('Invalid public benchmark provenance.');
+      }
     }
   }
 
   if (score.config?.valsData !== undefined) {
     const evidence = score.config.valsData;
-    if (!Array.isArray(evidence) || evidence.length > 9
+    if (!Array.isArray(evidence) || evidence.length > 12
       || new Set(evidence.map(item => item.metricId)).size !== evidence.length) {
       throw new Error('Public Vals evidence must contain unique registered results.');
     }

@@ -7,7 +7,10 @@ export type SourceType =
   | 'swe_rebench'
   | 'frontier_code'
   | 'design_arena'
-  | 'vals';
+  | 'vals'
+  | 'livebench'
+  | 'opencompass'
+  | 'epoch_ai';
 
 /**
  * How a shipped configuration is reached. API and explicit subscription
@@ -97,6 +100,13 @@ export interface ExactSourceCardProvenance {
   kind: 'exact';
 }
 
+/** Same reviewed model/version; consume the publisher's actual available tier. */
+export interface AvailableProfileEvidenceProvenance {
+  kind: 'available_profile_evidence';
+  sourceProfile: string;
+  targetProfile: string;
+}
+
 /**
  * An explicit, one-way use of a lower model profile to fill a higher target
  * profile.  The numeric levels are authored evidence of the ordering; code
@@ -145,6 +155,7 @@ export interface LowerProfileHarnessFallbackProvenance {
 
 export type ConfigurationSourceLinkProvenance =
   | ExactSourceCardProvenance
+  | AvailableProfileEvidenceProvenance
   | LowerProfileFallbackProvenance
   | LowerHarnessFallbackProvenance
   | LowerProfileHarnessFallbackProvenance;

@@ -1,7 +1,7 @@
 import type { DomainId } from '../types/llm_pk';
 import metricWeights from './capabilityMetricWeights.json';
 
-/** All nine Vals metrics score in v3.2; related signals share limited domain budgets. */
+/** Independently versioned Vals tasks share limited domain budgets. */
 export const VALS_METRIC_DEFINITIONS: readonly {
   id: string; slug: string; name: string; domain: DomainId; scoringWeightInDomain: number;
   benchmarkVersion: string;
@@ -15,6 +15,9 @@ export const VALS_METRIC_DEFINITIONS: readonly {
   { id: 'vals_legal_research_v1', slug: 'legal_research', name: 'Legal Research', domain: 'reasoning', scoringWeightInDomain: metricWeights.vals_legal_research_v1, benchmarkVersion: '1' },
   { id: 'vals_hlab_v11', slug: 'hlab', name: 'HLAB-Vals 1.1', domain: 'documents', scoringWeightInDomain: metricWeights.vals_hlab_v11, benchmarkVersion: '1.1' },
   { id: 'vals_tax_agent_v1', slug: 'tax_agent_bench', name: 'Tax Agent Bench', domain: 'reasoning', scoringWeightInDomain: metricWeights.vals_tax_agent_v1, benchmarkVersion: '1' },
+  { id: 'vals_proofbench_v11', slug: 'proof_bench', name: 'ProofBench 1.1', domain: 'reasoning', scoringWeightInDomain: metricWeights.vals_proofbench_v11, benchmarkVersion: '1.1' },
+  { id: 'vals_programbench_v1', slug: 'programbench', name: 'ProgramBench', domain: 'coding', scoringWeightInDomain: metricWeights.vals_programbench_v1, benchmarkVersion: '1' },
+  { id: 'vals_vibe_code_1_100_v1', slug: 'vcb-1-100', name: 'Vibe Code Bench 1–100', domain: 'frontend', scoringWeightInDomain: metricWeights.vals_vibe_code_1_100_v1, benchmarkVersion: '1.0' },
 ];
 
 export interface ValsBenchmarkEvidence {

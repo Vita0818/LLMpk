@@ -46,6 +46,7 @@ export interface ValsReviewedMapping {
   baseCardId: string;
   baseSource?: 'openrouter' | 'artificial_analysis';
   baseReleaseDate?: string;
+  minimumSourceDate?: string;
   canonicalModelVersion: string;
   targets: readonly ValsReviewedTarget[];
   executions: readonly {
@@ -107,7 +108,9 @@ export function buildValsSourceCards(
       const row = benchmark?.tasks[execution.task]?.[review.modelId];
       const refusal = benchmark?.refusalFallback?.[review.modelId];
       const metric = VALS_METRIC_DEFINITIONS.find(item => item.slug === execution.benchmarkSlug);
+      const modelDate = review.minimumSourceDate ?? null;
       if (baseMatches.length !== 1 || benchmarks.length !== 1 || !metric || !row
+        || (modelDate && benchmark.metadata.updated < modelDate)
         || (benchmark.metadata.version ?? null) !== execution.benchmarkVersion
         || metric.benchmarkVersion !== execution.benchmarkVersion
         || !matchesSettings(row, execution.settings)
@@ -129,9 +132,11 @@ export function buildValsSourceCards(
       const selectedAccuracy = hasFallback ? refusal.noFallbackScorePct : row.accuracy;
       const targets = review.targets.flatMap(target => {
         const level = execution.profile.level;
-        if (level === null || level > target.profileLevel) return [];
+        if (level === null) return [];
         const provenance: ConfigurationSourceLinkProvenance = level === target.profileLevel
           ? { kind: 'exact' }
+          : level > target.profileLevel
+          ? { kind: 'available_profile_evidence', sourceProfile: execution.profile.label, targetProfile: target.profile }
           : { kind: 'lower_profile_fallback', sourceProfile: execution.profile.label,
               sourceLevel: level, targetProfile: target.profile, targetLevel: target.profileLevel };
         return [{ ...target, provenance }];

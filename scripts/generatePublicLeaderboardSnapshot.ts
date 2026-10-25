@@ -66,6 +66,17 @@ const scores: PublicLeaderboardScore[] = adminMappingStore
             metricId,
             rawValue: observation.rawValue,
             ...(observation.testDate ? { sourceSnapshotDate: observation.testDate } : {}),
+            ...(observation.benchmarkEvidence ? { benchmarkEvidence: {
+              sourceUrl: observation.benchmarkEvidence.sourceUrl,
+              benchmarkVersion: observation.benchmarkEvidence.benchmarkVersion,
+              sourceProfile: observation.benchmarkEvidence.sourceProfile,
+              sourceHarness: observation.benchmarkEvidence.sourceHarness,
+              sourceUpdated: observation.benchmarkEvidence.sourceUpdated,
+              notes: observation.benchmarkEvidence.notes,
+              profileFallback: Boolean(observation.benchmarkEvidence.profileFallback),
+              ...(observation.benchmarkEvidence.standardError !== undefined
+                ? { standardError: observation.benchmarkEvidence.standardError } : {}),
+            } } : {}),
           },
         ]),
     );

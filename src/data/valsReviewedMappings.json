@@ -173,6 +173,69 @@
             "level": 6,
             "disclosed": true
           }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "programbench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vcb-1-100",
+          "benchmarkVersion": "1.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
         }
       ]
     },
@@ -393,6 +456,69 @@
           "profile": {
             "label": "Max",
             "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "programbench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vcb-1-100",
+          "benchmarkVersion": "1.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "xhigh",
+            "provider": "Anthropic",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
             "disclosed": true
           }
         }
@@ -617,6 +743,48 @@
             "level": 6,
             "disclosed": true
           }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "programbench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
         }
       ]
     },
@@ -769,6 +937,69 @@
             "compute_effort": null,
             "provider": "OpenAI",
             "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "programbench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vcb-1-100",
+          "benchmarkVersion": "1.0",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": "OpenHands"
           },
           "profile": {
             "label": "Max",
@@ -997,6 +1228,69 @@
             "level": 6,
             "disclosed": true
           }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "programbench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vcb-1-100",
+          "benchmarkVersion": "1.0",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
         }
       ]
     },
@@ -1187,6 +1481,48 @@
         },
         {
           "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "programbench",
           "benchmarkVersion": "1",
           "task": "overall",
           "settings": {
@@ -1427,6 +1763,48 @@
             "level": 6,
             "disclosed": true
           }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "programbench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "OpenAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
         }
       ]
     },
@@ -1561,6 +1939,27 @@
         },
         {
           "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Google",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "programbench",
           "benchmarkVersion": "1",
           "task": "overall",
           "settings": {
@@ -1829,6 +2228,69 @@
             "level": 4,
             "disclosed": true
           }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Google",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "programbench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Google",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vcb-1-100",
+          "benchmarkVersion": "1.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Google",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
         }
       ]
     },
@@ -2019,6 +2481,48 @@
         },
         {
           "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "max_output_tokens": null,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "SpaceXAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "max_output_tokens": null,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "SpaceXAI",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "programbench",
           "benchmarkVersion": "1",
           "task": "overall",
           "settings": {
@@ -2245,6 +2749,69 @@
             "level": 6,
             "disclosed": true
           }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Zhipu AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "programbench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Zhipu AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vcb-1-100",
+          "benchmarkVersion": "1.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Fireworks AI",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
         }
       ]
     },
@@ -2411,6 +2978,69 @@
             "level": 6,
             "disclosed": true
           }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Zhipu AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "programbench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Zhipu AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vcb-1-100",
+          "benchmarkVersion": "1.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Fireworks AI",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
         }
       ]
     },
@@ -2563,6 +3193,48 @@
             "compute_effort": null,
             "provider": "MiniMax",
             "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 512000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "MiniMax",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "vcb-1-100",
+          "benchmarkVersion": "1.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 512000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "MiniMax",
+            "harness": "OpenHands"
           },
           "profile": {
             "label": "Default",
@@ -2851,6 +3523,48 @@
             "level": 5,
             "disclosed": true
           }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Alibaba",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "programbench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 65536,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Alibaba",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
         }
       ]
     },
@@ -3007,6 +3721,69 @@
           "profile": {
             "label": "Max",
             "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 384000,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "DeepSeek",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "programbench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 1,
+            "max_output_tokens": 384000,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "DeepSeek",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vcb-1-100",
+          "benchmarkVersion": "1.0",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 384000,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "DeepSeek",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
             "disclosed": true
           }
         }
@@ -3199,6 +3976,48 @@
         },
         {
           "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Xiaomi",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Xiaomi",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "programbench",
           "benchmarkVersion": "1",
           "task": "overall",
           "settings": {
@@ -3417,6 +4236,69 @@
             "level": 6,
             "disclosed": true
           }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 262144,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Moonshot AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "programbench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 262144,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Moonshot AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "vcb-1-100",
+          "benchmarkVersion": "1.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 262144,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Moonshot AI",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
         }
       ]
     },
@@ -3557,6 +4439,48 @@
         },
         {
           "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "xhigh",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": null
+          },
+          "profile": {
+            "label": "XHigh",
+            "level": 5,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "programbench",
           "benchmarkVersion": "1",
           "task": "overall",
           "settings": {
@@ -3727,6 +4651,69 @@
             "compute_effort": null,
             "provider": "Meta",
             "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "programbench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vcb-1-100",
+          "benchmarkVersion": "1.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": "OpenHands"
           },
           "profile": {
             "label": "Max",
@@ -3941,6 +4928,48 @@
             "level": 0,
             "disclosed": false
           }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.9,
+            "top_p": 1,
+            "max_output_tokens": 64000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Tencent",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "programbench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.9,
+            "top_p": 1,
+            "max_output_tokens": 64000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Tencent",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
         }
       ]
     },
@@ -4061,6 +5090,27 @@
         {
           "benchmarkSlug": "tax_agent_bench",
           "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "max_output_tokens": 80000,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Mistral AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
           "task": "overall",
           "settings": {
             "temperature": 0.7,
@@ -4280,6 +5330,69 @@
             "compute_effort": null,
             "provider": "Thinkingmachines",
             "harness": null
+          },
+          "profile": {
+            "label": "0.99",
+            "level": null,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 1,
+            "max_output_tokens": 256000,
+            "reasoning": null,
+            "reasoning_effort": "0.99",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Thinkingmachines",
+            "harness": null
+          },
+          "profile": {
+            "label": "0.99",
+            "level": null,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "programbench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 1,
+            "max_output_tokens": 256000,
+            "reasoning": null,
+            "reasoning_effort": "0.99",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Thinkingmachines",
+            "harness": null
+          },
+          "profile": {
+            "label": "0.99",
+            "level": null,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vcb-1-100",
+          "benchmarkVersion": "1.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 1,
+            "max_output_tokens": 256000,
+            "reasoning": null,
+            "reasoning_effort": "0.99",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Thinkingmachines",
+            "harness": "OpenHands"
           },
           "profile": {
             "label": "0.99",
@@ -4526,6 +5639,48 @@
             "level": 6,
             "disclosed": true
           }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vcb-1-100",
+          "benchmarkVersion": "1.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
         }
       ]
     },
@@ -4730,6 +5885,69 @@
             "compute_effort": null,
             "provider": "Meta",
             "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "programbench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vcb-1-100",
+          "benchmarkVersion": "1.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 131072,
+            "reasoning": null,
+            "reasoning_effort": "max",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Meta",
+            "harness": "OpenHands"
           },
           "profile": {
             "label": "Max",
@@ -4944,6 +6162,69 @@
             "level": 6,
             "disclosed": true
           }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "programbench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": null
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vcb-1-100",
+          "benchmarkVersion": "1.0",
+          "task": "overall",
+          "settings": {
+            "temperature": null,
+            "top_p": null,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": "max",
+            "provider": "Anthropic",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "Max",
+            "level": 6,
+            "disclosed": true
+          }
         }
       ]
     },
@@ -5125,6 +6406,48 @@
             "compute_effort": null,
             "provider": "Mistral AI",
             "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 256000,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Mistral AI",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vcb-1-100",
+          "benchmarkVersion": "1.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 256000,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Mistral AI",
+            "harness": "OpenHands"
           },
           "profile": {
             "label": "High",
@@ -5347,7 +6670,8 @@
             "disclosed": true
           }
         }
-      ]
+      ],
+      "minimumSourceDate": "2026-10-17"
     },
     {
       "key": "meta-muse-spark-open",
@@ -5914,6 +7238,69 @@
             "level": 4,
             "disclosed": true
           }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 262144,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Google",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "programbench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 262144,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Google",
+            "harness": null
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
+        },
+        {
+          "benchmarkSlug": "vcb-1-100",
+          "benchmarkVersion": "1.0",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": null,
+            "max_output_tokens": 262144,
+            "reasoning": null,
+            "reasoning_effort": "high",
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Google",
+            "harness": "OpenHands"
+          },
+          "profile": {
+            "label": "High",
+            "level": 4,
+            "disclosed": true
+          }
         }
       ]
     },
@@ -6104,6 +7491,48 @@
         },
         {
           "benchmarkSlug": "tax_agent_bench",
+          "benchmarkVersion": "1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Xiaomi",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "proof_bench",
+          "benchmarkVersion": "1.1",
+          "task": "overall",
+          "settings": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "max_output_tokens": 128000,
+            "reasoning": null,
+            "reasoning_effort": null,
+            "verbosity": null,
+            "compute_effort": null,
+            "provider": "Xiaomi",
+            "harness": null
+          },
+          "profile": {
+            "label": "Default",
+            "level": 0,
+            "disclosed": false
+          }
+        },
+        {
+          "benchmarkSlug": "programbench",
           "benchmarkVersion": "1",
           "task": "overall",
           "settings": {

@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import publicSnapshot from '../src/data/publicLeaderboardSnapshot.json';
 import aaSnapshot from '../src/data/artificialAnalysisSourceSnapshot.json';
+import arenaSnapshot from '../src/data/arenaRawExtraction.json';
 import valsSnapshot from '../src/data/valsSourceSnapshot.json';
 import valsReviews from '../src/data/valsReviewedMappings.json';
 import { ALL_CONFIGURATION_PRESET_CANDIDATES, BUILT_IN_CONFIGURATION_PRESETS, BUILT_IN_CONFIGURATION_MODEL_GROUP_COUNT } from '../src/data/builtInConfigurationPresets';
@@ -58,7 +59,8 @@ assert.equal(deepseek.config.valsData?.length, 9);
 assert.equal(deepseek.config.observations.arena_agent_bash_recovery, undefined);
 assert.equal(deepseek.config.observations.frontiercode_v11_main_pass_rate, undefined,
   'The dated 0910 Chisel run is not a 1017 DeepSeek Harness pass rate.');
-assert.equal(deepseek.domainScores.chatting.coverage, 0);
+assert.equal(deepseek.domainScores.chatting.coverage, 0.25,
+  'The exact 1017 OpenCompass row supplies independent interaction evidence; older Arena rows stay absent.');
 assert.equal(deepseek.rawCapabilityScore, null);
 for (const line of ['kimi_k3', 'deepseek_v41_flash']) {
   assert.equal(BUILT_IN_CONFIGURATION_PRESETS.some(preset => preset.productLineId === line), false);
@@ -81,18 +83,26 @@ for (const id of ['vals_finance_agent_v2', 'vals_excel_modeling_v1', 'vals_code_
 }
 const spark = scoreFor('muse_spark_open');
 assert.ok(spark.config.name.startsWith('Muse Spark Open XHigh'));
-assert.equal(spark.config.observations.arena_code_webdev, undefined,
-  'The Fireworks Max execution cannot be used as a lower XHigh result.');
+assert.equal(spark.config.observations.arena_code_webdev?.rawValue,
+  arenaSnapshot.metrics.arena_code_webdev.rows.find(row => row.exactSourceModelName === 'Muse Spark Open (Max)')!.rawValue,
+  'Use the available same-model Max grade while retaining its actual tier.');
+assert.equal(spark.config.observations.arena_code_webdev?.benchmarkEvidence?.sourceProfile, 'Max');
+assert.equal(spark.config.observations.arena_code_webdev?.benchmarkEvidence?.profileFallback, true);
 assert.equal(spark.config.valsData?.length, 9);
-for (const line of ['gemini_4_argon', 'muse_wonder', 'claude_haiku_55']) {
+for (const line of ['gemini_4_argon']) {
   assert.equal(scoreFor(line).eligibleForGlobalLeaderboard, true,
     `${line} now has enough independently published evidence under the unchanged gates.`);
+}
+for (const line of ['muse_wonder', 'claude_haiku_55']) {
+  assert.equal(scoreFor(line).availableDomainCount, 6);
+  assert.ok(scoreFor(line).overallCoverage < SCORING_CONFIG.coverage.overallMinimum);
+  assert.equal(scoreFor(line).eligibleForGlobalLeaderboard, false);
 }
 assert.equal(scoreFor('muse_wonder_full').domainScores.chatting.coverage, 0);
 
 assert.equal(SCORING_CONFIG.coverage.officialMinimum, 0.6);
 assert.equal(SCORING_CONFIG.coverage.overallMinimum, 0.75);
-assert.equal(ALL_METRIC_DEFINITIONS.find(metric => metric.id === 'vals_hlab_v11')?.internalWeightInDomain, 0.15);
+assert.equal(ALL_METRIC_DEFINITIONS.find(metric => metric.id === 'vals_hlab_v11')?.internalWeightInDomain, 0.08);
 assert.equal(ALL_METRIC_DEFINITIONS.some(metric => metric.id === 'vals_hlab_v1'), false);
 for (const score of publicSnapshot.scores) {
   assert.equal(Object.hasOwn(score.config.observations, 'vals_hlab_v1'), false);

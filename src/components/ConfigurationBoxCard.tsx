@@ -38,6 +38,9 @@ const sourceLabels: Record<SourceType, string> = {
   frontier_code: 'FrontierCode',
   design_arena: 'DesignArena',
   vals: 'Vals AI',
+  livebench: 'LiveBench',
+  opencompass: 'OpenCompass',
+  epoch_ai: 'Epoch AI',
 };
 
 export const ConfigurationBoxCard: React.FC<ConfigurationBoxCardProps> = React.memo(({
@@ -225,6 +228,9 @@ const StackedSourceCard: React.FC<StackedSourceCardProps> = ({
   const fallbackLabel = (() => {
     const provenance = link.provenance;
     if (!provenance || provenance.kind === 'exact') return null;
+    if (provenance.kind === 'available_profile_evidence') {
+      return `来源档位 · ${provenance.sourceProfile} → ${provenance.targetProfile}`;
+    }
     if (provenance.kind === 'lower_profile_fallback') {
       return `兜底 · ${provenance.sourceProfile} → ${provenance.targetProfile}`;
     }

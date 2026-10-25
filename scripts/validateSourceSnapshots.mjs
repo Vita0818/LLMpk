@@ -6,6 +6,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { hasPublishedCodingAgentModelIdentity } from './artificialAnalysisModelExtraction.mjs';
 import { standardEndpointExclusionReason } from './openRouterEndpointPolicy.mjs';
+import { validateExpansionSnapshot, EXPANSION_METRICS } from './sourceExpansionSnapshotUtils.mjs';
+import { validateReviewedValsRows, VALS_BENCHMARK_SLUGS } from './valsSnapshotUtils.mjs';
 import {
   asFiniteNumber,
   atomicWriteJson,
@@ -812,6 +814,23 @@ try {
     openRouterPerformance: validateOpenRouterPerformance(snapshots.openRouterPerformance),
     frontierCode: validateFrontierCode(snapshots.frontierCode),
   };
+  const expansion = readJson(path.join(ROOT, 'src/data/sourceExpansionSnapshot.json'), 'expanded source snapshot');
+  const expansionReviews = readJson(path.join(ROOT, 'src/data/sourceExpansionReviewedMappings.json'), 'expanded source reviews');
+  coverage.expansion = validateExpansionSnapshot(expansion, expansionReviews);
+  check('expansion-freshness', 'Expanded source acquisitions are recent and retain their own capture dates.',
+    freshEnough(expansion.fetchedAt) && expansion.datasets.every(dataset => freshEnough(dataset.fetchedAt)));
+  const reviewedIds = new Set(expansionReviews.entries.map(entry => entry.recordId));
+  const attachedMetricIds = new Set(expansion.records.filter(record => reviewedIds.has(record.id))
+    .flatMap(record => record.observations.filter(observation => observation.rawValue !== null).map(observation => observation.metricId)));
+  check('expansion-registered-metrics', 'Every new scored benchmark has reviewed real observations and an independent version identity.',
+    EXPANSION_METRICS.every(metric => attachedMetricIds.has(metric.id)), { metrics: attachedMetricIds.size });
+  check('expansion-conflicting-identities', 'Conflicting source identities remain archived without a current target.',
+    expansion.records.filter(record => record.identity.ambiguousIdentity).every(record => !reviewedIds.has(record.id)));
+  const vals = readJson(path.join(ROOT, 'src/data/valsSourceSnapshot.json'), 'Vals source snapshot');
+  const valsReviews = readJson(path.join(ROOT, 'src/data/valsReviewedMappings.json'), 'Vals reviewed mappings');
+  coverage.vals = validateReviewedValsRows(vals.benchmarks, valsReviews);
+  check('vals-current-standalone-tasks', 'All current standalone Vals tasks retain exact execution/version settings.',
+    vals.benchmarks.length === VALS_BENCHMARK_SLUGS.length && vals.benchmarks.every(benchmark => VALS_BENCHMARK_SLUGS.includes(benchmark.metadata.slug)));
   const failedChecks = checks.filter((item) => !item.passed);
   report = {
     schemaVersion: 'source-snapshot-validation-report/v1',

@@ -15,6 +15,7 @@ import { DOMAIN_IDS, getCoverageStatus, SCORING_CONFIG } from './scoringConfig';
 import { VALS_METRIC_DEFINITIONS } from '../data/valsMetricDefinitions';
 import metricWeights from '../data/capabilityMetricWeights.json';
 import { EXPANDED_CAPABILITY_METRIC_DEFINITIONS } from '../data/expandedCapabilityMetricDefinitions';
+import sourceExpansionMetrics from '../data/sourceExpansionMetricDefinitions.json';
 import {
   isCapabilityMetricApplicableToConfiguration,
 } from '../data/executionMetricPolicy';
@@ -60,7 +61,8 @@ const CAPABILITY_METRIC_METADATA: Omit<MetricDefinition, 'internalWeightInDomain
   {
     id: "aa_critpt", name: "CritPt", source: "Artificial Analysis", domain: "reasoning",
     metricType: "accuracy", higherIsBetter: true,
-    unit: "pass@1", description: "专业物理与理论科学推理。", officialUrl: "https://artificialanalysis.ai/evaluations/critpt",
+    unit: "pass@1", description: "专业物理与理论科学推理；保留旧数据集，与修订版 v2 分开。", officialUrl: "https://artificialanalysis.ai/evaluations/critpt",
+    dataQuality: { status: 'legacy', note: '原始 CritPt；修订数据集 v2 另列，旧成绩不重命名。', sourceUrl: 'https://artificialanalysis.ai/evaluations/critpt' },
   },
   {
     id: "arena_text_math", name: "Arena Math", source: "Arena.ai", domain: "reasoning",
@@ -128,6 +130,7 @@ const CAPABILITY_METRIC_METADATA: Omit<MetricDefinition, 'internalWeightInDomain
     unit: "pass@1", description: "专业 PDF 文档任务的全部交付要求通过率。", officialUrl: "https://artificialanalysis.ai/evaluations/gdp-pdf",
   },
   ...EXPANDED_CAPABILITY_METRIC_DEFINITIONS,
+  ...(sourceExpansionMetrics as Omit<MetricDefinition, 'internalWeightInDomain'>[]),
   ...VALS_METRIC_DEFINITIONS.map(metric => ({
     id: metric.id, name: `Vals · ${metric.name}`, source: 'Vals AI' as const, domain: metric.domain,
     metricType: 'accuracy' as const,

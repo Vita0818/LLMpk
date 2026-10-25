@@ -25,10 +25,16 @@ export interface ConfigurationMetricRow {
   title: string;
   sourceUrl?: string;
   weightInDomain?: number;
+  qualityStatus?: 'under-review' | 'legacy';
+  profileMismatch?: boolean;
 }
 
 export const formatConfigurationScore = (score: number | null | undefined) =>
   score === null || score === undefined ? '--' : score.toFixed(1);
+
+/** Preserve fractional positive budgets instead of displaying 0%. */
+export const formatMetricWeight = (weight: number) =>
+  `${Number((weight * 100).toFixed(2))}%`;
 
 export const formatConfigurationHarness = (harness: string) => {
   if (!harness) return 'Chat';
@@ -109,7 +115,7 @@ export const buildConfigurationMetricRows = (
           `Vals v${valsEvidence.benchmarkVersion ?? '未披露'}`,
           `来源更新 ${valsEvidence.sourceUpdated}`,
           `${valsEvidence.sourceProfile} / ${valsEvidence.sourceHarness ?? '评测环境未披露'}`,
-          valsEvidence.profileFallback ? '使用已审核的较低档位来源' : '',
+          valsEvidence.profileFallback ? '采用该模型来源实测档位' : '',
           valsEvidence.rawValue !== null ? `来源成绩 ${(valsEvidence.rawValue * 100).toFixed(2)}%` : '',
           valsEvidence.standardError !== null ? `SE ${(valsEvidence.standardError * 100).toFixed(2)}（标准误）` : '',
           valsEvidence.scoreBasis === 'no-fallback'
@@ -119,15 +125,20 @@ export const buildConfigurationMetricRows = (
         ].filter(Boolean).join(' · ')}`
         : '';
 
+      const evidence = observation?.benchmarkEvidence;
+      const sourceProvenance = evidence ? ` · 来源版本 ${evidence.benchmarkVersion} · ${evidence.sourceProfile} · ${evidence.sourceHarness}${evidence.profileFallback ? ' · 采用来源实测档位' : ''}${evidence.standardError !== undefined ? ` · SE ${(evidence.standardError * 100).toFixed(2)}（标准误）` : ''}${evidence.notes ? ` · ${evidence.notes}` : ''}` : '';
+      const quality = metric.dataQuality ? ` · ${metric.dataQuality.status === 'under-review' ? '来源正在复核' : '旧数据集'}：${metric.dataQuality.note}` : '';
       return {
         id: metric.id,
         label: getCompactMetricName(metric.id, metric.name),
         value: formattedValue,
         color: domainDefinition.color,
         domainId,
-        sourceUrl: valsEvidence?.sourceUrl ?? metric.officialUrl,
+        sourceUrl: evidence?.sourceUrl ?? valsEvidence?.sourceUrl ?? metric.officialUrl,
         weightInDomain: metric.internalWeightInDomain,
-        title: `${metric.name} (${domainDefinition.nameEn}) · 计分权重 ${(metric.internalWeightInDomain * 100).toFixed(0)}% · ${metric.source} · Raw Value: ${formattedValue}${observation?.sourceSnapshotDate ? ` · 来源快照 ${observation.sourceSnapshotDate}` : ''}${sourceConditions}`,
+        qualityStatus: metric.dataQuality?.status,
+        profileMismatch: Boolean(evidence?.profileFallback || valsEvidence?.profileFallback),
+        title: `${metric.name} (${domainDefinition.nameEn}) · 计分权重 ${formatMetricWeight(metric.internalWeightInDomain)} · ${metric.source} · Raw Value: ${formattedValue}${observation?.sourceSnapshotDate ? ` · 来源快照 ${observation.sourceSnapshotDate}` : ''}${sourceConditions}${sourceProvenance}${quality}`,
       };
     });
   });
@@ -312,7 +323,9 @@ export const ConfigurationMetricList: React.FC<ConfigurationMetricListProps> = (
                   {row.label}
                 </a>
               ) : <span className="truncate">{row.label}</span>}
-              {row.weightInDomain !== undefined && <span className="shrink-0 text-[9px] font-normal text-neutral-500" title="领域内配置权重">{Math.round(row.weightInDomain * 100)}%</span>}
+              {row.weightInDomain !== undefined && <span className="shrink-0 text-[9px] font-normal text-neutral-500" title="领域内配置权重">{formatMetricWeight(row.weightInDomain)}</span>}
+              {row.qualityStatus && <span className="shrink-0 text-[9px] font-normal text-amber-700" aria-label={row.qualityStatus === 'under-review' ? '来源正在复核' : '旧版数据集'}>{row.qualityStatus === 'under-review' ? '复核' : '旧版'}</span>}
+              {row.profileMismatch && <span className="shrink-0 text-[9px] font-normal text-neutral-500" title="使用同一模型已有的实测档位；实际档位见此行来源说明">异档</span>}
             </span>
             <span className="shrink-0 font-brand-mono text-xs font-black text-neutral-950 sm:text-sm">
               {row.value}

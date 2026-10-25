@@ -1,4 +1,57 @@
-> Current scoring policy: [Registry v3.2](llm_pk_data_source_registry_v3_2.md), [Weights v3.2](llm_pk_domain_classification_weighting_v3_2.md), [Scoring v3.2](llm_pk_scoring_methodology_v3_2.md). Earlier captures and policy counts below remain historical provenance.
+> Current scoring policy: [Registry v3.3](llm_pk_data_source_registry_v3_3.md), [Weights v3.3](llm_pk_domain_classification_weighting_v3_3.md), [Scoring v3.3](llm_pk_scoring_methodology_v3_3.md). Earlier captures and policy counts below remain historical provenance.
+
+## October 25 source integration / Scoring v3.3
+
+The current policy contains 108 positively weighted benchmarks, including 60
+new metrics. The source expansion adds 23 datasets / 1,649 raw records and
+343 reviewed identities / 666 explicit target links / 820 atomic observations.
+Vals separately expands to 12 tasks, 123 execution IDs, 7,008 raw result rows
+and 327 reviewed cards. Inventory and original measurements remain unchanged.
+
+The new pipeline has acquisition, normalization, reviewed identity mapping,
+trusted source-card projection, existing configuration attachment, scoring,
+public provenance serialization and shared rendering. It rejects source
+version/effort/harness drift before replacing the published snapshot.
+
+```bash
+npm run refresh:source-expansion -- --from-dir /path/to/validated/raw-pack
+npm run refresh:source-expansion -- --arena-dom-dir /path/to/current/arena-captures --opencompass-rule-dom /path/to/current/opencompass-rule-version.json
+npm run test:source-expansion
+npm run validate:source-snapshots
+```
+
+A raw pack has pack.json plus hash-pinned raw files. Arena captures contain
+url, fetchedAt, text with the source date, and complete rows with cells/links;
+no private page state is needed. Normal HTTP requests currently return 403.
+OpenCompass publishes its V3.0 rule caption separately from the data JSON,
+so the CLI requires a current rendered caption. LiveBench's source-zero policy is checked from notes.json; its actual model
+efforts are statically parsed from the official frontend metadata. Epoch uses Python 3's
+standard ZIP/CSV readers for three allowlisted files without extracting paths.
+
+DesignArena source aliases are not extra tasks. Eight conflicting duplicate
+identity groups (16 rows) remain archived and unlinked. OpenRouter AA and
+DesignArena mirrors are represented by their original publishers, while its
+native GPQA and airline tasks receive distinct metrics. Old models in its
+four search datasets do not populate newer versions.
+
+The requested profile policy uses available same-model grades: exact tier
+first, then lower tiers, with other available tiers disclosed as source-profile
+evidence. The verified Spark Open Max WebDev grade is also attached.
+
+Public metrics retain safe version, effort, actual scaffold, original date,
+standard error and fallback evidence. CLI-bound Scale records cannot flow to
+plain Chat, including through manual mappings. Source catalog fingerprints
+include source identity, dates, confidence bounds and benchmark provenance.
+All 108 rows and positive weights appear in one list on detail and comparison.
+
+There are 11 qualified / 24 insufficient reader representatives. New weights
+change the evidence denominator; all six domain gates and the 75% total gate
+remain mandatory. Comparing the prior public snapshot found 1,408 unchanged
+observations and unchanged speed/cost adjustments, with 1,646 added cells.
+Full source links, versions, candidate admission decisions and budgets are in
+the current registry and weighting documents above. The following sections
+record earlier releases and retain their historical counts and policies.
+
 
 ## October 24 complete metric scoring revision
 

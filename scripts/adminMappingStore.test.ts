@@ -1698,10 +1698,11 @@ assert.ok(
   'GLM-5.3-Flash must consume its exact current Arena WebDev card.',
 );
 assert.equal(
-  typeof scoreByConfigurationId.get(glm53FlashBox.id)?.domainScores.coding.score,
-  'number',
-  'GLM-5.3-Flash must receive a Coding score from its current Arena WebDev evidence.',
+  scoreByConfigurationId.get(glm53FlashBox.id)?.domainScores.coding.score,
+  null,
+  'WebDev remains Frontend evidence; 59% of expanded Coding evidence does not pass the 60% gate.',
 );
+assert.ok(Math.abs(scoreByConfigurationId.get(glm53FlashBox.id)!.domainScores.coding.coverage - .59) < 1e-12);
 const qwen27bBox = installedPresetBoxes.find((box) => (
   box.builtInPresetId === 'builtin.qwen3-8-27b.xhigh'
 ));
@@ -1769,8 +1770,8 @@ assert.equal(qwenFlashNextConfig.openRouterData?.inputPricePerMToken, 0.15);
 assert.equal(qwenFlashNextConfig.openRouterData?.outputPricePerMToken, 0.47);
 assert.ok((qwenFlashNextConfig.openRouterData?.ttftP50Seconds || 0) > 0);
 assert.ok((qwenFlashNextConfig.openRouterData?.throughputP50TokensPerSec || 0) > 0);
-assert.equal(scoreByConfigurationId.get(qwenFlashNextBox.id)?.availableDomainCount, 1,
-  'The expanded AA reasoning evidence can qualify a domain without inventing missing Vals runs.');
+assert.equal(scoreByConfigurationId.get(qwenFlashNextBox.id)?.availableDomainCount, 0,
+  'The retained AA and new OpenCompass evidence still leave the expanded domain below 60%.');
 assert.equal(qwenFlashNextConfig.valsData, undefined);
 assert.equal(scoreByConfigurationId.get(qwenFlashNextBox.id)?.eligibleForGlobalLeaderboard, false);
 const hy4Box = installedPresetBoxes.find((box) => (
@@ -1779,7 +1780,7 @@ const hy4Box = installedPresetBoxes.find((box) => (
 assert.ok(hy4Box, 'Hy4 Preview High must enter as the explicitly approved sparse release.');
 const hy4Stack = reconciledV3Store.getLinkedCardStack(hy4Box.id);
 assert.deepEqual(
-  hy4Stack.filter(({ card }) => card.source !== 'vals').map(({ card }) => card.id),
+  hy4Stack.filter(({ card }) => card.source !== 'vals' && !card.id.startsWith('card-expansion-')).map(({ card }) => card.id),
   [
     'card-openrouter-tencent-hy4-preview',
     'card-openrouter-standard-performance-tencent-hy4-preview',
@@ -1787,7 +1788,7 @@ assert.deepEqual(
   ],
   'Hy4 Preview must retain its exact OpenRouter practical cards and current Arena WebDev row.',
 );
-assert.equal(hy4Stack.filter(({ card }) => card.source === 'vals').length, 9);
+assert.equal(hy4Stack.filter(({ card }) => card.source === 'vals').length, 11);
 assert.deepEqual(
   hy4Stack.find(({ card }) => card.id === 'card-arena-hy4-preview')?.link.provenance,
   {
@@ -1811,9 +1812,11 @@ for (const [metricId, actual] of [
 }
 assert.ok((hy4Config.openRouterData?.ttftP50Seconds || 0) > 0);
 assert.ok((hy4Config.openRouterData?.throughputP50TokensPerSec || 0) > 0);
-assert.equal(scoreByConfigurationId.get(hy4Box.id)?.availableDomainCount, 1);
+assert.equal(scoreByConfigurationId.get(hy4Box.id)?.availableDomainCount, 0);
 assert.equal(scoreByConfigurationId.get(hy4Box.id)?.eligibleForGlobalLeaderboard, false);
-assert.equal(typeof scoreByConfigurationId.get(hy4Box.id)?.domainScores.frontend.score, 'number');
+assert.equal(scoreByConfigurationId.get(hy4Box.id)?.domainScores.frontend.score, null);
+assert.equal(typeof hy4Config.observations.arena_code_webdev?.rawValue, 'number',
+  'Published WebDev evidence remains present while expanded Frontend coverage is insufficient.');
 assert.equal(scoreByConfigurationId.get(hy4Box.id)?.domainScores.coding.score, null);
 assert.equal(scoreByConfigurationId.get(hy4Box.id)?.domainScores.chatting.score, null);
 assert.equal(scoreByConfigurationId.get(hy4Box.id)?.domainScores.reasoning.score, null);
@@ -2171,9 +2174,9 @@ for (const expectation of august2026ReleaseExpectations) {
 
   const stack = reconciledV3Store.getLinkedCardStack(box.id);
   assert.deepEqual(
-    stack.map(({ card }) => card.id),
+    stack.filter(({ card }) => !card.id.startsWith('card-expansion-')).map(({ card }) => card.id),
     expectation.cardIds,
-    `${expectation.modelName} must use only its explicitly scoped August 2026 cards.`,
+    `${expectation.modelName} must retain its explicitly scoped August cards alongside new reviewed evidence.`,
   );
   assert.ok(
     stack.every(({ card }) => (
@@ -2191,8 +2194,8 @@ for (const expectation of august2026ReleaseExpectations) {
   );
   const score = scoreByConfigurationId.get(box.id);
   if (expectation.productLineId === 'muse_glimmer') {
-    assert.equal(score?.availableDomainCount, 2,
-      'Muse Glimmer has no matching Vals release and must retain its missing v3.1 evidence.');
+    assert.equal(score?.availableDomainCount, 1,
+      'Muse Glimmer has no matching Vals release and must retain its missing expanded evidence.');
     assert.equal(score?.rawCapabilityScore, null);
     assert.equal(score?.practicalBreakdown.practicalScore, null);
     assert.equal(score?.eligibleForGlobalLeaderboard, false);
@@ -2501,9 +2504,9 @@ for (const metricId of [
 }
 const kimiCodeScore = scoreByConfigurationId.get(kimiCodeBox.id);
 assert.equal(kimiCodeScore?.rawCapabilityScore, null, 'Missing independent domains must keep the new model unranked.');
-assert.ok(Math.abs(kimiCodeScore!.domainScores.reasoning.coverage - 0.67) < 1e-12);
-assert.notEqual(kimiCodeScore?.domainScores.reasoning.score, null,
-  'Previously undisplayed reasoning evidence now contributes under v3.2.');
+assert.ok(Math.abs(kimiCodeScore!.domainScores.reasoning.coverage - 0.45) < 1e-12);
+assert.equal(kimiCodeScore?.domainScores.reasoning.score, null,
+  'Published reasoning evidence remains visible but does not fill missing expanded tasks.');
 assert.equal(kimiCodeScore?.domainScores.documents.score, null);
 for (const [presetId, expectedAuthorProvider] of [
   ['builtin.harness.claude-opus-4-8.max.claude-code', 'Anthropic'],
@@ -2572,8 +2575,8 @@ for (const release of [
   assert.equal(stack[0].card.id, `card-aa-coding-agent-${release.cardPrefix}-max`);
   assert.ok(stack.every(({ card }) => card.metadataJson?.scope?.productLineId === release.line));
   const currentScore = scoreByConfigurationId.get(box.id)!;
-  assert.equal(currentScore.domainScores.chatting.coverage, 0.9,
-    'The four Arena dialogue tasks do not invent a missing IFBench observation.');
+  assert.ok(Math.abs(currentScore.domainScores.chatting.coverage - 0.9) < 1e-12,
+    'Arena and reviewed OpenCompass dialogue evidence do not invent a missing IFBench observation.');
   assert.ok(currentScore.domainScores.reasoning.coverage >= 0.6);
   assert.equal(currentScore.eligibleForGlobalLeaderboard, true,
     'The newly observed non-CLI evidence permits ranking under the unchanged coverage gates.');

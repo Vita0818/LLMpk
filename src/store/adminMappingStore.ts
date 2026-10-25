@@ -15,6 +15,7 @@ import {
   LowerHarnessFallbackProvenance,
   LowerProfileHarnessFallbackProvenance,
   LowerProfileFallbackProvenance,
+  AvailableProfileEvidenceProvenance,
   ConfigurationModelIdentity,
   ConfigurationHarnessIdentity,
   ConfigurationProviderIdentity,
@@ -36,6 +37,8 @@ import { getSubscriptionPricingEvidence } from '../data/subscriptionPricing';
 import { VERIFIED_DESIGN_ARENA_SOURCE_MODEL_CARDS, VERIFIED_DESIGN_ARENA_SOURCE_OBSERVATIONS } from '../data/designArenaSeedCards';
 import { VERIFIED_VALS_SOURCE_MODEL_CARDS, VERIFIED_VALS_SOURCE_OBSERVATIONS, getValsDisplayEvidence } from '../data/valsSeedCards';
 import { VALS_METRIC_DEFINITIONS, type ValsBenchmarkEvidence } from '../data/valsMetricDefinitions';
+import { VERIFIED_EXPANSION_SOURCE_MODEL_CARDS, VERIFIED_EXPANSION_SOURCE_OBSERVATIONS } from '../data/sourceExpansionSeedCards';
+import sourceExpansionMetrics from '../data/sourceExpansionMetricDefinitions.json';
 import {
   VERIFIED_HARNESS_SOURCE_MODEL_CARDS,
   VERIFIED_HARNESS_SOURCE_OBSERVATIONS,
@@ -192,7 +195,8 @@ function isKnownSource(source: unknown): source is SourceType {
     || source === 'swe_rebench'
     || source === 'frontier_code'
     || source === 'design_arena'
-    || source === 'vals';
+    || source === 'vals'
+    || source === 'livebench' || source === 'opencompass' || source === 'epoch_ai';
 }
 
 /**
@@ -255,6 +259,11 @@ function parseSourceLinkProvenance(value: unknown): ConfigurationSourceLinkProve
   if (value === undefined) return { kind: 'exact' };
   if (!isPlainRecord(value) || typeof value.kind !== 'string') return null;
   if (value.kind === 'exact') return { kind: 'exact' };
+  if (value.kind === 'available_profile_evidence') {
+    if (typeof value.sourceProfile !== 'string' || !value.sourceProfile.trim()
+      || typeof value.targetProfile !== 'string' || !value.targetProfile.trim()) return null;
+    return { kind: 'available_profile_evidence', sourceProfile: value.sourceProfile.trim(), targetProfile: value.targetProfile.trim() };
+  }
   if (value.kind === 'lower_profile_fallback') {
     if (
       typeof value.sourceProfile !== 'string'
@@ -357,6 +366,9 @@ function sameSourceLinkProvenance(
 ): boolean {
   if (left.kind !== right.kind) return false;
   if (left.kind === 'exact' || right.kind === 'exact') return true;
+  if (left.kind === 'available_profile_evidence' && right.kind === 'available_profile_evidence') {
+    return left.sourceProfile === right.sourceProfile && left.targetProfile === right.targetProfile;
+  }
   if (left.kind === 'lower_profile_fallback' && right.kind === 'lower_profile_fallback') {
     return left.sourceProfile === right.sourceProfile
       && left.sourceLevel === right.sourceLevel
@@ -443,6 +455,7 @@ function presetSourceCardDeclarations(
 }
 
 type FallbackProvenance =
+  | AvailableProfileEvidenceProvenance
   | LowerProfileFallbackProvenance
   | LowerHarnessFallbackProvenance
   | LowerProfileHarnessFallbackProvenance;
@@ -457,6 +470,8 @@ function fallbackIsValidForPreset(
     || !identity?.model?.profile
     || identity.model.profile !== provenance.targetProfile
   ) return false;
+
+  if (provenance.kind === 'available_profile_evidence') return true;
 
   if (provenance.kind === 'lower_profile_fallback') {
     return provenance.sourceLevel < provenance.targetLevel;
@@ -511,6 +526,9 @@ function fallbackIsAuthorizedForBox(
 
   const scope = cardScope(card as SourceCardWithProvenance);
   if (!isValidOagxmScope(scope) || scope.productLineId !== preset.productLineId) return false;
+  if (provenance.kind === 'available_profile_evidence'
+    && card.metadataJson?.sourceIdentity?.effort
+    && card.metadataJson.sourceIdentity.effort !== provenance.sourceProfile) return false;
   if (
     (
       provenance.kind === 'lower_harness_fallback'
@@ -634,6 +652,9 @@ function belongsToExpectedHost(source: SourceType, value: unknown): boolean {
     }
     if (source === 'design_arena') return host === 'designarena.ai' || host.endsWith('.designarena.ai');
     if (source === 'vals') return host === 'vals.ai' || host === 'www.vals.ai';
+    if (source === 'livebench') return host === 'livebench.ai';
+    if (source === 'opencompass') return host === 'rank.opencompass.org.cn' || host === 'cdn.opencompass.org.cn';
+    if (source === 'epoch_ai') return host === 'epoch.ai';
     return host === 'cognition.com' || host.endsWith('.cognition.com');
   } catch {
     return false;
@@ -677,8 +698,12 @@ function sourceMetricIsAllowed(source: SourceType, metricId: unknown): boolean {
   if (source === 'scale_labs') return metricId.startsWith('scale_');
   if (source === 'terminal_bench') return metricId.startsWith('tbench_');
   if (source === 'swe_rebench') return metricId.startsWith('swe_rebench_');
-  if (source === 'design_arena') return metricId === 'designarena_frontend';
+  if (source === 'design_arena') return metricId === 'designarena_frontend'
+    || sourceExpansionMetrics.some(metric => metric.sourceType === source && metric.id === metricId);
   if (source === 'vals') return VALS_METRIC_DEFINITIONS.some(metric => metric.id === metricId);
+  if (source === 'livebench' || source === 'opencompass' || source === 'epoch_ai') {
+    return sourceExpansionMetrics.some(metric => metric.sourceType === source && metric.id === metricId);
+  }
   return metricId.startsWith('frontiercode_');
 }
 
@@ -801,11 +826,11 @@ function buildCatalogFingerprint(cards: SourceModelCard[], observations: SourceO
       .map((card) => {
         const sourceCard = card as SourceCardWithProvenance;
         const scope = sourceCard.metadataJson?.scope as ScopeProvenance | undefined;
-        return `${card.id}|${card.source}|${card.exactSourceModelName}|${card.latestSnapshotDate}|${sourceCard.profileUrl || sourceCard.metadataJson?.profileUrl || ''}|${scope?.scopeVersion || ''}|${scope?.vendorId || ''}|${scope?.productLineId || ''}|${scope?.rankingClass || ''}`;
+        return `${card.id}|${card.source}|${card.exactSourceModelName}|${card.latestSnapshotDate}|${sourceCard.profileUrl || sourceCard.metadataJson?.profileUrl || ''}|${scope?.scopeVersion || ''}|${scope?.vendorId || ''}|${scope?.productLineId || ''}|${scope?.rankingClass || ''}|${JSON.stringify(sourceCard.metadataJson?.sourceIdentity ?? null)}`;
       })
       .sort(),
     ...observations
-      .map((observation) => `${observation.id}|${observation.sourceModelCardId}|${observation.metricId}|${observation.rawValue}|${observation.sourceUrl || ''}|${observation.metadataJson?.sourceField || observation.metadataJson?.sourceLeaderboard || ''}|${observation.metadataJson?.scope?.productLineId || ''}|${observation.metadataJson?.scoringRole || ''}`)
+      .map((observation) => `${observation.id}|${observation.sourceModelCardId}|${observation.metricId}|${observation.rawValue}|${observation.sourceUrl || ''}|${observation.metadataJson?.sourceField || observation.metadataJson?.sourceLeaderboard || ''}|${observation.metadataJson?.scope?.productLineId || ''}|${observation.metadataJson?.scoringRole || ''}|${observation.snapshotDate}|${observation.confidenceLow ?? ''}|${observation.confidenceHigh ?? ''}|${JSON.stringify(observation.metadataJson?.benchmarkEvidence ?? null)}|${observation.metadataJson?.productionHarness ?? ''}`)
       .sort(),
   ].join('\n');
 
@@ -1943,6 +1968,7 @@ export class AdminMappingStore {
       ...VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_MODEL_CARDS,
       ...VERIFIED_DESIGN_ARENA_SOURCE_MODEL_CARDS,
       ...VERIFIED_VALS_SOURCE_MODEL_CARDS,
+      ...VERIFIED_EXPANSION_SOURCE_MODEL_CARDS,
     ];
     const rawObservations = [
       ...parseArray<SourceObservation>(VERIFIED_SOURCE_OBSERVATIONS),
@@ -1953,6 +1979,7 @@ export class AdminMappingStore {
       ...VERIFIED_REPLACEMENT_BENCHMARK_SOURCE_OBSERVATIONS,
       ...VERIFIED_DESIGN_ARENA_SOURCE_OBSERVATIONS,
       ...VERIFIED_VALS_SOURCE_OBSERVATIONS,
+      ...VERIFIED_EXPANSION_SOURCE_OBSERVATIONS,
     ];
     const sourceData = sanitizeSourceData(rawCards, rawObservations);
     this.catalogFingerprint = buildCatalogFingerprint(sourceData.cards, sourceData.observations);
@@ -2476,12 +2503,13 @@ export class AdminMappingStore {
     // The stack is already top-to-bottom. The first verified observation for
     // a metric wins; lower cards can fill a missing metric but cannot silently
     // overwrite a card the operator intentionally placed above them.
-    linkedStack
-      .filter(({ card }) => card.source !== 'openrouter')
-      .forEach(({ link, card }) => {
+    linkedStack.forEach(({ link, card }) => {
         const provenance = parseSourceLinkProvenance(link.provenance);
         if (!provenance) return;
         this.getCardObservations(card.id).forEach((observation) => {
+          if (card.source === 'openrouter' && !ALL_METRIC_DEFINITIONS.some(metric => metric.id === observation.metricId)) return;
+          const productionHarness = card.metadataJson?.sourceIdentity?.productionHarness;
+          if (productionHarness && productionHarness !== configurationIdentity?.harness?.name) return;
           if (observationsMap[observation.metricId]) return;
           if (
             isHarnessOnlyCapabilityMetric(observation.metricId)
@@ -2491,6 +2519,14 @@ export class AdminMappingStore {
               provenance,
             )
           ) return;
+          const benchmarkEvidence = observation.metadataJson?.benchmarkEvidence
+            ?? (provenance.kind === 'available_profile_evidence' ? {
+              sourceUrl: observation.sourceUrl ?? card.metadataJson?.sourceUrl,
+              benchmarkVersion: 'unversioned', sourceProfile: provenance.sourceProfile,
+              sourceHarness: observation.metricId === 'arena_code_webdev' ? 'Arena WebDev benchmark scaffold'
+                : card.metadataJson?.sourceIdentity?.executionHarness ?? 'Source benchmark scaffold',
+              sourceUpdated: observation.snapshotDate, notes: '采用同一模型已有的实测档位。',
+            } : undefined);
           observationsMap[observation.metricId] = {
             metricId: observation.metricId,
             rawValue: observation.rawValue,
@@ -2499,6 +2535,9 @@ export class AdminMappingStore {
             confidenceRadius: getEmbeddedConfidenceRadius(observation),
             testDate: observation.snapshotDate,
             harness: configurationIdentity?.harness?.name,
+            ...(benchmarkEvidence ? { benchmarkEvidence: {
+              ...benchmarkEvidence, profileFallback: provenance.kind !== 'exact',
+            } } : {}),
           };
           const valsEvidence = getValsDisplayEvidence(card, observation, provenance);
           if (valsEvidence) valsData.push(valsEvidence);
