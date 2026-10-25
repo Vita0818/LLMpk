@@ -7,9 +7,9 @@ import { buildConfigurationMetricRows } from '../src/components/ConfigurationDet
 import { buildRepresentativeConfigurationQueue } from '../src/utils/playModeQueue';
 import type { LLMConfiguration } from '../src/types/llm_pk';
 
-assert.equal(SCORING_CONFIG.version, '3.3');
-assert.equal(snapshot.scoringVersion, '3.3');
-assert.equal(ALL_METRIC_DEFINITIONS.length, 108);
+assert.equal(SCORING_CONFIG.version, '3.4');
+assert.equal(snapshot.scoringVersion, '3.4');
+assert.equal(ALL_METRIC_DEFINITIONS.length, 84);
 const definitions = new Map(ALL_METRIC_DEFINITIONS.map(metric => [metric.id, metric]));
 assert.deepEqual([...definitions.keys()].sort(), Object.keys(weights).sort());
 for (const domain of DOMAIN_IDS) {
@@ -20,16 +20,16 @@ for (const domain of DOMAIN_IDS) {
 assert.ok(ALL_METRIC_DEFINITIONS.every(metric => metric.internalWeightInDomain > 0));
 const budget = (ids: string[]) => ids.reduce((sum, id) => sum + definitions.get(id)!.internalWeightInDomain, 0);
 assert.ok(Math.abs(budget(['aa_terminalbench_v4', 'vals_terminalbench_v4', 'tbench_v4',
-  'aa_terminalbench_v21', 'aa_coding_agent_terminalbench_v2']) - 0.15) < 1e-12);
-assert.ok(Math.abs(budget(['aa_coding_agent_index', 'aa_coding_agent_deepswe', 'aa_coding_agent_swe_atlas_qna']) - 0.10) < 1e-12);
-assert.ok(Math.abs(budget(['aa_omniscience_accuracy', 'aa_omniscience_nonhallucination']) - 0.10) < 1e-12);
+  'aa_terminalbench_v21', 'aa_coding_agent_terminalbench_v2']) - 0.15 / 0.95) < 1e-12);
+assert.ok(Math.abs(budget(['aa_coding_agent_index', 'aa_coding_agent_deepswe', 'aa_coding_agent_swe_atlas_qna']) - 0.10 / 0.95) < 1e-12);
+assert.ok(Math.abs(budget(['aa_omniscience_accuracy', 'aa_omniscience_nonhallucination']) - 0.10 / 0.87) < 1e-12);
 
 const observedIds = new Set(snapshot.scores.flatMap(score => Object.keys(score.config.observations)));
 assert.deepEqual([...observedIds].sort(), [...definitions.keys()].sort(),
   'Every benchmark already attached to the current cohort must have a positive weight and public field.');
 for (const score of snapshot.scores) {
   const rows = buildConfigurationMetricRows(score);
-  assert.equal(rows.length, 112);
+  assert.equal(rows.length, 88);
   assert.deepEqual(rows.slice(0, -4).map(row => row.id).sort(), [...definitions.keys()].sort());
   assert.ok(rows.slice(0, -4).every(row => row.weightInDomain! > 0));
   for (const observation of Object.values(score.config.observations)) {
@@ -40,7 +40,7 @@ for (const score of snapshot.scores) {
 const representatives = buildRepresentativeConfigurationQueue(snapshot.scores);
 assert.equal(snapshot.scores.length, 49);
 assert.equal(representatives.length, 35);
-assert.equal(representatives.filter(score => score.eligibleForGlobalLeaderboard).length, 11);
+assert.equal(representatives.filter(score => score.eligibleForGlobalLeaderboard).length, 14);
 
 // Exercise actual aggregation, not merely the presence of configuration values.
 // The synthetic cohort gives every metric enough varying observations to carry a signal.
@@ -66,7 +66,7 @@ for (const metric of ALL_METRIC_DEFINITIONS) {
 const missing = structuredClone(fixtures);
 missing[4].observations.vals_index_v22.rawValue = null;
 const withMissing = processLLMpkBatchScoring(missing)[4];
-assert.ok(Math.abs(withMissing.domainScores.agentic.coverage - 0.97) < 1e-12);
+assert.ok(Math.abs(withMissing.domainScores.agentic.coverage - (1 - definitions.get('vals_index_v22')!.internalWeightInDomain)) < 1e-12);
 assert.equal(withMissing.domainScores.agentic.metricDetails.find(metric => metric.metricId === 'vals_index_v22')!.normalizedScore, null);
 
-console.log('Scoring v3.3: all 108 metrics contribute, shared budgets, complete public display, dated evidence and unchanged coverage gates: PASS');
+console.log('Scoring v3.4: all 84 metrics contribute, shared budgets, complete public display, dated evidence and unchanged coverage gates: PASS');

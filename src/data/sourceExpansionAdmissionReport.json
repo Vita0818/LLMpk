@@ -1,13 +1,13 @@
 {
   "schemaVersion": "source-expansion-admission-report/v1",
   "reviewedAt": "2026-10-25",
-  "scoringVersion": "3.3",
-  "newMetrics": 60,
-  "totalMetrics": 108,
-  "rawDatasets": 23,
-  "rawRecords": 1649,
-  "reviewedIdentities": 343,
-  "reviewedTargets": 666,
+  "scoringVersion": "3.4",
+  "newMetrics": 36,
+  "totalMetrics": 84,
+  "rawDatasets": 22,
+  "rawRecords": 1627,
+  "reviewedIdentities": 328,
+  "reviewedTargets": 637,
   "sourceDecisions": [
     {
       "datasetId": "design-agents",
@@ -26,12 +26,6 @@
       "sourceUrl": "https://livebench.ai/data/20261014/table.csv",
       "sourceRows": 53,
       "admittedIdentities": 22
-    },
-    {
-      "datasetId": "opencompass-v3",
-      "sourceUrl": "https://cdn.opencompass.org.cn/assets/lm/data-lm-ability_official.json?benchmark=text",
-      "sourceRows": 22,
-      "admittedIdentities": 15
     },
     {
       "datasetId": "epoch-frontiermath_tiers_1_3_v2",

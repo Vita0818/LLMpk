@@ -6,13 +6,14 @@ const read = name => JSON.parse(readFileSync(new URL(`../src/data/${name}`, impo
 const snapshot = read('sourceExpansionSnapshot.json');
 const manifest = read('sourceExpansionReviewedMappings.json');
 assert.deepEqual(validateExpansionSnapshot(snapshot, manifest), {
-  datasets: 23, sourceRecords: 1649, reviewedMappings: 343, reviewedTargets: 666,
+  datasets: 22, sourceRecords: 1627, reviewedMappings: 328, reviewedTargets: 637,
 });
-assert.equal(EXPANSION_METRICS.length, 57);
+assert.equal(EXPANSION_METRICS.length, 33);
+assert.doesNotMatch(JSON.stringify({snapshot, manifest, metrics: EXPANSION_METRICS}), /opencompass|司南/iu, 'Removed source data must not remain in snapshots or mappings.');
 const definitions = new Map(EXPANSION_METRICS.map(metric => [metric.id, metric]));
 const admitted = new Set(manifest.entries.map(entry => entry.recordId));
 assert.equal(new Set(snapshot.records.filter(record => admitted.has(record.id))
-  .flatMap(record => record.observations.filter(observation => observation.rawValue !== null).map(observation => observation.metricId))).size, 57);
+  .flatMap(record => record.observations.filter(observation => observation.rawValue !== null).map(observation => observation.metricId))).size, 33);
 
 for (const record of snapshot.records) {
   assert.match(record.sourceDate, /^\d{4}-\d{2}-\d{2}$/u);
@@ -28,9 +29,6 @@ assert.ok(snapshot.records.some(record => record.identity.ambiguousIdentity));
 for (const entry of manifest.entries) {
   assert.equal(/openai\/gpt-6-(?:astra|luna)-pro-/u.test(entry.baseSourceRecordId), false,
     'Distinct Pro products cannot supply ordinary Astra/Luna evidence.');
-  const record = snapshot.records.find(record => record.id === entry.recordId);
-  if (record.datasetId === 'opencompass-v3') assert.notEqual(record.sourceModelId, 'qwen3.8-max',
-    'August Qwen Max is not the fixed September revision.');
 }
 
 assert.deepEqual(parseCsv('model,value,note\r\n"a,b",0,"two\nlines"\r\nb,,"a""b"\r\n'), [

@@ -144,19 +144,6 @@ export function normalizeExpansionDataset(dataset, input) {
       metrics.map(metric => ({ metric, value: percentage(row[metric.field]),
         notes: '按该模型公开的 effort 连接；单次运行。来源明确的零分保留为零；Overall 不重复计分。' })));
     }
-  } else if (dataset.id === 'opencompass-v3') {
-    const payload = typeof input === 'string' ? JSON.parse(input) : input;
-    if (!payload.modelBase || !Array.isArray(payload.OverallTable)) throw new Error('Invalid OpenCompass v3 data.');
-    for (const [key, model] of Object.entries(payload.modelBase)) {
-      const overall = payload.OverallTable.filter(row => row.key === key);
-      if (overall.length !== 1) throw new Error('Ambiguous OpenCompass model key.');
-      add(key, model.model, { modelKey: key, displayName: model.model, modelLink: model.model_link, releaseDate: overall[0].release_date, ruleVersion: '3.0' },
-        profileFromName(model.model), 'OpenCompass v3.0 text evaluation', metrics.map(metric => {
-          const [table, field] = metric.field.split('.'); const matches = payload[table]?.filter(row => row.key === key);
-          if (matches?.length !== 1 || !Object.hasOwn(matches[0], field)) throw new Error(`Missing OpenCompass field ${metric.field}.`);
-          return { metric, value: percentage(matches[0][field]) };
-        }), model.date.replaceAll('/', '-'));
-    }
   } else if (dataset.id.startsWith('epoch-')) {
     const rows = typeof input === 'string' ? parseCsv(input) : input;
     for (const row of rows) {

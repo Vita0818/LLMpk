@@ -9,7 +9,6 @@ const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const datasetIds = [...new Set(EXPANSION_METRICS.map(metric => metric.datasetId))];
 const epochUrl = 'https://epoch.ai/data/benchmark_data.zip';
 const livebenchUrl = 'https://livebench.ai/data/20261014/table.csv';
-const compassUrl = 'https://cdn.opencompass.org.cn/assets/lm/data-lm-ability_official.json?benchmark=text';
 const routerUrl = 'https://openrouter.ai/api/v1/benchmarks?include_run_config=true';
 
 export async function buildExpansionSnapshotFromPack(folder) {
@@ -34,14 +33,6 @@ export async function buildExpansionSnapshotFromPack(folder) {
       if (sha256(javascript) !== settings.sha256) throw new Error('LiveBench model settings hash changed.');
       entry.modelSettings = extractLivebenchModelSettings(javascript.toString('utf8'));
     }
-    if (id === 'opencompass-v3') {
-      const proof = entry.methodology;
-      if (!proof || proof.filename !== 'opencompass-rule-version.json') throw new Error('Missing OpenCompass rule-version evidence.');
-      const layout = readFileSync(path.join(folder, proof.filename));
-      const capture = JSON.parse(layout);
-      if (sha256(layout) !== proof.sha256 || capture.url !== 'https://rank.opencompass.org.cn/leaderboard/llm'
-        || !/榜单 V3\.0\b/u.test(capture.text)) throw new Error('OpenCompass rule version changed.');
-    }
     const input = id.startsWith('epoch-')
       ? readEpochTables(path.join(folder, entry.filename))[id.slice(6) + '.csv'] : bytes.toString('utf8');
     const normalized = normalizeExpansionDataset(entry, input);
@@ -53,7 +44,7 @@ export async function buildExpansionSnapshotFromPack(folder) {
     datasets, records, admissionNotes: pack.admissionNotes ?? [] };
 }
 
-async function acquire(folder, arenaFolder, compassCapture) {
+async function acquire(folder, arenaFolder) {
   mkdirSync(folder, { recursive: true });
   const requests = new Map(); const datasets = [];
   const fetchText = async (url, auth) => {
@@ -82,7 +73,6 @@ async function acquire(folder, arenaFolder, compassCapture) {
       if (id.startsWith('design-')) url = `${routerUrl}&source=design-arena&arena=${id.slice(7)}`;
       if (id === 'openrouter-native') url = routerUrl;
       if (id === 'livebench2') url = livebenchUrl;
-      if (id === 'opencompass-v3') url = compassUrl;
       if (id === 'livebench2') {
         const proofUrl = 'https://livebench.ai/data/20261014/notes.json';
         const proof = await fetchText(proofUrl, false);
@@ -98,12 +88,6 @@ async function acquire(folder, arenaFolder, compassCapture) {
         extractLivebenchModelSettings(script.body);
         writeFileSync(path.join(folder, 'livebench-main.js'), script.body);
         modelSettingsSource = { url: scriptUrl, filename: 'livebench-main.js', sha256: sha256(script.body) };
-      }
-      if (id === 'opencompass-v3') {
-        if (!compassCapture) throw new Error('OpenCompass separates its rule version from its data JSON; pass --opencompass-rule-dom with the current rendered version caption.');
-        const proof = readFileSync(compassCapture); const proofFile = 'opencompass-rule-version.json';
-        writeFileSync(path.join(folder, proofFile), proof);
-        methodology = { url: metric.officialUrl, filename: proofFile, sha256: sha256(proof) };
       }
       if ((id.startsWith('design-') || id === 'openrouter-native') && !readBenchmarkApiKey()) throw new Error('The existing dedicated benchmark API key is required.');
       const response = await fetchText(url, id.startsWith('design-') || id === 'openrouter-native');
@@ -122,7 +106,7 @@ export async function main(args = process.argv.slice(2)) {
   const argument = name => args.includes(name) ? args[args.indexOf(name) + 1] : undefined;
   const existingPack = argument('--from-dir');
   const folder = existingPack ? path.resolve(existingPack) : path.join(ROOT, '.cache/oagxm-source-snapshots/expansion', timestampForPath());
-  if (!existingPack) await acquire(folder, argument('--arena-dom-dir'), argument('--opencompass-rule-dom'));
+  if (!existingPack) await acquire(folder, argument('--arena-dom-dir'));
   const snapshot = await buildExpansionSnapshotFromPack(folder);
   const manifest = JSON.parse(readFileSync(path.join(ROOT, 'src/data/sourceExpansionReviewedMappings.json')));
   const result = validateExpansionSnapshot(snapshot, manifest);

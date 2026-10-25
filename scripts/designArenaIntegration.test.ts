@@ -23,7 +23,7 @@ assert.equal(VERIFIED_DESIGN_ARENA_SOURCE_OBSERVATIONS.length, 17);
 assert.deepEqual(UNMATCHED_REVIEWED_DESIGN_ARENA_MAPPINGS, []);
 assert.equal(BUILT_IN_CONFIGURATION_PRESETS.length, 49);
 assert.equal(READER_CURRENT_MODEL_GROUP_KEYS.size, 33);
-assert.equal(ALL_METRIC_DEFINITIONS.length, 108);
+assert.equal(ALL_METRIC_DEFINITIONS.length, 84);
 assert.equal(ALL_METRIC_DEFINITIONS.find(metric => metric.id === 'designarena_frontend')?.internalWeightInDomain, 0.15);
 
 const targetIds = new Set<string>();

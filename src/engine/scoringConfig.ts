@@ -5,7 +5,7 @@ import type { CoverageStatus, DomainId } from '../types/llm_pk';
  * and released with a new version instead of being embedded in aggregation code.
  */
 export const SCORING_CONFIG = {
-  version: '3.3',
+  version: '3.4',
   practicalAdjustment: {
     version: '1.4',
     speed: {

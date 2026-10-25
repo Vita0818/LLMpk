@@ -15,6 +15,9 @@ const forbiddenMarkers = [
   'llmpk_admin_mapping',
   'exportConfigurationBackup',
   'importConfigurationBackup',
+  'OpenCompass',
+  'opencompass',
+  '司南',
   ...(process.env.VITE_ENABLE_PLAY_MODE === 'false'
     ? ['播放模式']
     : []),
@@ -110,7 +113,7 @@ for (const score of publicSnapshot.scores) {
       const evidence = observation.benchmarkEvidence;
       const permitted = ['sourceUrl', 'benchmarkVersion', 'sourceProfile', 'sourceHarness', 'sourceUpdated', 'notes', 'profileFallback', 'standardError'];
       const source = new URL(evidence.sourceUrl);
-      const allowedHosts = ['www.designarena.ai', 'livebench.ai', 'rank.opencompass.org.cn', 'epoch.ai', 'artificialanalysis.ai', 'labs.scale.com', 'arena.ai', 'openrouter.ai'];
+      const allowedHosts = ['www.designarena.ai', 'livebench.ai', 'epoch.ai', 'artificialanalysis.ai', 'labs.scale.com', 'arena.ai', 'openrouter.ai'];
       if (!evidence || Object.keys(evidence).some(key => !permitted.includes(key))
         || !['benchmarkVersion', 'sourceProfile', 'sourceHarness', 'notes'].every(key => typeof evidence[key] === 'string' && evidence[key].length < 1000)
         || source.protocol !== 'https:' || !allowedHosts.includes(source.hostname) || source.username || source.password || source.search

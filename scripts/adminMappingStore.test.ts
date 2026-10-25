@@ -1700,9 +1700,9 @@ assert.ok(
 assert.equal(
   scoreByConfigurationId.get(glm53FlashBox.id)?.domainScores.coding.score,
   null,
-  'WebDev remains Frontend evidence; 59% of expanded Coding evidence does not pass the 60% gate.',
+  'WebDev remains Frontend evidence; the retained Coding observations do not pass the 60% gate.',
 );
-assert.ok(Math.abs(scoreByConfigurationId.get(glm53FlashBox.id)!.domainScores.coding.coverage - .59) < 1e-12);
+assert.ok(Math.abs(scoreByConfigurationId.get(glm53FlashBox.id)!.domainScores.coding.coverage - .54 / .95) < 1e-12);
 const qwen27bBox = installedPresetBoxes.find((box) => (
   box.builtInPresetId === 'builtin.qwen3-8-27b.xhigh'
 ));
@@ -1771,7 +1771,7 @@ assert.equal(qwenFlashNextConfig.openRouterData?.outputPricePerMToken, 0.47);
 assert.ok((qwenFlashNextConfig.openRouterData?.ttftP50Seconds || 0) > 0);
 assert.ok((qwenFlashNextConfig.openRouterData?.throughputP50TokensPerSec || 0) > 0);
 assert.equal(scoreByConfigurationId.get(qwenFlashNextBox.id)?.availableDomainCount, 0,
-  'The retained AA and new OpenCompass evidence still leave the expanded domain below 60%.');
+  'The retained source evidence still leaves the expanded domain below 60%.');
 assert.equal(qwenFlashNextConfig.valsData, undefined);
 assert.equal(scoreByConfigurationId.get(qwenFlashNextBox.id)?.eligibleForGlobalLeaderboard, false);
 const hy4Box = installedPresetBoxes.find((box) => (
@@ -2504,10 +2504,10 @@ for (const metricId of [
 }
 const kimiCodeScore = scoreByConfigurationId.get(kimiCodeBox.id);
 assert.equal(kimiCodeScore?.rawCapabilityScore, null, 'Missing independent domains must keep the new model unranked.');
-assert.ok(Math.abs(kimiCodeScore!.domainScores.reasoning.coverage - 0.45) < 1e-12);
+assert.ok(Math.abs(kimiCodeScore!.domainScores.reasoning.coverage - 0.45 / 0.87) < 1e-12);
 assert.equal(kimiCodeScore?.domainScores.reasoning.score, null,
   'Published reasoning evidence remains visible but does not fill missing expanded tasks.');
-assert.equal(kimiCodeScore?.domainScores.documents.score, null);
+assert.equal(typeof kimiCodeScore?.domainScores.documents.score, 'number');
 for (const [presetId, expectedAuthorProvider] of [
   ['builtin.harness.claude-opus-4-8.max.claude-code', 'Anthropic'],
   ['builtin.agent.arena.claude-sonnet-5.max', 'Anthropic'],
@@ -2575,8 +2575,8 @@ for (const release of [
   assert.equal(stack[0].card.id, `card-aa-coding-agent-${release.cardPrefix}-max`);
   assert.ok(stack.every(({ card }) => card.metadataJson?.scope?.productLineId === release.line));
   const currentScore = scoreByConfigurationId.get(box.id)!;
-  assert.ok(Math.abs(currentScore.domainScores.chatting.coverage - 0.9) < 1e-12,
-    'Arena and reviewed OpenCompass dialogue evidence do not invent a missing IFBench observation.');
+  assert.ok(Math.abs(currentScore.domainScores.chatting.coverage - 0.65 / 0.75) < 1e-12,
+    'Retained dialogue evidence does not invent a missing IFBench observation.');
   assert.ok(currentScore.domainScores.reasoning.coverage >= 0.6);
   assert.equal(currentScore.eligibleForGlobalLeaderboard, true,
     'The newly observed non-CLI evidence permits ranking under the unchanged coverage gates.');

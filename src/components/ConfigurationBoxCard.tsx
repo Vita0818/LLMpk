@@ -39,7 +39,6 @@ const sourceLabels: Record<SourceType, string> = {
   design_arena: 'DesignArena',
   vals: 'Vals AI',
   livebench: 'LiveBench',
-  opencompass: 'OpenCompass',
   epoch_ai: 'Epoch AI',
 };
 

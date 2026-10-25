@@ -9,7 +9,6 @@ export type MetricSource =
   | 'DesignArena'
   | 'Vals AI'
   | 'LiveBench'
-  | 'OpenCompass'
   | 'Epoch AI';
 
 export type MetricType =

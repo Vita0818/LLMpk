@@ -12,14 +12,16 @@ import { BUILT_IN_CONFIGURATION_PRESETS } from '../src/data/builtInConfiguration
 import type { SourceModelCard } from '../src/types/admin_mapping';
 import type { PublicLeaderboardScore } from '../src/types/publicLeaderboard';
 
+assert.doesNotMatch(JSON.stringify({ sourceSnapshot, reviews, metrics, publicSnapshot }), /opencompass|司南/iu, 'Removed source must be absent from the shipped scoring data.');
+
 const data = sourceSnapshot as unknown as Parameters<typeof buildExpansionSourceCards>[0];
 const manifest = reviews as unknown as Parameters<typeof buildExpansionSourceCards>[2];
 const bases = JSON.parse(VERIFIED_SOURCE_MODEL_CARDS) as SourceModelCard[];
 assert.deepEqual(UNMATCHED_REVIEWED_EXPANSION_MAPPINGS, []);
-assert.equal(VERIFIED_EXPANSION_SOURCE_MODEL_CARDS.length, 343);
-assert.equal(VERIFIED_EXPANSION_SOURCE_OBSERVATIONS.length, 820);
+assert.equal(VERIFIED_EXPANSION_SOURCE_MODEL_CARDS.length, 328);
+assert.equal(VERIFIED_EXPANSION_SOURCE_OBSERVATIONS.length, 460);
 assert.equal(BUILT_IN_CONFIGURATION_PRESETS.length, 49);
-assert.equal(ALL_METRIC_DEFINITIONS.length, 108);
+assert.equal(ALL_METRIC_DEFINITIONS.length, 84);
 assert.equal(formatMetricWeight(.006), '0.6%');
 assert.equal(formatMetricWeight(.0075), '0.75%');
 assert.equal(formatMetricWeight(.005), '0.5%');
@@ -60,8 +62,8 @@ for (const change of ['identity', 'version', 'base', 'duplicate', 'profile', 'ha
 
 const argon = publicSnapshot.scores.find(score => score.config.name.startsWith('Gemini 4 Argon'))! as PublicLeaderboardScore;
 const rows = buildConfigurationMetricRows(argon);
-assert.equal(rows.length, 112);
-assert.equal(rows.filter(row => row.weightInDomain! > 0).length, 108);
+assert.equal(rows.length, 88);
+assert.equal(rows.filter(row => row.weightInDomain! > 0).length, 84);
 assert.match(rows.find(row => row.id === 'epoch_mirrorcode_v1')!.title, /SE .*标准误/u);
 assert.match(rows.find(row => row.id === 'aa_scicode')!.title, /来源正在复核/u);
 assert.equal(rows.find(row => row.id === 'aa_scicode')!.qualityStatus, 'under-review');

@@ -9,7 +9,6 @@ export type SourceType =
   | 'design_arena'
   | 'vals'
   | 'livebench'
-  | 'opencompass'
   | 'epoch_ai';
 
 /**

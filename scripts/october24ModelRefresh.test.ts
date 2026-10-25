@@ -59,8 +59,8 @@ assert.equal(deepseek.config.valsData?.length, 9);
 assert.equal(deepseek.config.observations.arena_agent_bash_recovery, undefined);
 assert.equal(deepseek.config.observations.frontiercode_v11_main_pass_rate, undefined,
   'The dated 0910 Chisel run is not a 1017 DeepSeek Harness pass rate.');
-assert.equal(deepseek.domainScores.chatting.coverage, 0.25,
-  'The exact 1017 OpenCompass row supplies independent interaction evidence; older Arena rows stay absent.');
+assert.equal(deepseek.domainScores.chatting.coverage, 0,
+  'Missing current dialogue evidence remains missing.');
 assert.equal(deepseek.rawCapabilityScore, null);
 for (const line of ['kimi_k3', 'deepseek_v41_flash']) {
   assert.equal(BUILT_IN_CONFIGURATION_PRESETS.some(preset => preset.productLineId === line), false);
@@ -95,14 +95,14 @@ for (const line of ['gemini_4_argon']) {
 }
 for (const line of ['muse_wonder', 'claude_haiku_55']) {
   assert.equal(scoreFor(line).availableDomainCount, 6);
-  assert.ok(scoreFor(line).overallCoverage < SCORING_CONFIG.coverage.overallMinimum);
-  assert.equal(scoreFor(line).eligibleForGlobalLeaderboard, false);
+  assert.ok(scoreFor(line).overallCoverage >= SCORING_CONFIG.coverage.overallMinimum);
+  assert.equal(scoreFor(line).eligibleForGlobalLeaderboard, true);
 }
 assert.equal(scoreFor('muse_wonder_full').domainScores.chatting.coverage, 0);
 
 assert.equal(SCORING_CONFIG.coverage.officialMinimum, 0.6);
 assert.equal(SCORING_CONFIG.coverage.overallMinimum, 0.75);
-assert.equal(ALL_METRIC_DEFINITIONS.find(metric => metric.id === 'vals_hlab_v11')?.internalWeightInDomain, 0.08);
+assert.equal(ALL_METRIC_DEFINITIONS.find(metric => metric.id === 'vals_hlab_v11')?.internalWeightInDomain, 0.08 / 0.95);
 assert.equal(ALL_METRIC_DEFINITIONS.some(metric => metric.id === 'vals_hlab_v1'), false);
 for (const score of publicSnapshot.scores) {
   assert.equal(Object.hasOwn(score.config.observations, 'vals_hlab_v1'), false);

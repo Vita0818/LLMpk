@@ -99,7 +99,7 @@ DOMAIN_IDS.forEach((domainId) => {
 const metricDefinitionsById = new Map(
   ALL_METRIC_DEFINITIONS.map((definition) => [definition.id, definition]),
 );
-assert.equal(ALL_METRIC_DEFINITIONS.length, 108);
+assert.equal(ALL_METRIC_DEFINITIONS.length, 84);
 assert.deepEqual(DOMAIN_IDS.map(id => DOMAIN_DEFINITIONS[id].nameEn),
   ['Chatting','Reasoning','Coding','Frontend','Agentic','Documents']);
 assert.deepEqual([...metricDefinitionsById.keys()].sort(), Object.keys(metricWeights).sort());

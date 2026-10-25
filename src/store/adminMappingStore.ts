@@ -196,7 +196,7 @@ function isKnownSource(source: unknown): source is SourceType {
     || source === 'frontier_code'
     || source === 'design_arena'
     || source === 'vals'
-    || source === 'livebench' || source === 'opencompass' || source === 'epoch_ai';
+    || source === 'livebench' || source === 'epoch_ai';
 }
 
 /**
@@ -653,7 +653,6 @@ function belongsToExpectedHost(source: SourceType, value: unknown): boolean {
     if (source === 'design_arena') return host === 'designarena.ai' || host.endsWith('.designarena.ai');
     if (source === 'vals') return host === 'vals.ai' || host === 'www.vals.ai';
     if (source === 'livebench') return host === 'livebench.ai';
-    if (source === 'opencompass') return host === 'rank.opencompass.org.cn' || host === 'cdn.opencompass.org.cn';
     if (source === 'epoch_ai') return host === 'epoch.ai';
     return host === 'cognition.com' || host.endsWith('.cognition.com');
   } catch {
@@ -701,7 +700,7 @@ function sourceMetricIsAllowed(source: SourceType, metricId: unknown): boolean {
   if (source === 'design_arena') return metricId === 'designarena_frontend'
     || sourceExpansionMetrics.some(metric => metric.sourceType === source && metric.id === metricId);
   if (source === 'vals') return VALS_METRIC_DEFINITIONS.some(metric => metric.id === metricId);
-  if (source === 'livebench' || source === 'opencompass' || source === 'epoch_ai') {
+  if (source === 'livebench' || source === 'epoch_ai') {
     return sourceExpansionMetrics.some(metric => metric.sourceType === source && metric.id === metricId);
   }
   return metricId.startsWith('frontiercode_');

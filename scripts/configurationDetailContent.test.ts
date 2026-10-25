@@ -51,7 +51,7 @@ const assertSharedDetailContract = (score: PublicLeaderboardScore) => {
     rows.map((row) => row.id),
     [...expectedBenchmarkIds, ...expectedTrailingIds]
   );
-  assert.equal(rows.filter(row => (row.weightInDomain ?? 0) > 0).length, 108,
+  assert.equal(rows.filter(row => (row.weightInDomain ?? 0) > 0).length, 84,
     'Every benchmark row exposes its positive domain weight.');
   for (const columns of [1, 2] as const) {
     const markup = renderToStaticMarkup(createElement(ConfigurationMetricList, { scoreItem: score, columns }));

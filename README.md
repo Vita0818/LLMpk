@@ -40,15 +40,15 @@ successor pruning and the October 24 reader cleanup.
 The reader view folds equivalent model/harness/radar access routes, preferring
 the highest subscription tier. Its table and all selectors share the same 35
 visible configurations; the complete scoring inventory stays available internally.
-Scoring v3.3 assigns positive weights to 108 verified benchmark fields
-from 11 publishers, including all 12 Vals metrics, and
+Scoring v3.4 assigns positive weights to 84 verified benchmark fields
+from 10 publishers, including all 12 Vals metrics, and
 requires every domain to reach 60% weighted observed evidence and
 at least 75% overall coverage before assigning a total or rank. Missing
 observations are null; insufficient configurations remain inspectable.
 
-- [Scoring v3.3](llm_pk_scoring_methodology_v3_3.md)
-- [Domain weights v3.3](llm_pk_domain_classification_weighting_v3_3.md)
-- [Source registry v3.3](llm_pk_data_source_registry_v3_3.md)
+- [Scoring v3.4](llm_pk_scoring_methodology_v3_4.md)
+- [Domain weights v3.4](llm_pk_domain_classification_weighting_v3_4.md)
+- [Source registry v3.4](llm_pk_data_source_registry_v3_4.md)
 
 Refresh the current FrontierCode 1.1 Main evidence with `npm run refresh:frontiercode`.
 DesignArena Overall Frontend is sourced through OpenRouter's authenticated
@@ -68,36 +68,22 @@ validate. New model or profile links must be authored in
 `src/data/designArenaReviewedMappings.json`; they are not inferred from a
 model ID or selected by highest Elo.
 
-## Scoring v3.3: independent source expansion
+## Scoring v3.4: current evidence
 
-The unified detail/comparison list contains 108 positively weighted benchmarks
-plus four practical fields. This adds 60 metrics to v3.2: LiveBench 2.0 (7),
-OpenCompass v3.0 (24), Epoch (3), Scale Labs (7), DesignArena (6), Vals (3),
-Artificial Analysis (5), Arena (3), and native OpenRouter benchmarks (2).
-There are no reference-only rows or source-specific accordions.
-Available same-model grades are used with the actual source tier disclosed;
-exact tier is preferred, lower tiers can fill higher ones, and other available
-tiers are marked explicitly rather than discarded.
+The unified detail/comparison list contains 84 positively weighted benchmarks
+plus four practical fields. All 10 publishers share the same list. Each domain
+sums to 100%; six domains remain equally weighted. Retained within-domain
+weights were normalized proportionally after the requested source removal.
 
-Six domains remain equal, and each domain's budget sums to 100%. Related
-signals share explicit budgets: existing terminal variants 15% of Agentic,
-AA Coding Agent index/components 10% of Coding, Omniscience 10% of Reasoning.
-OpenCompass atomic fields share fixed domain budgets instead of receiving a
-budget in proportion to column count. LiveBench Design measures documents,
-PDFs and slides, so it contributes to Documents rather than Frontend.
+Available same-model grades retain their actual source tier: exact tier is
+preferred, lower tiers can fill higher ones, and other available tiers are
+marked explicitly. The model/version and actual benchmark environment remain
+inspectable. Original values, prices and speed measurements are retained.
 
-The expansion snapshot retains 23 datasets and 1,649 source records; 343
-reviewed identities produce 820 atomic observations linked through 666
-explicit configuration targets. Every new metric has at least one matched
-current observation. SHA-256 hashes, source dates, exact versions, profiles,
-benchmark scaffolds and production CLI restrictions remain inspectable.
-Conflicting DesignArena identities and old Qwen Max revisions stay unlinked.
-
-The inventory remains 49 configurations / 35 reader representatives. Under
-the unchanged 60% domain / 75% overall gates, 11 representatives qualify and
-24 remain data-insufficient. Comparing 1,408 previous observations found no
-raw-value changes; price and speed adjustments are unchanged. A larger
-weighted evidence denominator changes eligibility and relative calibration.
+The expansion snapshot has 22 datasets, 1,627 source records, 328 reviewed
+identities, 637 target links and 460 atomic observations. The inventory is
+49 configurations / 35 reader representatives: 14 qualified and 21 insufficient
+under the existing 60% domain / 75% overall coverage gates.
 
 ```bash
 npm run refresh:source-expansion -- --from-dir /path/to/validated/raw-pack
@@ -105,10 +91,9 @@ npm run test:source-expansion
 npm run test:scoring-v32 # full current-metric contribution regression
 ```
 
-Network refresh requires current rendered Arena captures and the separately
-published OpenCompass rule-version caption; see SOURCE_DATA_PIPELINE.md.
-Earlier v3.1/v3.2 policy documents remain historical records. SciCode shows
-AA's Under review status; old CritPt and revised CritPt v2 remain distinct.
+Network refresh needs current rendered Arena captures; see the source pipeline.
+SciCode retains the publisher's Under review status; original CritPt and revised
+CritPt v2 remain separate metrics.
 
 ## Vals AI evidence and scoring
 
@@ -121,8 +106,8 @@ Vals Index 2.2 and 11 standalone tasks: Finance Agent v2, Excel
 Modeling, Vibe Code Bench 1.1, Code Migration, Terminal-Bench 4.0, Legal
 Research, HLAB-Vals 1.1, Tax Agent Bench, ProofBench 1.1, ProgramBench, and VCB 1–100.
 Their source update dates range from October 12 to October 22. Vals Index
-receives 3% of Agentic; the existing terminal sources and versions share a 15%
-Agentic budget, limiting
+receives approximately 3.16% of Agentic; the existing terminal sources and versions
+share approximately 15.79% of the Agentic budget, limiting
 overlapping signals rather than adding full independent task weights.
 
 ```bash
@@ -160,11 +145,10 @@ Muse Code XHigh. Neither borrows an older model's CLI or FrontierCode result.
 Spark Open also uses its available Fireworks Max WebDev grade with its actual
 source tier disclosed. Newly
 published Arena Text records qualified Wonder and Haiku 5.5 under the earlier
-v3.1 weights; v3.3 retains their observations while their expanded total
-coverage remains below 75%. Wonder Full stays
+v3.1 weights; v3.4 retains their observations and their current total coverage passes 75%. Wonder Full stays
 separate and retains its unknown subscription allowance. Under the prior v3.1 policy, reader cleanup left 20 ranked and 15 insufficient
-representatives. The v3.2 revision gave 17 ranked / 18 insufficient representatives; v3.3
-gives 11 / 24 under the same 60%/75% gates.
+representatives. The v3.2 revision gave 17 ranked / 18 insufficient representatives; v3.4
+gives 14 / 21 under the same 60%/75% gates.
 
 The cleanup removes every shipped route of GPT-5.6 Terra, MiniMax M3,
 Qwen3.7 Plus, Mistral Medium 3.5 and Muse Spark 1.3: five model families and

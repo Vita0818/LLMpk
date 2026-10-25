@@ -97,11 +97,11 @@ assert.equal(haiku.config.openRouterData?.inputPricePerMToken, 0.1);
 assert.equal(haiku.config.openRouterData?.outputPricePerMToken, 0.5);
 for (const model of ['Muse Wonder ', 'Claude Haiku 5.5 ']) {
   const score = published.scores.find(s => s.config.name.startsWith(model))!;
-  assert.ok(Math.abs(score.domainScores.chatting.coverage - 0.65) < 1e-12);
+  assert.ok(Math.abs(score.domainScores.chatting.coverage - 0.65 / 0.75) < 1e-12);
   assert.equal(score.availableDomainCount, 6);
-  assert.ok(score.overallCoverage < 0.75);
-  assert.equal(score.eligibleForGlobalLeaderboard, false,
-    'Additional weighted tasks retain the overall gate even when all six domains pass.');
+  assert.ok(score.overallCoverage >= 0.75);
+  assert.equal(score.eligibleForGlobalLeaderboard, true,
+    'Remaining weighted evidence passes the unchanged overall coverage gate.');
 }
 assert.equal(full.domainScores.chatting.coverage, 0);
 assert.equal(full.rawCapabilityScore, null, 'Wonder Full must not borrow Wonder’s dialogue evidence.');

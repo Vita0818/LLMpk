@@ -1,6 +1,6 @@
 {
   "schemaVersion": "source-snapshot-validation-report/v1",
-  "validatedAt": "2026-10-25T08:10:20.354Z",
+  "validatedAt": "2026-10-25T08:53:10.019Z",
   "status": "PASS",
   "inputs": {
     "artificialAnalysis": "src/data/artificialAnalysisSourceSnapshot.json",
@@ -148,10 +148,10 @@
       "rows": 136
     },
     "expansion": {
-      "datasets": 23,
-      "sourceRecords": 1649,
-      "reviewedMappings": 343,
-      "reviewedTargets": 666
+      "datasets": 22,
+      "sourceRecords": 1627,
+      "reviewedMappings": 328,
+      "reviewedTargets": 637
     },
     "vals": {
       "reviewedModels": 33,
@@ -759,7 +759,7 @@
       "description": "Every new scored benchmark has reviewed real observations and an independent version identity.",
       "passed": true,
       "details": {
-        "metrics": 57
+        "metrics": 33
       }
     },
     {
