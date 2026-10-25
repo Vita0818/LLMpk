@@ -162,7 +162,7 @@ assert.equal(getCoverageStatus(SCORING_CONFIG.coverage.officialMinimum), 'offici
 assert.equal(getCoverageStatus(SCORING_CONFIG.coverage.officialMinimum - 0.001), 'provisional');
 assert.equal(getCoverageStatus(0), 'no_observed_data');
 assert.deepEqual(SCORING_CONFIG.practicalAdjustment, {
-  version: '1.4',
+  version: '1.5',
   speed: {
     rewardScale: 7.5,
     penaltyScale: 8,
@@ -170,6 +170,10 @@ assert.deepEqual(SCORING_CONFIG.practicalAdjustment, {
   cost: {
     rewardScale: 7.5,
     penaltyScale: 12,
+  },
+  weights: {
+    aaAgentTask: 0.35, valsTasks: 0.25, aaIndexTask: 0.10,
+    throughput: 0.15, ttft: 0.15, scenarioCost: 0.30,
   },
 });
 assert.equal(
@@ -507,4 +511,4 @@ assert.equal(
   null,
 );
 
-console.log('scoringEngine Scoring v3.2 + Practical Adjustment v1.4 policies: PASS');
+console.log('scoringEngine Scoring v3.4 + Practical Adjustment v1.5 policies: PASS');

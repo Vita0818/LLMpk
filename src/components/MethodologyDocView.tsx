@@ -34,8 +34,11 @@ export const MethodologyDocView: React.FC = () => {
           <p>原始比例经 Logit 变换，Elo/效果量保留连续尺度。相对分以同批参考配置的最高值为 100、中位数为 50，再根据参与量与置信区间将弱信号向 50 收缩。领域聚合后再次以同批合格配置校准。</p>
           <div className="rounded-lg bg-slate-50 p-4 font-mono text-xs">R = (Chatting × Reasoning × Coding × Frontend × Agentic × Documents)^(1/6)</div>
           <p>六域等权几何平均保留领域短板。订阅、价格档位等共享能力证据的路线不重复加重能力校准样本。</p>
-          <p>Practical Adjustment v{SCORING_CONFIG.practicalAdjustment.version} 保持现有规则：能力分加速度与成本的饱和奖惩。缺少能力总分或可核实的速度/成本时，实用分也保持空值。不同 effort、速度测试条件或订阅路线应分别比较。</p>
-          <p>订阅成本 = 同模型 API 场景成本 × 月费 ÷ 可用月度 API 等效额度。SemiAnalysis 的额度来自 agentic 混合负载，将其折扣系数映射到本站 1M 输入 + 0.25M 输出场景是近似；缓存比例、实际利用率和限额变化都会影响结果。Fable 5.1 的 $2,485 已包含 50% 模型上限，不再折半。详情中 ≈ 表示保留的旧估算。</p>
+          <p>Practical Adjustment v{SCORING_CONFIG.practicalAdjustment.version} 沿用原有饱和效用函数及附加分：P = max(0, R + Δ速度 + Δ成本)。速度最多奖励 7.5、惩罚 8 分；成本最多奖励 7.5、惩罚 12 分。六维能力分和雷达图不加入速度或成本。</p>
+          <p>速度：AA 代理任务计时 35%、Vals 任务时长 25%、AA 折算任务时间 10%、输出吞吐 15%、首 token 延迟 15%。成本：AA 代理任务费用 35%、Vals 每任务费用 25%、AA 任务 token 费用 10%、标准 token 场景 30%。Vals 的 11 个独立任务均分该 25% 预算，综合 Index 不重复计入。</p>
+          <p>各项按同口径参考中位数计算饱和效用，再乘配置权重。缺测项不贡献加减分，不把剩余项放大到 100%；速度和成本整域缺测时保持空值。任务只连接已审核的同模型、同实测档位，展示实际环境；纯失败及备用模型混合运行不提供效率加成。订阅路线不重复加重速度参考样本。</p>
+          <p>AA 代理字段是实测代理阶段墙钟时间；Vals latency 是来源任务耗时；AA Time per Task 按评测 token 与实测 API 速度折算。它们在相同版本的题集内分别比较，不能把不同题目的原始秒数混算。</p>
+          <p>订阅任务成本 = 同模型 API 任务费用 × 月费 ÷ 可用月度 API 等效额度，限 SemiAnalysis 实测的 agentic 负载近似换算，假设满额使用；不把这组额度用于 AA 的推理任务混合负载。标准 1M 输入 + 0.25M 输出场景保留旧算法和明确的近似说明。缓存比例、实际利用率和限额变化都会影响结果。Fable 5.1 的 $2,485 已包含 50% 模型上限，不再折半。详情中 ≈ 表示保留的旧估算。</p>
           <p>默认模型按同产品线的继任关系筛选，取消历史对照例外；不同用途的当前产品线继续保留。历史原始来源记录供复核使用。</p>
         </>}
         {activeDoc === 'weighting' && <>
@@ -51,6 +54,8 @@ export const MethodologyDocView: React.FC = () => {
           </div>)}
           <p>五个终端来源/版本共用 Agentic 的 {metricBudget('aa_terminalbench_v4', 'vals_terminalbench_v4', 'tbench_v4', 'aa_terminalbench_v21', 'aa_coding_agent_terminalbench_v2')}，科学终端任务另占 {metricBudget('aa_terminalbench_science_v01')}；AA Coding Agent 指数和两个编程分项共用 Coding 的 {metricBudget('aa_coding_agent_index', 'aa_coding_agent_deepswe', 'aa_coding_agent_swe_atlas_qna')}；Omniscience 两个信号共用 Reasoning 的 {metricBudget('aa_omniscience_accuracy', 'aa_omniscience_nonhallucination')}。同一运行的镜像只导入一次，相关独立运行共用预算。</p>
           <p>Frontend 为 Arena WebDev 与 Image-to-WebDev 合计 40%、DesignArena 整体与 DataViz/UI/SVG 合计 35%、Vals 两类 Vibe Code 合计 20%、AA-3D 5%。来源缺失仍占覆盖分母。</p>
+          <h2 className="text-lg font-bold">速度与成本：独立附加分预算</h2>
+          <p>两个实用领域各有 70% 任务预算：AA 代理 35%、Vals 25%、AA 任务折算 10%。速度余下 30% 均分给吞吐和首 token 延迟；成本余下 30% 使用标准场景费用。正向奖励预算各为 7.5 分，沿用原有成本重罚规则。</p>
         </>}
         {activeDoc === 'registry' && <>
           <h2 className="text-lg font-bold">可核实的当前来源</h2>

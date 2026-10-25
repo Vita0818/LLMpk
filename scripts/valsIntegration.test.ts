@@ -75,7 +75,7 @@ assert.notEqual(migration.rawValue, index.tasks.code_migration['anthropic/claude
   'The standalone full migration run must not be replaced by the index subset.');
 assert.equal(sonnet.config.valsData!.find(row => row.metricId === 'vals_index_v22')!.hasRefusalFallbackNotice, true);
 assert.equal(sonnet.config.valsData!.find(row => row.metricId === 'vals_vibe_code_v11')!.sourceHarness, 'OpenHands');
-assert.equal(buildConfigurationMetricRows(sonnet).length, 88, 'All 84 weighted metrics and four practical fields share one list.');
+assert.equal(buildConfigurationMetricRows(sonnet).length, 115, 'All 84 capability metrics and 31 practical fields share one list.');
 const migrationRow = buildConfigurationMetricRows(sonnet).find(row => row.id === 'vals_code_migration_v1')!;
 assert.equal(migrationRow.value, '69.8%');
 assert.equal(migrationRow.sourceUrl, migration.sourceUrl);

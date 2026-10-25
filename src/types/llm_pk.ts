@@ -113,6 +113,42 @@ export interface SubscriptionCostData {
   pricingEvidenceId?: string;
 }
 
+/** Build-time task evidence; never mixed into the six capability domains. */
+export interface PracticalTaskMeasurement {
+  id: string;
+  family: 'aa-agent' | 'aa-index' | 'vals';
+  benchmark: string;
+  comparisonKey: string;
+  referenceKey: string;
+  timeSeconds: number | null;
+  apiCostUSD: number | null;
+  quality: number | null;
+  measurement: 'agent-wall-clock' | 'task-latency' | 'token-speed-estimate';
+  sourceUrl: string;
+  sourceUpdated: string;
+  sourceProfile: string;
+  sourceHarness: string;
+  notes: string;
+}
+
+export interface PracticalComponentDetail {
+  id: string;
+  label: string;
+  domain: 'speed' | 'cost';
+  weight: number;
+  rawValue: number | null;
+  referenceValue: number | null;
+  ratio: number | null;
+  utility: number | null;
+  contribution: number | null;
+  unit: 's' | 't/s' | 'USD/task' | 'USD/1.25M';
+  sourceUrl?: string;
+  sourceUpdated?: string;
+  sourceProfile?: string;
+  sourceHarness?: string;
+  notes: string;
+}
+
 export interface LLMConfiguration {
   id: string;
   name: string;
@@ -163,6 +199,8 @@ export interface LLMConfiguration {
 
   /** Independent Vals runs retain their own effort and benchmark environment. */
   valsData?: import('../data/valsMetricDefinitions').ValsBenchmarkEvidence[];
+
+  practicalMeasurements?: PracticalTaskMeasurement[];
 
   // Atomic Observations map: metricId -> MetricObservation
   observations: Record<string, MetricObservation>;
@@ -220,6 +258,9 @@ export interface PracticalScoreBreakdown {
   referenceCostUSD: number | null;
   throughputRatio: number | null;
   latencyRatio: number | null;
+  speedCoverage?: number;
+  costCoverage?: number;
+  components?: PracticalComponentDetail[];
 }
 
 export interface ProcessedConfigurationScore {

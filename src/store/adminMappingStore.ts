@@ -77,6 +77,7 @@ import {
 } from '../data/builtInConfigurationPresets';
 import { getEmbeddedConfidenceRadius } from '../data/metricUncertainty';
 import { getOpenRouterPromotionalPricing } from '../data/openRouterPromotionalPricing';
+import { buildPracticalTaskMeasurements } from '../data/practicalTaskEvidence';
 
 /**
  * A schema bump is intentionally paired with a source-catalog fingerprint.
@@ -2627,6 +2628,10 @@ export class AdminMappingStore {
     const readerFacingProvider = subscriptionData?.planName ?? (displayProviderLabel?.endsWith(' API')
       ? displayProviderLabel.replace(/\s+API$/u, '')
       : configuredProviderName);
+    const practicalMeasurements = buildPracticalTaskMeasurements(linkedStack.flatMap(({ link, card }) => {
+      const provenance = parseSourceLinkProvenance(link.provenance);
+      return provenance ? [{ card, provenance, observations: this.getCardObservations(card.id) }] : [];
+    }), configurationIdentity?.harness?.name);
 
     return {
       id: box.id,
@@ -2670,6 +2675,7 @@ export class AdminMappingStore {
       ...(openRouterData ? { openRouterData } : {}),
       ...(subscriptionData ? { subscriptionData } : {}),
       ...(valsData.length > 0 ? { valsData } : {}),
+      ...(practicalMeasurements.length > 0 ? { practicalMeasurements } : {}),
       observations: observationsMap,
     };
   }

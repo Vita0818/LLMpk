@@ -243,11 +243,11 @@ export const ConfigurationDetailModal: React.FC<ConfigurationDetailModalProps> =
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Zap className="w-3.5 h-3.5 text-amber-400" />
-                  <span>速度效用: Throughput {config.openRouterData?.throughputP50TokensPerSec ?? '--'} t/s, TTFT {config.openRouterData?.ttftP50Seconds ?? '--'}s</span>
+                  <span>速度：任务 70% + 响应 30%；实测覆盖 {((practicalBreakdown.speedCoverage ?? 0) * 100).toFixed(0)}%</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <DollarSign className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>标准成本: ${formatOptionalNumber(practicalBreakdown.effectiveScenarioCostUSD, 2)} / 1.25M tokens (中位数: ${formatOptionalNumber(practicalBreakdown.referenceCostUSD, 2)})</span>
+                  <span>成本：任务 70% + 场景 30%；标准场景 ${formatOptionalNumber(practicalBreakdown.effectiveScenarioCostUSD, 2)}</span>
                 </div>
               </div>
             </div>

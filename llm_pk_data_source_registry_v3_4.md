@@ -33,6 +33,12 @@
 
 SciCode 保留来源复核状态，旧 CritPt 与修订版分开。[BFCL](https://gorilla.cs.berkeley.edu/leaderboard.html)、[OSWorld 2.0](https://osworld-v2.xlang.ai/) 和 [SWE-bench](https://www.swebench.com/) 的本次候选仍没有审核通过的当前模型/执行连接。
 
+## 实用分资料
+
+[Practical Adjustment v1.5](llm_pk_practical_adjustment_v1_5.md) 另使用 AA Coding Agents 的实际代理运行时间与费用、AA Intelligence Index 按 token 折算的任务时间/费用、Vals 的 latency/cost_per_test，以及现有 OR 请求速度和 API 单价。Vals 的综合 Index 不重复加入任务效率；备用模型混合运行及异档计时不参与。所有指标只影响速度/成本附加分，不进入 84 项能力评测或六维雷达。
+
+订阅成本继续采用 [SemiAnalysis](https://newsletter.semianalysis.com/p/anthropic-subscriptions-offer-5x) 2026-10-05 发布、2026-10-11 核验的九组套餐与模型测量。实测 agentic 额度只近似折算对应任务费用；历史估算不升级为实测，未知额度不补零。
+
 ## 数据署名
 
 DesignArena 结果来自 Design Arena，经 OpenRouter 提供，采用 CC BY 4.0。Epoch AI 数据遵循其 [Creative Commons Attribution 说明](https://epoch.ai/benchmarks/use-this-data) 署名；题目另遵循原作者许可。其他平台的公开成绩分别保留来源 URL，不推断未公开许可。

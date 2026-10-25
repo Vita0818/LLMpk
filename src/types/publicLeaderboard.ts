@@ -57,5 +57,6 @@ export interface PublicLeaderboardScore {
 export interface PublicLeaderboardSnapshot {
   schemaVersion: 2;
   scoringVersion?: string;
+  practicalAdjustmentVersion?: string;
   scores: PublicLeaderboardScore[];
 }

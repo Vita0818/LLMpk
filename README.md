@@ -49,6 +49,7 @@ observations are null; insufficient configurations remain inspectable.
 - [Scoring v3.4](llm_pk_scoring_methodology_v3_4.md)
 - [Domain weights v3.4](llm_pk_domain_classification_weighting_v3_4.md)
 - [Source registry v3.4](llm_pk_data_source_registry_v3_4.md)
+- [Practical Adjustment v1.5](llm_pk_practical_adjustment_v1_5.md)
 
 Refresh the current FrontierCode 1.1 Main evidence with `npm run refresh:frontiercode`.
 DesignArena Overall Frontend is sourced through OpenRouter's authenticated
@@ -71,7 +72,7 @@ model ID or selected by highest Elo.
 ## Scoring v3.4: current evidence
 
 The unified detail/comparison list contains 84 positively weighted benchmarks
-plus four practical fields. All 10 publishers share the same list. Each domain
+plus 31 practical fields. All 10 capability publishers share the same list. Each domain
 sums to 100%; six domains remain equally weighted. Retained within-domain
 weights were normalized proportionally after the requested source removal.
 
@@ -79,6 +80,13 @@ Available same-model grades retain their actual source tier: exact tier is
 preferred, lower tiers can fill higher ones, and other available tiers are
 marked explicitly. The model/version and actual benchmark environment remain
 inspectable. Original values, prices and speed measurements are retained.
+
+Practical Adjustment v1.5 retains the additive saturated rewards and penalties.
+Speed and cost each devote 70% to task efficiency (AA agents 35%, Vals 25%,
+AA task estimates 10%). Speed's remaining 30% covers throughput and TTFT;
+cost's remaining 30% retains the standard token scenario. Missing components
+leave their budget unspent. Reviewed SemiAnalysis allowances convert agentic
+task costs for subscriptions; the six capability radar axes stay unchanged.
 
 The expansion snapshot has 22 datasets, 1,627 source records, 328 reviewed
 identities, 637 target links and 460 atomic observations. The inventory is

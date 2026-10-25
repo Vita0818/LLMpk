@@ -146,6 +146,7 @@ const scores: PublicLeaderboardScore[] = adminMappingStore
 const snapshot: PublicLeaderboardSnapshot = {
   schemaVersion: 2,
   scoringVersion: SCORING_CONFIG.version,
+  practicalAdjustmentVersion: SCORING_CONFIG.practicalAdjustment.version,
   scores,
 };
 if (scores.length !== installation.presetCount) {

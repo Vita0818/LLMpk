@@ -25,6 +25,7 @@ import { RadarOverviewGallery } from './components/RadarOverviewGallery';
 import {
   ConfigurationMetricList,
   ConfigurationRadar,
+  PracticalAdjustmentSummary,
   parseConfigurationName,
 } from './components/ConfigurationDetailContent';
 import {
@@ -1172,6 +1173,8 @@ export const VercelAestheticPreview: React.FC = () => {
                 </div>
               )}
             </div>
+
+            <PracticalAdjustmentSummary scoreItem={selectedScoreItem} />
 
             {/* Radar Display & Domain Progress Bars directly on background */}
             <div className="configuration-detail-panels grid min-h-0 flex-1">

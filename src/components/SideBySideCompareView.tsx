@@ -5,6 +5,7 @@ import type { PublicLeaderboardScore } from '../types/publicLeaderboard';
 import {
   ConfigurationMetricList,
   ConfigurationRadar,
+  PracticalAdjustmentSummary,
   formatConfigurationScore,
   parseConfigurationName,
 } from './ConfigurationDetailContent';
@@ -132,6 +133,7 @@ const ComparisonColumn = <T extends PublicLeaderboardScore,>({
             </div>
           </div>
         </div>
+        <PracticalAdjustmentSummary scoreItem={item} />
       </div>
 
       <div className="flex min-h-[340px] items-center justify-center border-b border-neutral-200 py-4">

@@ -12,6 +12,7 @@ import {
   MetricUncertaintyStatus,
 } from '../types/llm_pk';
 import { DOMAIN_IDS, getCoverageStatus, SCORING_CONFIG } from './scoringConfig';
+import { calculatePracticalAdjustments } from './practicalScoring';
 import { VALS_METRIC_DEFINITIONS } from '../data/valsMetricDefinitions';
 import metricWeights from '../data/capabilityMetricWeights.json';
 import { EXPANDED_CAPABILITY_METRIC_DEFINITIONS } from '../data/expandedCapabilityMetricDefinitions';
@@ -700,61 +701,11 @@ export function processLLMpkBatchScoring(
       ), 0));
   });
 
-  // Step E: Calculate Practical Score adjustments (Speed Delta & Cost Delta)
-  // 1. Calculate Scenario Effective Cost for each config (USD)
-  // Scenario: 1M Input tokens + 0.25M Output tokens
-  const scenarioCosts = configs.map((c) => {
-    if (!c.openRouterData) return null;
-    const input = c.openRouterData.inputPricePerMToken;
-    const output = c.openRouterData.outputPricePerMToken;
-    if (!Number.isFinite(input) || !Number.isFinite(output) || input < 0 || output < 0) {
-      return null;
-    }
-    const apiScenarioCost = input + 0.25 * output;
-    if (!c.subscriptionData) return apiScenarioCost;
-
-    const {
-      monthlyPriceUSD,
-      apiEquivalentCostUSD,
-      usableQuotaFraction,
-    } = c.subscriptionData;
-    if (
-      !Number.isFinite(monthlyPriceUSD)
-      || monthlyPriceUSD <= 0
-      || apiEquivalentCostUSD === null
-      || usableQuotaFraction === null
-      || !Number.isFinite(apiEquivalentCostUSD)
-      || apiEquivalentCostUSD <= 0
-      || !Number.isFinite(usableQuotaFraction)
-      || usableQuotaFraction <= 0
-      || usableQuotaFraction > 1
-    ) return null;
-
-    // Convert a fixed monthly plan back to the same standard-workload scale
-    // used by API rows. Example: if $200 buys $2,000 of API-equivalent work,
-    // the subscription's effective scenario cost is 10% of the API route.
-    const usableApiEquivalentCostUSD =
-      apiEquivalentCostUSD * usableQuotaFraction;
-    return apiScenarioCost
-      * monthlyPriceUSD
-      / usableApiEquivalentCostUSD;
-  });
-
-  const validCosts = scenarioCosts.filter(
-    (v): v is number => v !== null && Number.isFinite(v) && v >= 0
+  // Step E retains the saturated utility and additive scales. Task and
+  // interaction evidence receive explicit budgets outside the six domains.
+  const practicalAdjustments = calculatePracticalAdjustments(
+    configs, calculateMedian, calculateUtilityRatio,
   );
-  const medianCostUSD = validCosts.length > 0 ? calculateMedian(validCosts) : null;
-
-  // 2. Speed reference values (p50 Throughput & TTFT)
-  const throughputs = configs
-    .map((c) => c.openRouterData?.throughputP50TokensPerSec)
-    .filter((v): v is number => v !== undefined && Number.isFinite(v) && v > 0);
-  const medianThroughput = throughputs.length > 0 ? calculateMedian(throughputs) : null;
-
-  const ttfts = configs
-    .map((c) => c.openRouterData?.ttftP50Seconds)
-    .filter((v): v is number => v !== undefined && Number.isFinite(v) && v > 0);
-  const medianTtft = ttfts.length > 0 ? calculateMedian(ttfts) : null;
 
   // Assembly of results
   const results: ProcessedConfigurationScore[] = configs.map((c, idx) => {
@@ -810,52 +761,8 @@ export function processLLMpkBatchScoring(
       && overallCoverage + Number.EPSILON >= SCORING_CONFIG.coverage.overallMinimum
     );
 
-    // Speed adjustment
-    let speedDelta: number | null = null;
-    let speedUtility: number | null = null;
-    let throughputRatio: number | null = null;
-    let latencyRatio: number | null = null;
-
-    if (
-      c.openRouterData
-      && medianThroughput !== null
-      && medianTtft !== null
-      && Number.isFinite(c.openRouterData.throughputP50TokensPerSec)
-      && c.openRouterData.throughputP50TokensPerSec > 0
-      && Number.isFinite(c.openRouterData.ttftP50Seconds)
-      && c.openRouterData.ttftP50Seconds > 0
-    ) {
-      throughputRatio = c.openRouterData.throughputP50TokensPerSec / medianThroughput;
-      latencyRatio = medianTtft / c.openRouterData.ttftP50Seconds;
-
-      const uThroughput = calculateUtilityRatio(throughputRatio);
-      const uTtft = calculateUtilityRatio(latencyRatio);
-
-      speedUtility = 0.5 * uThroughput + 0.5 * uTtft;
-      if (speedUtility >= 0) {
-        speedDelta = SCORING_CONFIG.practicalAdjustment.speed.rewardScale * speedUtility;
-      } else {
-        speedDelta = SCORING_CONFIG.practicalAdjustment.speed.penaltyScale * speedUtility;
-      }
-    }
-
-    // Cost adjustment
-    let costDelta: number | null = null;
-    let costUtility: number | null = null;
-    const effectiveCost = scenarioCosts[idx];
-
-    if (effectiveCost !== null && medianCostUSD !== null) {
-      const r_c = medianCostUSD === 0 && effectiveCost === 0
-        ? 1
-        : medianCostUSD / Math.max(0.001, effectiveCost);
-      costUtility = calculateUtilityRatio(r_c);
-
-      if (costUtility >= 0) {
-        costDelta = SCORING_CONFIG.practicalAdjustment.cost.rewardScale * costUtility;
-      } else {
-        costDelta = SCORING_CONFIG.practicalAdjustment.cost.penaltyScale * costUtility;
-      }
-    }
+    const adjustment = practicalAdjustments[idx];
+    const { speedDelta, costDelta } = adjustment;
 
     // A practical score also requires an actual capability score. Do not turn
     // missing capability coverage into a zero or neutral practical score.
@@ -864,16 +771,9 @@ export function processLLMpkBatchScoring(
       : Math.max(0, rawCapabilityScore + speedDelta + costDelta);
 
     const practicalBreakdown: PracticalScoreBreakdown = {
+      ...adjustment,
       rawCapabilityScore,
-      speedDelta,
-      costDelta,
       practicalScore,
-      speedUtility,
-      costUtility,
-      effectiveScenarioCostUSD: effectiveCost,
-      referenceCostUSD: medianCostUSD,
-      throughputRatio,
-      latencyRatio,
     };
 
     return {

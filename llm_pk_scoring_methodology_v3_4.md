@@ -1,6 +1,6 @@
 # LLMpk Scoring Methodology v3.4
 
-生效日期：2026-10-25（Australia/Perth）。当前 84 项评测全部赋正权重、统一展示。详情为 84 项评测加 4 项实用数据；三列对比使用同一份 88 行内容。当前目录仍为 33 个系列、49 条内部配置和 35 条前台代表。
+生效日期：2026-10-25（Australia/Perth）。当前 84 项能力评测全部赋正权重、统一展示。详情为 84 项能力评测加 31 项实用数据；对比使用同一份 115 行内容。当前目录仍为 33 个系列、49 条内部配置和 35 条前台代表。
 
 ## 本版调整
 
@@ -20,4 +20,4 @@
 
 模型、版本、档位、基准框架、生产 CLI、来源日期分别留存。LiveBench 逐模型设置由官方前端静态解析；Epoch 采用已选运行 mean_score 和 SE；Scale Full/HARD 与其执行条件独立保存；Vals 的独立任务、版本和官方 no-fallback 口径继续使用。来源清单见 [Registry v3.4](llm_pk_data_source_registry_v3_4.md)。
 
-Practical Adjustment 仍为 v1.4：P = max(0, R + speedDelta + costDelta)。速度使用原有吞吐/TTFT，成本使用 1M 输入 + 0.25M 输出 token 场景及已审核订阅额度。评测耗时和任务成本不替代路由速度或 API 单价；订阅可用额度未知时保留相应缺失。
+Practical Adjustment 升至 v1.5，仍用 P = max(0, R + speedDelta + costDelta) 和原有饱和效用/奖惩尺度。速度与成本各有 70% 任务预算：AA 代理 35%、Vals 25%、AA 任务折算 10%；速度余下 30% 均分吞吐/TTFT，成本余下 30% 使用原标准场景。任务实际耗时、费用与 API 响应、单价分别保留。实用附加分不进入能力分及雷达图。完整权重、缺测规则与订阅折算见 [Practical Adjustment v1.5](llm_pk_practical_adjustment_v1_5.md)。

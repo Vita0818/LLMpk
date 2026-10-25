@@ -57,11 +57,16 @@ const allowedValsKeys = new Set([
   'sourceProfile', 'sourceHarness', 'profileFallback', 'hasRefusalFallbackNotice',
   'publishedRawValue', 'scoreBasis', 'fallbackCount', 'refusalCount',
 ]);
+const allowedPracticalKeys = new Set([
+  'id', 'label', 'domain', 'weight', 'rawValue', 'referenceValue', 'ratio', 'utility',
+  'contribution', 'unit', 'sourceUrl', 'sourceUpdated', 'sourceProfile', 'sourceHarness', 'notes',
+]);
 
 if (
   publicSnapshot.schemaVersion !== 2
   || typeof publicSnapshot.scoringVersion !== 'string'
   || !/^\d+\.\d+$/u.test(publicSnapshot.scoringVersion)
+  || !/^\d+\.\d+$/u.test(publicSnapshot.practicalAdjustmentVersion ?? '')
   || !Array.isArray(publicSnapshot.scores)
   || publicSnapshot.scores.length === 0
 ) {
@@ -69,6 +74,34 @@ if (
 }
 
 for (const score of publicSnapshot.scores) {
+  const components = score.practicalBreakdown?.components;
+  if (!Array.isArray(components) || components.length !== 29
+    || new Set(components.map(component => component.id)).size !== components.length) {
+    throw new Error('Public practical adjustment must contain 29 unique registered components.');
+  }
+  for (const component of components) {
+    if (Object.keys(component).some(key => !allowedPracticalKeys.has(key))
+      || !['speed', 'cost'].includes(component.domain)
+      || !['s', 't/s', 'USD/task', 'USD/1.25M'].includes(component.unit)
+      || !Number.isFinite(component.weight) || component.weight <= 0 || component.weight > 1
+      || ['rawValue', 'referenceValue', 'ratio'].some(key => component[key] !== null
+        && (!Number.isFinite(component[key]) || component[key] < 0))
+      || ['utility', 'contribution'].some(key => component[key] !== null
+        && (!Number.isFinite(component[key]) || Math.abs(component[key]) > 1))
+      || !['id', 'label', 'notes'].every(key => typeof component[key] === 'string' && component[key].length < 1000)
+      || (component.sourceUpdated !== undefined && !/^\d{4}-\d{2}-\d{2}$/u.test(component.sourceUpdated))) {
+      throw new Error('Public practical adjustment contains unsupported data.');
+    }
+    if (component.sourceUrl !== undefined) {
+      const source = new URL(component.sourceUrl);
+      if (source.protocol !== 'https:' || !['artificialanalysis.ai', 'www.vals.ai'].includes(source.hostname)
+        || source.username || source.password || source.search) throw new Error('Invalid public practical source URL.');
+    }
+  }
+  for (const domain of ['speed', 'cost']) {
+    const weight = components.filter(component => component.domain === domain).reduce((sum, component) => sum + component.weight, 0);
+    if (Math.abs(weight - 1) > 1e-10) throw new Error('Public practical weights must sum to one per domain.');
+  }
   const unexpectedKeys = Object.keys(score.config ?? {})
     .filter((key) => !allowedConfigurationKeys.has(key));
   if (unexpectedKeys.length > 0) {

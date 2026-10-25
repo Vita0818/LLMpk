@@ -5153,4 +5153,4 @@ export const BUILT_IN_CONFIGURATION_PRESET_COUNT = BUILT_IN_CONFIGURATION_PRESET
  * additions visible during Vite hot updates as well as after a full reload.
  */
 export const BUILT_IN_CONFIGURATION_PRESET_INVENTORY_VERSION =
-  '2026-10-25-scoring34-source-revision-v59';
+  '2026-10-25-practical15-task-efficiency-v60';

@@ -29,9 +29,10 @@ assert.deepEqual([...observedIds].sort(), [...definitions.keys()].sort(),
   'Every benchmark already attached to the current cohort must have a positive weight and public field.');
 for (const score of snapshot.scores) {
   const rows = buildConfigurationMetricRows(score);
-  assert.equal(rows.length, 88);
-  assert.deepEqual(rows.slice(0, -4).map(row => row.id).sort(), [...definitions.keys()].sort());
-  assert.ok(rows.slice(0, -4).every(row => row.weightInDomain! > 0));
+  assert.equal(rows.length, 115);
+  const capabilityRows = rows.filter(row => row.domainId !== null);
+  assert.deepEqual(capabilityRows.map(row => row.id).sort(), [...definitions.keys()].sort());
+  assert.ok(capabilityRows.every(row => row.weightInDomain! > 0));
   for (const observation of Object.values(score.config.observations)) {
     assert.match(observation.sourceSnapshotDate, /^\d{4}-\d{2}-\d{2}$/u,
       'Old versions must retain an inspectable source date.');

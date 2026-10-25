@@ -62,7 +62,7 @@ for (const change of ['identity', 'version', 'base', 'duplicate', 'profile', 'ha
 
 const argon = publicSnapshot.scores.find(score => score.config.name.startsWith('Gemini 4 Argon'))! as PublicLeaderboardScore;
 const rows = buildConfigurationMetricRows(argon);
-assert.equal(rows.length, 88);
+assert.equal(rows.length, 115);
 assert.equal(rows.filter(row => row.weightInDomain! > 0).length, 84);
 assert.match(rows.find(row => row.id === 'epoch_mirrorcode_v1')!.title, /SE .*标准误/u);
 assert.match(rows.find(row => row.id === 'aa_scicode')!.title, /来源正在复核/u);

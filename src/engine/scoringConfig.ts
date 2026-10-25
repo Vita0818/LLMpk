@@ -7,7 +7,7 @@ import type { CoverageStatus, DomainId } from '../types/llm_pk';
 export const SCORING_CONFIG = {
   version: '3.4',
   practicalAdjustment: {
-    version: '1.4',
+    version: '1.5',
     speed: {
       /** Positive utility approaches this reward without reaching it. */
       rewardScale: 7.5,
@@ -19,6 +19,15 @@ export const SCORING_CONFIG = {
       rewardScale: 7.5,
       /** Negative utility approaches this penalty without reaching it. */
       penaltyScale: 12,
+    },
+    /** Same 70/30 task/interaction budget in both additive domains. */
+    weights: {
+      aaAgentTask: 0.35,
+      valsTasks: 0.25,
+      aaIndexTask: 0.10,
+      throughput: 0.15,
+      ttft: 0.15,
+      scenarioCost: 0.30,
     },
   },
   reliability: {

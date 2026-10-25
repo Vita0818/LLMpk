@@ -33,6 +33,8 @@ const expectedBenchmarkIds = CONFIGURATION_DETAIL_DOMAIN_ORDER.flatMap((domainId
   ),
 ]);
 const expectedTrailingIds = [
+  ...apiScore.practicalBreakdown.components!.filter(component => component.id.includes('-task-')
+    || component.id === 'cost-scenario').map(component => `practical_${component.id}`),
   'speed_throughput',
   'speed_ttft',
   'cost_input',

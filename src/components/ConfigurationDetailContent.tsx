@@ -6,6 +6,7 @@ import type { DomainId } from '../types/llm_pk';
 import type { PublicLeaderboardScore } from '../types/publicLeaderboard';
 import { getProviderBrandTheme } from '../utils/providerColors';
 import { RadarChart } from './RadarChart';
+import { formatPracticalAdjustment, practicalAdjustmentTextClass } from '../utils/practicalAdjustment';
 
 export const CONFIGURATION_DETAIL_DOMAIN_ORDER: readonly DomainId[] = [
   'chatting',
@@ -25,6 +26,7 @@ export interface ConfigurationMetricRow {
   title: string;
   sourceUrl?: string;
   weightInDomain?: number;
+  practicalWeight?: number;
   qualityStatus?: 'under-review' | 'legacy';
   profileMismatch?: boolean;
 }
@@ -165,9 +167,26 @@ export const buildConfigurationMetricRows = (
     : undefined;
   const inputPrice = scoreItem.config.openRouterData?.inputPricePerMToken;
   const outputPrice = scoreItem.config.openRouterData?.outputPricePerMToken;
+  const practicalRows: ConfigurationMetricRow[] = (scoreItem.practicalBreakdown.components ?? [])
+    .filter(component => component.id.includes('-task-') || component.id === 'cost-scenario')
+    .map(component => ({
+      id: `practical_${component.id}`,
+      label: component.label,
+      value: component.rawValue === null ? '--'
+        : component.unit === 's' ? `${component.rawValue.toFixed(0)} s`
+        : `$${component.rawValue.toLocaleString('en-US', { maximumFractionDigits: 4 })}`,
+      color: component.domain === 'speed' ? '#F97316' : '#6366F1',
+      domainId: null, practicalWeight: component.weight, sourceUrl: component.sourceUrl,
+      title: [component.domain === 'speed' ? '速度附加分' : '成本附加分',
+        `配置权重 ${formatMetricWeight(component.weight)}`,
+        component.referenceValue === null ? '参考中位数缺测' : `同口径参考中位数 ${component.referenceValue.toFixed(4)} ${component.unit}`,
+        component.sourceProfile, component.sourceHarness, component.sourceUpdated,
+        component.notes].filter(Boolean).join(' · '),
+    }));
 
   return [
     ...benchmarkRows,
+    ...practicalRows,
     {
       id: 'speed_throughput',
       label: 'Throughput Speed',
@@ -177,7 +196,8 @@ export const buildConfigurationMetricRows = (
           : throughput.toFixed(1),
       color: '#F97316',
       domainId: null,
-      title: 'Throughput Speed - Speed Metric (Raw Value)',
+      practicalWeight: scoreItem.practicalBreakdown.components?.find(component => component.id === 'speed-throughput')?.weight,
+      title: '速度附加分 · 输出吞吐 15% · 同模型 API 测速，订阅路线并非独立实测。',
     },
     {
       id: 'speed_ttft',
@@ -188,7 +208,8 @@ export const buildConfigurationMetricRows = (
           : (ttft * 1000).toFixed(0),
       color: '#F97316',
       domainId: null,
-      title: 'TTFT Latency - Speed Metric (Raw Value)',
+      practicalWeight: scoreItem.practicalBreakdown.components?.find(component => component.id === 'speed-ttft')?.weight,
+      title: '速度附加分 · 首 token 延迟 15% · 包含首个推理 token，不等于首个答案。',
     },
     {
       id: 'cost_input',
@@ -218,6 +239,22 @@ export const buildConfigurationMetricRows = (
       title: subscriptionCostTitle ?? 'Output Price - Price Metric (Raw Value)',
     },
   ];
+};
+
+/** Practical deltas remain outside the six-axis capability radar. */
+export const PracticalAdjustmentSummary: React.FC<{ scoreItem: PublicLeaderboardScore }> = ({ scoreItem }) => {
+  const breakdown = scoreItem.practicalBreakdown;
+  return <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-[11px] text-neutral-500" aria-label="速度与成本附加分">
+    {(['speed', 'cost'] as const).map(domain => {
+      const delta = domain === 'speed' ? breakdown.speedDelta : breakdown.costDelta;
+      const coverage = domain === 'speed' ? breakdown.speedCoverage : breakdown.costCoverage;
+      return <span key={domain} title="缺测项不贡献附加分，已测指标不放大到满权重；雷达图只展示六个能力领域。">
+        {domain === 'speed' ? '速度' : '成本'}{' '}
+        <strong className={practicalAdjustmentTextClass(delta)}>{formatPracticalAdjustment(delta)}</strong>
+        {coverage !== undefined ? ` · 覆盖 ${(coverage * 100).toFixed(0)}%` : ''}
+      </span>;
+    })}
+  </div>;
 };
 
 interface ConfigurationRadarProps {
@@ -324,6 +361,7 @@ export const ConfigurationMetricList: React.FC<ConfigurationMetricListProps> = (
                 </a>
               ) : <span className="truncate">{row.label}</span>}
               {row.weightInDomain !== undefined && <span className="shrink-0 text-[9px] font-normal text-neutral-500" title="领域内配置权重">{formatMetricWeight(row.weightInDomain)}</span>}
+              {row.practicalWeight !== undefined && <span className="shrink-0 text-[9px] font-normal text-neutral-500" title="实用附加分领域内配置权重">{formatMetricWeight(row.practicalWeight)}</span>}
               {row.qualityStatus && <span className="shrink-0 text-[9px] font-normal text-amber-700" aria-label={row.qualityStatus === 'under-review' ? '来源正在复核' : '旧版数据集'}>{row.qualityStatus === 'under-review' ? '复核' : '旧版'}</span>}
               {row.profileMismatch && <span className="shrink-0 text-[9px] font-normal text-neutral-500" title="使用同一模型已有的实测档位；实际档位见此行来源说明">异档</span>}
             </span>
