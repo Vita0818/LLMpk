@@ -51,10 +51,19 @@ import {
   PlayModeWeightsCard,
 } from './components/PlayModeTitleCards';
 import { PLAY_MODE_ENABLED } from './config/featureFlags';
+import { PRICE_TIERS, type PriceTierId } from './utils/priceTiers';
+import {
+  DEFAULT_PRICE_TIER,
+  priceTierFromHash,
+  priceTierPageHash,
+  rankPriceTierConfigurations,
+} from './utils/priceTierRanking';
 
 type SortKey = 'rawCapabilityScore' | 'practicalScore' | DomainId;
-type MainTab = 'leaderboard' | 'pareto' | 'custom' | 'side_by_side' | 'overview';
+type MainTab = 'leaderboard' | 'price' | 'pareto' | 'custom' | 'side_by_side' | 'overview';
 type ActiveTab = MainTab | 'detail';
+const MAIN_TABS: readonly MainTab[] = ['leaderboard', 'price', 'pareto', 'custom', 'side_by_side', 'overview'];
+const initialPriceTier = () => typeof window === 'undefined' ? null : priceTierFromHash(window.location.hash);
 
 /** intro -> model loop -> radar overview -> outro weights -> outro credits. */
 type PlayModePhase =
@@ -95,8 +104,9 @@ const getScoreDepthStyle = (score: number | null | undefined) => {
  * - Header Pill Navbar: bg-neutral-100 rounded-[1.5rem] with bg-black active pill
  */
 export const VercelAestheticPreview: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<ActiveTab>('leaderboard');
-  const [lastMainTab, setLastMainTab] = useState<MainTab>('leaderboard');
+  const [activeTab, setActiveTab] = useState<ActiveTab>(() => initialPriceTier() ? 'price' : 'leaderboard');
+  const [lastMainTab, setLastMainTab] = useState<MainTab>(() => initialPriceTier() ? 'price' : 'leaderboard');
+  const [priceTierId, setPriceTierId] = useState<PriceTierId>(() => initialPriceTier() ?? DEFAULT_PRICE_TIER);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedConfigId, setSelectedConfigId] = useState<string>('');
   const [filterCategory, setFilterCategory] = useState<'all' | 'reasoning' | 'top'>('all');
@@ -109,6 +119,34 @@ export const VercelAestheticPreview: React.FC = () => {
       .map((item) => item.config.id)
   );
   const scores: PublicLeaderboardScore[] = READER_SCORES;
+
+  const navigateToMainTab = (tab: MainTab, tierId = priceTierId) => {
+    setActiveTab(tab);
+    setLastMainTab(tab);
+    if (tab === 'price') setPriceTierId(tierId);
+    const hash = tab === 'price' ? priceTierPageHash(tierId) : '';
+    if (activeTab !== tab || window.location.hash !== hash) {
+      window.history.pushState({ llmpkMainTab: tab }, '', `${window.location.pathname}${window.location.search}${hash}`);
+    }
+  };
+
+  useEffect(() => {
+    const restoreNavigation = () => {
+      const tierId = priceTierFromHash(window.location.hash);
+      const storedTab = window.history.state?.llmpkMainTab as MainTab | undefined;
+      const tab = tierId ? 'price'
+        : storedTab && storedTab !== 'price' && MAIN_TABS.includes(storedTab) ? storedTab : 'leaderboard';
+      setActiveTab(tab);
+      setLastMainTab(tab);
+      if (tierId) setPriceTierId(tierId);
+    };
+    window.addEventListener('popstate', restoreNavigation);
+    window.addEventListener('hashchange', restoreNavigation);
+    return () => {
+      window.removeEventListener('popstate', restoreNavigation);
+      window.removeEventListener('hashchange', restoreNavigation);
+    };
+  }, []);
 
   // Play Mode: rank one representative configuration per distinct radar route.
   const [isPlayModeActive, setIsPlayModeActive] = useState(false);
@@ -192,6 +230,15 @@ export const VercelAestheticPreview: React.FC = () => {
           || a.config.name.localeCompare(b.config.name);
       });
   }, [scores, searchTerm, filterCategory, sortKey, sortOrder]);
+
+  const leaderboardRows = useMemo(() => {
+    let rank = 0;
+    return filteredScores.map(item => ({ item, rank: item.eligibleForGlobalLeaderboard ? ++rank : null }));
+  }, [filteredScores]);
+  const priceTierRows = useMemo(
+    () => rankPriceTierConfigurations(PUBLIC_SCORES, priceTierId, sortKey, sortOrder),
+    [priceTierId, sortKey, sortOrder],
+  );
 
   // Playback and radar overview deliberately ignore search/filter UI state.
   // Equivalent API and subscription routes share one radar slot, represented
@@ -593,7 +640,7 @@ export const VercelAestheticPreview: React.FC = () => {
   }, [isPlayModeCleanView]);
 
   const selectedScoreItem =
-    scores.find((s) => s.config.id === selectedConfigId) || scores[0];
+    PUBLIC_SCORES.find((s) => s.config.id === selectedConfigId) || scores[0];
   const currentPlayModeItem = PLAY_MODE_ENABLED && isPlayModeActive
     ? playModeQueue[playModeQueue.length - 1 - playModeIndex]
     : null;
@@ -750,15 +797,12 @@ export const VercelAestheticPreview: React.FC = () => {
           </div>
 
           {/* Top Right Main Tab Switcher & Play Mode Button */}
-          <div className="flex items-center gap-2">
+          <div className="flex min-w-0 items-center gap-2">
             {activeTab !== 'detail' && (
-              <div className="flex items-center p-1 bg-neutral-100/90 rounded-full border border-neutral-200/80 text-[10px] sm:text-xs font-bold font-brand-mono">
+              <div className="flex min-w-0 items-center overflow-x-auto p-1 bg-neutral-100/90 rounded-full border border-neutral-200/80 text-[10px] sm:text-xs font-bold font-brand-mono">
                 <button
-                  onClick={() => {
-                    setActiveTab('leaderboard');
-                    setLastMainTab('leaderboard');
-                  }}
-                  className={`px-2.5 sm:px-3.5 py-1.5 rounded-full transition-all ${
+                  onClick={() => navigateToMainTab('leaderboard')}
+                  className={`shrink-0 px-2.5 sm:px-3.5 py-1.5 rounded-full transition-all ${
                     activeTab === 'leaderboard'
                       ? 'bg-black text-white shadow-2xs'
                       : 'text-neutral-600 hover:text-neutral-950'
@@ -768,11 +812,19 @@ export const VercelAestheticPreview: React.FC = () => {
                   <span className="hidden sm:inline">全量榜单</span>
                 </button>
                 <button
-                  onClick={() => {
-                    setActiveTab('pareto');
-                    setLastMainTab('pareto');
-                  }}
-                  className={`px-2.5 sm:px-3.5 py-1.5 rounded-full transition-all ${
+                  onClick={() => navigateToMainTab('price')}
+                  className={`shrink-0 px-2.5 sm:px-3.5 py-1.5 rounded-full transition-all ${
+                    activeTab === 'price'
+                      ? 'bg-black text-white shadow-2xs'
+                      : 'text-neutral-600 hover:text-neutral-950'
+                  }`}
+                >
+                  <span className="sm:hidden">价格</span>
+                  <span className="hidden sm:inline">价格分类</span>
+                </button>
+                <button
+                  onClick={() => navigateToMainTab('pareto')}
+                  className={`shrink-0 px-2.5 sm:px-3.5 py-1.5 rounded-full transition-all ${
                     activeTab === 'pareto'
                       ? 'bg-black text-white shadow-2xs'
                       : 'text-neutral-600 hover:text-neutral-950'
@@ -782,11 +834,8 @@ export const VercelAestheticPreview: React.FC = () => {
                   <span className="hidden sm:inline">三维 Pareto</span>
                 </button>
                 <button
-                  onClick={() => {
-                    setActiveTab('custom');
-                    setLastMainTab('custom');
-                  }}
-                  className={`px-2.5 sm:px-3.5 py-1.5 rounded-full transition-all ${
+                  onClick={() => navigateToMainTab('custom')}
+                  className={`shrink-0 px-2.5 sm:px-3.5 py-1.5 rounded-full transition-all ${
                     activeTab === 'custom'
                       ? 'bg-black text-white shadow-2xs'
                       : 'text-neutral-600 hover:text-neutral-950'
@@ -796,11 +845,8 @@ export const VercelAestheticPreview: React.FC = () => {
                   <span className="hidden sm:inline">自定义排行</span>
                 </button>
                 <button
-                  onClick={() => {
-                    setActiveTab('side_by_side');
-                    setLastMainTab('side_by_side');
-                  }}
-                  className={`px-2.5 sm:px-3.5 py-1.5 rounded-full transition-all ${
+                  onClick={() => navigateToMainTab('side_by_side')}
+                  className={`shrink-0 px-2.5 sm:px-3.5 py-1.5 rounded-full transition-all ${
                     activeTab === 'side_by_side'
                       ? 'bg-black text-white shadow-2xs'
                       : 'text-neutral-600 hover:text-neutral-950'
@@ -810,11 +856,8 @@ export const VercelAestheticPreview: React.FC = () => {
                   <span className="hidden sm:inline">并排对比</span>
                 </button>
                 <button
-                  onClick={() => {
-                    setActiveTab('overview');
-                    setLastMainTab('overview');
-                  }}
-                  className={`px-2.5 sm:px-3.5 py-1.5 rounded-full transition-all ${
+                  onClick={() => navigateToMainTab('overview')}
+                  className={`shrink-0 px-2.5 sm:px-3.5 py-1.5 rounded-full transition-all ${
                     activeTab === 'overview'
                       ? 'bg-black text-white shadow-2xs'
                       : 'text-neutral-600 hover:text-neutral-950'
@@ -859,8 +902,25 @@ export const VercelAestheticPreview: React.FC = () => {
         }
       >
         {/* VIEW 1: MODELS LEADERBOARD */}
-        {activeTab === 'leaderboard' && (
+        {(activeTab === 'leaderboard' || activeTab === 'price') && (
           <div className="space-y-6">
+            {activeTab === 'price' && (
+              <div className="flex flex-wrap gap-2" role="group" aria-label="价格区间">
+                {PRICE_TIERS.map(tier => (
+                  <button
+                    key={tier.id}
+                    type="button"
+                    aria-pressed={tier.id === priceTierId}
+                    onClick={() => navigateToMainTab('price', tier.id)}
+                    className={`rounded-full px-3.5 py-2 text-xs font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-900 focus-visible:ring-offset-2 ${
+                      tier.id === priceTierId ? 'bg-black text-white' : 'bg-neutral-100 text-neutral-600 hover:text-neutral-950'
+                    }`}
+                  >
+                    {tier.id}
+                  </button>
+                ))}
+              </div>
+            )}
             {/* High-Density Authentic Table */}
             <div className="w-full overflow-x-auto rounded-xl border border-neutral-200 bg-white">
               <table className="w-full text-left border-collapse text-xs">
@@ -893,12 +953,7 @@ export const VercelAestheticPreview: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-neutral-100 font-sans text-neutral-900">
-                  {filteredScores.map((item, index) => {
-                    const rank = item.eligibleForGlobalLeaderboard
-                      ? filteredScores
-                          .slice(0, index + 1)
-                          .filter((score) => score.eligibleForGlobalLeaderboard).length
-                      : null;
+                  {(activeTab === 'price' ? priceTierRows : leaderboardRows).map(({ item, rank }) => {
                     const parsed = parseConfigName(item.config.name);
                     const capabilityScore = item.rawCapabilityScore;
                     const practicalAdjustment = getPracticalAdjustment(item.practicalBreakdown);

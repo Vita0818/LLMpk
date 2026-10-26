@@ -1,0 +1,1694 @@
+{
+  "schemaVersion": 1,
+  "policyVersion": "price-tiers/v1",
+  "grain": "configuration",
+  "source": {
+    "leaderboard": {
+      "path": "src/data/publicLeaderboardSnapshot.json",
+      "sha256": "a37b4534f3bf6af10634af571e96c91e1fc902a32ca1ccfca53d27cb2150d2d4"
+    },
+    "subscriptionEvidence": {
+      "path": "src/data/subscriptionPricing.ts",
+      "sha256": "52a24756586f6d49923d16e743543207b6952badd8fc138ba256d50467afb42f"
+    },
+    "cohort": {
+      "id": "current_product_lines_2026_10_24_v3_4_source_revision",
+      "snapshotDate": "2026-10-24"
+    },
+    "scoringVersion": "3.4",
+    "practicalAdjustmentVersion": "1.5",
+    "freshnessNote": "Uses the existing reviewed snapshot; the cohort date is not a new price check or a per-price observation date."
+  },
+  "policy": {
+    "currency": "USD",
+    "apiPriceUnit": "USD/1M tokens",
+    "scenario": {
+      "inputMTokens": 1,
+      "outputMTokens": 0.25
+    },
+    "apiCostFormula": "inputPricePerMToken + 0.25 * outputPricePerMToken",
+    "subscriptionCostFormula": "apiScenarioCostUSD * (monthlyPriceUSD / (apiEquivalentCostUSD * usableQuotaFraction))",
+    "boundaryMethod": "geometric_mean_of_adjacent_scenario_costs",
+    "intervalConvention": "lower_inclusive_upper_exclusive",
+    "equalityGoesTo": "higher_tier",
+    "freeCostTierId": "0.10/0.50",
+    "unknownTierId": null,
+    "subscriptionAssumption": "Full utilization; agentic allowance measurements are an approximation for this token scenario. Legacy estimates remain explicitly labelled."
+  },
+  "tiers": [
+    {
+      "id": "0.10/0.50",
+      "input": 0.1,
+      "output": 0.5,
+      "scenarioCostUSD": 0.225,
+      "lowerBoundUSD": 0,
+      "upperBoundUSD": 0.31819805153394637
+    },
+    {
+      "id": "0.20/1",
+      "input": 0.2,
+      "output": 1,
+      "scenarioCostUSD": 0.45,
+      "lowerBoundUSD": 0.31819805153394637,
+      "upperBoundUSD": 0.6363961030678927
+    },
+    {
+      "id": "0.40/2",
+      "input": 0.4,
+      "output": 2,
+      "scenarioCostUSD": 0.9,
+      "lowerBoundUSD": 0.6363961030678927,
+      "upperBoundUSD": 1.4230249470757708
+    },
+    {
+      "id": "1/5",
+      "input": 1,
+      "output": 5,
+      "scenarioCostUSD": 2.25,
+      "lowerBoundUSD": 1.4230249470757708,
+      "upperBoundUSD": 3.181980515339464
+    },
+    {
+      "id": "2/10",
+      "input": 2,
+      "output": 10,
+      "scenarioCostUSD": 4.5,
+      "lowerBoundUSD": 3.181980515339464,
+      "upperBoundUSD": 6.363961030678928
+    },
+    {
+      "id": "4/20",
+      "input": 4,
+      "output": 20,
+      "scenarioCostUSD": 9,
+      "lowerBoundUSD": 6.363961030678928,
+      "upperBoundUSD": 14.230249470757707
+    },
+    {
+      "id": "10/50",
+      "input": 10,
+      "output": 50,
+      "scenarioCostUSD": 22.5,
+      "lowerBoundUSD": 14.230249470757707,
+      "upperBoundUSD": null
+    }
+  ],
+  "summary": {
+    "configurationCount": 49,
+    "distinctModelProfileCount": 33,
+    "apiConfigurationCount": 34,
+    "subscriptionConfigurationCount": 15,
+    "readerConfigurationCount": 35,
+    "classifiedConfigurationCount": 48,
+    "unknownConfigurationCount": 1,
+    "freeConfigurationCount": 1,
+    "subscriptionEvidenceCounts": {
+      "measured": 9,
+      "legacy-estimate": 5,
+      "official-plan-only": 1,
+      "unreviewed": 0
+    },
+    "maxReconciliationDifferenceUSD": 0
+  },
+  "groups": [
+    {
+      "tierId": "0.10/0.50",
+      "configurationIds": [
+        "config-62e7bbee3ebcfddf",
+        "config-31677d17833ab7d9",
+        "config-12b0bb1b86998780",
+        "config-90877c01690a6318",
+        "config-6730082e64ff17b3",
+        "config-934c1b133cfb7a78",
+        "config-8b6c1105bfeb3440",
+        "config-1ae28971017e9754",
+        "config-85670e3d99150492",
+        "config-7bb10837095b166c",
+        "config-fafceba3f2aabda8",
+        "config-0b43fd9bc29df7bb",
+        "config-f3430fb9bfec6aa8",
+        "config-273c37a664bda620",
+        "config-740827594f71be80",
+        "config-ed58c1a6a6c08d31",
+        "config-a59f90c0a8e01729"
+      ],
+      "configurationCount": 17,
+      "apiConfigurationCount": 8,
+      "subscriptionConfigurationCount": 9,
+      "readerConfigurationIds": [
+        "config-62e7bbee3ebcfddf",
+        "config-31677d17833ab7d9",
+        "config-12b0bb1b86998780",
+        "config-6730082e64ff17b3",
+        "config-934c1b133cfb7a78",
+        "config-1ae28971017e9754",
+        "config-85670e3d99150492",
+        "config-7bb10837095b166c",
+        "config-fafceba3f2aabda8",
+        "config-0b43fd9bc29df7bb",
+        "config-f3430fb9bfec6aa8",
+        "config-740827594f71be80",
+        "config-a59f90c0a8e01729"
+      ],
+      "readerConfigurationCount": 13
+    },
+    {
+      "tierId": "0.20/1",
+      "configurationIds": [
+        "config-161542df5dce4e29",
+        "config-a20a5d5f4c61a59b",
+        "config-dc6c678372a6e996",
+        "config-a4c15858bba49a5a"
+      ],
+      "configurationCount": 4,
+      "apiConfigurationCount": 2,
+      "subscriptionConfigurationCount": 2,
+      "readerConfigurationIds": [
+        "config-161542df5dce4e29",
+        "config-dc6c678372a6e996",
+        "config-a4c15858bba49a5a"
+      ],
+      "readerConfigurationCount": 3
+    },
+    {
+      "tierId": "0.40/2",
+      "configurationIds": [
+        "config-fc19451bee20d47f",
+        "config-388e51ea4a6459b4",
+        "config-f2279f78a620a0c7",
+        "config-9ada8a1d5a5efa25",
+        "config-68c8a84d392f7e4c"
+      ],
+      "configurationCount": 5,
+      "apiConfigurationCount": 5,
+      "subscriptionConfigurationCount": 0,
+      "readerConfigurationIds": [
+        "config-388e51ea4a6459b4",
+        "config-f2279f78a620a0c7",
+        "config-9ada8a1d5a5efa25",
+        "config-68c8a84d392f7e4c"
+      ],
+      "readerConfigurationCount": 4
+    },
+    {
+      "tierId": "1/5",
+      "configurationIds": [
+        "config-1d117f1700170371",
+        "config-00fc9e9918f39433",
+        "config-a5ae0b0b78e42017",
+        "config-a33ad8feefd46d2b",
+        "config-79e91e6f41568e17",
+        "config-444109a4ade8365f",
+        "config-a449ea80057b272d",
+        "config-20488201e8b538dc",
+        "config-91257dec54cc72bd",
+        "config-999c67af18d1faea",
+        "config-4e556041e4717e48"
+      ],
+      "configurationCount": 11,
+      "apiConfigurationCount": 8,
+      "subscriptionConfigurationCount": 3,
+      "readerConfigurationIds": [
+        "config-1d117f1700170371",
+        "config-00fc9e9918f39433",
+        "config-a33ad8feefd46d2b",
+        "config-79e91e6f41568e17",
+        "config-444109a4ade8365f",
+        "config-a449ea80057b272d",
+        "config-20488201e8b538dc",
+        "config-91257dec54cc72bd"
+      ],
+      "readerConfigurationCount": 8
+    },
+    {
+      "tierId": "2/10",
+      "configurationIds": [
+        "config-06a34fe6f8c703e0",
+        "config-d6b0ee48b6506195",
+        "config-21c9bc2ef65724f2",
+        "config-905327b808581854",
+        "config-a2f5be42daf728b4",
+        "config-61d486c9c1066ff2",
+        "config-e118652d8c9129cb"
+      ],
+      "configurationCount": 7,
+      "apiConfigurationCount": 7,
+      "subscriptionConfigurationCount": 0,
+      "readerConfigurationIds": [
+        "config-06a34fe6f8c703e0",
+        "config-d6b0ee48b6506195",
+        "config-21c9bc2ef65724f2",
+        "config-61d486c9c1066ff2",
+        "config-e118652d8c9129cb"
+      ],
+      "readerConfigurationCount": 5
+    },
+    {
+      "tierId": "4/20",
+      "configurationIds": [
+        "config-bf6bff6d9ce4b074",
+        "config-27488fc68ef4f735"
+      ],
+      "configurationCount": 2,
+      "apiConfigurationCount": 2,
+      "subscriptionConfigurationCount": 0,
+      "readerConfigurationIds": [
+        "config-27488fc68ef4f735"
+      ],
+      "readerConfigurationCount": 1
+    },
+    {
+      "tierId": "10/50",
+      "configurationIds": [
+        "config-acb93c8184c45049",
+        "config-b43b8cb50c3d8c0e"
+      ],
+      "configurationCount": 2,
+      "apiConfigurationCount": 2,
+      "subscriptionConfigurationCount": 0,
+      "readerConfigurationIds": [],
+      "readerConfigurationCount": 0
+    },
+    {
+      "tierId": null,
+      "configurationIds": [
+        "config-b37d0dcf3267fa43"
+      ],
+      "configurationCount": 1,
+      "apiConfigurationCount": 0,
+      "subscriptionConfigurationCount": 1,
+      "readerConfigurationIds": [
+        "config-b37d0dcf3267fa43"
+      ],
+      "readerConfigurationCount": 1
+    }
+  ],
+  "configurations": [
+    {
+      "configurationId": "config-1d117f1700170371",
+      "configurationName": "GLM-5.3 Max | --- | Z.ai API",
+      "modelProfile": "GLM-5.3 Max",
+      "provider": "Z.ai",
+      "harness": "--- · OpenRouter Chatroom (ORC)",
+      "access": "api",
+      "sourceScoreIndex": 0,
+      "apiPricing": {
+        "inputPricePerMToken": 0.9272431818181818,
+        "outputPricePerMToken": 3.5996409090909087,
+        "scenarioCostUSD": 1.827153409090909,
+        "tierId": "1/5"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 1.827153409090909,
+      "tierId": "1/5",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-1d117f1700170371",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-161542df5dce4e29",
+      "configurationName": "LongCat 2.0 Max | --- | Meituan API",
+      "modelProfile": "LongCat 2.0 Max",
+      "provider": "Meituan",
+      "harness": "--- · OpenRouter Chatroom (ORC)",
+      "access": "api",
+      "sourceScoreIndex": 1,
+      "apiPricing": {
+        "inputPricePerMToken": 0.3,
+        "outputPricePerMToken": 1.2,
+        "scenarioCostUSD": 0.6,
+        "tierId": "0.20/1"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 0.6,
+      "tierId": "0.20/1",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-161542df5dce4e29",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-fc19451bee20d47f",
+      "configurationName": "Gemini 3.5 Flash-Lite High | --- | Google API",
+      "modelProfile": "Gemini 3.5 Flash-Lite High",
+      "provider": "Google",
+      "harness": "--- · OpenRouter Chatroom (ORC)",
+      "access": "api",
+      "sourceScoreIndex": 2,
+      "apiPricing": {
+        "inputPricePerMToken": 0.315,
+        "outputPricePerMToken": 2.6250000000000004,
+        "scenarioCostUSD": 0.9712500000000002,
+        "tierId": "0.40/2"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 0.9712500000000002,
+      "tierId": "0.40/2",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-62e7bbee3ebcfddf",
+      "isReaderRepresentative": false
+    },
+    {
+      "configurationId": "config-62e7bbee3ebcfddf",
+      "configurationName": "Gemini 3.5 Flash-Lite High | --- | Google AI Pro",
+      "modelProfile": "Gemini 3.5 Flash-Lite High",
+      "provider": "Google AI Pro",
+      "harness": "--- · OpenRouter Chatroom (ORC)",
+      "access": "subscription",
+      "sourceScoreIndex": 3,
+      "apiPricing": {
+        "inputPricePerMToken": 0.315,
+        "outputPricePerMToken": 2.6250000000000004,
+        "scenarioCostUSD": 0.9712500000000002,
+        "tierId": "0.40/2"
+      },
+      "subscriptionPricing": {
+        "planName": "Google AI Pro",
+        "monthlyPriceUSD": 20,
+        "apiEquivalentCostUSD": 260,
+        "usableQuotaFraction": 1,
+        "usableMonthlyApiEquivalentUSD": 260,
+        "costMultiplier": 0.07692307692307693,
+        "evidence": {
+          "id": "legacy-subscription-estimate",
+          "kind": "legacy-estimate",
+          "checkedOn": "2026-10-11",
+          "publishedOn": null,
+          "sourceUrl": null,
+          "workload": null
+        }
+      },
+      "effectiveScenarioCostUSD": 0.07471153846153848,
+      "tierId": "0.10/0.50",
+      "status": "classified",
+      "pricingBasis": "subscription_full_utilization",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-62e7bbee3ebcfddf",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-acb93c8184c45049",
+      "configurationName": "Claude Fable 5.1 Max | Claude Code | Anthropic API",
+      "modelProfile": "Claude Fable 5.1 Max",
+      "provider": "Anthropic",
+      "harness": "Claude Code · Claude Code · Artificial Analysis Coding Agent Index",
+      "access": "api",
+      "sourceScoreIndex": 4,
+      "apiPricing": {
+        "inputPricePerMToken": 10,
+        "outputPricePerMToken": 50,
+        "scenarioCostUSD": 22.5,
+        "tierId": "10/50"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 22.5,
+      "tierId": "10/50",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-00fc9e9918f39433",
+      "isReaderRepresentative": false
+    },
+    {
+      "configurationId": "config-00fc9e9918f39433",
+      "configurationName": "Claude Fable 5.1 Max | Claude Code | Claude Max 20×",
+      "modelProfile": "Claude Fable 5.1 Max",
+      "provider": "Claude Max 20×",
+      "harness": "Claude Code · Claude Code · Artificial Analysis Coding Agent Index",
+      "access": "subscription",
+      "sourceScoreIndex": 5,
+      "apiPricing": {
+        "inputPricePerMToken": 10,
+        "outputPricePerMToken": 50,
+        "scenarioCostUSD": 22.5,
+        "tierId": "10/50"
+      },
+      "subscriptionPricing": {
+        "planName": "Claude Max 20×",
+        "monthlyPriceUSD": 200,
+        "apiEquivalentCostUSD": 4970,
+        "usableQuotaFraction": 0.5,
+        "usableMonthlyApiEquivalentUSD": 2485,
+        "costMultiplier": 0.08048289738430583,
+        "evidence": {
+          "id": "sa-2026-10-05-max-20x-fable-5-1",
+          "kind": "measured",
+          "checkedOn": "2026-10-11",
+          "publishedOn": "2026-10-05",
+          "sourceUrl": "https://newsletter.semianalysis.com/p/anthropic-subscriptions-offer-5x",
+          "workload": "agentic"
+        }
+      },
+      "effectiveScenarioCostUSD": 1.8108651911468814,
+      "tierId": "1/5",
+      "status": "classified",
+      "pricingBasis": "subscription_full_utilization",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-00fc9e9918f39433",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-b43b8cb50c3d8c0e",
+      "configurationName": "GPT-6 Astra Max | Codex CLI | OpenAI API",
+      "modelProfile": "GPT-6 Astra Max",
+      "provider": "OpenAI",
+      "harness": "Codex CLI · Codex CLI · Artificial Analysis Coding Agent Index",
+      "access": "api",
+      "sourceScoreIndex": 6,
+      "apiPricing": {
+        "inputPricePerMToken": 10,
+        "outputPricePerMToken": 50,
+        "scenarioCostUSD": 22.5,
+        "tierId": "10/50"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 22.5,
+      "tierId": "10/50",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-a33ad8feefd46d2b",
+      "isReaderRepresentative": false
+    },
+    {
+      "configurationId": "config-a5ae0b0b78e42017",
+      "configurationName": "GPT-6 Astra Max | Codex CLI | ChatGPT Plus",
+      "modelProfile": "GPT-6 Astra Max",
+      "provider": "ChatGPT Plus",
+      "harness": "Codex CLI · Codex CLI · Artificial Analysis Coding Agent Index",
+      "access": "subscription",
+      "sourceScoreIndex": 7,
+      "apiPricing": {
+        "inputPricePerMToken": 10,
+        "outputPricePerMToken": 50,
+        "scenarioCostUSD": 22.5,
+        "tierId": "10/50"
+      },
+      "subscriptionPricing": {
+        "planName": "ChatGPT Plus",
+        "monthlyPriceUSD": 20,
+        "apiEquivalentCostUSD": 162,
+        "usableQuotaFraction": 1,
+        "usableMonthlyApiEquivalentUSD": 162,
+        "costMultiplier": 0.12345679012345678,
+        "evidence": {
+          "id": "sa-2026-10-05-plus-astra-6",
+          "kind": "measured",
+          "checkedOn": "2026-10-11",
+          "publishedOn": "2026-10-05",
+          "sourceUrl": "https://newsletter.semianalysis.com/p/anthropic-subscriptions-offer-5x",
+          "workload": "agentic"
+        }
+      },
+      "effectiveScenarioCostUSD": 2.7777777777777777,
+      "tierId": "1/5",
+      "status": "classified",
+      "pricingBasis": "subscription_full_utilization",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-a33ad8feefd46d2b",
+      "isReaderRepresentative": false
+    },
+    {
+      "configurationId": "config-a33ad8feefd46d2b",
+      "configurationName": "GPT-6 Astra Max | Codex CLI | ChatGPT Pro $200",
+      "modelProfile": "GPT-6 Astra Max",
+      "provider": "ChatGPT Pro $200",
+      "harness": "Codex CLI · Codex CLI · Artificial Analysis Coding Agent Index",
+      "access": "subscription",
+      "sourceScoreIndex": 8,
+      "apiPricing": {
+        "inputPricePerMToken": 10,
+        "outputPricePerMToken": 50,
+        "scenarioCostUSD": 22.5,
+        "tierId": "10/50"
+      },
+      "subscriptionPricing": {
+        "planName": "ChatGPT Pro $200",
+        "monthlyPriceUSD": 200,
+        "apiEquivalentCostUSD": 2897,
+        "usableQuotaFraction": 1,
+        "usableMonthlyApiEquivalentUSD": 2897,
+        "costMultiplier": 0.06903693476009665,
+        "evidence": {
+          "id": "sa-2026-10-05-pro-200-astra-6",
+          "kind": "measured",
+          "checkedOn": "2026-10-11",
+          "publishedOn": "2026-10-05",
+          "sourceUrl": "https://newsletter.semianalysis.com/p/anthropic-subscriptions-offer-5x",
+          "workload": "agentic"
+        }
+      },
+      "effectiveScenarioCostUSD": 1.5533310321021745,
+      "tierId": "1/5",
+      "status": "classified",
+      "pricingBasis": "subscription_full_utilization",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-a33ad8feefd46d2b",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-31677d17833ab7d9",
+      "configurationName": "GPT-6 Luna Max | Codex CLI | OpenAI API",
+      "modelProfile": "GPT-6 Luna Max",
+      "provider": "OpenAI",
+      "harness": "Codex CLI · Codex CLI · Artificial Analysis Coding Agent Index",
+      "access": "api",
+      "sourceScoreIndex": 9,
+      "apiPricing": {
+        "inputPricePerMToken": 0.1,
+        "outputPricePerMToken": 0.5,
+        "scenarioCostUSD": 0.225,
+        "tierId": "0.10/0.50"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 0.225,
+      "tierId": "0.10/0.50",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-31677d17833ab7d9",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-bf6bff6d9ce4b074",
+      "configurationName": "Claude Opus 5.5 Max | Claude Code | Anthropic API",
+      "modelProfile": "Claude Opus 5.5 Max",
+      "provider": "Anthropic",
+      "harness": "Claude Code · Claude Code · Artificial Analysis Coding Agent Index",
+      "access": "api",
+      "sourceScoreIndex": 10,
+      "apiPricing": {
+        "inputPricePerMToken": 4,
+        "outputPricePerMToken": 20,
+        "scenarioCostUSD": 9,
+        "tierId": "4/20"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 9,
+      "tierId": "4/20",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-12b0bb1b86998780",
+      "isReaderRepresentative": false
+    },
+    {
+      "configurationId": "config-12b0bb1b86998780",
+      "configurationName": "Claude Opus 5.5 Max | Claude Code | Claude Max 20×",
+      "modelProfile": "Claude Opus 5.5 Max",
+      "provider": "Claude Max 20×",
+      "harness": "Claude Code · Claude Code · Artificial Analysis Coding Agent Index",
+      "access": "subscription",
+      "sourceScoreIndex": 11,
+      "apiPricing": {
+        "inputPricePerMToken": 4,
+        "outputPricePerMToken": 20,
+        "scenarioCostUSD": 9,
+        "tierId": "4/20"
+      },
+      "subscriptionPricing": {
+        "planName": "Claude Max 20×",
+        "monthlyPriceUSD": 200,
+        "apiEquivalentCostUSD": 11726,
+        "usableQuotaFraction": 1,
+        "usableMonthlyApiEquivalentUSD": 11726,
+        "costMultiplier": 0.017056114617090227,
+        "evidence": {
+          "id": "sa-2026-10-05-max-20x-opus-5-5",
+          "kind": "measured",
+          "checkedOn": "2026-10-11",
+          "publishedOn": "2026-10-05",
+          "sourceUrl": "https://newsletter.semianalysis.com/p/anthropic-subscriptions-offer-5x",
+          "workload": "agentic"
+        }
+      },
+      "effectiveScenarioCostUSD": 0.15350503155381204,
+      "tierId": "0.10/0.50",
+      "status": "classified",
+      "pricingBasis": "subscription_full_utilization",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-12b0bb1b86998780",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-90877c01690a6318",
+      "configurationName": "Claude Opus 5.5 Max | Claude Code | Claude Pro",
+      "modelProfile": "Claude Opus 5.5 Max",
+      "provider": "Claude Pro",
+      "harness": "Claude Code · Claude Code · Artificial Analysis Coding Agent Index",
+      "access": "subscription",
+      "sourceScoreIndex": 12,
+      "apiPricing": {
+        "inputPricePerMToken": 4,
+        "outputPricePerMToken": 20,
+        "scenarioCostUSD": 9,
+        "tierId": "4/20"
+      },
+      "subscriptionPricing": {
+        "planName": "Claude Pro",
+        "monthlyPriceUSD": 20,
+        "apiEquivalentCostUSD": 1178,
+        "usableQuotaFraction": 1,
+        "usableMonthlyApiEquivalentUSD": 1178,
+        "costMultiplier": 0.01697792869269949,
+        "evidence": {
+          "id": "sa-2026-10-05-pro-opus-5-5",
+          "kind": "measured",
+          "checkedOn": "2026-10-11",
+          "publishedOn": "2026-10-05",
+          "sourceUrl": "https://newsletter.semianalysis.com/p/anthropic-subscriptions-offer-5x",
+          "workload": "agentic"
+        }
+      },
+      "effectiveScenarioCostUSD": 0.15280135823429541,
+      "tierId": "0.10/0.50",
+      "status": "classified",
+      "pricingBasis": "subscription_full_utilization",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-12b0bb1b86998780",
+      "isReaderRepresentative": false
+    },
+    {
+      "configurationId": "config-06a34fe6f8c703e0",
+      "configurationName": "Grok 4.7 XHigh | Grok Build | xAI API",
+      "modelProfile": "Grok 4.7 XHigh",
+      "provider": "xAI",
+      "harness": "Grok Build · Grok Build · Artificial Analysis Coding Agent Index",
+      "access": "api",
+      "sourceScoreIndex": 13,
+      "apiPricing": {
+        "inputPricePerMToken": 2,
+        "outputPricePerMToken": 6,
+        "scenarioCostUSD": 3.5,
+        "tierId": "2/10"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 3.5,
+      "tierId": "2/10",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-06a34fe6f8c703e0",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-388e51ea4a6459b4",
+      "configurationName": "MiMo-V2.6-Pro Default | --- | Xiaomi API",
+      "modelProfile": "MiMo-V2.6-Pro Default",
+      "provider": "Xiaomi",
+      "harness": "--- · Xiaomi MiMo API · mimo-v2.6-pro",
+      "access": "api",
+      "sourceScoreIndex": 14,
+      "apiPricing": {
+        "inputPricePerMToken": 0.4428000000000001,
+        "outputPricePerMToken": 0.8874,
+        "scenarioCostUSD": 0.6646500000000001,
+        "tierId": "0.40/2"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 0.6646500000000001,
+      "tierId": "0.40/2",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-388e51ea4a6459b4",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-6730082e64ff17b3",
+      "configurationName": "MiMo-V2.6-Flash Default | --- | Xiaomi API",
+      "modelProfile": "MiMo-V2.6-Flash Default",
+      "provider": "Xiaomi",
+      "harness": "--- · Xiaomi MiMo API · mimo-v2.6-flash",
+      "access": "api",
+      "sourceScoreIndex": 15,
+      "apiPricing": {
+        "inputPricePerMToken": 0.12650000000000003,
+        "outputPricePerMToken": 0.273,
+        "scenarioCostUSD": 0.19475000000000003,
+        "tierId": "0.10/0.50"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 0.19475000000000003,
+      "tierId": "0.10/0.50",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-6730082e64ff17b3",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-79e91e6f41568e17",
+      "configurationName": "Step 5 Preview High | --- | StepFun API",
+      "modelProfile": "Step 5 Preview High",
+      "provider": "StepFun",
+      "harness": "--- · StepFun API · Step 5 Preview",
+      "access": "api",
+      "sourceScoreIndex": 16,
+      "apiPricing": {
+        "inputPricePerMToken": 1,
+        "outputPricePerMToken": 2.7,
+        "scenarioCostUSD": 1.675,
+        "tierId": "1/5"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 1.675,
+      "tierId": "1/5",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-79e91e6f41568e17",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-d6b0ee48b6506195",
+      "configurationName": "Qwen3.8-2.4T-A95B XHigh | --- | Alibaba API",
+      "modelProfile": "Qwen3.8-2.4T-A95B XHigh",
+      "provider": "Alibaba",
+      "harness": "--- · Alibaba Cloud Model Studio · qwen3.8-2.4t-a95b",
+      "access": "api",
+      "sourceScoreIndex": 17,
+      "apiPricing": {
+        "inputPricePerMToken": 2,
+        "outputPricePerMToken": 6,
+        "scenarioCostUSD": 3.5,
+        "tierId": "2/10"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 3.5,
+      "tierId": "2/10",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-d6b0ee48b6506195",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-21c9bc2ef65724f2",
+      "configurationName": "Qwen3.8-Max XHigh | --- | Alibaba API",
+      "modelProfile": "Qwen3.8-Max XHigh",
+      "provider": "Alibaba",
+      "harness": "--- · Alibaba Cloud Model Studio · qwen3.8-max-0902",
+      "access": "api",
+      "sourceScoreIndex": 18,
+      "apiPricing": {
+        "inputPricePerMToken": 2,
+        "outputPricePerMToken": 6,
+        "scenarioCostUSD": 3.5,
+        "tierId": "2/10"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 3.5,
+      "tierId": "2/10",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-21c9bc2ef65724f2",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-905327b808581854",
+      "configurationName": "GPT-6.1 Sol Max | Codex CLI | OpenAI API",
+      "modelProfile": "GPT-6.1 Sol Max",
+      "provider": "OpenAI",
+      "harness": "Codex CLI · Codex CLI · Artificial Analysis Coding Agent Index",
+      "access": "api",
+      "sourceScoreIndex": 19,
+      "apiPricing": {
+        "inputPricePerMToken": 2,
+        "outputPricePerMToken": 10,
+        "scenarioCostUSD": 4.5,
+        "tierId": "2/10"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 4.5,
+      "tierId": "2/10",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-dc6c678372a6e996",
+      "isReaderRepresentative": false
+    },
+    {
+      "configurationId": "config-a20a5d5f4c61a59b",
+      "configurationName": "GPT-6.1 Sol Max | Codex CLI | ChatGPT Plus",
+      "modelProfile": "GPT-6.1 Sol Max",
+      "provider": "ChatGPT Plus",
+      "harness": "Codex CLI · Codex CLI · Artificial Analysis Coding Agent Index",
+      "access": "subscription",
+      "sourceScoreIndex": 20,
+      "apiPricing": {
+        "inputPricePerMToken": 2,
+        "outputPricePerMToken": 10,
+        "scenarioCostUSD": 4.5,
+        "tierId": "2/10"
+      },
+      "subscriptionPricing": {
+        "planName": "ChatGPT Plus",
+        "monthlyPriceUSD": 20,
+        "apiEquivalentCostUSD": 211,
+        "usableQuotaFraction": 1,
+        "usableMonthlyApiEquivalentUSD": 211,
+        "costMultiplier": 0.0947867298578199,
+        "evidence": {
+          "id": "sa-2026-10-05-plus-sol-6-1",
+          "kind": "measured",
+          "checkedOn": "2026-10-11",
+          "publishedOn": "2026-10-05",
+          "sourceUrl": "https://newsletter.semianalysis.com/p/anthropic-subscriptions-offer-5x",
+          "workload": "agentic"
+        }
+      },
+      "effectiveScenarioCostUSD": 0.42654028436018954,
+      "tierId": "0.20/1",
+      "status": "classified",
+      "pricingBasis": "subscription_full_utilization",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-dc6c678372a6e996",
+      "isReaderRepresentative": false
+    },
+    {
+      "configurationId": "config-dc6c678372a6e996",
+      "configurationName": "GPT-6.1 Sol Max | Codex CLI | ChatGPT Pro $200",
+      "modelProfile": "GPT-6.1 Sol Max",
+      "provider": "ChatGPT Pro $200",
+      "harness": "Codex CLI · Codex CLI · Artificial Analysis Coding Agent Index",
+      "access": "subscription",
+      "sourceScoreIndex": 21,
+      "apiPricing": {
+        "inputPricePerMToken": 2,
+        "outputPricePerMToken": 10,
+        "scenarioCostUSD": 4.5,
+        "tierId": "2/10"
+      },
+      "subscriptionPricing": {
+        "planName": "ChatGPT Pro $200",
+        "monthlyPriceUSD": 200,
+        "apiEquivalentCostUSD": 2084,
+        "usableQuotaFraction": 1,
+        "usableMonthlyApiEquivalentUSD": 2084,
+        "costMultiplier": 0.09596928982725528,
+        "evidence": {
+          "id": "sa-2026-10-05-pro-200-sol-6-1",
+          "kind": "measured",
+          "checkedOn": "2026-10-11",
+          "publishedOn": "2026-10-05",
+          "sourceUrl": "https://newsletter.semianalysis.com/p/anthropic-subscriptions-offer-5x",
+          "workload": "agentic"
+        }
+      },
+      "effectiveScenarioCostUSD": 0.43186180422264875,
+      "tierId": "0.20/1",
+      "status": "classified",
+      "pricingBasis": "subscription_full_utilization",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-dc6c678372a6e996",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-a2f5be42daf728b4",
+      "configurationName": "Claude Sonnet 5.5 Max | Claude Code | Anthropic API",
+      "modelProfile": "Claude Sonnet 5.5 Max",
+      "provider": "Anthropic",
+      "harness": "Claude Code · Claude Code · Artificial Analysis Coding Agent Index",
+      "access": "api",
+      "sourceScoreIndex": 22,
+      "apiPricing": {
+        "inputPricePerMToken": 2,
+        "outputPricePerMToken": 10,
+        "scenarioCostUSD": 4.5,
+        "tierId": "2/10"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 4.5,
+      "tierId": "2/10",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-934c1b133cfb7a78",
+      "isReaderRepresentative": false
+    },
+    {
+      "configurationId": "config-934c1b133cfb7a78",
+      "configurationName": "Claude Sonnet 5.5 Max | Claude Code | Claude Max 20×",
+      "modelProfile": "Claude Sonnet 5.5 Max",
+      "provider": "Claude Max 20×",
+      "harness": "Claude Code · Claude Code · Artificial Analysis Coding Agent Index",
+      "access": "subscription",
+      "sourceScoreIndex": 23,
+      "apiPricing": {
+        "inputPricePerMToken": 2,
+        "outputPricePerMToken": 10,
+        "scenarioCostUSD": 4.5,
+        "tierId": "2/10"
+      },
+      "subscriptionPricing": {
+        "planName": "Claude Max 20×",
+        "monthlyPriceUSD": 200,
+        "apiEquivalentCostUSD": 12524,
+        "usableQuotaFraction": 1,
+        "usableMonthlyApiEquivalentUSD": 12524,
+        "costMultiplier": 0.015969338869370808,
+        "evidence": {
+          "id": "sa-2026-10-05-max-20x-sonnet-5-5",
+          "kind": "measured",
+          "checkedOn": "2026-10-11",
+          "publishedOn": "2026-10-05",
+          "sourceUrl": "https://newsletter.semianalysis.com/p/anthropic-subscriptions-offer-5x",
+          "workload": "agentic"
+        }
+      },
+      "effectiveScenarioCostUSD": 0.07186202491216863,
+      "tierId": "0.10/0.50",
+      "status": "classified",
+      "pricingBasis": "subscription_full_utilization",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-934c1b133cfb7a78",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-8b6c1105bfeb3440",
+      "configurationName": "Claude Sonnet 5.5 Max | Claude Code | Claude Pro",
+      "modelProfile": "Claude Sonnet 5.5 Max",
+      "provider": "Claude Pro",
+      "harness": "Claude Code · Claude Code · Artificial Analysis Coding Agent Index",
+      "access": "subscription",
+      "sourceScoreIndex": 24,
+      "apiPricing": {
+        "inputPricePerMToken": 2,
+        "outputPricePerMToken": 10,
+        "scenarioCostUSD": 4.5,
+        "tierId": "2/10"
+      },
+      "subscriptionPricing": {
+        "planName": "Claude Pro",
+        "monthlyPriceUSD": 20,
+        "apiEquivalentCostUSD": 1241,
+        "usableQuotaFraction": 1,
+        "usableMonthlyApiEquivalentUSD": 1241,
+        "costMultiplier": 0.016116035455278,
+        "evidence": {
+          "id": "sa-2026-10-05-pro-sonnet-5-5",
+          "kind": "measured",
+          "checkedOn": "2026-10-11",
+          "publishedOn": "2026-10-05",
+          "sourceUrl": "https://newsletter.semianalysis.com/p/anthropic-subscriptions-offer-5x",
+          "workload": "agentic"
+        }
+      },
+      "effectiveScenarioCostUSD": 0.072522159548751,
+      "tierId": "0.10/0.50",
+      "status": "classified",
+      "pricingBasis": "subscription_full_utilization",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-934c1b133cfb7a78",
+      "isReaderRepresentative": false
+    },
+    {
+      "configurationId": "config-1ae28971017e9754",
+      "configurationName": "Claude Haiku 5.5 Max | Claude Code | Anthropic API",
+      "modelProfile": "Claude Haiku 5.5 Max",
+      "provider": "Anthropic",
+      "harness": "Claude Code · Claude Code · Artificial Analysis Coding Agent Index",
+      "access": "api",
+      "sourceScoreIndex": 25,
+      "apiPricing": {
+        "inputPricePerMToken": 0.1,
+        "outputPricePerMToken": 0.5,
+        "scenarioCostUSD": 0.225,
+        "tierId": "0.10/0.50"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 0.225,
+      "tierId": "0.10/0.50",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-1ae28971017e9754",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-444109a4ade8365f",
+      "configurationName": "Mistral Large 4 Preview High | --- | Mistral API",
+      "modelProfile": "Mistral Large 4 Preview High",
+      "provider": "Mistral",
+      "harness": "--- · Mistral API · mistral-large-4",
+      "access": "api",
+      "sourceScoreIndex": 26,
+      "apiPricing": {
+        "inputPricePerMToken": 1.4053333333333333,
+        "outputPricePerMToken": 4.319333333333334,
+        "scenarioCostUSD": 2.4851666666666667,
+        "tierId": "1/5"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 2.4851666666666667,
+      "tierId": "1/5",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-444109a4ade8365f",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-61d486c9c1066ff2",
+      "configurationName": "Kimi K3.1 Pro Max | --- | Moonshot AI API",
+      "modelProfile": "Kimi K3.1 Pro Max",
+      "provider": "Moonshot AI",
+      "harness": "--- · Moonshot API · kimi-k3.1-pro",
+      "access": "api",
+      "sourceScoreIndex": 27,
+      "apiPricing": {
+        "inputPricePerMToken": 2,
+        "outputPricePerMToken": 10,
+        "scenarioCostUSD": 4.5,
+        "tierId": "2/10"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 4.5,
+      "tierId": "2/10",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-61d486c9c1066ff2",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-a4c15858bba49a5a",
+      "configurationName": "DeepSeek V4.1 Flash 1017 Max | DeepSeek Harness | DeepSeek API",
+      "modelProfile": "DeepSeek V4.1 Flash 1017 Max",
+      "provider": "DeepSeek",
+      "harness": "DeepSeek Harness · DeepSeek Harness · Artificial Analysis Coding Agent Index",
+      "access": "api",
+      "sourceScoreIndex": 28,
+      "apiPricing": {
+        "inputPricePerMToken": 0.20626562499999995,
+        "outputPricePerMToken": 0.8434374999999997,
+        "scenarioCostUSD": 0.41712499999999986,
+        "tierId": "0.20/1"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 0.41712499999999986,
+      "tierId": "0.20/1",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-a4c15858bba49a5a",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-85670e3d99150492",
+      "configurationName": "MiniMax M3.1 Flash Max | --- | MiniMax API",
+      "modelProfile": "MiniMax M3.1 Flash Max",
+      "provider": "MiniMax",
+      "harness": "--- · MiniMax API · MiniMax-M3.1-Flash",
+      "access": "api",
+      "sourceScoreIndex": 29,
+      "apiPricing": {
+        "inputPricePerMToken": 0.15354166666666666,
+        "outputPricePerMToken": 0.6391666666666668,
+        "scenarioCostUSD": 0.31333333333333335,
+        "tierId": "0.10/0.50"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 0.31333333333333335,
+      "tierId": "0.10/0.50",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-85670e3d99150492",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-a449ea80057b272d",
+      "configurationName": "Muse Spark Open XHigh | Muse Code | Meta API",
+      "modelProfile": "Muse Spark Open XHigh",
+      "provider": "Meta",
+      "harness": "Muse Code · Muse Code · Artificial Analysis Coding Agent Index",
+      "access": "api",
+      "sourceScoreIndex": 30,
+      "apiPricing": {
+        "inputPricePerMToken": 1.25,
+        "outputPricePerMToken": 4.25,
+        "scenarioCostUSD": 2.3125,
+        "tierId": "1/5"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 2.3125,
+      "tierId": "1/5",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-a449ea80057b272d",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-e118652d8c9129cb",
+      "configurationName": "Gemini 4 Argon High | --- | Google API",
+      "modelProfile": "Gemini 4 Argon High",
+      "provider": "Google",
+      "harness": "--- · Google AI Studio API · gemini-4-argon",
+      "access": "api",
+      "sourceScoreIndex": 31,
+      "apiPricing": {
+        "inputPricePerMToken": 2.0666666666666664,
+        "outputPricePerMToken": 10.333333333333334,
+        "scenarioCostUSD": 4.65,
+        "tierId": "2/10"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 4.65,
+      "tierId": "2/10",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-e118652d8c9129cb",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-f2279f78a620a0c7",
+      "configurationName": "Muse Glimmer XHigh | --- | Meta API",
+      "modelProfile": "Muse Glimmer XHigh",
+      "provider": "Meta",
+      "harness": "--- · OpenRouter Chatroom (ORC)",
+      "access": "api",
+      "sourceScoreIndex": 32,
+      "apiPricing": {
+        "inputPricePerMToken": 0.32499999999999996,
+        "outputPricePerMToken": 1.35,
+        "scenarioCostUSD": 0.6625,
+        "tierId": "0.40/2"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 0.6625,
+      "tierId": "0.40/2",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-f2279f78a620a0c7",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-7bb10837095b166c",
+      "configurationName": "Qwen3.8-Flash-Next XHigh | --- | Alibaba API",
+      "modelProfile": "Qwen3.8-Flash-Next XHigh",
+      "provider": "Alibaba",
+      "harness": "--- · Alibaba Qwen API",
+      "access": "api",
+      "sourceScoreIndex": 33,
+      "apiPricing": {
+        "inputPricePerMToken": 0.15,
+        "outputPricePerMToken": 0.47,
+        "scenarioCostUSD": 0.26749999999999996,
+        "tierId": "0.10/0.50"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 0.26749999999999996,
+      "tierId": "0.10/0.50",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-7bb10837095b166c",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-20488201e8b538dc",
+      "configurationName": "Hy4 Preview High | --- | Tencent API",
+      "modelProfile": "Hy4 Preview High",
+      "provider": "Tencent",
+      "harness": "--- · OpenRouter Chatroom (ORC)",
+      "access": "api",
+      "sourceScoreIndex": 34,
+      "apiPricing": {
+        "inputPricePerMToken": 0.834,
+        "outputPricePerMToken": 2.501,
+        "scenarioCostUSD": 1.45925,
+        "tierId": "1/5"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 1.45925,
+      "tierId": "1/5",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-20488201e8b538dc",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-fafceba3f2aabda8",
+      "configurationName": "GLM-5.3-Flash Max | --- | Z.ai API",
+      "modelProfile": "GLM-5.3-Flash Max",
+      "provider": "Z.ai",
+      "harness": "--- · OpenRouter Chatroom (ORC)",
+      "access": "api",
+      "sourceScoreIndex": 35,
+      "apiPricing": {
+        "inputPricePerMToken": 0.13438789189189188,
+        "outputPricePerMToken": 0.4865810810810813,
+        "scenarioCostUSD": 0.2560331621621622,
+        "tierId": "0.10/0.50"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 0.2560331621621622,
+      "tierId": "0.10/0.50",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-fafceba3f2aabda8",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-9ada8a1d5a5efa25",
+      "configurationName": "Qwen3.8 27B XHigh | --- | Alibaba API",
+      "modelProfile": "Qwen3.8 27B XHigh",
+      "provider": "Alibaba",
+      "harness": "--- · OpenRouter Chatroom (ORC)",
+      "access": "api",
+      "sourceScoreIndex": 36,
+      "apiPricing": {
+        "inputPricePerMToken": 0.22304761904761902,
+        "outputPricePerMToken": 2.216428571428571,
+        "scenarioCostUSD": 0.7771547619047618,
+        "tierId": "0.40/2"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 0.7771547619047618,
+      "tierId": "0.40/2",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-9ada8a1d5a5efa25",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-68c8a84d392f7e4c",
+      "configurationName": "Command A+ Thinking | --- | Cohere API",
+      "modelProfile": "Command A+ Thinking",
+      "provider": "Cohere",
+      "harness": "--- · Cohere API",
+      "access": "api",
+      "sourceScoreIndex": 37,
+      "apiPricing": {
+        "inputPricePerMToken": 0.3,
+        "outputPricePerMToken": 1.5,
+        "scenarioCostUSD": 0.675,
+        "tierId": "0.40/2"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 0.675,
+      "tierId": "0.40/2",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-68c8a84d392f7e4c",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-0b43fd9bc29df7bb",
+      "configurationName": "Nemotron 3.5 Lightning Thinking | --- | NVIDIA API",
+      "modelProfile": "Nemotron 3.5 Lightning Thinking",
+      "provider": "NVIDIA",
+      "harness": "--- · OpenRouter Chatroom (ORC)",
+      "access": "api",
+      "sourceScoreIndex": 38,
+      "apiPricing": {
+        "inputPricePerMToken": 0.050475000000000006,
+        "outputPricePerMToken": 0.1535,
+        "scenarioCostUSD": 0.08885000000000001,
+        "tierId": "0.10/0.50"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 0.08885000000000001,
+      "tierId": "0.10/0.50",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-0b43fd9bc29df7bb",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-f3430fb9bfec6aa8",
+      "configurationName": "Inkling XHigh | --- | Thinking Machines API",
+      "modelProfile": "Inkling XHigh",
+      "provider": "Thinking Machines",
+      "harness": "--- · OpenRouter Chatroom (ORC)",
+      "access": "api",
+      "sourceScoreIndex": 39,
+      "apiPricing": {
+        "inputPricePerMToken": 0,
+        "outputPricePerMToken": 0,
+        "scenarioCostUSD": 0,
+        "tierId": "0.10/0.50"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 0,
+      "tierId": "0.10/0.50",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-f3430fb9bfec6aa8",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-27488fc68ef4f735",
+      "configurationName": "Muse Wonder Max | Muse Code | Meta API",
+      "modelProfile": "Muse Wonder Max",
+      "provider": "Meta",
+      "harness": "Muse Code · Muse Code · Artificial Analysis Coding Agent Index",
+      "access": "api",
+      "sourceScoreIndex": 40,
+      "apiPricing": {
+        "inputPricePerMToken": 4,
+        "outputPricePerMToken": 20,
+        "scenarioCostUSD": 9,
+        "tierId": "4/20"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 9,
+      "tierId": "4/20",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-27488fc68ef4f735",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-b37d0dcf3267fa43",
+      "configurationName": "Muse Wonder Full Max | Muse Code | Muse Code Maximum Usage",
+      "modelProfile": "Muse Wonder Full Max",
+      "provider": "Muse Code Maximum Usage",
+      "harness": "Muse Code · Muse Code subscription",
+      "access": "subscription",
+      "sourceScoreIndex": 41,
+      "apiPricing": {
+        "inputPricePerMToken": null,
+        "outputPricePerMToken": null,
+        "scenarioCostUSD": null,
+        "tierId": null
+      },
+      "subscriptionPricing": {
+        "planName": "Muse Code Maximum Usage",
+        "monthlyPriceUSD": 200,
+        "apiEquivalentCostUSD": null,
+        "usableQuotaFraction": null,
+        "usableMonthlyApiEquivalentUSD": null,
+        "costMultiplier": null,
+        "evidence": {
+          "id": "meta-muse-code-maximum-2026-10-12",
+          "kind": "official-plan-only",
+          "checkedOn": "2026-10-13",
+          "publishedOn": "2026-10-12",
+          "sourceUrl": "https://dev.meta.ai/models/muse-wonder",
+          "workload": null
+        }
+      },
+      "effectiveScenarioCostUSD": null,
+      "tierId": null,
+      "status": "unknown",
+      "pricingBasis": "subscription_full_utilization",
+      "missingFields": [
+        "inputPricePerMToken",
+        "outputPricePerMToken",
+        "apiEquivalentCostUSD",
+        "usableQuotaFraction"
+      ],
+      "reconciliationDifferenceUSD": null,
+      "representativeConfigurationId": "config-b37d0dcf3267fa43",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-91257dec54cc72bd",
+      "configurationName": "Gemini 3.8 Flash High | AA Agent Harness | Google API",
+      "modelProfile": "Gemini 3.8 Flash High",
+      "provider": "Google",
+      "harness": "AA Agent Harness · Arena Agent Mode",
+      "access": "api",
+      "sourceScoreIndex": 42,
+      "apiPricing": {
+        "inputPricePerMToken": 0.75,
+        "outputPricePerMToken": 3.75,
+        "scenarioCostUSD": 1.6875,
+        "tierId": "1/5"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 1.6875,
+      "tierId": "1/5",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-91257dec54cc72bd",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-999c67af18d1faea",
+      "configurationName": "Gemini 3.8 Flash High | Antigravity SDK | Google API",
+      "modelProfile": "Gemini 3.8 Flash High",
+      "provider": "Google",
+      "harness": "Antigravity SDK · Antigravity SDK · Artificial Analysis Coding Agent Index",
+      "access": "api",
+      "sourceScoreIndex": 43,
+      "apiPricing": {
+        "inputPricePerMToken": 0.75,
+        "outputPricePerMToken": 3.75,
+        "scenarioCostUSD": 1.6875,
+        "tierId": "1/5"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 1.6875,
+      "tierId": "1/5",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-a59f90c0a8e01729",
+      "isReaderRepresentative": false
+    },
+    {
+      "configurationId": "config-4e556041e4717e48",
+      "configurationName": "Gemini 3.8 Flash High | OpenCode | Google API",
+      "modelProfile": "Gemini 3.8 Flash High",
+      "provider": "Google",
+      "harness": "OpenCode · OpenCode · Artificial Analysis Coding Agent Index",
+      "access": "api",
+      "sourceScoreIndex": 44,
+      "apiPricing": {
+        "inputPricePerMToken": 0.75,
+        "outputPricePerMToken": 3.75,
+        "scenarioCostUSD": 1.6875,
+        "tierId": "1/5"
+      },
+      "subscriptionPricing": null,
+      "effectiveScenarioCostUSD": 1.6875,
+      "tierId": "1/5",
+      "status": "classified",
+      "pricingBasis": "api_scenario",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-740827594f71be80",
+      "isReaderRepresentative": false
+    },
+    {
+      "configurationId": "config-273c37a664bda620",
+      "configurationName": "Gemini 3.8 Flash High | OpenCode | Google AI Pro",
+      "modelProfile": "Gemini 3.8 Flash High",
+      "provider": "Google AI Pro",
+      "harness": "OpenCode · OpenCode · Artificial Analysis Coding Agent Index",
+      "access": "subscription",
+      "sourceScoreIndex": 45,
+      "apiPricing": {
+        "inputPricePerMToken": 0.75,
+        "outputPricePerMToken": 3.75,
+        "scenarioCostUSD": 1.6875,
+        "tierId": "1/5"
+      },
+      "subscriptionPricing": {
+        "planName": "Google AI Pro",
+        "monthlyPriceUSD": 20,
+        "apiEquivalentCostUSD": 260,
+        "usableQuotaFraction": 1,
+        "usableMonthlyApiEquivalentUSD": 260,
+        "costMultiplier": 0.07692307692307693,
+        "evidence": {
+          "id": "legacy-subscription-estimate",
+          "kind": "legacy-estimate",
+          "checkedOn": "2026-10-11",
+          "publishedOn": null,
+          "sourceUrl": null,
+          "workload": null
+        }
+      },
+      "effectiveScenarioCostUSD": 0.12980769230769232,
+      "tierId": "0.10/0.50",
+      "status": "classified",
+      "pricingBasis": "subscription_full_utilization",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-740827594f71be80",
+      "isReaderRepresentative": false
+    },
+    {
+      "configurationId": "config-740827594f71be80",
+      "configurationName": "Gemini 3.8 Flash High | OpenCode | Google AI Ultra 20×",
+      "modelProfile": "Gemini 3.8 Flash High",
+      "provider": "Google AI Ultra 20×",
+      "harness": "OpenCode · OpenCode · Artificial Analysis Coding Agent Index",
+      "access": "subscription",
+      "sourceScoreIndex": 46,
+      "apiPricing": {
+        "inputPricePerMToken": 0.75,
+        "outputPricePerMToken": 3.75,
+        "scenarioCostUSD": 1.6875,
+        "tierId": "1/5"
+      },
+      "subscriptionPricing": {
+        "planName": "Google AI Ultra 20×",
+        "monthlyPriceUSD": 200,
+        "apiEquivalentCostUSD": 5200,
+        "usableQuotaFraction": 1,
+        "usableMonthlyApiEquivalentUSD": 5200,
+        "costMultiplier": 0.038461538461538464,
+        "evidence": {
+          "id": "legacy-subscription-estimate",
+          "kind": "legacy-estimate",
+          "checkedOn": "2026-10-11",
+          "publishedOn": null,
+          "sourceUrl": null,
+          "workload": null
+        }
+      },
+      "effectiveScenarioCostUSD": 0.06490384615384616,
+      "tierId": "0.10/0.50",
+      "status": "classified",
+      "pricingBasis": "subscription_full_utilization",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-740827594f71be80",
+      "isReaderRepresentative": true
+    },
+    {
+      "configurationId": "config-ed58c1a6a6c08d31",
+      "configurationName": "Gemini 3.8 Flash High | Antigravity SDK | Google AI Pro",
+      "modelProfile": "Gemini 3.8 Flash High",
+      "provider": "Google AI Pro",
+      "harness": "Antigravity SDK · Antigravity SDK · Artificial Analysis Coding Agent Index",
+      "access": "subscription",
+      "sourceScoreIndex": 47,
+      "apiPricing": {
+        "inputPricePerMToken": 0.75,
+        "outputPricePerMToken": 3.75,
+        "scenarioCostUSD": 1.6875,
+        "tierId": "1/5"
+      },
+      "subscriptionPricing": {
+        "planName": "Google AI Pro",
+        "monthlyPriceUSD": 20,
+        "apiEquivalentCostUSD": 260,
+        "usableQuotaFraction": 1,
+        "usableMonthlyApiEquivalentUSD": 260,
+        "costMultiplier": 0.07692307692307693,
+        "evidence": {
+          "id": "legacy-subscription-estimate",
+          "kind": "legacy-estimate",
+          "checkedOn": "2026-10-11",
+          "publishedOn": null,
+          "sourceUrl": null,
+          "workload": null
+        }
+      },
+      "effectiveScenarioCostUSD": 0.12980769230769232,
+      "tierId": "0.10/0.50",
+      "status": "classified",
+      "pricingBasis": "subscription_full_utilization",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-a59f90c0a8e01729",
+      "isReaderRepresentative": false
+    },
+    {
+      "configurationId": "config-a59f90c0a8e01729",
+      "configurationName": "Gemini 3.8 Flash High | Antigravity SDK | Google AI Ultra 20×",
+      "modelProfile": "Gemini 3.8 Flash High",
+      "provider": "Google AI Ultra 20×",
+      "harness": "Antigravity SDK · Antigravity SDK · Artificial Analysis Coding Agent Index",
+      "access": "subscription",
+      "sourceScoreIndex": 48,
+      "apiPricing": {
+        "inputPricePerMToken": 0.75,
+        "outputPricePerMToken": 3.75,
+        "scenarioCostUSD": 1.6875,
+        "tierId": "1/5"
+      },
+      "subscriptionPricing": {
+        "planName": "Google AI Ultra 20×",
+        "monthlyPriceUSD": 200,
+        "apiEquivalentCostUSD": 5200,
+        "usableQuotaFraction": 1,
+        "usableMonthlyApiEquivalentUSD": 5200,
+        "costMultiplier": 0.038461538461538464,
+        "evidence": {
+          "id": "legacy-subscription-estimate",
+          "kind": "legacy-estimate",
+          "checkedOn": "2026-10-11",
+          "publishedOn": null,
+          "sourceUrl": null,
+          "workload": null
+        }
+      },
+      "effectiveScenarioCostUSD": 0.06490384615384616,
+      "tierId": "0.10/0.50",
+      "status": "classified",
+      "pricingBasis": "subscription_full_utilization",
+      "missingFields": [],
+      "reconciliationDifferenceUSD": 0,
+      "representativeConfigurationId": "config-a59f90c0a8e01729",
+      "isReaderRepresentative": true
+    }
+  ]
+}

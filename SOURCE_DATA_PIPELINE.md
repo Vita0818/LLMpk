@@ -290,6 +290,53 @@ The raw AA and Arena HTML captures, SHA-256 hashes, response metadata, and run
 manifest are retained under the run directory recorded in
 `.cache/oagxm-source-snapshots/latest.json`.
 
+## Price classification data
+
+`src/data/priceTierSnapshot.json` is a separate, generated data table with one
+record per configuration. It retains every API and subscription route from
+`publicLeaderboardSnapshot.json`; the reader representative is recorded as a
+reference, never used to discard a price record. The price-classification page
+uses the same tier rules on the complete source inventory, with the saved group
+memberships checked against its results in tests. For example,
+`#prices/2-10` opens the 2/10 tier directly.
+
+The seven reference input/output prices (USD/1M tokens) are `0.10/0.50`,
+`0.20/1`, `0.40/2`, `1/5`, `2/10`, `4/20`, and `10/50`. Classification uses
+`C = input + 0.25 × output`, with each boundary at the geometric mean of the
+adjacent reference scenario costs. Ranges include the lower bound and exclude
+the upper bound. Zero cost belongs to the first tier; the last has no upper limit.
+Comparisons retain full precision.
+
+Each record includes the source configuration ID/index, input/output prices,
+unadjusted API scenario cost and tier, effective cost and tier, and the original
+subscription conversion parameters when present. Subscription classification
+assumes full utilization and retains the existing agentic-allowance approximation.
+Evidence kinds distinguish measured allowances, legacy estimates, official plan
+prices without an allowance, and unreviewed data. Unknown costs and tier IDs
+remain `null`, with explicit missing fields; an API price does not fill a missing
+subscription allowance. Model and plan matches and the single application of
+model quota caps are checked against the reviewed subscription evidence.
+
+The file records its input file paths and SHA-256 hashes. The cohort date is
+inventory context, not a fresh price check; subscription evidence retains its
+own published/checked dates. Generation is deterministic and fails on duplicate
+identities, invalid prices, orphan evidence IDs, or disagreement between
+recalculated costs and the existing effective scenario costs.
+
+```bash
+# Run after changing/rebuilding the source leaderboard or subscription evidence:
+npm run generate:price-tiers
+# Check that the saved table matches its inputs without writing:
+npm run generate:price-tiers -- --check
+npm run test:price-tiers
+```
+
+`npm run build` regenerates price classification after the source leaderboard.
+The data includes all seven groups plus an unknown group, with counts for the
+complete inventory, API routes, subscriptions and current reader representatives.
+The price page ranks qualified configurations within the selected tier; missing
+scores keep an empty rank. Ascending display order preserves those ranks.
+
 ## September 25 model refresh
 
 The September 25 refresh adds source-backed GPT-6 Astra, Sol, and Luna;
